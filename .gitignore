@@ -179,3 +179,33 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+# Project specific
+*.db
+liking_rating.db
+test_liking_rating.db
+app.log
+*.tmp
+*.cache
+test_sample.csv
+
+# Development and testing files
+scripts/create_sample_data.py
+scripts/init_database.py
+scripts/import_real_data.py
+requirements-*.txt
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+Desktop.ini
