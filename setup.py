@@ -42,8 +42,6 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "lrd-init=scripts.init_database:main",
-            "lrd-migrate=scripts.migrate_data:main",
             "lrd-server=backend.app:main",
         ],
     },

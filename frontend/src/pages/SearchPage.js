@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   Card, 
   Input, 
@@ -13,22 +14,31 @@ import {
   Collapse,
   Select,
   Slider,
-  Typography
+  Typography,
+  Modal,
+  message,
+  Spin
 } from 'antd';
 import { SearchOutlined, FilterOutlined, DownloadOutlined } from '@ant-design/icons';
 import { useQuery } from 'react-query';
-import { searchDatasets, getCategories, getScaleTypes, getYearRange } from '../services/api';
+import { searchDatasets, getCategories, getScaleTypes, getYearRange, requestDownload, getDownload, downloadFile } from '../services/api';
 
 const { Panel } = Collapse;
 const { Title } = Typography;
 const { Option } = Select;
 
 const SearchPage = () => {
+  const navigate = useNavigate();
   const [form] = Form.useForm();
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({});
   const [pagination, setPagination] = useState({ page: 1, pageSize: 20 });
   const [selectedDatasets, setSelectedDatasets] = useState([]);
+  const [downloadModalVisible, setDownloadModalVisible] = useState(false);
+  const [downloadLoading, setDownloadLoading] = useState(false);
+  const [downloadFormat, setDownloadFormat] = useState('csv');
+  const [includeMetadata, setIncludeMetadata] = useState(true);
+  const [includeDemographics, setIncludeDemographics] = useState(false);
 
   // Metadata queries
   const { data: categories } = useQuery('categories', getCategories);
@@ -44,7 +54,10 @@ const SearchPage = () => {
       page: pagination.page,
       page_size: pagination.pageSize
     }),
-    { enabled: false }
+    { 
+      enabled: searchQuery.length > 0 || Object.keys(filters).length > 0,
+      refetchOnWindowFocus: false
+    }
   );
 
   const handleSearch = (values) => {
@@ -52,6 +65,95 @@ const SearchPage = () => {
     setFilters(values);
     setPagination({ ...pagination, page: 1 });
     refetch();
+  };
+
+  const handleDownloadSingle = async (datasetId) => {
+    try {
+      setDownloadLoading(true);
+      message.loading('Preparing download...', 0);
+      
+      const downloadRequest = {
+        dataset_ids: [datasetId],
+        format: 'csv',
+        include_metadata: true,
+        include_demographics: false
+      };
+      
+      const response = await requestDownload(downloadRequest);
+      
+      // Get the file
+      const fileResponse = await getDownload(response.download_id);
+      
+      // Extract filename from response headers or use default
+      const contentDisposition = fileResponse.headers['content-disposition'];
+      let filename = 'dataset.csv';
+      if (contentDisposition) {
+        const matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(contentDisposition);
+        if (matches != null && matches[1]) {
+          filename = matches[1].replace(/['"]/g, '');
+        }
+      }
+      
+      downloadFile(fileResponse.data, filename);
+      message.destroy();
+      message.success('Download completed!');
+    } catch (error) {
+      message.destroy();
+      console.error('Download error:', error);
+      message.error('Failed to initiate download. Please try again.');
+    } finally {
+      setDownloadLoading(false);
+    }
+  };
+
+  const handleDownloadSelected = () => {
+    if (selectedDatasets.length === 0) {
+      message.warning('Please select at least one dataset to download.');
+      return;
+    }
+    setDownloadModalVisible(true);
+  };
+
+  const handleDownloadConfirm = async () => {
+    try {
+      setDownloadLoading(true);
+      message.loading('Preparing download...', 0);
+      
+      const downloadRequest = {
+        dataset_ids: selectedDatasets,
+        format: downloadFormat,
+        include_metadata: includeMetadata,
+        include_demographics: includeDemographics
+      };
+      
+      const response = await requestDownload(downloadRequest);
+      
+      // Get the file
+      const fileResponse = await getDownload(response.download_id);
+      
+      // Extract filename from response headers or use default
+      const contentDisposition = fileResponse.headers['content-disposition'];
+      let filename = `datasets.${downloadFormat}`;
+      if (contentDisposition) {
+        const matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(contentDisposition);
+        if (matches != null && matches[1]) {
+          filename = matches[1].replace(/['"]/g, '');
+        }
+      }
+      
+      downloadFile(fileResponse.data, filename);
+      
+      message.destroy();
+      message.success('Download completed!');
+      setDownloadModalVisible(false);
+      setSelectedDatasets([]);
+    } catch (error) {
+      message.destroy();
+      console.error('Download error:', error);
+      message.error('Failed to initiate download. Please try again.');
+    } finally {
+      setDownloadLoading(false);
+    }
   };
 
   const columns = [
@@ -72,7 +174,13 @@ const SearchPage = () => {
       title: 'Authors',
       dataIndex: ['study', 'authors'],
       key: 'authors',
-      render: (authors) => authors?.slice(0, 2).join(', ') + (authors?.length > 2 ? '...' : ''),
+      render: (authors, record) => {
+        const authorList = record.study?.authors;
+        if (!authorList || !Array.isArray(authorList) || authorList.length === 0) {
+          return '-';
+        }
+        return authorList.slice(0, 2).join(', ') + (authorList.length > 2 ? ' et al.' : '');
+      },
     },
     {
       title: 'Year',
@@ -103,8 +211,18 @@ const SearchPage = () => {
       key: 'actions',
       render: (_, record) => (
         <Space>
-          <Button size="small">View</Button>
-          <Button size="small" icon={<DownloadOutlined />}>
+          <Button 
+            size="small"
+            onClick={() => navigate(`/datasets/${record.id}`)}
+          >
+            View
+          </Button>
+          <Button 
+            size="small" 
+            icon={<DownloadOutlined />}
+            loading={downloadLoading}
+            onClick={() => handleDownloadSingle(record.id)}
+          >
             Download
           </Button>
         </Space>
@@ -202,7 +320,12 @@ const SearchPage = () => {
                 Clear
               </Button>
               {selectedDatasets.length > 0 && (
-                <Button type="primary" icon={<DownloadOutlined />}>
+                <Button 
+                  type="primary" 
+                  icon={<DownloadOutlined />}
+                  loading={downloadLoading}
+                  onClick={handleDownloadSelected}
+                >
                   Download Selected ({selectedDatasets.length})
                 </Button>
               )}
@@ -247,6 +370,57 @@ const SearchPage = () => {
           </div>
         </Card>
       )}
+      
+      {/* Download Modal */}
+      <Modal
+        title="Download Options"
+        open={downloadModalVisible}
+        onOk={handleDownloadConfirm}
+        onCancel={() => setDownloadModalVisible(false)}
+        confirmLoading={downloadLoading}
+        okText="Download"
+        cancelText="Cancel"
+      >
+        <Form layout="vertical">
+          <Form.Item label="Format">
+            <Select 
+              value={downloadFormat} 
+              onChange={setDownloadFormat}
+              style={{ width: '100%' }}
+            >
+              <Select.Option value="csv">CSV</Select.Option>
+              <Select.Option value="json">JSON</Select.Option>
+              <Select.Option value="xlsx">Excel (XLSX)</Select.Option>
+              <Select.Option value="spss">SPSS (SAV)</Select.Option>
+            </Select>
+          </Form.Item>
+          
+          <Form.Item>
+            <Space direction="vertical">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={includeMetadata}
+                  onChange={(e) => setIncludeMetadata(e.target.checked)}
+                />
+                {' '}Include study metadata
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={includeDemographics}
+                  onChange={(e) => setIncludeDemographics(e.target.checked)}
+                />
+                {' '}Include demographic data
+              </label>
+            </Space>
+          </Form.Item>
+          
+          <p style={{ color: '#666', fontSize: '14px' }}>
+            Downloading {selectedDatasets.length} dataset(s) in {downloadFormat.toUpperCase()} format.
+          </p>
+        </Form>
+      </Modal>
     </div>
   );
 };

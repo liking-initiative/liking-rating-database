@@ -1,6 +1,6 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
-import { Card, Descriptions, Tag, Button, Space, Typography, Row, Col, Table } from 'antd';
+import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Card, Descriptions, Tag, Button, Space, Typography, Row, Col, Table, message, Modal, Select } from 'antd';
 import { useQuery } from 'react-query';
 import { 
   DownloadOutlined, 
@@ -9,12 +9,17 @@ import {
   AppleOutlined,
   BarChartOutlined 
 } from '@ant-design/icons';
-import { getDataset, getRatingAggregations } from '../services/api';
+import { getDataset, getRatingAggregations, requestDownload, getDownload, downloadFile } from '../services/api';
 
 const { Title, Paragraph } = Typography;
+const { Option } = Select;
 
 const DatasetDetailPage = () => {
   const { datasetId } = useParams();
+  const navigate = useNavigate();
+  const [downloadModalVisible, setDownloadModalVisible] = useState(false);
+  const [downloadFormat, setDownloadFormat] = useState('csv');
+  const [downloading, setDownloading] = useState(false);
   
   const { data: dataset, isLoading } = useQuery(
     ['dataset', datasetId], 
@@ -26,6 +31,43 @@ const DatasetDetailPage = () => {
     () => getRatingAggregations({ dataset_ids: [datasetId], min_ratings: 1 }),
     { enabled: !!datasetId }
   );
+
+  const handleDownload = async () => {
+    try {
+      setDownloading(true);
+      
+      // Request download
+      const downloadResponse = await requestDownload({
+        dataset_ids: [datasetId],
+        format: downloadFormat,
+        include_metadata: true,
+        include_demographics: false
+      });
+
+      message.success('Download request initiated. Preparing file...');
+      
+      // Wait a moment for file preparation, then download
+      setTimeout(async () => {
+        try {
+          const fileResponse = await getDownload(downloadResponse.download_id);
+          const filename = `${dataset.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_dataset.${downloadFormat}`;
+          downloadFile(fileResponse.data, filename);
+          message.success('Download completed!');
+        } catch (error) {
+          console.error('Download error:', error);
+          message.error('Failed to download file. Please try again.');
+        } finally {
+          setDownloading(false);
+          setDownloadModalVisible(false);
+        }
+      }, 2000);
+      
+    } catch (error) {
+      console.error('Download request error:', error);
+      message.error('Failed to initiate download. Please try again.');
+      setDownloading(false);
+    }
+  };
 
   const statsColumns = [
     {
@@ -88,10 +130,18 @@ const DatasetDetailPage = () => {
           </Col>
           <Col>
             <Space>
-              <Button icon={<BarChartOutlined />}>
+              <Button 
+                icon={<BarChartOutlined />}
+                onClick={() => navigate(`/datasets/${datasetId}/visualize`)}
+              >
                 Visualize
               </Button>
-              <Button type="primary" icon={<DownloadOutlined />}>
+              <Button 
+                type="primary" 
+                icon={<DownloadOutlined />}
+                onClick={() => setDownloadModalVisible(true)}
+                loading={downloading}
+              >
                 Download Dataset
               </Button>
             </Space>
@@ -241,6 +291,41 @@ const DatasetDetailPage = () => {
           />
         </Card>
       )}
+
+      {/* Download Modal */}
+      <Modal
+        title="Download Dataset"
+        open={downloadModalVisible}
+        onOk={handleDownload}
+        onCancel={() => setDownloadModalVisible(false)}
+        confirmLoading={downloading}
+        okText="Download"
+      >
+        <Space direction="vertical" style={{ width: '100%' }}>
+          <div>
+            <strong>Dataset:</strong> {dataset?.name}
+          </div>
+          <div>
+            <strong>Study:</strong> {dataset?.study?.name}
+          </div>
+          <div>
+            <strong>Format:</strong>
+            <Select
+              value={downloadFormat}
+              onChange={setDownloadFormat}
+              style={{ width: 120, marginLeft: 8 }}
+            >
+              <Option value="csv">CSV</Option>
+              <Option value="json">JSON</Option>
+              <Option value="xlsx">Excel</Option>
+              <Option value="spss">SPSS</Option>
+            </Select>
+          </div>
+          <div style={{ color: '#666', fontSize: '12px' }}>
+            This will download the complete dataset including ratings, subject IDs, and item information.
+          </div>
+        </Space>
+      </Modal>
     </div>
   );
 };

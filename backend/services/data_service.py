@@ -25,14 +25,14 @@ class DataService:
         """
         Get aggregated rating statistics for items
         """
-        # Base query for ratings with items
+        # Base query for ratings with items - simplified for SQLite compatibility
         query = select(
             Rating.item_id,
             Item.name,
             func.avg(Rating.normalized_rating).label('mean_rating'),
-            func.stddev(Rating.normalized_rating).label('std_rating'),
-            func.percentile_cont(0.5).within_group(Rating.normalized_rating).label('median_rating'),
             func.count(Rating.id).label('n_ratings'),
+            func.min(Rating.normalized_rating).label('min_rating'),
+            func.max(Rating.normalized_rating).label('max_rating'),
             func.count(func.distinct(Rating.dataset_id)).label('datasets_count')
         ).select_from(Rating).join(Item).group_by(Rating.item_id, Item.name)
         
@@ -54,14 +54,34 @@ class DataService:
         
         aggregations = []
         for row in rows:
+            # Calculate std deviation manually for each item if needed
+            std_query = select(Rating.normalized_rating).where(Rating.item_id == row.item_id)
+            if dataset_ids:
+                std_query = std_query.where(Rating.dataset_id.in_(dataset_ids))
+            
+            std_result = await db.execute(std_query)
+            ratings_list = [r[0] for r in std_result.fetchall()]
+            
+            # Calculate standard deviation
+            if len(ratings_list) > 1:
+                mean_val = sum(ratings_list) / len(ratings_list)
+                variance = sum((x - mean_val) ** 2 for x in ratings_list) / (len(ratings_list) - 1)
+                std_rating = variance ** 0.5
+                median_rating = sorted(ratings_list)[len(ratings_list) // 2]
+            else:
+                std_rating = 0.0
+                median_rating = ratings_list[0] if ratings_list else 0.0
+            
             aggregations.append(RatingAggregation(
                 item_id=row.item_id,
                 item_name=row.name,
                 mean_rating=float(row.mean_rating) if row.mean_rating else 0.0,
-                std_rating=float(row.std_rating) if row.std_rating else 0.0,
-                median_rating=float(row.median_rating) if row.median_rating else 0.0,
+                std_rating=std_rating,
+                median_rating=median_rating,
                 n_ratings=row.n_ratings,
-                datasets_count=row.datasets_count
+                datasets_count=row.datasets_count,
+                min_rating=float(row.min_rating) if row.min_rating else None,
+                max_rating=float(row.max_rating) if row.max_rating else None
             ))
         
         return aggregations

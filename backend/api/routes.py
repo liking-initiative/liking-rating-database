@@ -3,6 +3,7 @@ Main API routes for the Liking Rating Database
 """
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi.responses import FileResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, and_, or_
 from sqlalchemy.orm import selectinload
@@ -12,11 +13,11 @@ from backend.models.schemas import (
     StudyResponse, StudyWithDatasets, StudyCreate, StudyUpdate,
     DatasetResponse, DatasetWithStudy, DatasetCreate, DatasetUpdate,
     ItemResponse, ItemCreate, ItemUpdate,
-    RatingResponse, RatingWithDetails,
+    RatingResponse, RatingWithDetails, PaginatedRatingsResponse,
     SearchRequest, SearchResponse, SearchFilters,
     DownloadRequest, DownloadResponse,
     RatingAggregation, StudyStatistics,
-    PaginatedResponse
+    PaginatedResponse, PaginatedItemsResponse
 )
 from backend.services.search_service import SearchService
 from backend.services.download_service import DownloadService
@@ -186,7 +187,7 @@ async def create_dataset(dataset: DatasetCreate, db: AsyncSession = Depends(get_
 
 
 # Items endpoints
-@api_router.get("/items", response_model=List[ItemResponse])
+@api_router.get("/items", response_model=PaginatedItemsResponse)
 async def get_items(
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
@@ -203,7 +204,7 @@ async def get_items(
         search_filter = or_(
             Item.name.ilike(f"%{search}%"),
             Item.standardized_name.ilike(f"%{search}%"),
-            Item.aliases.any(search)
+            func.json_extract(Item.aliases, '$').like(f'%"{search}"%')
         )
         query = query.where(search_filter)
     
@@ -216,6 +217,11 @@ async def get_items(
     # Order by frequency (most common first)
     query = query.order_by(Item.frequency.desc())
     
+    # Get total count for pagination
+    count_query = select(func.count()).select_from(query.subquery())
+    total_result = await db.execute(count_query)
+    total = total_result.scalar()
+    
     # Add pagination
     offset = (page - 1) * page_size
     query = query.offset(offset).limit(page_size)
@@ -223,7 +229,20 @@ async def get_items(
     result = await db.execute(query)
     items = result.scalars().all()
     
-    return items
+    # Calculate pagination info
+    pages = (total + page_size - 1) // page_size
+    has_next = page < pages
+    has_prev = page > 1
+    
+    return PaginatedItemsResponse(
+        items=items,
+        total=total,
+        page=page,
+        page_size=page_size,
+        pages=pages,
+        has_next=has_next,
+        has_prev=has_prev
+    )
 
 
 @api_router.get("/items/{item_id}", response_model=ItemResponse)
@@ -247,6 +266,63 @@ async def search_datasets(
 ):
     """Advanced search for datasets"""
     return await search_service.search_datasets(search_request, db)
+
+
+# Ratings endpoints
+@api_router.get("/ratings", response_model=PaginatedRatingsResponse)
+async def get_ratings(
+    dataset_id: Optional[str] = Query(None),
+    item_id: Optional[str] = Query(None),
+    page: int = Query(1, ge=1),
+    page_size: int = Query(100, ge=1, le=1000),
+    db: AsyncSession = Depends(get_db)
+):
+    """Get individual ratings with optional filtering"""
+    # Build the query
+    query = select(Rating).options(
+        selectinload(Rating.item)
+    )
+    
+    # Apply filters
+    if dataset_id:
+        query = query.where(Rating.dataset_id == dataset_id)
+    if item_id:
+        query = query.where(Rating.item_id == item_id)
+    
+    # Get total count for pagination
+    count_query = select(func.count()).select_from(
+        query.subquery()
+    )
+    total_result = await db.execute(count_query)
+    total = total_result.scalar()
+    
+    # Apply pagination
+    offset = (page - 1) * page_size
+    query = query.offset(offset).limit(page_size)
+    
+    result = await db.execute(query)
+    ratings = result.scalars().all()
+    
+    # Convert to response format
+    rating_responses = [
+        RatingResponse(
+            id=str(rating.id),
+            rating=rating.rating,
+            item_id=str(rating.item_id),
+            item_name=rating.item.name if rating.item else None,
+            dataset_id=str(rating.dataset_id),
+            participant_id=rating.subject_id
+        )
+        for rating in ratings
+    ]
+    
+    return PaginatedRatingsResponse(
+        items=rating_responses,
+        total=total,
+        page=page,
+        page_size=page_size,
+        total_pages=(total + page_size - 1) // page_size
+    )
 
 
 # Ratings aggregation endpoint
@@ -279,7 +355,17 @@ async def request_download(
 @api_router.get("/download/{download_id}")
 async def get_download(download_id: str, db: AsyncSession = Depends(get_db)):
     """Get download file"""
-    return await download_service.get_download_file(download_id, db)
+    try:
+        file_info = await download_service.get_download_file(download_id, db)
+        return FileResponse(
+            path=file_info["file_path"],
+            filename=file_info["filename"],
+            media_type='application/octet-stream'
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Download failed")
 
 
 # Statistics endpoint

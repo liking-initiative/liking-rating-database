@@ -1,5 +1,5 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Card, Descriptions, Tag, Table, Button, Space, Typography, Row, Col } from 'antd';
 import { useQuery } from 'react-query';
 import { 
@@ -9,17 +9,78 @@ import {
   TeamOutlined,
   DatabaseOutlined 
 } from '@ant-design/icons';
-import { getStudy } from '../services/api';
+import { getStudy, requestDownload, getDownload, downloadFile } from '../services/api';
 
 const { Title, Paragraph } = Typography;
 
 const StudyDetailPage = () => {
   const { studyId } = useParams();
+  const navigate = useNavigate();
+  const [downloadingDatasets, setDownloadingDatasets] = useState(new Set());
+  const [downloadingAll, setDownloadingAll] = useState(false);
   
   const { data: study, isLoading } = useQuery(
     ['study', studyId], 
     () => getStudy(studyId)
   );
+
+  const handleDatasetDownload = async (dataset) => {
+    try {
+      setDownloadingDatasets(prev => new Set(prev).add(dataset.id));
+      
+      // Request download
+      const downloadRequest = {
+        dataset_ids: [dataset.id],
+        format: 'csv'
+      };
+      
+      const downloadInfo = await requestDownload(downloadRequest);
+      
+      // Get the file
+      const response = await getDownload(downloadInfo.download_id);
+      
+      // Download the file
+      const filename = `${dataset.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_data.csv`;
+      downloadFile(response.data, filename);
+      
+    } catch (error) {
+      console.error('Download failed:', error);
+      // You could add a notification here
+    } finally {
+      setDownloadingDatasets(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(dataset.id);
+        return newSet;
+      });
+    }
+  };
+
+  const handleDownloadAllDatasets = async () => {
+    try {
+      setDownloadingAll(true);
+      
+      // Request download for all datasets in the study
+      const downloadRequest = {
+        dataset_ids: study.datasets.map(ds => ds.id),
+        format: 'csv'
+      };
+      
+      const downloadInfo = await requestDownload(downloadRequest);
+      
+      // Get the file
+      const response = await getDownload(downloadInfo.download_id);
+      
+      // Download the file
+      const filename = `${study.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_all_datasets.csv`;
+      downloadFile(response.data, filename);
+      
+    } catch (error) {
+      console.error('Download failed:', error);
+      // You could add a notification here
+    } finally {
+      setDownloadingAll(false);
+    }
+  };
 
   const datasetColumns = [
     {
@@ -86,8 +147,18 @@ const StudyDetailPage = () => {
       width: 150,
       render: (_, record) => (
         <Space>
-          <Button size="small">View</Button>
-          <Button size="small" icon={<DownloadOutlined />}>
+          <Button 
+            size="small"
+            onClick={() => navigate(`/datasets/${record.id}`)}
+          >
+            View
+          </Button>
+          <Button 
+            size="small" 
+            icon={<DownloadOutlined />}
+            loading={downloadingDatasets.has(record.id)}
+            onClick={() => handleDatasetDownload(record)}
+          >
             Download
           </Button>
         </Space>
@@ -130,7 +201,13 @@ const StudyDetailPage = () => {
           </Col>
           <Col>
             <Space>
-              <Button type="primary" icon={<DownloadOutlined />}>
+              <Button 
+                type="primary" 
+                icon={<DownloadOutlined />}
+                loading={downloadingAll}
+                onClick={handleDownloadAllDatasets}
+                disabled={!study.datasets || study.datasets.length === 0}
+              >
                 Download All Datasets
               </Button>
             </Space>

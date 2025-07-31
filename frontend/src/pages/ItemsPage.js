@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   Card, 
   Table, 
@@ -21,18 +22,23 @@ const { Option } = Select;
 const { Search } = Input;
 
 const ItemsPage = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [pagination, setPagination] = useState({ page: 1, pageSize: 20 });
 
-  const { data: items, isLoading } = useQuery(
+  const { data: items, isLoading, error } = useQuery(
     ['items', searchTerm, selectedCategory, pagination],
     () => getItems({
       search: searchTerm,
       category: selectedCategory,
       page: pagination.page,
       page_size: pagination.pageSize
-    })
+    }),
+    {
+      retry: 3,
+      staleTime: 5 * 60 * 1000, // 5 minutes
+    }
   );
 
   const { data: categories } = useQuery('categories', getCategories);
@@ -117,8 +123,18 @@ const ItemsPage = () => {
       width: 120,
       render: (_, record) => (
         <Space>
-          <Button size="small">View</Button>
-          <Button size="small">Analyze</Button>
+          <Button 
+            size="small"
+            onClick={() => navigate(`/items/${record.id}`)}
+          >
+            View
+          </Button>
+          <Button 
+            size="small"
+            onClick={() => navigate(`/items/${record.id}/analyze`)}
+          >
+            Analyze
+          </Button>
         </Space>
       ),
     },
@@ -145,7 +161,7 @@ const ItemsPage = () => {
           <Card>
             <Statistic
               title="Total Items"
-              value={items?.length || 0}
+              value={items?.total || 0}
               prefix={<AppleOutlined />}
               valueStyle={{ color: '#1890ff' }}
             />
@@ -165,9 +181,9 @@ const ItemsPage = () => {
           <Card>
             <Statistic
               title="With Images"
-              value={items?.filter(item => item.image_available).length || 0}
+              value={items?.items?.filter(item => item.image_available).length || 0}
               valueStyle={{ color: '#faad14' }}
-              suffix={`/ ${items?.length || 0}`}
+              suffix={`/ ${items?.items?.length || 0}`}
             />
           </Card>
         </Col>
@@ -217,12 +233,13 @@ const ItemsPage = () => {
       <Card>
         <Table
           columns={columns}
-          dataSource={items}
+          dataSource={items?.items}
           rowKey="id"
           loading={isLoading}
           pagination={{
             current: pagination.page,
             pageSize: pagination.pageSize,
+            total: items?.total,
             showSizeChanger: true,
             showQuickJumper: true,
             showTotal: (total, range) => 

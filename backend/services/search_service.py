@@ -25,6 +25,20 @@ class SearchService:
         """
         query = select(Dataset).options(selectinload(Dataset.study))
         
+        # Always join with Study if we have text search or certain filters
+        needs_study_join = (
+            search_request.query or 
+            (search_request.filters and (
+                search_request.filters.study_name or 
+                search_request.filters.authors or 
+                search_request.filters.year_min or 
+                search_request.filters.year_max
+            ))
+        )
+        
+        if needs_study_join:
+            query = query.join(Study)
+        
         # Apply text search
         if search_request.query:
             text_filter = self._build_text_search_filter(search_request.query)
@@ -32,7 +46,7 @@ class SearchService:
         
         # Apply filters
         if search_request.filters:
-            query = self._apply_filters(query, search_request.filters)
+            query = self._apply_filters(query, search_request.filters, needs_study_join)
         
         # Apply sorting
         query = self._apply_sorting(query, search_request.sort_by, search_request.sort_order)
@@ -70,12 +84,13 @@ class SearchService:
         
         filters = []
         for term in search_terms:
+            # For SQLite with JSON, we need to use JSON functions
             term_filter = or_(
                 Dataset.name.ilike(f"%{term}%"),
                 Dataset.description.ilike(f"%{term}%"),
                 Study.name.ilike(f"%{term}%"),
                 Study.description.ilike(f"%{term}%"),
-                Study.authors.any(func.lower(text("unnest(authors)")).like(f"%{term}%")),
+                func.json_extract(Study.authors, '$').like(f'%"{term}"%'),
                 Study.journal.ilike(f"%{term}%")
             )
             filters.append(term_filter)
@@ -83,17 +98,18 @@ class SearchService:
         # All terms must match (AND logic)
         return and_(*filters) if len(filters) > 1 else filters[0]
     
-    def _apply_filters(self, query, filters: SearchFilters):
+    def _apply_filters(self, query, filters: SearchFilters, study_already_joined: bool = False):
         """Apply search filters to the query"""
-        # Join with Study for filtering
-        query = query.join(Study)
+        # Join with Study for filtering if not already joined
+        if not study_already_joined:
+            query = query.join(Study)
         
         if filters.study_name:
             query = query.where(Study.name.ilike(f"%{filters.study_name}%"))
         
         if filters.authors:
             for author in filters.authors:
-                query = query.where(Study.authors.any(func.lower(text("unnest(authors)")).like(f"%{author.lower()}%")))
+                query = query.where(func.json_extract(Study.authors, '$').like(f'%"{author}"%'))
         
         if filters.year_min:
             query = query.where(Study.year >= filters.year_min)
@@ -131,7 +147,7 @@ class SearchService:
                     or_(
                         Item.name.ilike(f"%{filters.food_name}%"),
                         Item.standardized_name.ilike(f"%{filters.food_name}%"),
-                        Item.aliases.any(filters.food_name)
+                        func.json_extract(Item.aliases, '$').like(f'%"{filters.food_name}"%')
                     )
                 )
             
@@ -200,12 +216,23 @@ class SearchService:
         study_result = await db.execute(study_query)
         suggestions["studies"] = [row[0] for row in study_result.fetchall()]
         
-        # Author suggestions
-        author_query = select(func.unnest(Study.authors)).where(
-            Study.authors.any(func.lower(text("unnest(authors)")).like(f"%{query.lower()}%"))
-        ).distinct().limit(limit)
+        # Author suggestions - extract from JSON array
+        author_query = select(Study.authors).where(
+            func.json_extract(Study.authors, '$').like(f'%"{query}"%')
+        ).limit(limit)
         author_result = await db.execute(author_query)
-        suggestions["authors"] = [row[0] for row in author_result.fetchall()]
+        authors_list = []
+        for row in author_result.fetchall():
+            if row[0]:  # authors is a JSON array
+                import json
+                try:
+                    authors = json.loads(row[0]) if isinstance(row[0], str) else row[0]
+                    for author in authors:
+                        if query.lower() in author.lower():
+                            authors_list.append(author)
+                except:
+                    pass
+        suggestions["authors"] = list(set(authors_list))[:limit]
         
         # Item name suggestions
         item_query = select(Item.name).where(

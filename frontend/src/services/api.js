@@ -38,7 +38,12 @@ api.interceptors.response.use(
 
 // Studies API
 export const getStudies = async (params = {}) => {
-  const response = await api.get('/studies', { params });
+  const defaultParams = {
+    page: 1,
+    page_size: 100,
+    ...params
+  };
+  const response = await api.get('/studies', { params: defaultParams });
   return response.data;
 };
 
@@ -80,11 +85,22 @@ export const createDataset = async (datasetData) => {
 
 // Items API
 export const getItems = async (params = {}) => {
-  const response = await api.get('/items', { params });
+  const defaultParams = {
+    page: 1,
+    page_size: 100,
+    ...params
+  };
+  const response = await api.get('/items', { params: defaultParams });
   return response.data;
 };
 
 export const getItem = async (itemId) => {
+  // Basic UUID validation
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  if (!uuidRegex.test(itemId)) {
+    throw new Error(`Invalid item ID format: ${itemId}`);
+  }
+  
   const response = await api.get(`/items/${itemId}`);
   return response.data;
 };
@@ -96,6 +112,16 @@ export const searchDatasets = async (searchRequest) => {
 };
 
 // Ratings API
+export const getRatings = async (params = {}) => {
+  const defaultParams = {
+    page: 1,
+    page_size: 1000,
+    ...params
+  };
+  const response = await api.get('/ratings', { params: defaultParams });
+  return response.data;
+};
+
 export const getRatingAggregations = async (params = {}) => {
   const response = await api.get('/ratings/aggregate', { params });
   return response.data;

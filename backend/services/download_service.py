@@ -6,6 +6,7 @@ import asyncio
 import csv
 import json
 import os
+import re
 import tempfile
 import zipfile
 from datetime import datetime, timedelta
@@ -18,6 +19,26 @@ import pandas as pd
 from backend.models.database import Dataset, Study, Item, Rating, DownloadLog
 from backend.models.schemas import DownloadRequest, DownloadResponse
 from backend.config import settings
+
+
+def _safe_filename(filename: str, max_length: int = 100) -> str:
+    """Create a safe filename by removing/replacing problematic characters and limiting length"""
+    # Remove or replace problematic characters
+    safe_name = re.sub(r'[<>:"/\\|?*]', '_', filename)
+    safe_name = re.sub(r'[^\w\-_\.]', '_', safe_name)
+    safe_name = re.sub(r'_+', '_', safe_name)  # Replace multiple underscores with single
+    safe_name = safe_name.strip('_')  # Remove leading/trailing underscores
+    
+    # Limit length
+    if len(safe_name) > max_length:
+        # Keep the extension if present
+        if '.' in safe_name:
+            name, ext = safe_name.rsplit('.', 1)
+            safe_name = name[:max_length-len(ext)-1] + '.' + ext
+        else:
+            safe_name = safe_name[:max_length]
+    
+    return safe_name
 
 
 class DownloadService:
@@ -144,7 +165,7 @@ class DownloadService:
         request: DownloadRequest
     ) -> str:
         """Create single CSV file"""
-        filename = f"{dataset.study.name}_{dataset.name}.csv".replace(" ", "_")
+        filename = _safe_filename(f"{dataset.study.name}_{dataset.name}.csv")
         file_path = os.path.join(download_path, filename)
         
         with open(file_path, 'w', newline='', encoding='utf-8') as csvfile:
@@ -205,7 +226,7 @@ class DownloadService:
                 await self._create_single_csv(dataset, os.path.dirname(temp_path), request)
                 
                 # Add to ZIP
-                csv_filename = f"{dataset.study.name}_{dataset.name}.csv".replace(" ", "_")
+                csv_filename = _safe_filename(f"{dataset.study.name}_{dataset.name}.csv")
                 zipf.write(temp_path, csv_filename)
                 
                 # Clean up temp file

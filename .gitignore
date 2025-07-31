@@ -195,6 +195,23 @@ scripts/init_database.py
 scripts/import_real_data.py
 requirements-*.txt
 
+# Build and cache directories
+build/
+dist/
+.cache/
+.temp/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Production database (should be backed up separately)
+production.db
+production_backup.db
+
 # Node.js
 node_modules/
 npm-debug.log*

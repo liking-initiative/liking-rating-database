@@ -19,7 +19,7 @@ class BaseSchema(BaseModel):
 # Study schemas
 class StudyBase(BaseSchema):
     """Base study schema"""
-    name: str = Field(..., max_length=255)
+    name: str = Field(..., max_length=1000)  # Increased for full academic citations
     authors: List[str]
     year: int = Field(..., ge=1900, le=2030)
     doi: Optional[str] = Field(None, max_length=255)
@@ -36,7 +36,7 @@ class StudyCreate(StudyBase):
 
 class StudyUpdate(BaseSchema):
     """Schema for updating a study"""
-    name: Optional[str] = Field(None, max_length=255)
+    name: Optional[str] = Field(None, max_length=1000)  # Increased for full academic citations
     authors: Optional[List[str]] = None
     year: Optional[int] = Field(None, ge=1900, le=2030)
     doi: Optional[str] = Field(None, max_length=255)
@@ -208,7 +208,7 @@ class SearchRequest(BaseSchema):
 
 class SearchResponse(BaseSchema):
     """Schema for search responses"""
-    results: List[DatasetResponse]
+    results: List[DatasetWithStudy]
     total: int
     page: int
     page_size: int
@@ -233,6 +233,26 @@ class DownloadResponse(BaseSchema):
     format: str
 
 
+# Rating schemas
+class RatingResponse(BaseSchema):
+    """Schema for individual rating responses"""
+    id: str
+    rating: float
+    item_id: str
+    item_name: Optional[str] = None
+    dataset_id: str
+    participant_id: Optional[str] = None
+
+
+class PaginatedRatingsResponse(BaseSchema):
+    """Schema for paginated ratings response"""
+    items: List[RatingResponse]
+    total: int
+    page: int
+    page_size: int
+    total_pages: int
+
+
 # Aggregation schemas
 class RatingAggregation(BaseSchema):
     """Schema for rating aggregations"""
@@ -243,6 +263,8 @@ class RatingAggregation(BaseSchema):
     median_rating: float
     n_ratings: int
     datasets_count: int
+    min_rating: Optional[float] = None
+    max_rating: Optional[float] = None
 
 
 class StudyStatistics(BaseSchema):
@@ -267,6 +289,17 @@ class ErrorResponse(BaseSchema):
 class PaginatedResponse(BaseSchema):
     """Generic paginated response"""
     items: List[Any]
+    total: int
+    page: int
+    page_size: int
+    pages: int
+    has_next: bool
+    has_prev: bool
+
+
+class PaginatedItemsResponse(BaseSchema):
+    """Paginated response for items"""
+    items: List[ItemResponse]
     total: int
     page: int
     page_size: int

@@ -10,7 +10,14 @@ const { Title } = Typography;
 const StudiesPage = () => {
   const navigate = useNavigate();
   
-  const { data: studies, isLoading } = useQuery('studies', () => getStudies());
+  const { data: studies, isLoading, error } = useQuery(
+    'studies', 
+    () => getStudies(),
+    {
+      retry: 3,
+      staleTime: 5 * 60 * 1000, // 5 minutes
+    }
+  );
 
   const columns = [
     {
@@ -112,19 +119,29 @@ const StudiesPage = () => {
       </Row>
 
       <Card>
-        <Table
-          columns={columns}
-          dataSource={studies}
-          rowKey="id"
-          loading={isLoading}
-          pagination={{
-            pageSize: 20,
-            showSizeChanger: true,
-            showQuickJumper: true,
-            showTotal: (total, range) => 
-              `${range[0]}-${range[1]} of ${total} studies`,
-          }}
-        />
+        {error ? (
+          <div style={{ textAlign: 'center', padding: '2rem' }}>
+            <p>Error loading studies: {error.message}</p>
+            <Button onClick={() => window.location.reload()}>Retry</Button>
+          </div>
+        ) : (
+          <Table
+            columns={columns}
+            dataSource={studies}
+            rowKey="id"
+            loading={isLoading}
+            pagination={{
+              pageSize: 20,
+              showSizeChanger: true,
+              showQuickJumper: true,
+              showTotal: (total, range) => 
+                `${range[0]}-${range[1]} of ${total} studies`,
+            }}
+            locale={{
+              emptyText: isLoading ? 'Loading...' : 'No studies found'
+            }}
+          />
+        )}
       </Card>
     </div>
   );
