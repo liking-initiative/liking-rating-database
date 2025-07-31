@@ -226,3 +226,22 @@ yarn-error.log*
 # Windows
 Thumbs.db
 Desktop.ini
+
+# AI conversation files
+CLAUDE.md
+GEMINI.md
+.claude/
+
+# Raw data files (imported to database)
+final_database.csv
+*.xlsx
+*.pdf
+
+# Deployment files (if using local development only)
+Dockerfile
+docker-compose.yml
+nginx.conf
+DEPLOYMENT.md
+
+# Test downloads
+test_download*.csv

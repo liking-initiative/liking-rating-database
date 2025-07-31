@@ -104,7 +104,7 @@ const AboutPage = () => {
         </Paragraph>
         <Space direction="vertical">
           <div>Email: support@likingdatabase.org</div>
-          <div>GitHub: <a href="https://github.com/your-repo/liking-rating-database">
+          <div>GitHub: <a href="https://github.com/kiante-fernandez/liking-rating-database">
             Project Repository
           </a></div>
         </Space>
