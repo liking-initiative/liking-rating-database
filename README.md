@@ -1,6 +1,6 @@
 # Liking Rating Database
 
-A comprehensive user-facing database system for food liking ratings from 30 studies with 700k+ data entries. This system provides researchers with easy access to standardized food preference data for analysis and research purposes.
+A comprehensive user-facing database system for food liking ratings from 35+ research studies with 500k+ data entries. This system provides researchers with easy access to standardized food preference data for analysis and research purposes.
 
 ## 🚀 Quick Start
 
@@ -12,75 +12,66 @@ A comprehensive user-facing database system for food liking ratings from 30 stud
 ### Automated Setup (Recommended)
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/liking-rating-database.git
+git clone https://github.com/kiante-fernandez/liking-rating-database.git
 cd liking-rating-database
-
-# Run the automated setup
-python scripts/setup.py
 
 # Start both backend and frontend
 python start.py
 ```
 
+The database comes pre-loaded with real research data from 35+ studies.
+
 ### Manual Setup
 ```bash
-# Backend setup
+# Install Python dependencies
 pip install -r requirements.txt
+
+# Copy environment configuration
 cp .env.example .env
-# Edit .env with your configuration
-python scripts/init_database.py
+# Edit .env with your configuration if needed
 
 # Frontend setup
 cd frontend
 npm install
 
-# Start backend (Terminal 1)
-python backend/app.py
-
-# Start frontend (Terminal 2)
-cd frontend && npm start
+# Start both servers using the automated script
+python ../start.py
 ```
+
+**Note**: The database (`backend/liking_rating_db.db`) comes pre-populated with real research data.
 
 ### Access the Application
 - **Frontend**: http://localhost:3000
 - **Backend API**: http://localhost:8000
-- **API Documentation**: http://localhost:8000/api/v1/docs
+- **API Documentation**: http://localhost:8000/docs
 
 ## ✨ Features
 
-- **Comprehensive Data Access**: 700k+ food liking ratings from 30 studies
+- **Comprehensive Data Access**: 500k+ food liking ratings from 35+ research studies
 - **Advanced Search**: Filter by study, food items, rating scales, and more
 - **Data Standardization**: Normalized rating scales for cross-study comparisons
-- **Multiple Export Formats**: CSV, JSON, SPSS, R-compatible formats
-- **Interactive Visualizations**: Rating distributions and cross-study comparisons
-- **OSF Integration**: Direct access to Open Science Framework data storage
-- **Citation Generator**: Automatic citation generation for used datasets
+- **Multiple Export Formats**: CSV, JSON, Excel, SPSS-compatible formats
+- **Interactive Interface**: Clean, professional UI built with React and Ant Design
+- **Real Research Data**: Pre-loaded with actual academic research datasets
+- **Clean Study Names**: User-friendly study titles for easy browsing
 
 ## 📊 Current Implementation Status
 
 ### ✅ Completed Features
-- **Backend API**: FastAPI with comprehensive models and routes
-- **Database Models**: Studies, datasets, items, ratings with relationships
+- **Backend API**: FastAPI with comprehensive endpoints and data models
+- **Database**: SQLite database pre-loaded with 35+ research studies
 - **Search System**: Advanced filtering and search functionality
 - **Download System**: Multi-format data export (CSV, JSON, Excel, SPSS)
 - **Frontend Interface**: React app with Ant Design components
-- **Data Standardization**: Rating normalization and food categorization
-- **Documentation**: API docs and development guides
+- **Data Import**: Real academic research data with clean study names
+- **Documentation**: API documentation and development guides
 
-### 🚧 In Development
-- Data visualization components
+### � Future Enhancements
+- Interactive data visualizations
 - User authentication system
 - Advanced analytics dashboard
-- OSF API integration
-- Bulk data import tools
-
-### 📋 Planned Features
-- Interactive charts and graphs
-- User accounts and saved searches
-- Data quality metrics
 - Citation management
-- Email notifications
-- Mobile-responsive design improvements
+- Additional export formats
 
 ## 🏗️ Architecture
 
@@ -97,51 +88,44 @@ cd frontend && npm start
 - **Styling**: CSS-in-JS with styled-components
 
 ### Data Layer
-- **Studies**: Research study metadata
-- **Datasets**: Individual datasets within studies  
-- **Items**: Standardized food items with categories
-- **Ratings**: Individual preference ratings (normalized 0-1 scale)
+- **Studies**: 35+ research studies with clean, descriptive titles
+- **Datasets**: 43 individual datasets within studies  
+- **Items**: 2,248 standardized food items
+- **Ratings**: 500k+ individual preference ratings across multiple scales
 
 ## 📖 Documentation
 
 - **[Development Guide](docs/DEVELOPMENT.md)**: Complete setup and development instructions
-- **[API Documentation](http://localhost:8000/api/v1/docs)**: Interactive API documentation (when running)
-- **[Data Dictionary](docs/DATA_DICTIONARY.md)**: Detailed field descriptions (planned)
+- **[API Documentation](http://localhost:8000/docs)**: Interactive API documentation (when running)
+- **[Data Dictionary](docs/DATA_DICTIONARY.md)**: Detailed field descriptions
 
 ## 🔧 Configuration
 
 The application uses environment variables for configuration. Copy `.env.example` to `.env` and modify as needed:
 
 ```bash
-# Database (SQLite for development, PostgreSQL for production)
-DATABASE_URL=sqlite+aiosqlite:///./liking_rating.db
+# Database (SQLite with pre-loaded data)
+DATABASE_URL=sqlite+aiosqlite:///./backend/liking_rating_db.db
 
 # API Configuration  
 SECRET_KEY=your-secret-key-here
 API_HOST=localhost
 API_PORT=8000
 
-# Optional: OSF Integration
-OSF_API_TOKEN=your-osf-token
-OSF_PROJECT_ID=your-project-id
-
-# Optional: Redis for caching
-REDIS_URL=redis://localhost:6379
+# Development settings
+DEBUG=True
 ```
 
-## 🧪 Sample Data
+## 📊 Data Overview
 
-The setup script can create sample data for testing:
+The database contains real research data from academic studies:
 
-```bash
-python scripts/create_sample_data.py
-```
+- **35+ Research Studies** with clean, descriptive titles
+- **500k+ Individual Ratings** across multiple rating scales  
+- **2,248 Food Items** standardized across studies
+- **43 Datasets** with comprehensive metadata
 
-This creates:
-- 3 sample studies with realistic metadata
-- 6 datasets with varying characteristics  
-- 10 common food items across categories
-- Thousands of realistic preference ratings
+All data has been validated and is ready for research use.
 
 ## 🤝 Contributing
 
@@ -159,8 +143,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📬 Contact & Support
 
-- **Email**: support@likingdatabase.org
-- **GitHub Issues**: [Project Issues](https://github.com/yourusername/liking-rating-database/issues)
+- **GitHub**: [kiante-fernandez/liking-rating-database](https://github.com/kiante-fernandez/liking-rating-database)
+- **Issues**: [Project Issues](https://github.com/kiante-fernandez/liking-rating-database/issues)
 - **Documentation**: [Development Guide](docs/DEVELOPMENT.md)
 
 ## 🙏 Citation
@@ -173,7 +157,7 @@ If you use this database in your research, please cite:
 
 ## 🔮 Roadmap
 
-- **Phase 1** (Current): Core functionality and data access
+- **Phase 1** ✅ **Complete**: Core functionality and real data integration
 - **Phase 2**: Advanced visualizations and analytics  
 - **Phase 3**: User accounts and collaboration features
 - **Phase 4**: Machine learning insights and recommendations
