@@ -101,7 +101,7 @@ const ItemsPage = () => {
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontWeight: 'bold' }}>{frequency}</div>
           <div style={{ fontSize: '12px', color: '#666' }}>
-            {frequency === 1 ? 'dataset' : 'datasets'}
+            {frequency === 1 ? 'rating' : 'ratings'}
           </div>
         </div>
       ),

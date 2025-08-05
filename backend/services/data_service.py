@@ -86,6 +86,67 @@ class DataService:
         
         return aggregations
     
+    async def get_item_ratings_by_dataset(
+        self,
+        item_id: str,
+        db: AsyncSession
+    ) -> List[Dict[str, Any]]:
+        """
+        Get rating statistics for a specific item broken down by dataset
+        """
+        # Query for ratings grouped by dataset for the specific item
+        query = select(
+            Rating.dataset_id,
+            Dataset.name.label('dataset_name'),
+            Dataset.study_id,
+            Study.name.label('study_name'),
+            func.avg(Rating.normalized_rating).label('mean_rating'),
+            func.count(Rating.id).label('n_ratings'),
+            func.min(Rating.normalized_rating).label('min_rating'),
+            func.max(Rating.normalized_rating).label('max_rating')
+        ).select_from(Rating)\
+         .join(Dataset, Rating.dataset_id == Dataset.id)\
+         .join(Study, Dataset.study_id == Study.id)\
+         .where(Rating.item_id == item_id)\
+         .group_by(Rating.dataset_id, Dataset.name, Dataset.study_id, Study.name)
+        
+        result = await db.execute(query)
+        rows = result.fetchall()
+        
+        dataset_ratings = []
+        for row in rows:
+            # Calculate std deviation and median for each dataset
+            std_query = select(Rating.normalized_rating).where(
+                and_(Rating.item_id == item_id, Rating.dataset_id == row.dataset_id)
+            )
+            std_result = await db.execute(std_query)
+            ratings_list = [r[0] for r in std_result.fetchall()]
+            
+            # Calculate standard deviation and median
+            if len(ratings_list) > 1:
+                mean_val = sum(ratings_list) / len(ratings_list)
+                variance = sum((x - mean_val) ** 2 for x in ratings_list) / (len(ratings_list) - 1)
+                std_rating = variance ** 0.5
+                median_rating = sorted(ratings_list)[len(ratings_list) // 2]
+            else:
+                std_rating = 0.0
+                median_rating = ratings_list[0] if ratings_list else 0.0
+            
+            dataset_ratings.append({
+                'dataset_id': row.dataset_id,
+                'dataset_name': row.dataset_name,
+                'study_id': row.study_id,
+                'study_name': row.study_name,
+                'mean_rating': float(row.mean_rating) if row.mean_rating is not None else 0.0,
+                'std_rating': std_rating,
+                'median_rating': median_rating,
+                'n_ratings': row.n_ratings,
+                'min_rating': float(row.min_rating) if row.min_rating is not None else None,
+                'max_rating': float(row.max_rating) if row.max_rating is not None else None
+            })
+        
+        return dataset_ratings
+    
     async def get_statistics(self, db: AsyncSession) -> StudyStatistics:
         """Get overall database statistics"""
         # Count studies
@@ -278,3 +339,73 @@ class DataService:
                 '95': statistics.quantiles(ratings, n=20)[18] if len(ratings) >= 20 else None
             }
         }
+
+    async def get_studies_with_dataset_counts(
+        self,
+        db: AsyncSession,
+        page: int = 1,
+        page_size: int = 20,
+        author: Optional[str] = None,
+        year_min: Optional[int] = None,
+        year_max: Optional[int] = None
+    ) -> List[Dict[str, Any]]:
+        """
+        Get studies with dataset counts
+        """
+        # Build base query for studies with dataset counts
+        query = select(
+            Study.id,
+            Study.name,
+            Study.authors,
+            Study.year,
+            Study.doi,
+            Study.description,
+            Study.publication_title,
+            Study.journal,
+            Study.osf_project_id,
+            Study.created_at,
+            Study.updated_at,
+            func.count(Dataset.id).label('dataset_count')
+        ).select_from(Study)\
+         .outerjoin(Dataset, Study.id == Dataset.study_id)\
+         .group_by(Study.id, Study.name, Study.authors, Study.year, Study.doi, 
+                  Study.description, Study.publication_title, Study.journal, 
+                  Study.osf_project_id, Study.created_at, Study.updated_at)
+        
+        # Apply filters
+        if author:
+            # Note: This would need to be adapted based on how authors are stored
+            query = query.where(Study.authors.contains(author))
+        if year_min:
+            query = query.where(Study.year >= year_min)
+        if year_max:
+            query = query.where(Study.year <= year_max)
+        
+        # Add pagination
+        offset = (page - 1) * page_size
+        query = query.offset(offset).limit(page_size)
+        
+        result = await db.execute(query)
+        rows = result.fetchall()
+        
+        studies_with_counts = []
+        for row in rows:
+            # Create an array with the count as length for frontend compatibility
+            datasets_array = [None] * row.dataset_count if row.dataset_count > 0 else []
+            
+            studies_with_counts.append({
+                'id': row.id,
+                'name': row.name,
+                'authors': row.authors,
+                'year': row.year,
+                'doi': row.doi,
+                'description': row.description,
+                'publication_title': row.publication_title,
+                'journal': row.journal,
+                'osf_project_id': row.osf_project_id,
+                'created_at': row.created_at,
+                'updated_at': row.updated_at,
+                'datasets': datasets_array  # Array with length matching dataset count
+            })
+        
+        return studies_with_counts

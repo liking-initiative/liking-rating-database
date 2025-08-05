@@ -16,7 +16,7 @@ import {
 } from 'antd';
 import { ArrowLeftOutlined, BarChartOutlined, TagOutlined } from '@ant-design/icons';
 import { useQuery } from 'react-query';
-import { getItem, getRatingAggregations } from '../services/api';
+import { getItem, getRatingAggregations, getItemRatingsByDataset } from '../services/api';
 
 const { Title, Text } = Typography;
 
@@ -62,10 +62,10 @@ const ItemDetailPage = () => {
     }
   );
 
-  // Fetch rating aggregations for this item
+  // Fetch rating aggregations for this item by dataset
   const { data: ratings, isLoading: ratingsLoading } = useQuery(
-    ['ratings', itemId],
-    () => getRatingAggregations({ item_ids: [itemId] }),
+    ['itemRatingsByDataset', itemId],
+    () => getItemRatingsByDataset(itemId),
     {
       enabled: !!itemId,
       retry: 3,
@@ -190,10 +190,19 @@ const ItemDetailPage = () => {
             <Row gutter={[16, 16]}>
               <Col span={24}>
                 <Statistic
-                  title="Frequency"
-                  value={item.frequency || 0}
+                  title="Appears in Datasets"
+                  value={ratings ? ratings.length : 0}
                   suffix="datasets"
                   valueStyle={{ color: '#1890ff' }}
+                />
+              </Col>
+              
+              <Col span={24}>
+                <Statistic
+                  title="Total Occurrences"
+                  value={item.frequency || 0}
+                  suffix="ratings"
+                  valueStyle={{ color: '#722ed1' }}
                 />
               </Col>
               
@@ -205,7 +214,7 @@ const ItemDetailPage = () => {
                   <Col span={24}>
                     <Statistic
                       title="Total Ratings"
-                      value={ratings.reduce((sum, r) => sum + r.count, 0)}
+                      value={ratings.reduce((sum, r) => sum + r.n_ratings, 0)}
                       valueStyle={{ color: '#52c41a' }}
                     />
                   </Col>
@@ -213,8 +222,8 @@ const ItemDetailPage = () => {
                     <Statistic
                       title="Average Rating"
                       value={ratings.length > 0 ? 
-                        (ratings.reduce((sum, r) => sum + r.mean_rating * r.count, 0) / 
-                         ratings.reduce((sum, r) => sum + r.count, 0)).toFixed(2) : 0
+                        (ratings.reduce((sum, r) => sum + r.mean_rating * r.n_ratings, 0) / 
+                         ratings.reduce((sum, r) => sum + r.n_ratings, 0)).toFixed(2) : 0
                       }
                       precision={2}
                       valueStyle={{ color: '#faad14' }}
@@ -245,10 +254,10 @@ const ItemDetailPage = () => {
               <Col key={index} xs={24} sm={12} md={8} lg={6}>
                 <Card size="small">
                   <Statistic
-                    title={`Dataset ${index + 1}`}
+                    title={rating.study_name || rating.dataset_name || `Dataset ${index + 1}`}
                     value={rating.mean_rating}
                     precision={2}
-                    suffix={`(${rating.count} ratings)`}
+                    suffix={`(${rating.n_ratings} ratings)`}
                     valueStyle={{ 
                       color: rating.mean_rating > 3 ? '#52c41a' : 
                              rating.mean_rating > 2 ? '#faad14' : '#ff4d4f' 

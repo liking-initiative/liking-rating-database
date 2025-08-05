@@ -127,6 +127,11 @@ export const getRatingAggregations = async (params = {}) => {
   return response.data;
 };
 
+export const getItemRatingsByDataset = async (itemId) => {
+  const response = await api.get(`/items/${itemId}/ratings/by-dataset`);
+  return response.data;
+};
+
 // Download API
 export const requestDownload = async (downloadRequest) => {
   const response = await api.post('/download', downloadRequest);

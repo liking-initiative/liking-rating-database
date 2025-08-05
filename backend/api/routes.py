@@ -33,7 +33,7 @@ data_service = DataService()
 
 
 # Studies endpoints
-@api_router.get("/studies", response_model=List[StudyResponse])
+@api_router.get("/studies", response_model=List[dict])
 async def get_studies(
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
@@ -42,25 +42,15 @@ async def get_studies(
     year_max: Optional[int] = Query(None),
     db: AsyncSession = Depends(get_db)
 ):
-    """Get all studies with optional filtering"""
-    query = select(Study)
-    
-    # Apply filters
-    if author:
-        query = query.where(Study.authors.any(author))
-    if year_min:
-        query = query.where(Study.year >= year_min)
-    if year_max:
-        query = query.where(Study.year <= year_max)
-    
-    # Add pagination
-    offset = (page - 1) * page_size
-    query = query.offset(offset).limit(page_size)
-    
-    result = await db.execute(query)
-    studies = result.scalars().all()
-    
-    return studies
+    """Get all studies with optional filtering and dataset counts"""
+    return await data_service.get_studies_with_dataset_counts(
+        db=db,
+        page=page,
+        page_size=page_size,
+        author=author,
+        year_min=year_min,
+        year_max=year_max
+    )
 
 
 @api_router.get("/studies/{study_id}", response_model=StudyWithDatasets)
@@ -340,6 +330,15 @@ async def get_rating_aggregations(
         min_ratings=min_ratings,
         db=db
     )
+
+# Get per-dataset ratings for a specific item
+@api_router.get("/items/{item_id}/ratings/by-dataset", response_model=List[dict])
+async def get_item_ratings_by_dataset(
+    item_id: str,
+    db: AsyncSession = Depends(get_db)
+):
+    """Get rating statistics for a specific item broken down by dataset"""
+    return await data_service.get_item_ratings_by_dataset(item_id, db)
 
 
 # Download endpoint

@@ -18,7 +18,7 @@ import {
 import { ArrowLeftOutlined, BarChartOutlined, LineChartOutlined } from '@ant-design/icons';
 import Plot from 'react-plotly.js';
 import { useQuery } from 'react-query';
-import { getItem, getRatingAggregations, getRatings } from '../services/api';
+import { getItem, getRatingAggregations, getRatings, getItemRatingsByDataset } from '../services/api';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -66,10 +66,10 @@ const ItemAnalysisPage = () => {
     }
   );
 
-  // Fetch rating aggregations for this item
+  // Fetch rating aggregations for this item by dataset
   const { data: ratings, isLoading: ratingsLoading } = useQuery(
-    ['ratings', itemId],
-    () => getRatingAggregations({ item_ids: [itemId], min_ratings: 1 }),
+    ['itemRatingsByDataset', itemId],
+    () => getItemRatingsByDataset(itemId),
     {
       enabled: !!itemId,
       retry: 3,
@@ -157,7 +157,7 @@ const ItemAnalysisPage = () => {
   // Prepare data for rating distribution table
   const ratingDistribution = ratings?.map((rating, index) => ({
     key: index,
-    dataset: `Dataset ${index + 1}`,
+    dataset: rating.study_name || rating.dataset_name || `Dataset ${index + 1}`,
     mean: rating.mean_rating,
     std: rating.std_rating,
     count: rating.n_ratings,
@@ -195,13 +195,27 @@ const ItemAnalysisPage = () => {
       title: 'Min',
       dataIndex: 'min',
       key: 'min',
-      render: (value) => value?.toFixed(1) || 'N/A',
+      render: (value) => value != null ? value.toFixed(2) : 'N/A',
+      sorter: (a, b) => {
+        // Handle null values - put them at the end
+        if (a.min == null && b.min == null) return 0;
+        if (a.min == null) return 1;
+        if (b.min == null) return -1;
+        return a.min - b.min;
+      },
     },
     {
       title: 'Max',
       dataIndex: 'max',
       key: 'max',
-      render: (value) => value?.toFixed(1) || 'N/A',
+      render: (value) => value != null ? value.toFixed(2) : 'N/A',
+      sorter: (a, b) => {
+        // Handle null values - put them at the end
+        if (a.max == null && b.max == null) return 0;
+        if (a.max == null) return 1;
+        if (b.max == null) return -1;
+        return a.max - b.max;
+      },
     },
   ];
 
@@ -234,7 +248,7 @@ const ItemAnalysisPage = () => {
     if (!ratings?.length) return [];
 
     return [{
-      x: ratings.map((r, i) => `Dataset ${i + 1}`),
+      x: ratings.map(r => r.study_name || r.dataset_name || 'Unknown Dataset'),
       y: ratings.map(r => r.mean_rating),
       error_y: {
         type: 'data',
