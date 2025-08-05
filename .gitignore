@@ -245,3 +245,10 @@ DEPLOYMENT.md
 
 # Test downloads
 test_download*.csv
+
+# Temporary development scripts
+fix_*.py
+check_*.py
+update_*.py
+*_temp.py
+*_backup.py
