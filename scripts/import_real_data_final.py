@@ -130,22 +130,22 @@ async def load_study_metadata_from_excel(excel_file_path):
             'name': 'Memorable but not chosen: No effect of memorability on value-based decisions',
             'authors': ['Li, X.', 'Bainbridge, W.', 'Bakkour, A.'],
             'year': 2022,
-            'journal': 'PsyArXiv',
-            'doi': 'https://doi.org/10.31234/osf.io/xqhk8'
+            'journal': 'Scientific Reports',
+            'doi': 'https://doi.org/10.1038/s41598-022-26333-5'
         },
         'libain2': {
             'name': 'Memorable but not chosen: No effect of memorability on value-based decisions',
             'authors': ['Li, X.', 'Bainbridge, W.', 'Bakkour, A.'],
             'year': 2022,
-            'journal': 'PsyArXiv',
-            'doi': 'https://doi.org/10.31234/osf.io/xqhk8'
+            'journal': 'Scientific Reports',
+            'doi': 'https://doi.org/10.1038/s41598-022-26333-5'
         },
         'romfred': {
             'name': 'Considering what we know and what we don\'t know: Expectations and confidence guide value integration in value-based decision-making',
             'authors': ['Frömer, R.', 'Callaway, F.', 'Griffiths, T.', 'Shenhav, A.'],
-            'year': 2022,
-            'journal': 'PsyArXiv',
-            'doi': 'https://doi.org/10.31234/osf.io/2sqyt_v1'
+            'year': 2025,
+            'journal': 'Open Mind',
+            'doi': 'https://doi.org/10.1162/opmi.a.3'
         },
         'sepush': {
             'name': 'Visual attention modulates the integration of goal-relevant evidence and not value',
