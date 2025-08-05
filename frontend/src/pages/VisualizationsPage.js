@@ -336,7 +336,7 @@ const VisualizationsPage = () => {
         </Col>
         
         <Col xs={24} lg={12}>
-          <Card             title="Dataset Distribution by Study" style={{ height: 500 }}>
+          <Card title="Dataset Distribution by Study" style={{ height: 500 }}>
             {datasets?.length > 0 ? (
               <Plot
                 data={[generateTimeSeriesData()]}
