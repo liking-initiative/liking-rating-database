@@ -85,12 +85,13 @@ class SearchService:
         filters = []
         for term in search_terms:
             # For SQLite with JSON, we need to use JSON functions
+            # Use case-insensitive search for authors
             term_filter = or_(
                 Dataset.name.ilike(f"%{term}%"),
                 Dataset.description.ilike(f"%{term}%"),
                 Study.name.ilike(f"%{term}%"),
                 Study.description.ilike(f"%{term}%"),
-                func.json_extract(Study.authors, '$').like(f'%"{term}"%'),
+                func.lower(func.json_extract(Study.authors, '$')).like(f'%{term}%'),
                 Study.journal.ilike(f"%{term}%")
             )
             filters.append(term_filter)
@@ -109,7 +110,7 @@ class SearchService:
         
         if filters.authors:
             for author in filters.authors:
-                query = query.where(func.json_extract(Study.authors, '$').like(f'%"{author}"%'))
+                query = query.where(func.lower(func.json_extract(Study.authors, '$')).like(f'%{author.lower()}%'))
         
         if filters.year_min:
             query = query.where(Study.year >= filters.year_min)

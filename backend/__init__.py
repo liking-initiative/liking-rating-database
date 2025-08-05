@@ -5,4 +5,4 @@ Main package initialization
 
 __version__ = "1.0.0"
 __author__ = "Kianté Fernandez"
-__email__ = "your_email@example.com"
+__email__ = "kiante.fernandez@gmail.com"

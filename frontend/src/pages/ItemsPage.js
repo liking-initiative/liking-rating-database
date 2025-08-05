@@ -146,13 +146,6 @@ const ItemsPage = () => {
         <Col>
           <Title level={2}>Food Items</Title>
         </Col>
-        <Col>
-          <Space>
-            <Button type="primary">
-              Add Item
-            </Button>
-          </Space>
-        </Col>
       </Row>
 
       {/* Summary Stats */}

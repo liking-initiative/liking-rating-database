@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Typography, Row, Col, Empty, Spin, Select } from 'antd';
+import { Card, Typography, Row, Col, Empty, Spin, Select, Alert } from 'antd';
 import { BarChartOutlined } from '@ant-design/icons';
 import Plot from 'react-plotly.js';
 import { useQuery } from 'react-query';
-import { getDatasets, getItems, getRatingAggregations } from '../services/api';
+import { getDatasets, getItems, getRatingAggregations, getStatistics } from '../services/api';
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -15,21 +15,31 @@ const VisualizationsPage = () => {
   // Data queries
   const { data: datasets, isLoading: datasetsLoading } = useQuery('datasets', getDatasets);
   const { data: items, isLoading: itemsLoading } = useQuery('items', getItems);
+  const { data: statistics, isLoading: statsLoading } = useQuery('statistics', getStatistics);
+  const { data: aggregations, isLoading: aggregationsLoading } = useQuery(
+    'ratingAggregations', 
+    () => getRatingAggregations({ min_ratings: 10 })
+  );
   
-  // Mock data for rating distributions - in real app this would come from API
+  // Real data for rating distributions
   const generateRatingDistributionData = () => {
-    const ratings = [];
-    const bins = [];
+    if (!aggregations?.length) return [];
     
-    // Generate sample data for demonstration
-    for (let i = 0; i <= 10; i++) {
-      bins.push(i);
-      ratings.push(Math.floor(Math.random() * 1000) + 100);
-    }
+    // Create rating distribution from actual data
+    const ratingCounts = {};
+    aggregations.forEach(item => {
+      if (item.mean_rating) {
+        const bin = Math.floor(item.mean_rating);
+        ratingCounts[bin] = (ratingCounts[bin] || 0) + 1;
+      }
+    });
+    
+    const bins = Object.keys(ratingCounts).map(Number).sort((a, b) => a - b);
+    const counts = bins.map(bin => ratingCounts[bin]);
     
     return {
       x: bins,
-      y: ratings,
+      y: counts,
       type: 'bar',
       name: 'Rating Frequency',
       marker: { color: '#1890ff' }
@@ -37,8 +47,22 @@ const VisualizationsPage = () => {
   };
 
   const generateCategoryData = () => {
-    const categories = ['Sweets', 'Chips', 'Fruits', 'Vegetables', 'Crackers', 'Other'];
-    const ratings = categories.map(() => Math.random() * 10);
+    if (!aggregations?.length) return [];
+    
+    // Group by category and calculate average ratings
+    const categoryData = {};
+    aggregations.forEach(item => {
+      if (item.category && item.mean_rating) {
+        if (!categoryData[item.category]) {
+          categoryData[item.category] = { sum: 0, count: 0 };
+        }
+        categoryData[item.category].sum += item.mean_rating;
+        categoryData[item.category].count += 1;
+      }
+    });
+    
+    const categories = Object.keys(categoryData);
+    const ratings = categories.map(cat => categoryData[cat].sum / categoryData[cat].count);
     
     return {
       x: categories,
@@ -50,41 +74,42 @@ const VisualizationsPage = () => {
   };
 
   const generateStudyComparisonData = () => {
-    const studies = datasets?.slice(0, 5)?.map(d => d.name.substring(0, 20) + '...') || 
-                   ['Study 1', 'Study 2', 'Study 3', 'Study 4', 'Study 5'];
-    const meanRatings = studies.map(() => Math.random() * 5 + 3);
-    const stdRatings = studies.map(() => Math.random() * 1 + 0.5);
+    if (!datasets?.length) return [];
+    
+    const studyData = datasets.slice(0, 10).map(dataset => ({
+      name: dataset.name.length > 20 ? dataset.name.substring(0, 20) + '...' : dataset.name,
+      subjects: dataset.n_subjects || 0,
+      items: dataset.n_items || 0
+    }));
     
     return {
-      x: studies,
-      y: meanRatings,
-      error_y: {
-        type: 'data',
-        array: stdRatings,
-        visible: true
-      },
+      x: studyData.map(s => s.name),
+      y: studyData.map(s => s.subjects),
       type: 'bar',
-      name: 'Mean Rating ± SD',
+      name: 'Number of Subjects',
       marker: { color: '#fa8c16' }
     };
   };
 
   const generateTimeSeriesData = () => {
-    const years = Array.from(new Set(datasets?.map(d => d.year) || [2018, 2019, 2020, 2021, 2022, 2023, 2024]));
-    years.sort();
+    if (!datasets?.length) return [];
     
-    const studyCounts = years.map(year => 
-      datasets?.filter(d => d.year === year).length || Math.floor(Math.random() * 5) + 1
-    );
+    // Since datasets don't have years, let's group by study and count datasets per study
+    const studyCounts = {};
+    datasets.forEach(dataset => {
+      const studyName = dataset.name.split(' ')[0]; // Get first word as study identifier
+      studyCounts[studyName] = (studyCounts[studyName] || 0) + 1;
+    });
+    
+    const studies = Object.keys(studyCounts).slice(0, 10); // Top 10 studies by dataset count
+    const counts = studies.map(study => studyCounts[study]);
     
     return {
-      x: years,
-      y: studyCounts,
-      type: 'scatter',
-      mode: 'lines+markers',
-      name: 'Studies per Year',
-      line: { color: '#722ed1' },
-      marker: { size: 8, color: '#722ed1' }
+      x: studies,
+      y: counts,
+      type: 'bar',
+      name: 'Datasets per Study',
+      marker: { color: '#722ed1' }
     };
   };
 
@@ -174,35 +199,51 @@ const VisualizationsPage = () => {
         
         <Col xs={24} lg={12}>
           <Card title="Cross-Study Comparisons" style={{ height: 500 }}>
-            <Plot
-              data={[generateStudyComparisonData()]}
-              layout={{
-                title: 'Mean Ratings Across Studies',
-                xaxis: { title: 'Study', tickangle: -45 },
-                yaxis: { title: 'Mean Rating' },
-                height: 400,
-                margin: { t: 50, b: 80, l: 50, r: 50 }
-              }}
-              config={{ responsive: true }}
-              style={{ width: '100%', height: '100%' }}
-            />
+            {datasets?.length > 0 ? (
+              <Plot
+                data={[generateStudyComparisonData()]}
+                layout={{
+                  title: 'Number of Subjects Across Studies',
+                  xaxis: { title: 'Study', tickangle: -45 },
+                  yaxis: { title: 'Number of Subjects' },
+                  height: 400,
+                  margin: { t: 50, b: 80, l: 50, r: 50 }
+                }}
+                config={{ responsive: true }}
+                style={{ width: '100%', height: '100%' }}
+              />
+            ) : (
+              <Alert 
+                message="No study data available" 
+                description="Study comparison will appear when data is loaded."
+                type="info" 
+              />
+            )}
           </Card>
         </Col>
         
         <Col xs={24} lg={12}>
-          <Card title="Research Timeline" style={{ height: 500 }}>
-            <Plot
-              data={[generateTimeSeriesData()]}
-              layout={{
-                title: 'Research Activity Over Time',
-                xaxis: { title: 'Year' },
-                yaxis: { title: 'Number of Studies' },
-                height: 400,
-                margin: { t: 50, b: 50, l: 50, r: 50 }
-              }}
-              config={{ responsive: true }}
-              style={{ width: '100%', height: '100%' }}
-            />
+          <Card             title="Dataset Distribution by Study" style={{ height: 500 }}>
+            {datasets?.length > 0 ? (
+              <Plot
+                data={[generateTimeSeriesData()]}
+                layout={{
+                  title: 'Research Activity Over Time',
+                  xaxis: { title: 'Year' },
+                  yaxis: { title: 'Number of Studies' },
+                  height: 400,
+                  margin: { t: 50, b: 50, l: 50, r: 50 }
+                }}
+                config={{ responsive: true }}
+                style={{ width: '100%', height: '100%' }}
+              />
+            ) : (
+              <Alert 
+                message="No timeline data available" 
+                description="Research timeline will appear when data is loaded."
+                type="info" 
+              />
+            )}
           </Card>
         </Col>
       </Row>

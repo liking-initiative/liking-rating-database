@@ -64,7 +64,7 @@ const AppHeader = () => {
           type="text" 
           icon={<GithubOutlined />}
           style={{ color: 'rgba(255, 255, 255, 0.85)' }}
-          onClick={() => window.open('https://github.com/yourusername/liking-rating-database', '_blank')}
+          onClick={() => window.open('https://github.com/kiante-fernandez/liking-rating-database', '_blank')}
         >
           GitHub
         </Button>

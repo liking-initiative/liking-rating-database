@@ -234,5 +234,5 @@ When using this database, please cite:
 
 For questions about the data dictionary or database schema:
 - Email: support@likingdatabase.org
-- GitHub Issues: [Project Issues](https://github.com/yourusername/liking-rating-database/issues)
+- GitHub Issues: [Project Issues](https://github.com/kiante-fernandez/liking-rating-database/issues)
 - Documentation: [Development Guide](DEVELOPMENT.md)
