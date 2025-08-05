@@ -108,7 +108,7 @@ The application uses environment variables for configuration. Copy `.env.example
 DATABASE_URL=sqlite+aiosqlite:///./backend/liking_rating_db.db
 
 # API Configuration  
-SECRET_KEY=your-secret-key-here
+SECRET_KEY=liking-rating-db-secure-key-2025
 API_HOST=localhost
 API_PORT=8000
 

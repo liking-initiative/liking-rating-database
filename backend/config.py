@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "Liking Rating Database"
     API_HOST: str = "localhost"
     API_PORT: int = 8000
-    SECRET_KEY: str = "your-secret-key-change-this-in-production"
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "liking-rating-db-secure-key-2025")
     
     # Database Configuration
     DATABASE_URL: str = "sqlite+aiosqlite:///./backend/liking_rating_db.db"

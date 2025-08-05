@@ -11,7 +11,7 @@ const AboutPage = () => {
       <Card style={{ marginBottom: 24 }}>
         <Title level={2}>Overview</Title>
         <Paragraph>
-          The Liking Rating Database is a comprehensive collection of food preference data 
+          The Liking Rating Database is a collection of food preference data 
           from multiple research studies. This database contains over 700,000 individual 
           ratings from 30+ research studies, providing researchers with standardized access 
           to food liking data for analysis and comparison.
