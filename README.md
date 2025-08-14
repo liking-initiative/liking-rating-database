@@ -6,7 +6,7 @@ A comprehensive user-facing database system for food liking ratings from 35+ res
 
 ### Prerequisites
 - Python 3.8+
-- Node.js 14+
+- Node.js 16+
 - npm or yarn
 
 ### Automated Setup (Recommended)
