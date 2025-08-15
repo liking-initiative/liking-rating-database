@@ -12,17 +12,20 @@ class Settings(BaseSettings):
     # API Configuration
     API_V1_STR: str = "/api/v1"
     PROJECT_NAME: str = "Liking Rating Database"
-    API_HOST: str = "localhost"
-    API_PORT: int = 8000
+    API_HOST: str = os.getenv("API_HOST", "localhost")
+    API_PORT: int = int(os.getenv("PORT", "8000"))
     SECRET_KEY: str = os.getenv("SECRET_KEY", "liking-rating-db-secure-key-2025")
     
     # Database Configuration
-    DATABASE_URL: str = "sqlite+aiosqlite:///./backend/liking_rating_db.db"
-    DATABASE_TEST_URL: str = "sqlite+aiosqlite:///./backend/test_liking_rating_db.db"
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./backend/liking_rating_db.db")
+    DATABASE_TEST_URL: str = os.getenv("DATABASE_TEST_URL", "sqlite+aiosqlite:///./backend/test_liking_rating_db.db")
     
     
     # CORS Configuration
-    BACKEND_CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:8080"]
+    BACKEND_CORS_ORIGINS: List[str] = os.getenv("BACKEND_CORS_ORIGINS", "http://localhost:3000,http://localhost:8080").split(",")
+    
+    # Trusted Hosts
+    TRUSTED_HOSTS: List[str] = os.getenv("TRUSTED_HOSTS", "localhost,127.0.0.1").split(",")
     
     
     # Logging Configuration

@@ -71,7 +71,7 @@ Contains information about food items that were rated across studies.
 | `subcategory` | String (100) | Subcategory (optional) | `"candy_bars"`, `"salty_snacks"` |
 | `description` | Text | Item description | `"Small 100 Grand candy bar"` |
 | `image_available` | Boolean | Whether image is available | `true`, `false` |
-| `image_url` | String (500) | URL to food item image | `"https://example.com/images/item123.jpg"` |
+| `image_url` | String (500) | URL to food item image | `"https://assets.likingratings.org/images/item123.jpg"` |
 | `frequency` | Integer | Number of datasets including this item | `15` |
 | `aliases` | JSON Array | Alternative names for the item | `["100 Grand", "hundred grand"]` |
 | `nutritional_info` | Text | Nutritional information (JSON) | `{"calories": 190, "fat": 8}` |
@@ -146,9 +146,9 @@ Tracks data downloads for analytics and usage monitoring.
 | `dataset_ids` | JSON Array | List of downloaded dataset IDs | `["id1", "id2", "id3"]` |
 | `download_format` | String (20) | Requested file format | `"csv"`, `"json"`, `"spss"`, `"excel"` |
 | `file_size_mb` | Float | Download file size | `45.7` |
-| `download_url` | String (500) | Temporary download URL | `"https://example.com/downloads/abc123"` |
+| `download_url` | String (500) | Temporary download URL | `"https://downloads.likingratings.org/files/abc123"` |
 | `expires_at` | DateTime | URL expiration time | `2024-01-16T10:30:00Z` |
-| `user_ip` | String (45) | User IP address (anonymized) | `"192.168.1.xxx"` |
+| `user_ip` | String (45) | User IP address (anonymized) | `"192.168.1.***"` |
 | `user_agent` | Text | Browser/client information | `"Mozilla/5.0 (Windows NT 10.0..."` |
 | `created_at` | DateTime | Download timestamp | `2024-01-15T10:30:00Z` |
 
@@ -164,7 +164,7 @@ Tracks search queries for improving search functionality.
 | `query` | String (500) | Search query text | `"chocolate preferences"` |
 | `filters` | Text | Applied filters (JSON) | `{"category": "sweets", "year": [2020, 2023]}` |
 | `results_count` | Integer | Number of results returned | `127` |
-| `user_ip` | String (45) | User IP address (anonymized) | `"192.168.1.xxx"` |
+| `user_ip` | String (45) | User IP address (anonymized) | `"192.168.1.***"` |
 | `created_at` | DateTime | Search timestamp | `2024-01-15T10:30:00Z` |
 
 ---

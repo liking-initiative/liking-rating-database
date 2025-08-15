@@ -199,8 +199,8 @@ DATABASE_URL=postgresql+asyncpg://user:pass@localhost/dbname
 2. Serve static files with a web server
 3. Configure API proxy for production backend
 
-### Docker Deployment (TODO)
-Docker configuration files are planned for future releases.
+### Docker Deployment
+Docker configuration can be added for containerized deployment if needed.
 
 ## Troubleshooting
 
