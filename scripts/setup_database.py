@@ -34,14 +34,15 @@ async def setup_database():
     
     # Try to download from GitHub releases
     try:
-        print("📥 Downloading database from GitHub releases...")
+        print("📥 Downloading database from cloud storage...")
         
-        # Try multiple release versions and alternative hosting
+        # Try multiple hosting options
         release_urls = [
+            # Google Drive direct download URL  
+            "https://drive.google.com/uc?export=download&id=1ZKfXSwz63pBYeVNmwfipDqTw45c7oqHz",
+            # GitHub releases (if repo becomes public)
             "https://github.com/kiante-fernandez/liking-rating-database/releases/download/v1.0.0/liking_rating_db.db",
-            "https://github.com/kiante-fernandez/liking-rating-database/releases/download/1.0.0/liking_rating_db.db",
-            "https://github.com/kiante-fernandez/liking-rating-database/releases/latest/download/liking_rating_db.db",
-            # Add alternative hosting URLs here if needed
+            "https://github.com/kiante-fernandez/liking-rating-database/releases/latest/download/liking_rating_db.db"
         ]
         
         import urllib.error
@@ -71,33 +72,18 @@ async def setup_database():
     except Exception as e:
         print(f"⚠️  Database download failed: {e}")
     
-    # Fallback: create database with sample data
-    print("📝 Creating database with sample research data...")
+    # Fallback: create empty database
+    print("📝 Creating empty database with tables...")
     await init_db()
-    
-    # Add sample data for demonstration
-    try:
-        import subprocess
-        result = subprocess.run([sys.executable, "scripts/create_sample_data.py"], 
-                              capture_output=True, text=True)
-        if result.returncode == 0:
-            print("✅ Sample data added successfully!")
-        else:
-            print(f"⚠️  Sample data creation failed: {result.stderr}")
-    except Exception as e:
-        print(f"⚠️  Could not create sample data: {e}")
     
     # Verify database was created
     if db_path.exists():
         file_size = db_path.stat().st_size / 1024  # KB
-        print(f"✅ Database created with sample data! ({file_size:.1f} KB)")
+        print(f"✅ Empty database created! ({file_size:.1f} KB)")
     else:
         print(f"❌ Failed to create database at {db_path}")
         
-    print("💡 To add your full research data:")
-    print("   1. Make your GitHub repository public")
-    print("   2. Create GitHub release v1.0.0 with your database file")
-    print("   3. Or use the API to import data manually")
+    print("💡 Database download failed - check Google Drive link permissions")
 
 
 if __name__ == "__main__":
