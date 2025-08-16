@@ -35,25 +35,37 @@ async def setup_database():
     # Try to download from GitHub releases
     try:
         print("📥 Downloading database from GitHub releases...")
-        url = "https://github.com/kiante-fernandez/liking-rating-database/releases/download/v1.0.0/liking_rating_db.db"
-        print(f"🔗 URL: {url}")
         
-        # Test if URL exists
+        # Try multiple release versions
+        release_urls = [
+            "https://github.com/kiante-fernandez/liking-rating-database/releases/download/v1.0.0/liking_rating_db.db",
+            "https://github.com/kiante-fernandez/liking-rating-database/releases/download/1.0.0/liking_rating_db.db",
+            "https://github.com/kiante-fernandez/liking-rating-database/releases/latest/download/liking_rating_db.db"
+        ]
+        
         import urllib.error
-        try:
-            urllib.request.urlopen(url)
-            print("✅ GitHub release found, downloading...")
-            urllib.request.urlretrieve(url, str(db_path))
-            file_size = db_path.stat().st_size / (1024 * 1024)  # MB
-            print(f"✅ Database downloaded successfully! ({file_size:.1f} MB)")
-            return
-        except urllib.error.HTTPError as e:
-            if e.code == 404:
-                print("⚠️  GitHub release v1.0.0 not found (404)")
-            else:
-                print(f"⚠️  HTTP Error {e.code}: {e.reason}")
-        except Exception as e:
-            print(f"⚠️  Download failed: {e}")
+        
+        for url in release_urls:
+            try:
+                print(f"🔗 Trying URL: {url}")
+                urllib.request.urlopen(url)
+                print("✅ GitHub release found, downloading...")
+                urllib.request.urlretrieve(url, str(db_path))
+                file_size = db_path.stat().st_size / (1024 * 1024)  # MB
+                print(f"✅ Database downloaded successfully! ({file_size:.1f} MB)")
+                return
+            except urllib.error.HTTPError as e:
+                if e.code == 404:
+                    print(f"⚠️  Release not found (404): {url}")
+                    continue
+                else:
+                    print(f"⚠️  HTTP Error {e.code}: {e.reason}")
+                    continue
+            except Exception as e:
+                print(f"⚠️  Download failed for {url}: {e}")
+                continue
+        
+        print("⚠️  No GitHub releases found with database file")
             
     except Exception as e:
         print(f"⚠️  Database download failed: {e}")
