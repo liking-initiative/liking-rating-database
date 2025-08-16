@@ -20,14 +20,15 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY backend/ ./backend/
 COPY scripts/ ./scripts/
 
-# Create data directory and copy database if it exists
+# Create data directory and download database
 RUN mkdir -p /app/data
-RUN if [ -f "./backend/liking_rating_db.db" ]; then \
-        echo "Copying database to data directory..."; \
-        cp ./backend/liking_rating_db.db /app/data/; \
-    else \
-        echo "No database file found - will create empty database"; \
-    fi
+
+# Download database from GitHub release or create empty database
+RUN echo "Downloading database from GitHub release..." && \
+    curl -L -o /app/data/liking_rating_db.db \
+    "https://github.com/kiante-fernandez/liking-rating-database/releases/download/v1.0.0/liking_rating_db.db" || \
+    (echo "Database download failed - creating empty database..." && \
+     python scripts/init_empty_db.py)
 
 # Make scripts executable
 RUN chmod +x ./scripts/start_production.sh
