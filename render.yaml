@@ -2,9 +2,11 @@ services:
   # Backend API Service  
   - type: web
     name: liking-rating-api
-    runtime: docker
-    dockerfilePath: Dockerfile
+    runtime: python
+    buildCommand: pip install -r requirements.txt && python scripts/setup_database.py
+    startCommand: uvicorn backend.app:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
+    plan: free
     envVars:
       - key: DATABASE_URL
         value: "sqlite+aiosqlite:///./data/liking_rating_db.db"
@@ -12,8 +14,6 @@ services:
         generateValue: true
       - key: API_HOST
         value: "0.0.0.0"
-      - key: PORT
-        value: "8000"
       - key: LOG_LEVEL
         value: "INFO"
       - key: BACKEND_CORS_ORIGINS
@@ -25,6 +25,7 @@ services:
   - type: web
     name: liking-rating-frontend
     runtime: static
+    plan: free
     buildCommand: cd frontend && npm ci && npm run build
     staticPublishPath: ./frontend/build
     envVars:
