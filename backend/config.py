@@ -22,10 +22,20 @@ class Settings(BaseSettings):
     
     
     # CORS Configuration
-    BACKEND_CORS_ORIGINS: List[str] = os.getenv("BACKEND_CORS_ORIGINS", "http://localhost:3000,http://localhost:8080").split(",")
+    BACKEND_CORS_ORIGINS: str = os.getenv("BACKEND_CORS_ORIGINS", "http://localhost:3000,http://localhost:8080")
     
     # Trusted Hosts
-    TRUSTED_HOSTS: List[str] = os.getenv("TRUSTED_HOSTS", "localhost,127.0.0.1").split(",")
+    TRUSTED_HOSTS: str = os.getenv("TRUSTED_HOSTS", "localhost,127.0.0.1")
+    
+    @property
+    def cors_origins(self) -> List[str]:
+        """Parse CORS origins from string"""
+        return [origin.strip() for origin in self.BACKEND_CORS_ORIGINS.split(",")]
+    
+    @property
+    def trusted_hosts(self) -> List[str]:
+        """Parse trusted hosts from string"""
+        return [host.strip() for host in self.TRUSTED_HOSTS.split(",")]
     
     
     # Logging Configuration

@@ -62,7 +62,7 @@ app = FastAPI(
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.BACKEND_CORS_ORIGINS,
+    allow_origins=settings.cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -71,7 +71,7 @@ app.add_middleware(
 # Add trusted host middleware
 app.add_middleware(
     TrustedHostMiddleware,
-    allowed_hosts=settings.TRUSTED_HOSTS + [settings.API_HOST, "*.onrender.com"]
+    allowed_hosts=settings.trusted_hosts + [settings.API_HOST, "*.onrender.com"]
 )
 
 # Include API routes
