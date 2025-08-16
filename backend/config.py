@@ -17,8 +17,8 @@ class Settings(BaseSettings):
     SECRET_KEY: str = os.getenv("SECRET_KEY", "liking-rating-db-secure-key-2025")
     
     # Database Configuration
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./backend/liking_rating_db.db")
-    DATABASE_TEST_URL: str = os.getenv("DATABASE_TEST_URL", "sqlite+aiosqlite:///./backend/test_liking_rating_db.db")
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./data/liking_rating_db.db")
+    DATABASE_TEST_URL: str = os.getenv("DATABASE_TEST_URL", "sqlite+aiosqlite:///./data/test_liking_rating_db.db")
     
     
     # CORS Configuration

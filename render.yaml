@@ -8,7 +8,7 @@ services:
     healthCheckPath: /health
     envVars:
       - key: DATABASE_URL
-        value: "sqlite+aiosqlite:///./backend/liking_rating_db.db"
+        value: "sqlite+aiosqlite:///./data/liking_rating_db.db"
       - key: SECRET_KEY
         generateValue: true
       - key: API_HOST
