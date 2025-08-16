@@ -7,6 +7,7 @@ import asyncio
 import os
 import sys
 import urllib.request
+import urllib.parse
 from pathlib import Path
 
 # Add backend to path
@@ -82,13 +83,29 @@ async def setup_database():
             try:
                 print(f"🔗 Trying URL: {url}")
                 
+                # Create request with headers to avoid being blocked
+                req = urllib.request.Request(url)
+                req.add_header('User-Agent', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36')
+                req.add_header('Accept', '*/*')
+                
                 # Download the file
-                urllib.request.urlretrieve(url, str(db_path))
+                with urllib.request.urlopen(req) as response:
+                    with open(db_path, 'wb') as f:
+                        f.write(response.read())
                 
                 # Check if it's a valid SQLite database
                 if db_path.exists():
                     file_size = db_path.stat().st_size / (1024 * 1024)  # MB
                     print(f"📁 Downloaded file: {file_size:.1f} MB")
+                    
+                    # Debug: Check what we actually downloaded
+                    if file_size < 1:  # Less than 1MB is suspicious
+                        try:
+                            with open(db_path, 'r', encoding='utf-8', errors='ignore') as f:
+                                content_preview = f.read(500)
+                                print(f"🔍 File content preview: {content_preview[:200]}...")
+                        except Exception as e:
+                            print(f"🔍 Could not read file as text: {e}")
                     
                     # Validate it's a SQLite database
                     if await validate_sqlite_db(db_path):
