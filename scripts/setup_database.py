@@ -66,9 +66,10 @@ async def setup_database():
         
         # Try multiple hosting options
         release_urls = [
-            # Google Drive direct download URL (bypasses virus scan for large files)
+            # Google Drive direct download URL (usercontent domain)
+            "https://drive.usercontent.google.com/uc?id=1ZKfXSwz63pBYeVNmwfipDqTw45c7oqHz&export=download",
+            # Google Drive backup URLs
             "https://drive.google.com/uc?export=download&id=1ZKfXSwz63pBYeVNmwfipDqTw45c7oqHz&confirm=t",
-            # Alternative Google Drive URL
             "https://drive.google.com/uc?export=download&id=1ZKfXSwz63pBYeVNmwfipDqTw45c7oqHz",
             # GitHub releases (if repo becomes public)
             "https://github.com/kiante-fernandez/liking-rating-database/releases/download/v1.0.0/liking_rating_db.db",
