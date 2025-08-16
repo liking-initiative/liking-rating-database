@@ -3,8 +3,7 @@ services:
   - type: web
     name: liking-rating-api
     runtime: docker
-    dockerfilePath: ./Dockerfile
-    dockerContext: .
+    dockerfilePath: Dockerfile
     healthCheckPath: /health
     envVars:
       - key: DATABASE_URL
