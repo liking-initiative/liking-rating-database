@@ -15,6 +15,34 @@ sys.path.append(str(Path(__file__).parent.parent))
 from backend.models.database import init_db
 
 
+async def validate_sqlite_db(db_path: Path) -> bool:
+    """Validate that the file is a proper SQLite database"""
+    try:
+        import sqlite3
+        
+        # Try to open and query the database
+        conn = sqlite3.connect(str(db_path))
+        cursor = conn.cursor()
+        
+        # Check if it has the expected tables
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
+        tables = cursor.fetchall()
+        table_names = [table[0] for table in tables]
+        
+        conn.close()
+        
+        # Check for expected tables
+        expected_tables = ['studies', 'items', 'datasets', 'ratings']
+        has_expected_tables = any(table in table_names for table in expected_tables)
+        
+        print(f"📊 Found tables: {table_names}")
+        return has_expected_tables
+        
+    except Exception as e:
+        print(f"❌ Database validation failed: {e}")
+        return False
+
+
 async def setup_database():
     """Setup database for production"""
     print("🔍 Setting up database...")
@@ -38,7 +66,9 @@ async def setup_database():
         
         # Try multiple hosting options
         release_urls = [
-            # Google Drive direct download URL  
+            # Google Drive direct download URL (bypasses virus scan for large files)
+            "https://drive.google.com/uc?export=download&id=1ZKfXSwz63pBYeVNmwfipDqTw45c7oqHz&confirm=t",
+            # Alternative Google Drive URL
             "https://drive.google.com/uc?export=download&id=1ZKfXSwz63pBYeVNmwfipDqTw45c7oqHz",
             # GitHub releases (if repo becomes public)
             "https://github.com/kiante-fernandez/liking-rating-database/releases/download/v1.0.0/liking_rating_db.db",
@@ -50,12 +80,27 @@ async def setup_database():
         for url in release_urls:
             try:
                 print(f"🔗 Trying URL: {url}")
-                urllib.request.urlopen(url)
-                print("✅ GitHub release found, downloading...")
+                
+                # Download the file
                 urllib.request.urlretrieve(url, str(db_path))
-                file_size = db_path.stat().st_size / (1024 * 1024)  # MB
-                print(f"✅ Database downloaded successfully! ({file_size:.1f} MB)")
-                return
+                
+                # Check if it's a valid SQLite database
+                if db_path.exists():
+                    file_size = db_path.stat().st_size / (1024 * 1024)  # MB
+                    print(f"📁 Downloaded file: {file_size:.1f} MB")
+                    
+                    # Validate it's a SQLite database
+                    if await validate_sqlite_db(db_path):
+                        print(f"✅ Valid database downloaded successfully! ({file_size:.1f} MB)")
+                        return
+                    else:
+                        print(f"❌ Downloaded file is not a valid SQLite database")
+                        db_path.unlink()  # Delete invalid file
+                        continue
+                else:
+                    print("❌ Download failed - no file created")
+                    continue
+                    
             except urllib.error.HTTPError as e:
                 if e.code == 404:
                     print(f"⚠️  Release not found (404): {url}")
@@ -65,6 +110,9 @@ async def setup_database():
                     continue
             except Exception as e:
                 print(f"⚠️  Download failed for {url}: {e}")
+                # Clean up any partial download
+                if db_path.exists():
+                    db_path.unlink()
                 continue
         
         print("⚠️  No GitHub releases found with database file")
