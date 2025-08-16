@@ -1,16 +1,10 @@
-services:
-  # PostgreSQL Database
-  - type: pserv
-    name: liking-rating-db
-    env: python
+databases:
+  - name: liking-rating-postgres
+    databaseName: liking_rating_db
+    user: liking_user
     plan: free
-    buildCommand: "echo 'Database service'"
-    startCommand: "echo 'Database is managed by Render'"
-    databases:
-      - name: liking-rating-postgres
-        databaseName: liking_rating_db
-        user: liking_user
 
+services:
   # Backend API Service
   - type: web
     name: liking-rating-api
@@ -34,6 +28,8 @@ services:
         value: "INFO"
       - key: BACKEND_CORS_ORIGINS
         value: "https://liking-rating-frontend.onrender.com,http://localhost:3000"
+      - key: TRUSTED_HOSTS
+        value: "localhost,127.0.0.1,*.onrender.com"
 
   # Frontend Static Site
   - type: web
@@ -51,9 +47,3 @@ services:
       - type: rewrite
         source: /*
         destination: /index.html
-
-databases:
-  - name: liking-rating-postgres
-    databaseName: liking_rating_db
-    user: liking_user
-    plan: free

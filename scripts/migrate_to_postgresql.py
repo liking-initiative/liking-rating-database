@@ -9,6 +9,7 @@ import json
 import os
 from datetime import datetime
 from typing import Dict, List, Any
+from dateutil import parser
 
 
 class DatabaseMigrator:
@@ -177,6 +178,31 @@ class DatabaseMigrator:
         await conn.execute("CREATE INDEX IF NOT EXISTS idx_search_query ON search_logs(query)")
         await conn.execute("CREATE INDEX IF NOT EXISTS idx_search_created ON search_logs(created_at)")
     
+    def parse_datetime(self, dt_str):
+        """Parse datetime string to datetime object"""
+        if dt_str is None:
+            return None
+        if isinstance(dt_str, datetime):
+            return dt_str
+        if isinstance(dt_str, str):
+            try:
+                return parser.parse(dt_str)
+            except:
+                return None
+        return None
+    
+    def parse_boolean(self, value):
+        """Parse boolean value"""
+        if value is None:
+            return False
+        if isinstance(value, bool):
+            return value
+        if isinstance(value, int):
+            return bool(value)
+        if isinstance(value, str):
+            return value.lower() in ('true', '1', 'yes', 'on')
+        return False
+
     async def migrate_studies(self, sqlite_conn: aiosqlite.Connection, postgres_conn: asyncpg.Connection):
         """Migrate studies table"""
         print("📚 Migrating studies...")
@@ -197,6 +223,10 @@ class DatabaseMigrator:
                 except:
                     row_dict['authors'] = []
             
+            # Handle datetime fields
+            created_at = self.parse_datetime(row_dict.get('created_at'))
+            updated_at = self.parse_datetime(row_dict.get('updated_at'))
+            
             await postgres_conn.execute("""
                 INSERT INTO studies (id, name, authors, year, doi, description, 
                                    publication_title, journal, osf_project_id, created_at, updated_at)
@@ -206,8 +236,7 @@ class DatabaseMigrator:
                 row_dict['id'], row_dict['name'], json.dumps(row_dict['authors']), 
                 row_dict['year'], row_dict.get('doi'), row_dict.get('description'),
                 row_dict.get('publication_title'), row_dict.get('journal'), 
-                row_dict.get('osf_project_id'), row_dict.get('created_at'), 
-                row_dict.get('updated_at')
+                row_dict.get('osf_project_id'), created_at, updated_at
             )
         
         print(f"✅ Migrated {len(rows)} studies")
@@ -231,6 +260,13 @@ class DatabaseMigrator:
                 except:
                     row_dict['aliases'] = []
             
+            # Handle datetime fields
+            created_at = self.parse_datetime(row_dict.get('created_at'))
+            updated_at = self.parse_datetime(row_dict.get('updated_at'))
+            
+            # Handle boolean fields
+            image_available = self.parse_boolean(row_dict.get('image_available', False))
+            
             await postgres_conn.execute("""
                 INSERT INTO items (id, name, standardized_name, category, subcategory, 
                                  description, image_available, image_url, frequency, 
@@ -240,10 +276,10 @@ class DatabaseMigrator:
             """,
                 row_dict['id'], row_dict['name'], row_dict.get('standardized_name'),
                 row_dict.get('category'), row_dict.get('subcategory'), 
-                row_dict.get('description'), row_dict.get('image_available', False),
+                row_dict.get('description'), image_available,
                 row_dict.get('image_url'), row_dict.get('frequency', 0),
                 json.dumps(row_dict.get('aliases', [])), row_dict.get('nutritional_info'),
-                row_dict.get('created_at'), row_dict.get('updated_at')
+                created_at, updated_at
             )
         
         print(f"✅ Migrated {len(rows)} items")
@@ -260,6 +296,10 @@ class DatabaseMigrator:
         for row in rows:
             row_dict = dict(zip(column_names, row))
             
+            # Handle datetime fields
+            created_at = self.parse_datetime(row_dict.get('created_at'))
+            updated_at = self.parse_datetime(row_dict.get('updated_at'))
+            
             await postgres_conn.execute("""
                 INSERT INTO datasets (id, study_id, name, description, n_subjects, n_items,
                                     rating_scale_min, rating_scale_max, rating_scale_type,
@@ -273,8 +313,7 @@ class DatabaseMigrator:
                 row_dict['rating_scale_min'], row_dict['rating_scale_max'], 
                 row_dict.get('rating_scale_type'), row_dict.get('data_completeness'),
                 row_dict.get('file_format'), row_dict.get('file_size_mb'), 
-                row_dict.get('osf_file_id'), row_dict.get('created_at'), 
-                row_dict.get('updated_at')
+                row_dict.get('osf_file_id'), created_at, updated_at
             )
         
         print(f"✅ Migrated {len(rows)} datasets")
@@ -306,12 +345,13 @@ class DatabaseMigrator:
             batch_data = []
             for row in rows:
                 row_dict = dict(zip(column_names, row))
+                created_at = self.parse_datetime(row_dict.get('created_at'))
                 batch_data.append((
                     row_dict['id'], row_dict['dataset_id'], row_dict['item_id'],
                     row_dict['subject_id'], row_dict['rating'], row_dict['normalized_rating'],
                     row_dict.get('response_time'), row_dict.get('session_id'),
                     row_dict.get('order_presented'), row_dict.get('demographic_data'),
-                    row_dict.get('created_at')
+                    created_at
                 ))
             
             # Execute batch insert
@@ -349,6 +389,9 @@ class DatabaseMigrator:
                         except:
                             row_dict['dataset_ids'] = []
                     
+                    expires_at = self.parse_datetime(row_dict.get('expires_at'))
+                    created_at = self.parse_datetime(row_dict.get('created_at'))
+                    
                     await postgres_conn.execute("""
                         INSERT INTO download_logs (id, dataset_ids, download_format, file_size_mb,
                                                  download_url, expires_at, user_ip, user_agent, created_at)
@@ -357,9 +400,9 @@ class DatabaseMigrator:
                     """,
                         row_dict['id'], json.dumps(row_dict.get('dataset_ids', [])),
                         row_dict['download_format'], row_dict.get('file_size_mb'),
-                        row_dict.get('download_url'), row_dict.get('expires_at'),
+                        row_dict.get('download_url'), expires_at,
                         row_dict.get('user_ip'), row_dict.get('user_agent'),
-                        row_dict.get('created_at')
+                        created_at
                     )
                 
                 print(f"✅ Migrated {len(rows)} download logs")
@@ -377,6 +420,8 @@ class DatabaseMigrator:
                 for row in rows:
                     row_dict = dict(zip(column_names, row))
                     
+                    created_at = self.parse_datetime(row_dict.get('created_at'))
+                    
                     await postgres_conn.execute("""
                         INSERT INTO search_logs (id, query, filters, results_count, user_ip, created_at)
                         VALUES ($1, $2, $3, $4, $5, $6)
@@ -384,7 +429,7 @@ class DatabaseMigrator:
                     """,
                         row_dict['id'], row_dict['query'], row_dict.get('filters'),
                         row_dict.get('results_count'), row_dict.get('user_ip'),
-                        row_dict.get('created_at')
+                        created_at
                     )
                 
                 print(f"✅ Migrated {len(rows)} search logs")
