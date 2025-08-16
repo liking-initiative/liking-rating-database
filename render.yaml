@@ -1,21 +1,22 @@
-databases:
-  - name: liking-rating-postgres
+services:
+  # PostgreSQL Database
+  - type: pserv
+    name: liking-rating-postgres
+    runtime: postgres
     databaseName: liking_rating_db
     user: liking_user
-    plan: free
 
-services:
   # Backend API Service
   - type: web
     name: liking-rating-api
-    env: docker
-    plan: free
+    runtime: docker
     dockerfilePath: ./Dockerfile
     dockerContext: .
     healthCheckPath: /health
     envVars:
       - key: DATABASE_URL
-        fromDatabase:
+        fromService:
+          type: pserv
           name: liking-rating-postgres
           property: connectionString
       - key: SECRET_KEY
@@ -34,16 +35,11 @@ services:
   # Frontend Static Site
   - type: web
     name: liking-rating-frontend
-    env: static
-    plan: free
+    runtime: static
     buildCommand: cd frontend && npm ci && npm run build
-    staticPublishPath: ./frontend/build
+    publishPath: ./frontend/build
     envVars:
       - key: REACT_APP_API_URL
         value: "https://liking-rating-api.onrender.com/api/v1"
       - key: NODE_ENV
         value: "production"
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
