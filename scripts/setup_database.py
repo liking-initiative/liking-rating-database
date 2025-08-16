@@ -22,28 +22,56 @@ async def setup_database():
     # Create data directory
     data_dir = Path("./data")
     data_dir.mkdir(exist_ok=True)
+    print(f"📁 Created data directory: {data_dir.absolute()}")
     
     db_path = data_dir / "liking_rating_db.db"
+    print(f"🎯 Target database path: {db_path.absolute()}")
     
     if db_path.exists():
-        print(f"✅ Database already exists at {db_path}")
+        file_size = db_path.stat().st_size / (1024 * 1024)  # MB
+        print(f"✅ Database already exists at {db_path} ({file_size:.1f} MB)")
         return
     
     # Try to download from GitHub releases
     try:
         print("📥 Downloading database from GitHub releases...")
         url = "https://github.com/kiante-fernandez/liking-rating-database/releases/download/v1.0.0/liking_rating_db.db"
-        urllib.request.urlretrieve(url, str(db_path))
-        print("✅ Database downloaded successfully!")
-        return
+        print(f"🔗 URL: {url}")
+        
+        # Test if URL exists
+        import urllib.error
+        try:
+            urllib.request.urlopen(url)
+            print("✅ GitHub release found, downloading...")
+            urllib.request.urlretrieve(url, str(db_path))
+            file_size = db_path.stat().st_size / (1024 * 1024)  # MB
+            print(f"✅ Database downloaded successfully! ({file_size:.1f} MB)")
+            return
+        except urllib.error.HTTPError as e:
+            if e.code == 404:
+                print("⚠️  GitHub release v1.0.0 not found (404)")
+            else:
+                print(f"⚠️  HTTP Error {e.code}: {e.reason}")
+        except Exception as e:
+            print(f"⚠️  Download failed: {e}")
+            
     except Exception as e:
         print(f"⚠️  Database download failed: {e}")
     
     # Fallback: create empty database
-    print("📝 Creating empty database...")
+    print("📝 Creating empty database with tables...")
     await init_db()
-    print("✅ Empty database created!")
-    print("💡 Upload a GitHub release with your database to populate data")
+    
+    # Verify database was created
+    if db_path.exists():
+        file_size = db_path.stat().st_size / 1024  # KB
+        print(f"✅ Empty database created! ({file_size:.1f} KB)")
+    else:
+        print(f"❌ Failed to create database at {db_path}")
+        
+    print("💡 To add data:")
+    print("   1. Create GitHub release v1.0.0 with your database file")
+    print("   2. Or use the API to import data manually")
 
 
 if __name__ == "__main__":
