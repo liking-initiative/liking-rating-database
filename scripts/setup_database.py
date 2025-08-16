@@ -36,11 +36,12 @@ async def setup_database():
     try:
         print("📥 Downloading database from GitHub releases...")
         
-        # Try multiple release versions
+        # Try multiple release versions and alternative hosting
         release_urls = [
             "https://github.com/kiante-fernandez/liking-rating-database/releases/download/v1.0.0/liking_rating_db.db",
             "https://github.com/kiante-fernandez/liking-rating-database/releases/download/1.0.0/liking_rating_db.db",
-            "https://github.com/kiante-fernandez/liking-rating-database/releases/latest/download/liking_rating_db.db"
+            "https://github.com/kiante-fernandez/liking-rating-database/releases/latest/download/liking_rating_db.db",
+            # Add alternative hosting URLs here if needed
         ]
         
         import urllib.error
@@ -70,20 +71,33 @@ async def setup_database():
     except Exception as e:
         print(f"⚠️  Database download failed: {e}")
     
-    # Fallback: create empty database
-    print("📝 Creating empty database with tables...")
+    # Fallback: create database with sample data
+    print("📝 Creating database with sample research data...")
     await init_db()
+    
+    # Add sample data for demonstration
+    try:
+        import subprocess
+        result = subprocess.run([sys.executable, "scripts/create_sample_data.py"], 
+                              capture_output=True, text=True)
+        if result.returncode == 0:
+            print("✅ Sample data added successfully!")
+        else:
+            print(f"⚠️  Sample data creation failed: {result.stderr}")
+    except Exception as e:
+        print(f"⚠️  Could not create sample data: {e}")
     
     # Verify database was created
     if db_path.exists():
         file_size = db_path.stat().st_size / 1024  # KB
-        print(f"✅ Empty database created! ({file_size:.1f} KB)")
+        print(f"✅ Database created with sample data! ({file_size:.1f} KB)")
     else:
         print(f"❌ Failed to create database at {db_path}")
         
-    print("💡 To add data:")
-    print("   1. Create GitHub release v1.0.0 with your database file")
-    print("   2. Or use the API to import data manually")
+    print("💡 To add your full research data:")
+    print("   1. Make your GitHub repository public")
+    print("   2. Create GitHub release v1.0.0 with your database file")
+    print("   3. Or use the API to import data manually")
 
 
 if __name__ == "__main__":
