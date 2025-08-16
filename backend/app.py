@@ -83,8 +83,9 @@ async def root():
     """Root endpoint"""
     return {
         "message": f"Welcome to {settings.PROJECT_NAME} API",
-        "version": "1.0.0",
-        "docs": f"{settings.API_V1_STR}/docs"
+        "version": "1.0.1",
+        "docs": f"{settings.API_V1_STR}/docs",
+        "database": "v1.0.0"
     }
 
 
