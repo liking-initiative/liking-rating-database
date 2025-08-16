@@ -238,10 +238,8 @@ final_database.csv
 *.pdf
 
 # Deployment files (if using local development only)
-Dockerfile
 docker-compose.yml
 nginx.conf
-DEPLOYMENT.md
 
 # Test downloads
 test_download*.csv
