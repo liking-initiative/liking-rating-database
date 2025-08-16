@@ -1,11 +1,9 @@
-services:
-  # PostgreSQL Database
-  - type: pserv
-    name: liking-rating-postgres
-    runtime: postgres
+databases:
+  - name: liking-rating-postgres
     databaseName: liking_rating_db
     user: liking_user
 
+services:
   # Backend API Service
   - type: web
     name: liking-rating-api
@@ -15,8 +13,7 @@ services:
     healthCheckPath: /health
     envVars:
       - key: DATABASE_URL
-        fromService:
-          type: pserv
+        fromDatabase:
           name: liking-rating-postgres
           property: connectionString
       - key: SECRET_KEY
@@ -37,7 +34,7 @@ services:
     name: liking-rating-frontend
     runtime: static
     buildCommand: cd frontend && npm ci && npm run build
-    publishPath: ./frontend/build
+    staticPublishPath: ./frontend/build
     envVars:
       - key: REACT_APP_API_URL
         value: "https://liking-rating-api.onrender.com/api/v1"
