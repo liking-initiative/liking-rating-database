@@ -65,13 +65,16 @@ async def setup_database():
     try:
         print("📥 Downloading database from cloud storage...")
         
-        # Try multiple hosting options
+        # Try multiple hosting options - handle Google Drive virus scan
+        file_id = "1ZKfXSwz63pBYeVNmwfipDqTw45c7oqHz"
         release_urls = [
-            # Google Drive direct download URL (usercontent domain)
-            "https://drive.usercontent.google.com/uc?id=1ZKfXSwz63pBYeVNmwfipDqTw45c7oqHz&export=download",
-            # Google Drive backup URLs
-            "https://drive.google.com/uc?export=download&id=1ZKfXSwz63pBYeVNmwfipDqTw45c7oqHz&confirm=t",
-            "https://drive.google.com/uc?export=download&id=1ZKfXSwz63pBYeVNmwfipDqTw45c7oqHz",
+            # Try to get direct download with virus scan bypass
+            f"https://drive.google.com/u/0/uc?id={file_id}&export=download&confirm=t&uuid=" + "12345678-1234-1234-1234-123456789012",
+            f"https://drive.usercontent.google.com/download?id={file_id}&export=download&authuser=0&confirm=t",
+            f"https://drive.google.com/uc?export=download&id={file_id}&confirm=t",
+            # Standard URLs as fallback
+            f"https://drive.usercontent.google.com/uc?id={file_id}&export=download",
+            f"https://drive.google.com/uc?export=download&id={file_id}",
             # GitHub releases (if repo becomes public)
             "https://github.com/kiante-fernandez/liking-rating-database/releases/download/v1.0.0/liking_rating_db.db",
             "https://github.com/kiante-fernandez/liking-rating-database/releases/latest/download/liking_rating_db.db"
@@ -90,8 +93,28 @@ async def setup_database():
                 
                 # Download the file
                 with urllib.request.urlopen(req) as response:
+                    content = response.read()
+                    
+                    # Check if we got the virus scan page instead of the file
+                    if len(content) < 1024 * 1024 and b'Google Drive - Virus scan warning' in content:
+                        print("⚠️  Got virus scan page, trying to extract download link...")
+                        content_str = content.decode('utf-8', errors='ignore')
+                        
+                        # Look for the download link in the virus scan page
+                        import re
+                        download_match = re.search(r'href="([^"]*&confirm=t[^"]*)"', content_str)
+                        if download_match:
+                            new_url = download_match.group(1).replace('&amp;', '&')
+                            print(f"🔗 Found download link: {new_url}")
+                            
+                            # Try the extracted URL
+                            new_req = urllib.request.Request(new_url)
+                            new_req.add_header('User-Agent', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36')
+                            with urllib.request.urlopen(new_req) as new_response:
+                                content = new_response.read()
+                    
                     with open(db_path, 'wb') as f:
-                        f.write(response.read())
+                        f.write(content)
                 
                 # Check if it's a valid SQLite database
                 if db_path.exists():
