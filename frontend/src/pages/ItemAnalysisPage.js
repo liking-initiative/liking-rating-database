@@ -472,10 +472,10 @@ const ItemAnalysisPage = () => {
               <Card>
                 <Statistic
                   title="Consistency Score"
-                  value={Math.max(0, 100 - (overallStd * 10))}
+                  value={Math.max(0, 100 - (overallStd * 20))}
                   precision={0}
-                  valueStyle={{ 
-                    color: overallStd < 1 ? '#52c41a' : overallStd < 2 ? '#faad14' : '#ff4d4f' 
+                  valueStyle={{
+                    color: overallStd < 1 ? '#52c41a' : overallStd < 2 ? '#faad14' : '#ff4d4f'
                   }}
                   suffix="/ 100"
                 />
@@ -643,38 +643,6 @@ const ItemAnalysisPage = () => {
               </Card>
             </Col>
           </Row>
-
-          {/* Analysis Insights */}
-          <Card title="Analysis Insights" style={{ marginTop: 24 }}>
-            <Space direction="vertical" style={{ width: '100%' }}>
-              <div>
-                <Text strong>Rating Interpretation:</Text>
-                <div style={{ marginTop: 8, marginLeft: 16 }}>
-                  {overallMean >= 4 && <Text>🟢 This item is generally well-liked across studies.</Text>}
-                  {overallMean >= 3 && overallMean < 4 && <Text>🟡 This item receives moderate ratings.</Text>}
-                  {overallMean < 3 && <Text>🔴 This item tends to receive lower ratings.</Text>}
-                </div>
-              </div>
-              
-              <div style={{ marginTop: 16 }}>
-                <Text strong>Consistency:</Text>
-                <div style={{ marginTop: 8, marginLeft: 16 }}>
-                  {overallStd < 1 && <Text>🟢 Ratings are highly consistent across studies.</Text>}
-                  {overallStd >= 1 && overallStd < 1.5 && <Text>🟡 Ratings show moderate variation.</Text>}
-                  {overallStd >= 1.5 && <Text>🔴 Ratings vary significantly across studies.</Text>}
-                </div>
-              </div>
-              
-              <div style={{ marginTop: 16 }}>
-                <Text strong>Data Quality:</Text>
-                <div style={{ marginTop: 8, marginLeft: 16 }}>
-                  {totalRatings >= 100 && <Text>🟢 Sufficient data for reliable analysis.</Text>}
-                  {totalRatings >= 20 && totalRatings < 100 && <Text>🟡 Moderate amount of data available.</Text>}
-                  {totalRatings < 20 && <Text>🔴 Limited data - results should be interpreted cautiously.</Text>}
-                </div>
-              </div>
-            </Space>
-          </Card>
         </>
       )}
     </div>
