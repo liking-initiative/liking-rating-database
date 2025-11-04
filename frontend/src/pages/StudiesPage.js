@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table, Card, Tag, Button, Space, Typography, Row, Col } from 'antd';
 import { useQuery } from 'react-query';
-import { EyeOutlined, TeamOutlined, CalendarOutlined } from '@ant-design/icons';
+import { EyeOutlined, TeamOutlined, CalendarOutlined, FileTextOutlined } from '@ant-design/icons';
 import { getStudies } from '../services/api';
 import { useNavigate } from 'react-router-dom';
 
@@ -88,16 +88,26 @@ const StudiesPage = () => {
     {
       title: 'Actions',
       key: 'actions',
-      width: 120,
+      width: 150,
       render: (_, record) => (
         <Space>
-          <Button 
-            size="small" 
+          <Button
+            size="small"
             icon={<EyeOutlined />}
             onClick={() => navigate(`/studies/${record.id}`)}
           >
             View
           </Button>
+          {record.doi && (
+            <Button
+              size="small"
+              icon={<FileTextOutlined />}
+              onClick={() => window.open(`https://doi.org/${record.doi}`, '_blank')}
+              title="View Paper"
+            >
+              Paper
+            </Button>
+          )}
         </Space>
       ),
     },

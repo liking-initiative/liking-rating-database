@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, Descriptions, Tag, Button, Space, Typography, Row, Col, Table, message, Modal, Select } from 'antd';
 import { useQuery } from 'react-query';
-import { 
-  DownloadOutlined, 
+import {
+  DownloadOutlined,
   DatabaseOutlined,
   TeamOutlined,
   AppleOutlined,
-  BarChartOutlined 
+  BarChartOutlined,
+  FileTextOutlined
 } from '@ant-design/icons';
 import { getDataset, getRatingAggregations, requestDownload, getDownload, downloadFile } from '../services/api';
 
@@ -130,14 +131,22 @@ const DatasetDetailPage = () => {
           </Col>
           <Col>
             <Space>
-              <Button 
+              {dataset.study?.doi && (
+                <Button
+                  icon={<FileTextOutlined />}
+                  onClick={() => window.open(`https://doi.org/${dataset.study.doi}`, '_blank')}
+                >
+                  View Paper
+                </Button>
+              )}
+              <Button
                 icon={<BarChartOutlined />}
                 onClick={() => navigate(`/datasets/${datasetId}/visualize`)}
               >
                 Visualize
               </Button>
-              <Button 
-                type="primary" 
+              <Button
+                type="primary"
                 icon={<DownloadOutlined />}
                 onClick={() => setDownloadModalVisible(true)}
                 loading={downloading}
