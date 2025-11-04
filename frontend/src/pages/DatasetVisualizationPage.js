@@ -287,8 +287,8 @@ const DatasetVisualizationPage = () => {
             {dataset && (
               <div style={{ marginTop: 20 }}>
                 <Title level={4}>Dataset Info</Title>
-                <Text><strong>Study:</strong> {dataset.study_name}</Text><br />
-                <Text><strong>Year:</strong> {dataset.year}</Text><br />
+                <Text><strong>Study:</strong> {dataset.study?.name || 'N/A'}</Text><br />
+                <Text><strong>Year:</strong> {dataset.study?.year || 'N/A'}</Text><br />
                 <Text><strong>Total Ratings:</strong> {ratings?.items?.length || 0}</Text><br />
                 <Text><strong>Unique Items:</strong> {
                   ratings?.items ? new Set(ratings.items.map(r => r.item_id)).size : 0

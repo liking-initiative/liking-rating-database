@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, Descriptions, Tag, Table, Button, Space, Typography, Row, Col } from 'antd';
 import { useQuery } from 'react-query';
-import { 
-  DownloadOutlined, 
-  ExperimentOutlined, 
+import {
+  DownloadOutlined,
+  ExperimentOutlined,
   CalendarOutlined,
   TeamOutlined,
-  DatabaseOutlined 
+  DatabaseOutlined,
+  FileTextOutlined
 } from '@ant-design/icons';
 import { getStudy, requestDownload, getDownload, downloadFile } from '../services/api';
 
@@ -201,8 +202,16 @@ const StudyDetailPage = () => {
           </Col>
           <Col>
             <Space>
-              <Button 
-                type="primary" 
+              {study.doi && (
+                <Button
+                  icon={<FileTextOutlined />}
+                  onClick={() => window.open(`https://doi.org/${study.doi}`, '_blank')}
+                >
+                  View Paper
+                </Button>
+              )}
+              <Button
+                type="primary"
                 icon={<DownloadOutlined />}
                 loading={downloadingAll}
                 onClick={handleDownloadAllDatasets}

@@ -19,7 +19,7 @@ import {
   message,
   Spin
 } from 'antd';
-import { SearchOutlined, FilterOutlined, DownloadOutlined } from '@ant-design/icons';
+import { SearchOutlined, FilterOutlined, DownloadOutlined, FileTextOutlined } from '@ant-design/icons';
 import { useQuery } from 'react-query';
 import { searchDatasets, getCategories, getScaleTypes, getYearRange, requestDownload, getDownload, downloadFile } from '../services/api';
 
@@ -211,14 +211,24 @@ const SearchPage = () => {
       key: 'actions',
       render: (_, record) => (
         <Space>
-          <Button 
+          <Button
             size="small"
             onClick={() => navigate(`/datasets/${record.id}`)}
           >
             View
           </Button>
-          <Button 
-            size="small" 
+          {record.study?.doi && (
+            <Button
+              size="small"
+              icon={<FileTextOutlined />}
+              onClick={() => window.open(`https://doi.org/${record.study.doi}`, '_blank')}
+              title="View Paper"
+            >
+              Paper
+            </Button>
+          )}
+          <Button
+            size="small"
             icon={<DownloadOutlined />}
             loading={downloadLoading}
             onClick={() => handleDownloadSingle(record.id)}
