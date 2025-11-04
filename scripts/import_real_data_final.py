@@ -26,245 +26,245 @@ async def load_study_metadata_from_excel(excel_file_path):
             'authors': ['Bakkour, A.', 'Botvinik-Nezer, R.', 'Cohen, N.', 'Hover, A. M.', 'Poldrack, R. A.', 'Schonberg, T.'],
             'year': 2018,
             'journal': 'PLOS ONE',
-            'doi': 'https://doi.org/10.1371/journal.pone.0201580'
+            'doi': '10.1371/journal.pone.0201580'
         },
         'bakpol': {
             'name': 'The hippocampus supports deliberation during value-based decisions',
             'authors': ['Bakkour, A.', 'Palombo, D. J.', 'Zylberberg, A.', 'Kang, Y. H.', 'Reid, A.', 'Verfaellie, M.', 'Shadlen, M. N.', 'Shohamy, D.'],
             'year': 2019,
             'journal': 'eLife',
-            'doi': 'https://doi.org/10.7554/eLife.46080'
+            'doi': '10.7554/eLife.46080'
         },
         'balim': {
             'name': 'Investigating psychological mechanisms of self-controlled decisions for food and leisure activity',
-            'authors': ['Bailey, C.', 'Lim, SL.'],
+            'authors': ['Bailey, C.', 'Lim, S.-L.'],
             'year': 2024,
             'journal': 'Journal of Behavioral Medicine',
-            'doi': 'https://doi.org/10.1007/s10865-024-00469-3'
+            'doi': '10.1007/s10865-024-00469-3'
         },
         'brusaeb': {
             'name': 'Sources of confidence in value-based choice',
             'authors': ['Brus, J.', 'Aebersold, H.', 'Grueschow, M.', 'Polania, R.'],
             'year': 2021,
             'journal': 'Nature Communications',
-            'doi': 'https://doi.org/10.1038/s41467-021-27618-5'
+            'doi': '10.1038/s41467-021-27618-5'
         },
         'deskrab1': {
             'name': 'Decomposing preferences into predispositions and evaluations',
             'authors': ['Desai, N.', 'Krajbich, I.'],
             'year': 2021,
             'journal': 'Journal of Experimental Psychology: General',
-            'doi': 'https://doi.org/10.1037/xge0001162'
+            'doi': '10.1037/xge0001162'
         },
         'deskrab2': {
             'name': 'Decomposing preferences into predispositions and evaluations',
             'authors': ['Desai, N.', 'Krajbich, I.'],
             'year': 2021,
             'journal': 'Journal of Experimental Psychology: General',
-            'doi': 'https://doi.org/10.1037/xge0001162'
+            'doi': '10.1037/xge0001162'
         },
         'deskrab4': {
             'name': 'Decomposing preferences into predispositions and evaluations',
             'authors': ['Desai, N.', 'Krajbich, I.'],
             'year': 2021,
             'journal': 'Journal of Experimental Psychology: General',
-            'doi': 'https://doi.org/10.1037/xge0001162'
+            'doi': '10.1037/xge0001162'
         },
         'eumdol': {
             'name': 'Peripheral Visual Information Halves Attentional Choice Biases',
             'authors': ['Eum, B.', 'Dolbier, S.', 'Rangel, A.'],
             'year': 2023,
             'journal': 'Psychological Science',
-            'doi': 'https://doi.org/10.1177/09567976231184878'
+            'doi': '10.1177/09567976231184878'
         },
         'foljac2': {
-            'name': 'Foljac2 Study',
-            'authors': ['Folke, T.', 'Jacobsen, C.'],
+            'name': 'Explicit representation of confidence informs future value-based decisions',
+            'authors': ['Folke, T.', 'Jacobsen, C.', 'Fleming, S. M.', 'De Martino, B.'],
             'year': 2016,
             'journal': 'Nature Human Behaviour',
-            'doi': 'https://doi.org/10.1038/s41562-016-0002'
+            'doi': '10.1038/s41562-016-0002'
         },
         'ganzou': {
-            'name': 'Ganzou Study',
-            'authors': ['Gandhi, N.', 'Zou, W.'],
+            'name': 'Computational Methods for Predicting and Understanding Food Judgment',
+            'authors': ['Gandhi, N.', 'Zou, W.', 'Meyer, C.', 'Bhatia, S.', 'Walasek, L.'],
             'year': 2022,
             'journal': 'Psychological Science',
-            'doi': 'https://doi.org/10.1177/09567976211043426'
+            'doi': '10.1177/09567976211043426'
         },
         'gwikrab': {
             'name': 'Attitudes and attention',
             'authors': ['Gwinn, R.', 'Krajbich, I.'],
             'year': 2020,
             'journal': 'Journal of Experimental Social Psychology',
-            'doi': 'https://doi.org/10.1016/j.jesp.2019.103892'
+            'doi': '10.1016/j.jesp.2019.103892'
         },
         'gwileb': {
             'name': 'The spillover effects of attentional learning on value-based choice',
             'authors': ['Gwinn, R. E.', 'Leber, A.', 'Krajbich, I.'],
             'year': 2019,
             'journal': 'Cognition',
-            'doi': 'https://doi.org/10.1016/j.cognition.2018.10.012'
+            'doi': '10.1016/j.cognition.2018.10.012'
         },
         'hasdes': {
             'name': 'Incentivized and non-incentivized liking ratings outperform willingness-to-pay in predicting choice',
             'authors': ['Hascher, J.', 'Desai, N.', 'Krajbich, I.'],
             'year': 2021,
-            'journal': 'Judgment & Decision Making',
-            'doi': None
+            'journal': 'Judgment and Decision Making',
+            'doi': '10.1017/S1930297500008500'
         },
         'marglu': {
             'name': 'The Hungry Lens: Hunger Shifts Attention and Attribute Weighting in Dietary Choice',
             'authors': ['March, J.', 'Gluth, S.'],
-            'year': 2024,
+            'year': 2025,
             'journal': 'eLife',
-            'doi': 'https://doi.org/10.7554/eLife.103736.2'
+            'doi': '10.7554/eLife.103736.2'
         },
         'larlua': {
             'name': 'Increased BMI is associated with an altered decision-making process during healthy food choices in males and females',
             'authors': ['Larenas, G.', 'Luarte, L.', 'Kerr, B.', 'Ossandón, T.', 'Cortés, V.', 'Baudrand, R.', 'Pérez Leighton, C.'],
             'year': 2025,
             'journal': 'Appetite',
-            'doi': 'https://doi.org/10.1016/j.appet.2025.107859'
+            'doi': '10.1016/j.appet.2025.107859'
         },
         'libain1': {
             'name': 'Memorable but not chosen: No effect of memorability on value-based decisions',
             'authors': ['Li, X.', 'Bainbridge, W.', 'Bakkour, A.'],
             'year': 2022,
             'journal': 'Scientific Reports',
-            'doi': 'https://doi.org/10.1038/s41598-022-26333-5'
+            'doi': '10.1038/s41598-022-26333-5'
         },
         'libain2': {
             'name': 'Memorable but not chosen: No effect of memorability on value-based decisions',
             'authors': ['Li, X.', 'Bainbridge, W.', 'Bakkour, A.'],
             'year': 2022,
             'journal': 'Scientific Reports',
-            'doi': 'https://doi.org/10.1038/s41598-022-26333-5'
+            'doi': '10.1038/s41598-022-26333-5'
         },
         'romfred': {
             'name': 'Considering what we know and what we don\'t know: Expectations and confidence guide value integration in value-based decision-making',
-            'authors': ['Frömer, R.', 'Callaway, F.', 'Griffiths, T.', 'Shenhav, A.'],
+            'authors': ['Frömer, R.', 'Callaway, F.', 'Griffiths, T. L.', 'Shenhav, A.'],
             'year': 2025,
             'journal': 'Open Mind',
-            'doi': 'https://doi.org/10.1162/opmi.a.3'
+            'doi': '10.1162/opmi_a_00103'
         },
         'sepush': {
             'name': 'Visual attention modulates the integration of goal-relevant evidence and not value',
             'authors': ['Sepulveda, P.', 'Usher, M.', 'Davies, N.', 'Benson, A. A.', 'Ortoleva, P.', 'De Martino, B.'],
             'year': 2020,
             'journal': 'eLife',
-            'doi': 'https://doi.org/10.7554/eLife.60705'
+            'doi': '10.7554/eLife.60705'
         },
         'shenhav1b': {
             'name': 'Mutual inclusivity improves decision-making by smoothing out choice\'s competitive edge',
-            'authors': ['Leng, X.', 'Frömer, R.', 'Summe, T.', 'et al.'],
+            'authors': ['Leng, X.', 'Frömer, R.', 'Summe, T.', 'Shenhav, A.'],
             'year': 2025,
             'journal': 'Nature Human Behaviour',
-            'doi': 'https://doi.org/10.1038/s41562-024-02064-7'
+            'doi': '10.1038/s41562-024-02064-7'
         },
         'shenhav2': {
             'name': 'Mutual inclusivity improves decision-making by smoothing out choice\'s competitive edge',
-            'authors': ['Leng, X.', 'Frömer, R.', 'Summe, T.', 'et al.'],
+            'authors': ['Leng, X.', 'Frömer, R.', 'Summe, T.', 'Shenhav, A.'],
             'year': 2025,
             'journal': 'Nature Human Behaviour',
-            'doi': 'https://doi.org/10.1038/s41562-024-02064-7'
+            'doi': '10.1038/s41562-024-02064-7'
         },
         'shenhav3a': {
             'name': 'Mutual inclusivity improves decision-making by smoothing out choice\'s competitive edge',
-            'authors': ['Leng, X.', 'Frömer, R.', 'Summe, T.', 'et al.'],
+            'authors': ['Leng, X.', 'Frömer, R.', 'Summe, T.', 'Shenhav, A.'],
             'year': 2025,
             'journal': 'Nature Human Behaviour',
-            'doi': 'https://doi.org/10.1038/s41562-024-02064-7'
+            'doi': '10.1038/s41562-024-02064-7'
         },
         'shenhav3b': {
             'name': 'Mutual inclusivity improves decision-making by smoothing out choice\'s competitive edge',
-            'authors': ['Leng, X.', 'Frömer, R.', 'Summe, T.', 'et al.'],
+            'authors': ['Leng, X.', 'Frömer, R.', 'Summe, T.', 'Shenhav, A.'],
             'year': 2025,
             'journal': 'Nature Human Behaviour',
-            'doi': 'https://doi.org/10.1038/s41562-024-02064-7'
+            'doi': '10.1038/s41562-024-02064-7'
         },
         'shenhav4': {
             'name': 'Mutual inclusivity improves decision-making by smoothing out choice\'s competitive edge',
-            'authors': ['Leng, X.', 'Frömer, R.', 'Summe, T.', 'et al.'],
+            'authors': ['Leng, X.', 'Frömer, R.', 'Summe, T.', 'Shenhav, A.'],
             'year': 2025,
             'journal': 'Nature Human Behaviour',
-            'doi': 'https://doi.org/10.1038/s41562-024-02064-7'
+            'doi': '10.1038/s41562-024-02064-7'
         },
         'shenhav5a': {
             'name': 'Mutual inclusivity improves decision-making by smoothing out choice\'s competitive edge',
-            'authors': ['Leng, X.', 'Frömer, R.', 'Summe, T.', 'et al.'],
+            'authors': ['Leng, X.', 'Frömer, R.', 'Summe, T.', 'Shenhav, A.'],
             'year': 2025,
             'journal': 'Nature Human Behaviour',
-            'doi': 'https://doi.org/10.1038/s41562-024-02064-7'
+            'doi': '10.1038/s41562-024-02064-7'
         },
         'shenhav5b': {
             'name': 'Mutual inclusivity improves decision-making by smoothing out choice\'s competitive edge',
-            'authors': ['Leng, X.', 'Frömer, R.', 'Summe, T.', 'et al.'],
+            'authors': ['Leng, X.', 'Frömer, R.', 'Summe, T.', 'Shenhav, A.'],
             'year': 2025,
             'journal': 'Nature Human Behaviour',
-            'doi': 'https://doi.org/10.1038/s41562-024-02064-7'
+            'doi': '10.1038/s41562-024-02064-7'
         },
         'shenhav6': {
             'name': 'Mutual inclusivity improves decision-making by smoothing out choice\'s competitive edge',
-            'authors': ['Leng, X.', 'Frömer, R.', 'Summe, T.', 'et al.'],
+            'authors': ['Leng, X.', 'Frömer, R.', 'Summe, T.', 'Shenhav, A.'],
             'year': 2025,
             'journal': 'Nature Human Behaviour',
-            'doi': 'https://doi.org/10.1038/s41562-024-02064-7'
+            'doi': '10.1038/s41562-024-02064-7'
         },
         'shevsmith1': {
             'name': 'High-value decisions are fast and accurate, inconsistent with diminishing value sensitivity',
             'authors': ['Shevlin, B. R. K.', 'Smith, S. M.', 'Hausfeld, J.', 'Krajbich, I.'],
             'year': 2022,
             'journal': 'Proceedings of the National Academy of Sciences',
-            'doi': 'https://doi.org/10.1073/pnas.2101508119'
+            'doi': '10.1073/pnas.2101508119'
         },
         'shevsmith2': {
             'name': 'High-value decisions are fast and accurate, inconsistent with diminishing value sensitivity',
             'authors': ['Shevlin, B. R. K.', 'Smith, S. M.', 'Hausfeld, J.', 'Krajbich, I.'],
             'year': 2022,
             'journal': 'Proceedings of the National Academy of Sciences',
-            'doi': 'https://doi.org/10.1073/pnas.2101508119'
+            'doi': '10.1073/pnas.2101508119'
         },
         'smikrab': {
             'name': 'Mental representations distinguish value-based decisions from perceptual decisions',
             'authors': ['Smith, S. M.', 'Krajbich, I.'],
             'year': 2021,
             'journal': 'Psychonomic Bulletin & Review',
-            'doi': 'https://doi.org/10.3758/s13423-021-01911-2'
+            'doi': '10.3758/s13423-021-01911-2'
         },
         'smikrab2018': {
             'name': 'Attention and choice across domains',
             'authors': ['Smith, S. M.', 'Krajbich, I.'],
             'year': 2018,
             'journal': 'Journal of Experimental Psychology: General',
-            'doi': 'https://doi.org/10.1037/xge0000482'
+            'doi': '10.1037/xge0000482'
         },
         'sucro': {
             'name': 'Elucidating the underlying components of food valuation in the human orbitofrontal cortex',
-            'authors': ['Suzuki, S.', 'Cross, L.', 'O\'Doherty, J.P.'],
+            'authors': ['Suzuki, S.', 'Cross, L.', 'O\'Doherty, J. P.'],
             'year': 2017,
             'journal': 'Nature Neuroscience',
-            'doi': 'https://doi.org/10.1038/s41593-017-0008-x'
+            'doi': '10.1038/s41593-017-0008-x'
         },
         'thomolt': {
             'name': 'Uncovering the computational mechanisms underlying many-alternative choice',
             'authors': ['Thomas, A. W.', 'Molter, F.', 'Krajbich, I.'],
             'year': 2021,
             'journal': 'eLife',
-            'doi': 'https://doi.org/10.7554/elife.57012'
+            'doi': '10.7554/elife.57012'
         },
         'toyam': {
             'name': 'Subjective Evaluation of Food: A Japanese Database',
             'authors': ['Toyama, A.', 'Yamashita, Y.', 'Suzuki, S.'],
             'year': 2025,
-            'journal': 'PsyArXiv',
-            'doi': 'https://doi.org/10.31234/osf.io/ywt3k_v1'
+            'journal': 'OSF',
+            'doi': '10.31234/osf.io/ywt3k_v1'
         },
         'xuefoe': {
             'name': 'Neural Representations of Food-Related Attributes in the Human Orbitofrontal Cortex during Choice Deliberation in Anorexia Nervosa',
             'authors': ['Xue, A. M.', 'Foerde, K.', 'Walsh, B. T.', 'Steinglass, J. E.', 'Shohamy, D.', 'Bakkour, A.'],
             'year': 2022,
             'journal': 'Journal of Neuroscience',
-            'doi': 'https://doi.org/10.1523/JNEUROSCI.0958-21.2021'
+            'doi': '10.1523/JNEUROSCI.0958-21.2021'
         }
     }
     
