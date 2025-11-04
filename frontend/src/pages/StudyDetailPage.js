@@ -259,11 +259,6 @@ const StudyDetailPage = () => {
                   </a>
                 </Descriptions.Item>
               )}
-              {study.description && (
-                <Descriptions.Item label="Description">
-                  <Paragraph>{study.description}</Paragraph>
-                </Descriptions.Item>
-              )}
             </Descriptions>
           </Card>
         </Col>

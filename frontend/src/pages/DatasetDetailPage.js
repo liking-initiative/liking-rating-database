@@ -202,11 +202,6 @@ const DatasetDetailPage = () => {
               <Descriptions.Item label="Data Completeness">
                 {dataset.data_completeness ? `${dataset.data_completeness.toFixed(1)}%` : 'Not specified'}
               </Descriptions.Item>
-              {dataset.description && (
-                <Descriptions.Item label="Description">
-                  <Paragraph>{dataset.description}</Paragraph>
-                </Descriptions.Item>
-              )}
               <Descriptions.Item label="File Format">
                 {dataset.file_format || 'Not specified'}
               </Descriptions.Item>
