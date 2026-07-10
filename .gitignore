@@ -193,7 +193,6 @@ test_sample.csv
 scripts/create_sample_data.py
 scripts/init_database.py
 scripts/import_real_data.py
-requirements-*.txt
 
 # Build and cache directories
 build/
@@ -250,3 +249,10 @@ check_*.py
 update_*.py
 *_temp.py
 *_backup.py
+# Raw source data and reference material (local only — never commit)
+Liking Rating Database/
+Liking Rating Database-*.zip
+reference-papers/
+*.db.bak
+*.db-wal
+*.db-shm
