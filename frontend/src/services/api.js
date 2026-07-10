@@ -10,22 +10,23 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-});
-
-// Request interceptor for auth tokens if needed
-api.interceptors.request.use(
-  (config) => {
-    // Add auth token if available
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
+  // FastAPI expects repeated query keys for list params (a=1&a=2),
+  // not axios' default bracket notation (a[]=1&a[]=2).
+  paramsSerializer: {
+    serialize: (params) => {
+      const searchParams = new URLSearchParams();
+      Object.entries(params).forEach(([key, value]) => {
+        if (value === undefined || value === null) return;
+        if (Array.isArray(value)) {
+          value.forEach((v) => searchParams.append(key, v));
+        } else {
+          searchParams.append(key, value);
+        }
+      });
+      return searchParams.toString();
+    },
   },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+});
 
 // Response interceptor for error handling
 api.interceptors.response.use(
@@ -37,6 +38,7 @@ api.interceptors.response.use(
 );
 
 // Studies API
+// Returns a paginated envelope: { items, total, page, page_size, pages }
 export const getStudies = async (params = {}) => {
   const defaultParams = {
     page: 1,
@@ -52,34 +54,20 @@ export const getStudy = async (studyId) => {
   return response.data;
 };
 
-export const createStudy = async (studyData) => {
-  const response = await api.post('/studies', studyData);
-  return response.data;
-};
-
-export const updateStudy = async (studyId, studyData) => {
-  const response = await api.put(`/studies/${studyId}`, studyData);
-  return response.data;
-};
-
-export const deleteStudy = async (studyId) => {
-  const response = await api.delete(`/studies/${studyId}`);
-  return response.data;
-};
-
 // Datasets API
+// Returns a paginated envelope: { items, total, page, page_size, pages }
 export const getDatasets = async (params = {}) => {
-  const response = await api.get('/datasets', { params });
+  const defaultParams = {
+    page: 1,
+    page_size: 100,
+    ...params
+  };
+  const response = await api.get('/datasets', { params: defaultParams });
   return response.data;
 };
 
 export const getDataset = async (datasetId) => {
   const response = await api.get(`/datasets/${datasetId}`);
-  return response.data;
-};
-
-export const createDataset = async (datasetData) => {
-  const response = await api.post('/datasets', datasetData);
   return response.data;
 };
 
@@ -187,14 +175,31 @@ export const downloadFile = (blob, filename) => {
   window.URL.revokeObjectURL(url);
 };
 
-export const generateCitation = (study, dataset = null) => {
-  const authors = study.authors.join(', ');
-  const year = study.year;
-  const title = dataset ? `${study.name} - ${dataset.name}` : study.name;
-  const journal = study.journal ? `, ${study.journal}` : '';
-  const doi = study.doi ? `. DOI: ${study.doi}` : '';
-  
-  return `${authors} (${year}). ${title}${journal}${doi}`;
+export const generateBibtex = (study) => {
+  const authors = Array.isArray(study.authors) ? study.authors : [];
+  const firstAuthor = authors[0] || 'unknown';
+  // "Lastname, F." puts the last name first; "First Lastname" puts it last
+  const lastName = firstAuthor.includes(',')
+    ? firstAuthor.split(',')[0]
+    : firstAuthor.split(/\s+/).filter(Boolean).pop() || 'unknown';
+  const firstAuthorKey = lastName.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+  const citationKey = `${firstAuthorKey || 'unknown'}${study.year || ''}`;
+
+  const fields = [
+    `  author = {${authors.join(' and ')}}`,
+    `  title = {${study.name}}`,
+  ];
+  if (study.year) {
+    fields.push(`  year = {${study.year}}`);
+  }
+  if (study.journal) {
+    fields.push(`  journal = {${study.journal}}`);
+  }
+  if (study.doi) {
+    fields.push(`  doi = {${study.doi}}`);
+  }
+
+  return `@article{${citationKey},\n${fields.join(',\n')}\n}`;
 };
 
 export default api;

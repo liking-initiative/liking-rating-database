@@ -1,48 +1,44 @@
-import React, { useState, useEffect } from 'react';
-import { Card, Typography, Row, Col, Empty, Spin, Select, Alert } from 'antd';
-import { BarChartOutlined } from '@ant-design/icons';
+import React, { useState } from 'react';
+import { Card, Typography, Row, Col, Spin, Select, Alert } from 'antd';
 import Plot from 'react-plotly.js';
 import { useQuery } from 'react-query';
-import { getDatasets, getItems, getRatingAggregations, getStatistics, getRatings } from '../services/api';
+import { getDatasets, getRatingAggregations, getRatings, getCategories } from '../services/api';
 
 const { Title } = Typography;
 const { Option } = Select;
+
+const RATINGS_SAMPLE_SIZE = 1000;
 
 const VisualizationsPage = () => {
   const [selectedDataset, setSelectedDataset] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('all');
 
   // Data queries
-  const { data: datasets, isLoading: datasetsLoading } = useQuery('datasets', getDatasets);
-  const { data: items, isLoading: itemsLoading } = useQuery('items', getItems);
-  const { data: statistics, isLoading: statsLoading } = useQuery('statistics', getStatistics);
-  
-  // Get individual ratings for histogram (limited to 1k for performance)
+  const { data: datasetsData, isLoading: datasetsLoading } = useQuery('datasets', () => getDatasets());
+  const { data: categoriesData } = useQuery('categories', getCategories);
+
+  // /datasets returns a paginated envelope: { items, total, page, page_size, pages }
+  const datasets = datasetsData?.items;
+
+  // Individual ratings for the distribution chart (a sample, for performance)
   const { data: ratingsData, isLoading: ratingsLoading, error: ratingsError } = useQuery(
-    ['ratings', selectedDataset], 
-    () => getRatings({ 
-      page: 1, 
-      page_size: 1000, // Start with smaller number
+    ['ratings-sample', selectedDataset, RATINGS_SAMPLE_SIZE],
+    () => getRatings({
+      page: 1,
+      page_size: RATINGS_SAMPLE_SIZE,
       ...(selectedDataset && { dataset_id: selectedDataset })
     }),
     {
       refetchOnWindowFocus: false,
       staleTime: 5 * 60 * 1000, // 5 minutes
-      enabled: true, // Explicitly enable the query
       retry: 2,
-      onError: (error) => {
-        console.error('Ratings query error:', error);
-      },
-      onSuccess: (data) => {
-        console.log('Ratings data loaded:', data?.items?.length, 'items');
-      }
     }
   );
-  
-  // Get aggregations for category analysis
+
+  // Aggregations for category analysis (each row carries its item category)
   const { data: aggregations, isLoading: aggregationsLoading } = useQuery(
-    ['ratingAggregations', selectedDataset], 
-    () => getRatingAggregations({ 
+    ['ratingAggregations', selectedDataset, 10],
+    () => getRatingAggregations({
       min_ratings: 10,
       ...(selectedDataset && { dataset_ids: [selectedDataset] })
     }),
@@ -52,51 +48,20 @@ const VisualizationsPage = () => {
     }
   );
   
-  // Real data for rating distributions using individual ratings
+  // Rating distribution over the sample. Across datasets scales differ
+  // (-870..870 sliders next to 1..5 likerts), so the pooled view uses
+  // normalized ratings; a single dataset shows its original scale.
   const generateRatingDistributionData = () => {
     if (!ratingsData?.items?.length) return [];
-    
-    // Create histogram bins for ratings
-    const ratings = ratingsData.items.map(r => r.rating).filter(r => r !== null && r !== undefined);
-    if (ratings.length === 0) return [];
-    
-    const minRating = Math.min(...ratings);
-    const maxRating = Math.max(...ratings);
-    
-    // If all ratings are the same, create a single bin
-    if (minRating === maxRating) {
-      return {
-        x: [minRating],
-        y: [ratings.length],
-        type: 'bar',
-        name: 'Rating Frequency',
-        marker: { color: '#1890ff' },
-        opacity: 0.7
-      };
-    }
-    
-    // Create 20 bins
-    const numBins = 20;
-    const binSize = (maxRating - minRating) / numBins;
-    const bins = [];
-    const binCounts = [];
-    
-    for (let i = 0; i < numBins; i++) {
-      const binStart = minRating + i * binSize;
-      const binEnd = minRating + (i + 1) * binSize;
-      bins.push(binStart + binSize / 2); // Use bin center
-      
-      // Include the last bin's upper bound
-      const count = i === numBins - 1 
-        ? ratings.filter(r => r >= binStart && r <= binEnd).length
-        : ratings.filter(r => r >= binStart && r < binEnd).length;
-      binCounts.push(count);
-    }
-    
+
+    const values = ratingsData.items
+      .map(r => (selectedDataset ? r.rating : r.normalized_rating))
+      .filter(r => r !== null && r !== undefined);
+    if (values.length === 0) return [];
+
     return {
-      x: bins,
-      y: binCounts,
-      type: 'bar',
+      x: values,
+      type: 'histogram',
       name: 'Rating Frequency',
       marker: { color: '#1890ff' },
       opacity: 0.7
@@ -104,20 +69,14 @@ const VisualizationsPage = () => {
   };
 
   const generateCategoryData = () => {
-    if (!aggregations?.length || !items?.items?.length) {
+    if (!aggregations?.length) {
       return { x: [], y: [] };
     }
-    
-    // Create a map of item_id to category
-    const itemCategoryMap = {};
-    items.items.forEach(item => {
-      itemCategoryMap[item.id] = item.category;
-    });
-    
-    // Group aggregations by category
+
+    // Group aggregations by the category the API provides on each row
     const categoryData = {};
     aggregations.forEach(agg => {
-      const category = itemCategoryMap[agg.item_id];
+      const category = agg.category;
       if (category && agg.mean_rating !== null && agg.mean_rating !== undefined) {
         if (!categoryData[category]) {
           categoryData[category] = { ratings: [], count: 0 };
@@ -174,24 +133,26 @@ const VisualizationsPage = () => {
     };
   };
 
-  const generateTimeSeriesData = () => {
+  const generateDatasetsPerStudyData = () => {
     if (!datasets?.length) return [];
-    
+
     // Filter datasets if needed
-    const filteredDatasets = selectedDataset 
+    const filteredDatasets = selectedDataset
       ? datasets.filter(d => d.id === selectedDataset)
       : datasets;
-    
-    // Group by study and count datasets per study
+
+    // Group by study code (first word of the dataset name) and count datasets
     const studyCounts = {};
     filteredDatasets.forEach(dataset => {
-      const studyName = dataset.name.split(' ')[0]; // Get first word as study identifier
+      const studyName = dataset.name.split(' ')[0];
       studyCounts[studyName] = (studyCounts[studyName] || 0) + 1;
     });
-    
-    const studies = Object.keys(studyCounts).slice(0, 15); // Top 15 studies by dataset count
+
+    const studies = Object.keys(studyCounts)
+      .sort((a, b) => studyCounts[b] - studyCounts[a])
+      .slice(0, 15);
     const counts = studies.map(study => studyCounts[study]);
-    
+
     return {
       x: studies,
       y: counts,
@@ -225,17 +186,15 @@ const VisualizationsPage = () => {
         </Col>
         <Col xs={24} md={12}>
           <Select
-            placeholder="Select food category"
+            placeholder="Select category"
             style={{ width: '100%' }}
             value={selectedCategory}
             onChange={setSelectedCategory}
           >
             <Option value="all">All Categories</Option>
-            <Option value="sweets">Sweets</Option>
-            <Option value="chips">Chips</Option>
-            <Option value="fruits">Fruits</Option>
-            <Option value="vegetables">Vegetables</Option>
-            <Option value="other">Other</Option>
+            {categoriesData?.categories?.map(cat => (
+              <Option key={cat} value={cat}>{cat.replace(/_/g, ' ')}</Option>
+            ))}
           </Select>
         </Col>
       </Row>
@@ -257,9 +216,9 @@ const VisualizationsPage = () => {
               <Plot
                 data={[generateRatingDistributionData()]}
                 layout={{
-                  title: `Distribution of ${ratingsData.items.length.toLocaleString()} Ratings`,
-                  xaxis: { title: 'Rating Value' },
-                  yaxis: { title: 'Frequency' },
+                  title: `Sample of ${ratingsData.items.length.toLocaleString()} of ${(ratingsData.total || 0).toLocaleString()} ratings`,
+                  xaxis: { title: selectedDataset ? 'Rating (original scale)' : 'Normalized rating (0–1)' },
+                  yaxis: { title: 'Count' },
                   height: 400,
                   margin: { t: 50, b: 50, l: 50, r: 50 }
                 }}
@@ -277,8 +236,8 @@ const VisualizationsPage = () => {
         </Col>
         
         <Col xs={24} lg={12}>
-          <Card title="Food Category Analysis" style={{ height: 500 }}>
-            {aggregationsLoading || itemsLoading ? (
+          <Card title="Category Analysis" style={{ height: 500 }}>
+            {aggregationsLoading ? (
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 400 }}>
                 <Spin size="large" />
               </div>
@@ -289,11 +248,11 @@ const VisualizationsPage = () => {
                   <Plot
                     data={[categoryData]}
                     layout={{
-                      title: selectedCategory === 'all' ? 'Average Ratings by Food Category' : `Average Ratings - ${selectedCategory}`,
-                      xaxis: { title: 'Food Category' },
-                      yaxis: { title: 'Average Rating' },
+                      title: selectedCategory === 'all' ? 'Average Normalized Rating by Category' : `Average Normalized Rating — ${selectedCategory}`,
+                      xaxis: { title: 'Category', tickangle: -30 },
+                      yaxis: { title: 'Mean normalized rating (0–1)', range: [0, 1] },
                       height: 400,
-                      margin: { t: 50, b: 50, l: 50, r: 50 }
+                      margin: { t: 50, b: 90, l: 50, r: 50 }
                     }}
                     config={{ responsive: true }}
                     style={{ width: '100%', height: '100%' }}
@@ -339,13 +298,13 @@ const VisualizationsPage = () => {
           <Card title="Dataset Distribution by Study" style={{ height: 500 }}>
             {datasets?.length > 0 ? (
               <Plot
-                data={[generateTimeSeriesData()]}
+                data={[generateDatasetsPerStudyData()]}
                 layout={{
-                  title: 'Research Activity Over Time',
-                  xaxis: { title: 'Year' },
-                  yaxis: { title: 'Number of Studies' },
+                  title: 'Datasets Contributed per Study',
+                  xaxis: { title: 'Study (dataset code)', tickangle: -45 },
+                  yaxis: { title: 'Number of Datasets' },
                   height: 400,
-                  margin: { t: 50, b: 50, l: 50, r: 50 }
+                  margin: { t: 50, b: 90, l: 50, r: 50 }
                 }}
                 config={{ responsive: true }}
                 style={{ width: '100%', height: '100%' }}

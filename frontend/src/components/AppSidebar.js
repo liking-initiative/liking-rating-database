@@ -31,7 +31,7 @@ const AppSidebar = () => {
     {
       key: '/items',
       icon: <AppleOutlined />,
-      label: 'Food Items',
+      label: 'Items',
       onClick: () => navigate('/items')
     },
     {
@@ -48,19 +48,22 @@ const AppSidebar = () => {
     }
   ];
 
-  // Get current selected key based on location
-  const selectedKey = menuItems.find(item => location.pathname.startsWith(item.key))?.key || '/search';
+  // Highlight the section the current path belongs to; datasets live under
+  // studies, and pages without a sidebar entry (home, downloads) select nothing
+  const path = location.pathname;
+  let selectedKey = menuItems.find(item => path.startsWith(item.key))?.key;
+  if (!selectedKey && path.startsWith('/datasets')) selectedKey = '/studies';
 
   return (
-    <Sider 
-      width={240} 
+    <Sider
+      width={240}
       style={{ background: '#fff' }}
       breakpoint="lg"
       collapsedWidth="0"
     >
       <Menu
         mode="inline"
-        selectedKeys={[selectedKey]}
+        selectedKeys={selectedKey ? [selectedKey] : []}
         style={{ height: '100%', borderRight: 0 }}
         items={menuItems}
       />

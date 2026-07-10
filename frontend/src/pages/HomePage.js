@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Row, Col, Card, Statistic, Button, Space } from 'antd';
+import { Typography, Row, Col, Card, Statistic, Button, Space, Alert } from 'antd';
 import { 
   ExperimentOutlined, 
   DatabaseOutlined, 
@@ -18,7 +18,7 @@ const { Title, Paragraph } = Typography;
 const HomePage = () => {
   const navigate = useNavigate();
   
-  const { data: statistics, isLoading } = useQuery('statistics', getStatistics);
+  const { data: statistics, isLoading, error: statsError } = useQuery('statistics', getStatistics);
 
   return (
     <div>
@@ -28,8 +28,9 @@ const HomePage = () => {
           Liking Rating Database
         </Title>
         <Paragraph style={{ fontSize: '18px', color: '#666', maxWidth: '800px', margin: '0 auto' }}>
-          A comprehensive database of food liking ratings from multiple research studies. 
-          Explore, analyze, and download standardized food preference data for your research.
+          A curated database of liking ratings — food and consumer products —
+          from published decision-making studies. Explore, analyze, and download
+          standardized preference data for your research.
         </Paragraph>
         <Space size="large" style={{ marginTop: '24px' }}>
           <Button 
@@ -51,6 +52,14 @@ const HomePage = () => {
       </div>
 
       {/* Statistics */}
+      {statsError && (
+        <Alert
+          type="warning"
+          showIcon
+          style={{ marginBottom: 16 }}
+          message="Database statistics are temporarily unavailable"
+        />
+      )}
       <Row gutter={[24, 24]} style={{ marginBottom: '48px' }}>
         <Col xs={24} sm={12} md={6}>
           <Card>
@@ -89,7 +98,7 @@ const HomePage = () => {
         <Col xs={24} sm={12} md={6}>
           <Card>
             <Statistic
-              title="Food Items"
+              title="Items"
               value={statistics?.total_items || 0}
               loading={isLoading}
               prefix={<AppleOutlined />}

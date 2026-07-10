@@ -1,23 +1,48 @@
-import React from 'react';
-import { Table, Card, Tag, Button, Space, Typography, Row, Col } from 'antd';
+import React, { useState } from 'react';
+import { Table, Card, Tag, Button, Space, Typography, Row, Col, Modal, message } from 'antd';
 import { useQuery } from 'react-query';
-import { EyeOutlined, TeamOutlined, CalendarOutlined } from '@ant-design/icons';
-import { getStudies } from '../services/api';
+import { EyeOutlined, TeamOutlined, CalendarOutlined, CopyOutlined, FileTextOutlined } from '@ant-design/icons';
+import { getStudies, generateBibtex } from '../services/api';
 import { useNavigate } from 'react-router-dom';
 
 const { Title } = Typography;
 
 const StudiesPage = () => {
   const navigate = useNavigate();
-  
-  const { data: studies, isLoading, error } = useQuery(
-    'studies', 
-    () => getStudies(),
+  const [citationStudy, setCitationStudy] = useState(null);
+
+  // Fetch every page of studies (the table paginates client-side)
+  const fetchAllStudies = async () => {
+    const first = await getStudies({ page: 1, page_size: 100 });
+    const all = [...(first.items || [])];
+    for (let page = 2; page <= (first.pages || 1); page += 1) {
+      const next = await getStudies({ page, page_size: 100 });
+      all.push(...(next.items || []));
+    }
+    return { ...first, items: all };
+  };
+
+  const { data: studiesData, isLoading, error } = useQuery(
+    'studies-all',
+    fetchAllStudies,
     {
       retry: 3,
       staleTime: 5 * 60 * 1000, // 5 minutes
     }
   );
+
+  const studies = studiesData?.items;
+
+  const handleCopyCitation = async () => {
+    if (!citationStudy) return;
+    const bibtex = generateBibtex(citationStudy);
+    try {
+      await navigator.clipboard.writeText(bibtex);
+      message.success('BibTeX citation copied to clipboard');
+    } catch (err) {
+      message.error('Failed to copy citation to clipboard');
+    }
+  };
 
   const columns = [
     {
@@ -29,8 +54,8 @@ const StudiesPage = () => {
           <div style={{ fontWeight: 'bold', marginBottom: 4 }}>{text}</div>
           {record.description && (
             <div style={{ color: '#666', fontSize: '12px' }}>
-              {record.description.length > 100 
-                ? record.description.substring(0, 100) + '...' 
+              {record.description.length > 100
+                ? record.description.substring(0, 100) + '...'
                 : record.description
               }
             </div>
@@ -88,15 +113,22 @@ const StudiesPage = () => {
     {
       title: 'Actions',
       key: 'actions',
-      width: 120,
+      width: 180,
       render: (_, record) => (
         <Space>
-          <Button 
-            size="small" 
+          <Button
+            size="small"
             icon={<EyeOutlined />}
             onClick={() => navigate(`/studies/${record.id}`)}
           >
             View
+          </Button>
+          <Button
+            size="small"
+            icon={<FileTextOutlined />}
+            onClick={() => setCitationStudy(record)}
+          >
+            Cite
           </Button>
         </Space>
       ),
@@ -108,13 +140,6 @@ const StudiesPage = () => {
       <Row justify="space-between" align="middle" style={{ marginBottom: 24 }}>
         <Col>
           <Title level={2}>Research Studies</Title>
-        </Col>
-        <Col>
-          <Space>
-            <Button type="primary">
-              Add Study
-            </Button>
-          </Space>
         </Col>
       </Row>
 
@@ -134,7 +159,7 @@ const StudiesPage = () => {
               pageSize: 20,
               showSizeChanger: true,
               showQuickJumper: true,
-              showTotal: (total, range) => 
+              showTotal: (total, range) =>
                 `${range[0]}-${range[1]} of ${total} studies`,
             }}
             locale={{
@@ -143,6 +168,34 @@ const StudiesPage = () => {
           />
         )}
       </Card>
+
+      <Modal
+        title="BibTeX Citation"
+        open={!!citationStudy}
+        onCancel={() => setCitationStudy(null)}
+        footer={[
+          <Button key="copy" type="primary" icon={<CopyOutlined />} onClick={handleCopyCitation}>
+            Copy to Clipboard
+          </Button>,
+          <Button key="close" onClick={() => setCitationStudy(null)}>
+            Close
+          </Button>,
+        ]}
+      >
+        {citationStudy && (
+          <pre
+            style={{
+              background: '#f5f5f5',
+              padding: '16px',
+              borderRadius: '4px',
+              whiteSpace: 'pre-wrap',
+              wordBreak: 'break-word',
+            }}
+          >
+            {generateBibtex(citationStudy)}
+          </pre>
+        )}
+      </Modal>
     </div>
   );
 };

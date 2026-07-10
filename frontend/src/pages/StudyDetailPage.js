@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Card, Descriptions, Tag, Table, Button, Space, Typography, Row, Col } from 'antd';
+import { Card, Descriptions, Tag, Table, Button, Space, Typography, Row, Col, Alert, message } from 'antd';
 import { useQuery } from 'react-query';
 import { 
   DownloadOutlined, 
@@ -19,8 +19,8 @@ const StudyDetailPage = () => {
   const [downloadingDatasets, setDownloadingDatasets] = useState(new Set());
   const [downloadingAll, setDownloadingAll] = useState(false);
   
-  const { data: study, isLoading } = useQuery(
-    ['study', studyId], 
+  const { data: study, isLoading, error: studyError } = useQuery(
+    ['study', studyId],
     () => getStudy(studyId)
   );
 
@@ -42,10 +42,10 @@ const StudyDetailPage = () => {
       // Download the file
       const filename = `${dataset.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_data.csv`;
       downloadFile(response.data, filename);
-      
+
     } catch (error) {
       console.error('Download failed:', error);
-      // You could add a notification here
+      message.error(`Download of ${dataset.name} failed. Please try again.`);
     } finally {
       setDownloadingDatasets(prev => {
         const newSet = new Set(prev);
@@ -70,13 +70,14 @@ const StudyDetailPage = () => {
       // Get the file
       const response = await getDownload(downloadInfo.download_id);
       
-      // Download the file
-      const filename = `${study.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_all_datasets.csv`;
+      // Multi-dataset CSV downloads arrive as a zip archive
+      const multi = (study.datasets?.length || 0) > 1;
+      const filename = `${study.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_all_datasets.${multi ? 'zip' : 'csv'}`;
       downloadFile(response.data, filename);
-      
+
     } catch (error) {
       console.error('Download failed:', error);
-      // You could add a notification here
+      message.error('Download failed. Please try again.');
     } finally {
       setDownloadingAll(false);
     }
@@ -168,6 +169,21 @@ const StudyDetailPage = () => {
 
   if (isLoading) {
     return <Card loading={true} />;
+  }
+
+  if (studyError) {
+    const notFound = studyError?.response?.status === 404;
+    return (
+      <Alert
+        type={notFound ? 'warning' : 'error'}
+        showIcon
+        message={notFound ? 'Study not found' : 'Error loading study'}
+        description={notFound
+          ? 'No study exists with this id — it may have been merged or the link is stale.'
+          : 'The study could not be loaded. Please try again.'}
+        action={<Button onClick={() => navigate('/studies')}>Back to Studies</Button>}
+      />
+    );
   }
 
   if (!study) {

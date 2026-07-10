@@ -14,7 +14,7 @@ import {
   Statistic 
 } from 'antd';
 import { useQuery } from 'react-query';
-import { SearchOutlined, AppleOutlined, TagOutlined } from '@ant-design/icons';
+import { AppleOutlined, TagOutlined } from '@ant-design/icons';
 import { getItems, getCategories } from '../services/api';
 
 const { Title } = Typography;
@@ -24,10 +24,21 @@ const { Search } = Input;
 const ItemsPage = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchInput, setSearchInput] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [pagination, setPagination] = useState({ page: 1, pageSize: 20 });
 
-  const { data: items, isLoading, error } = useQuery(
+  // New search or category filter always restarts from page 1
+  const applySearch = (value) => {
+    setSearchTerm(value);
+    setPagination((p) => ({ ...p, page: 1 }));
+  };
+  const applyCategory = (value) => {
+    setSelectedCategory(value);
+    setPagination((p) => ({ ...p, page: 1 }));
+  };
+
+  const { data: items, isLoading } = useQuery(
     ['items', searchTerm, selectedCategory, pagination],
     () => getItems({
       search: searchTerm,
@@ -101,7 +112,7 @@ const ItemsPage = () => {
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontWeight: 'bold' }}>{frequency}</div>
           <div style={{ fontSize: '12px', color: '#666' }}>
-            {frequency === 1 ? 'rating' : 'ratings'}
+            {frequency === 1 ? 'dataset' : 'datasets'}
           </div>
         </div>
       ),
@@ -173,7 +184,7 @@ const ItemsPage = () => {
         <Col xs={24} sm={8}>
           <Card>
             <Statistic
-              title="With Images"
+              title="With Images (current page)"
               value={items?.items?.filter(item => item.image_available).length || 0}
               valueStyle={{ color: '#faad14' }}
               suffix={`/ ${items?.items?.length || 0}`}
@@ -187,8 +198,10 @@ const ItemsPage = () => {
         <Row gutter={16}>
           <Col xs={24} sm={12} md={8}>
             <Search
-              placeholder="Search food items..."
-              onSearch={setSearchTerm}
+              placeholder="Search items..."
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              onSearch={applySearch}
               allowClear
               style={{ width: '100%' }}
             />
@@ -197,8 +210,9 @@ const ItemsPage = () => {
             <Select
               placeholder="Filter by category"
               allowClear
+              value={selectedCategory}
               style={{ width: '100%' }}
-              onChange={setSelectedCategory}
+              onChange={applyCategory}
             >
               {categories?.categories?.map(category => (
                 <Option key={category} value={category}>
@@ -209,10 +223,11 @@ const ItemsPage = () => {
           </Col>
           <Col xs={24} sm={12} md={8}>
             <Space>
-              <Button 
+              <Button
                 onClick={() => {
-                  setSearchTerm('');
-                  setSelectedCategory(null);
+                  setSearchInput('');
+                  applySearch('');
+                  applyCategory(null);
                 }}
               >
                 Clear Filters

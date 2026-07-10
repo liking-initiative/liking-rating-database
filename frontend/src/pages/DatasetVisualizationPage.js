@@ -30,27 +30,17 @@ const DatasetVisualizationPage = () => {
   const isLoading = datasetLoading || ratingsLoading;
   const hasError = datasetError || ratingsError;
 
-  // Generate rating distribution histogram
+  // Generate rating distribution histogram.
+  // Ratings are passed raw and binned by Plotly — rounding to integers would
+  // destroy continuous scales (e.g. −870..870 sliders or 0–10 analog scales).
   const generateHistogramData = () => {
     if (!ratings?.items?.length) return [];
 
-    const ratingCounts = {};
-    ratings.items.forEach(rating => {
-      const score = Math.round(rating.rating);
-      ratingCounts[score] = (ratingCounts[score] || 0) + 1;
-    });
-
-    const scores = Object.keys(ratingCounts).map(Number).sort((a, b) => a - b);
-    const counts = scores.map(score => ratingCounts[score]);
-
     return [{
-      x: scores,
-      y: counts,
-      type: 'bar',
+      x: ratings.items.map(r => r.rating),
+      type: 'histogram',
       name: 'Rating Frequency',
       marker: { color: '#1890ff' },
-      text: counts.map(c => c.toString()),
-      textposition: 'auto',
     }];
   };
 
@@ -193,9 +183,9 @@ const DatasetVisualizationPage = () => {
       case 'histogram':
         return {
           ...baseLayout,
-          title: 'Rating Distribution',
+          title: 'Rating Distribution (original scale)',
           xaxis: { title: 'Rating Value' },
-          yaxis: { title: 'Frequency' }
+          yaxis: { title: 'Count' }
         };
       case 'topItems':
         return {
@@ -287,11 +277,13 @@ const DatasetVisualizationPage = () => {
             {dataset && (
               <div style={{ marginTop: 20 }}>
                 <Title level={4}>Dataset Info</Title>
-                <Text><strong>Study:</strong> {dataset.study_name}</Text><br />
-                <Text><strong>Year:</strong> {dataset.year}</Text><br />
-                <Text><strong>Total Ratings:</strong> {ratings?.items?.length || 0}</Text><br />
+                <Text><strong>Study:</strong> {dataset.study?.name}</Text><br />
+                <Text><strong>Year:</strong> {dataset.study?.year}</Text><br />
+                <Text><strong>Total Ratings:</strong> {
+                  (dataset.n_ratings ?? ratings?.items?.length ?? 0).toLocaleString()
+                }</Text><br />
                 <Text><strong>Unique Items:</strong> {
-                  ratings?.items ? new Set(ratings.items.map(r => r.item_id)).size : 0
+                  dataset.n_items ?? (ratings?.items ? new Set(ratings.items.map(r => r.item_id)).size : 0)
                 }</Text>
               </div>
             )}
@@ -305,12 +297,22 @@ const DatasetVisualizationPage = () => {
                 <Spin size="large" />
               </div>
             ) : ratings?.items?.length > 0 ? (
-              <Plot
-                data={getChartData()}
-                layout={getChartLayout()}
-                config={{ responsive: true }}
-                style={{ width: '100%', height: '100%' }}
-              />
+              <>
+                {dataset?.n_ratings > ratings.items.length && (
+                  <Alert
+                    type="info"
+                    showIcon
+                    style={{ marginBottom: 16 }}
+                    message={`Charts are computed from a sample of ${ratings.items.length.toLocaleString()} of ${dataset.n_ratings.toLocaleString()} ratings.`}
+                  />
+                )}
+                <Plot
+                  data={getChartData()}
+                  layout={getChartLayout()}
+                  config={{ responsive: true }}
+                  style={{ width: '100%', height: '100%' }}
+                />
+              </>
             ) : (
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 500 }}>
                 <Text type="secondary">No rating data available for visualization</Text>

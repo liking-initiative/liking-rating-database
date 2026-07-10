@@ -1,27 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  Card, 
-  Input, 
-  Form, 
-  Row, 
-  Col, 
-  Button, 
-  Table, 
-  Tag, 
-  Space, 
+import {
+  Card,
+  AutoComplete,
+  Input,
+  Form,
+  Row,
+  Col,
+  Button,
+  Table,
+  Tag,
+  Space,
   Pagination,
   Collapse,
   Select,
   Slider,
   Typography,
   Modal,
-  message,
-  Spin
+  message
 } from 'antd';
 import { SearchOutlined, FilterOutlined, DownloadOutlined } from '@ant-design/icons';
+import debounce from 'lodash/debounce';
 import { useQuery } from 'react-query';
-import { searchDatasets, getCategories, getScaleTypes, getYearRange, requestDownload, getDownload, downloadFile } from '../services/api';
+import { searchDatasets, getCategories, getScaleTypes, getYearRange, getSearchSuggestions, requestDownload, getDownload, downloadFile } from '../services/api';
 
 const { Panel } = Collapse;
 const { Title } = Typography;
@@ -32,9 +33,12 @@ const SearchPage = () => {
   const [form] = Form.useForm();
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({});
+  const [hasSearched, setHasSearched] = useState(false);
   const [pagination, setPagination] = useState({ page: 1, pageSize: 20 });
+  const [suggestionOptions, setSuggestionOptions] = useState([]);
   const [selectedDatasets, setSelectedDatasets] = useState([]);
   const [downloadModalVisible, setDownloadModalVisible] = useState(false);
+  const [downloadingId, setDownloadingId] = useState(null);
   const [downloadLoading, setDownloadLoading] = useState(false);
   const [downloadFormat, setDownloadFormat] = useState('csv');
   const [includeMetadata, setIncludeMetadata] = useState(true);
@@ -45,31 +49,76 @@ const SearchPage = () => {
   const { data: scaleTypes } = useQuery('scaleTypes', getScaleTypes);
   const { data: yearRange } = useQuery('yearRange', getYearRange);
 
-  // Search query
-  const { data: searchResults, isLoading, refetch } = useQuery(
-    ['search', searchQuery, filters, pagination],
+  // Keep the year slider's form value in sync with what it displays, so a
+  // submit always sends exactly the range the user sees
+  React.useEffect(() => {
+    if (yearRange?.min_year && !form.getFieldValue('year_range')) {
+      form.setFieldsValue({ year_range: [yearRange.min_year, yearRange.max_year] });
+    }
+  }, [yearRange, form]);
+
+  // Search query — an empty submitted search browses all datasets.
+  // keepPreviousData keeps the table mounted while the next page loads.
+  const { data: searchResults, isLoading } = useQuery(
+    ['search', searchQuery, filters, pagination.page, pagination.pageSize],
     () => searchDatasets({
       query: searchQuery,
       filters,
       page: pagination.page,
       page_size: pagination.pageSize
     }),
-    { 
-      enabled: searchQuery.length > 0 || Object.keys(filters).length > 0,
+    {
+      enabled: hasSearched,
+      keepPreviousData: true,
       refetchOnWindowFocus: false
     }
   );
 
+  // Typeahead over studies / authors / item names
+  const fetchSuggestions = useMemo(() => debounce(async (text) => {
+    if (!text || text.length < 2) {
+      setSuggestionOptions([]);
+      return;
+    }
+    try {
+      const s = await getSearchSuggestions(text);
+      const opts = [...(s.items || []), ...(s.studies || []), ...(s.authors || [])]
+        .slice(0, 10)
+        .map(v => ({ value: v }));
+      setSuggestionOptions(opts);
+    } catch {
+      setSuggestionOptions([]);
+    }
+  }, 300), []);
+
   const handleSearch = (values) => {
-    setSearchQuery(values.query || '');
-    setFilters(values);
-    setPagination({ ...pagination, page: 1 });
-    refetch();
+    // The API expects year_min/year_max, not the form's year_range slider value
+    const { query, year_range, ...rest } = values;
+    const newFilters = Object.fromEntries(
+      Object.entries(rest).filter(([, v]) => v !== undefined && v !== null && v !== '')
+    );
+    if (Array.isArray(year_range) && year_range.length === 2) {
+      newFilters.year_min = year_range[0];
+      newFilters.year_max = year_range[1];
+    }
+    setSearchQuery(query || '');
+    setFilters(newFilters);
+    setPagination((p) => ({ ...p, page: 1 }));
+    setHasSearched(true);
+  };
+
+  const handleClear = () => {
+    form.resetFields();
+    setSearchQuery('');
+    setFilters({});
+    setPagination({ page: 1, pageSize: 20 });
+    setHasSearched(false);
+    setSelectedDatasets([]);
   };
 
   const handleDownloadSingle = async (datasetId) => {
     try {
-      setDownloadLoading(true);
+      setDownloadingId(datasetId);
       message.loading('Preparing download...', 0);
       
       const downloadRequest = {
@@ -102,7 +151,7 @@ const SearchPage = () => {
       console.error('Download error:', error);
       message.error('Failed to initiate download. Please try again.');
     } finally {
-      setDownloadLoading(false);
+      setDownloadingId(null);
     }
   };
 
@@ -217,10 +266,10 @@ const SearchPage = () => {
           >
             View
           </Button>
-          <Button 
-            size="small" 
+          <Button
+            size="small"
             icon={<DownloadOutlined />}
-            loading={downloadLoading}
+            loading={downloadingId === record.id}
             onClick={() => handleDownloadSingle(record.id)}
           >
             Download
@@ -249,11 +298,17 @@ const SearchPage = () => {
           <Row gutter={16}>
             <Col span={24}>
               <Form.Item name="query" label="Search Query">
-                <Input
-                  placeholder="Search studies, authors, food items..."
-                  size="large"
-                  suffix={<SearchOutlined />}
-                />
+                <AutoComplete
+                  options={suggestionOptions}
+                  onSearch={fetchSuggestions}
+                  onSelect={() => form.submit()}
+                >
+                  <Input
+                    placeholder="Search studies, authors, items..."
+                    size="large"
+                    suffix={<SearchOutlined />}
+                  />
+                </AutoComplete>
               </Form.Item>
             </Col>
           </Row>
@@ -316,7 +371,7 @@ const SearchPage = () => {
               <Button type="primary" htmlType="submit" loading={isLoading}>
                 Search
               </Button>
-              <Button onClick={() => form.resetFields()}>
+              <Button onClick={handleClear}>
                 Clear
               </Button>
               {selectedDatasets.length > 0 && (
@@ -364,7 +419,6 @@ const SearchPage = () => {
               }
               onChange={(page, pageSize) => {
                 setPagination({ page, pageSize });
-                refetch();
               }}
             />
           </div>

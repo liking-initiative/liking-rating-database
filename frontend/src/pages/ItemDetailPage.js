@@ -16,7 +16,7 @@ import {
 } from 'antd';
 import { ArrowLeftOutlined, BarChartOutlined, TagOutlined } from '@ant-design/icons';
 import { useQuery } from 'react-query';
-import { getItem, getRatingAggregations, getItemRatingsByDataset } from '../services/api';
+import { getItem, getItemRatingsByDataset } from '../services/api';
 
 const { Title, Text } = Typography;
 
@@ -24,14 +24,37 @@ const ItemDetailPage = () => {
   const { itemId } = useParams();
   const navigate = useNavigate();
 
-  // Validate item ID format
+  // Validate item ID format (checked after the hooks — an early return here
+  // would skip hook calls and crash React when the URL param changes)
   const isValidUUID = (id) => {
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     return uuidRegex.test(id);
   };
+  const validId = isValidUUID(itemId);
 
-  // If item ID is invalid format, show error immediately
-  if (!isValidUUID(itemId)) {
+  // Fetch item details
+  const { data: item, isLoading: itemLoading, error: itemError } = useQuery(
+    ['item', itemId],
+    () => getItem(itemId),
+    {
+      enabled: validId,
+      retry: 3,
+      staleTime: 5 * 60 * 1000, // 5 minutes
+    }
+  );
+
+  // Fetch rating aggregations for this item by dataset
+  const { data: ratings, isLoading: ratingsLoading } = useQuery(
+    ['itemRatingsByDataset', itemId],
+    () => getItemRatingsByDataset(itemId),
+    {
+      enabled: validId,
+      retry: 3,
+      staleTime: 5 * 60 * 1000, // 5 minutes
+    }
+  );
+
+  if (!validId) {
     return (
       <div style={{ padding: '20px' }}>
         <Alert
@@ -50,28 +73,6 @@ const ItemDetailPage = () => {
       </div>
     );
   }
-
-  // Fetch item details
-  const { data: item, isLoading: itemLoading, error: itemError } = useQuery(
-    ['item', itemId],
-    () => getItem(itemId),
-    {
-      enabled: !!itemId,
-      retry: 3,
-      staleTime: 5 * 60 * 1000, // 5 minutes
-    }
-  );
-
-  // Fetch rating aggregations for this item by dataset
-  const { data: ratings, isLoading: ratingsLoading } = useQuery(
-    ['itemRatingsByDataset', itemId],
-    () => getItemRatingsByDataset(itemId),
-    {
-      enabled: !!itemId,
-      retry: 3,
-      staleTime: 5 * 60 * 1000, // 5 minutes
-    }
-  );
 
   if (itemLoading) {
     return (
@@ -258,9 +259,10 @@ const ItemDetailPage = () => {
                     value={rating.mean_rating}
                     precision={2}
                     suffix={`(${rating.n_ratings} ratings)`}
-                    valueStyle={{ 
-                      color: rating.mean_rating > 3 ? '#52c41a' : 
-                             rating.mean_rating > 2 ? '#faad14' : '#ff4d4f' 
+                    valueStyle={{
+                      // Ratings are normalized to 0-1, so threshold on that domain
+                      color: rating.mean_rating > 0.6 ? '#52c41a' :
+                             rating.mean_rating > 0.4 ? '#faad14' : '#ff4d4f'
                     }}
                   />
                   <div style={{ fontSize: '12px', color: '#666', marginTop: 8 }}>

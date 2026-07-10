@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Card, Descriptions, Tag, Button, Space, Typography, Row, Col, Table, message, Modal, Select } from 'antd';
+import { Card, Descriptions, Tag, Button, Space, Typography, Row, Col, Table, message, Modal, Select, Alert } from 'antd';
 import { useQuery } from 'react-query';
 import { 
   DownloadOutlined, 
@@ -21,8 +21,8 @@ const DatasetDetailPage = () => {
   const [downloadFormat, setDownloadFormat] = useState('csv');
   const [downloading, setDownloading] = useState(false);
   
-  const { data: dataset, isLoading } = useQuery(
-    ['dataset', datasetId], 
+  const { data: dataset, isLoading, error: datasetError } = useQuery(
+    ['dataset', datasetId],
     () => getDataset(datasetId)
   );
 
@@ -76,7 +76,7 @@ const DatasetDetailPage = () => {
       key: 'item_name',
     },
     {
-      title: 'Mean Rating',
+      title: 'Mean (normalized 0–1)',
       dataIndex: 'mean_rating',
       key: 'mean_rating',
       render: (value) => value?.toFixed(3),
@@ -104,6 +104,20 @@ const DatasetDetailPage = () => {
 
   if (isLoading) {
     return <Card loading={true} />;
+  }
+
+  if (datasetError) {
+    const notFound = datasetError?.response?.status === 404;
+    return (
+      <Alert
+        type={notFound ? 'warning' : 'error'}
+        showIcon
+        message={notFound ? 'Dataset not found' : 'Error loading dataset'}
+        description={notFound
+          ? 'No dataset exists with this id — the link may be stale.'
+          : 'The dataset could not be loaded. Please try again.'}
+      />
+    );
   }
 
   if (!dataset) {
@@ -191,7 +205,7 @@ const DatasetDetailPage = () => {
                 </div>
               </Descriptions.Item>
               <Descriptions.Item label="Data Completeness">
-                {dataset.data_completeness ? `${dataset.data_completeness.toFixed(1)}%` : 'Not specified'}
+                {dataset.data_completeness != null ? `${dataset.data_completeness.toFixed(1)}%` : 'Not specified'}
               </Descriptions.Item>
               {dataset.description && (
                 <Descriptions.Item label="Description">
@@ -231,7 +245,7 @@ const DatasetDetailPage = () => {
               <div>
                 <div style={{ fontWeight: 'bold' }}>Total Ratings</div>
                 <div style={{ fontSize: '24px', color: '#faad14' }}>
-                  {(dataset.n_subjects * dataset.n_items).toLocaleString()}
+                  {(dataset.n_ratings ?? 0).toLocaleString()}
                 </div>
               </div>
               {dataset.data_completeness && (

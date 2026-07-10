@@ -15,27 +15,102 @@ import {
   Tag,
   Select
 } from 'antd';
-import { ArrowLeftOutlined, BarChartOutlined, LineChartOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 import Plot from 'react-plotly.js';
 import { useQuery } from 'react-query';
-import { getItem, getRatingAggregations, getRatings, getItemRatingsByDataset } from '../services/api';
+import { getItem, getItems, getRatingAggregations, getRatings, getItemRatingsByDataset } from '../services/api';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
+
+// Fetch the ids of every item in a category (paging through /items)
+const getCategoryItemIds = async (category) => {
+  const ids = [];
+  let page = 1;
+  let pages = 1;
+  do {
+    const response = await getItems({ category, page, page_size: 100 });
+    (response.items || []).forEach((item) => ids.push(item.id));
+    pages = response.pages || 1;
+    page += 1;
+  } while (page <= pages);
+  return ids;
+};
 
 const ItemAnalysisPage = () => {
   const { itemId } = useParams();
   const navigate = useNavigate();
   const [chartType, setChartType] = useState('distribution');
 
-  // Validate item ID format
+  // Validate item ID format (checked after the hooks below — an early return
+  // here would skip hook calls and crash React when the URL param changes)
   const isValidUUID = (id) => {
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     return uuidRegex.test(id);
   };
+  const validId = isValidUUID(itemId);
 
-  // If item ID is invalid format, show error immediately
-  if (!isValidUUID(itemId)) {
+  // Fetch item details
+  const { data: item, isLoading: itemLoading, error: itemError } = useQuery(
+    ['item', itemId],
+    () => getItem(itemId),
+    {
+      enabled: validId,
+      retry: 3,
+      staleTime: 5 * 60 * 1000
+    }
+  );
+
+  // Fetch rating aggregations for this item by dataset
+  const { data: ratings, isLoading: ratingsLoading, error: ratingsError } = useQuery(
+    ['itemRatingsByDataset', itemId],
+    () => getItemRatingsByDataset(itemId),
+    {
+      enabled: validId,
+      retry: 3,
+      staleTime: 5 * 60 * 1000,
+    }
+  );
+
+  // Fetch individual ratings for detailed analysis
+  const { data: individualRatings, isLoading: individualRatingsLoading } = useQuery(
+    ['individualRatings', itemId],
+    () => getRatings({ item_id: itemId, page_size: 1000 }),
+    {
+      enabled: validId,
+      retry: 3,
+      staleTime: 5 * 60 * 1000,
+    }
+  );
+
+  // Fetch category comparison data
+  const { data: allRatingAggregations } = useQuery(
+    ['categoryRatings', item?.category],
+    () => getRatingAggregations({ min_ratings: 1 }),
+    {
+      enabled: !!item?.category,
+      retry: 3,
+      staleTime: 10 * 60 * 1000,
+    }
+  );
+
+  // Fetch the ids of the items that actually belong to this item's category,
+  // so the "category rank" / competitive analysis only compare within it
+  const { data: categoryItemIds } = useQuery(
+    ['categoryItemIds', item?.category],
+    () => getCategoryItemIds(item.category),
+    {
+      enabled: !!item?.category,
+      retry: 3,
+      staleTime: 10 * 60 * 1000,
+    }
+  );
+
+  const categoryIdSet = new Set(categoryItemIds || []);
+  const categoryRatings = allRatingAggregations?.filter(r => categoryIdSet.has(r.item_id));
+  const categoryDataReady = !!(categoryItemIds && allRatingAggregations);
+
+  if (!validId) {
     return (
       <div style={{ padding: '20px' }}>
         <Alert
@@ -54,50 +129,6 @@ const ItemAnalysisPage = () => {
       </div>
     );
   }
-
-  // Fetch item details
-  const { data: item, isLoading: itemLoading, error: itemError } = useQuery(
-    ['item', itemId],
-    () => getItem(itemId),
-    {
-      enabled: !!itemId,
-      retry: 3,
-      staleTime: 5 * 60 * 1000
-    }
-  );
-
-  // Fetch rating aggregations for this item by dataset
-  const { data: ratings, isLoading: ratingsLoading } = useQuery(
-    ['itemRatingsByDataset', itemId],
-    () => getItemRatingsByDataset(itemId),
-    {
-      enabled: !!itemId,
-      retry: 3,
-      staleTime: 5 * 60 * 1000,
-    }
-  );
-
-  // Fetch individual ratings for detailed analysis
-  const { data: individualRatings, isLoading: individualRatingsLoading } = useQuery(
-    ['individualRatings', itemId],
-    () => getRatings({ item_id: itemId, page_size: 1000 }),
-    {
-      enabled: !!itemId,
-      retry: 3,
-      staleTime: 5 * 60 * 1000,
-    }
-  );
-
-  // Fetch category comparison data
-  const { data: categoryRatings, isLoading: categoryLoading } = useQuery(
-    ['categoryRatings', item?.category],
-    () => getRatingAggregations({ min_ratings: 1 }),
-    {
-      enabled: !!item?.category,
-      retry: 3,
-      staleTime: 10 * 60 * 1000,
-    }
-  );
 
   if (itemLoading) {
     return (
@@ -138,15 +169,20 @@ const ItemAnalysisPage = () => {
     );
   }
 
-  // Calculate analysis metrics
+  // Calculate analysis metrics. Pooled SD uses the law of total variance:
+  // within-dataset variance plus the variance of the dataset means — omitting
+  // the between-dataset term understates how much studies disagree.
   const totalRatings = ratings?.reduce((sum, r) => sum + r.n_ratings, 0) || 0;
-  const overallMean = ratings?.length > 0 ? 
+  const overallMean = ratings?.length > 0 ?
     ratings.reduce((sum, r) => sum + r.mean_rating * r.n_ratings, 0) / totalRatings : 0;
-  const overallStd = ratings?.length > 0 ?
-    Math.sqrt(ratings.reduce((sum, r) => sum + Math.pow(r.std_rating || 0, 2) * r.n_ratings, 0) / totalRatings) : 0;
+  const withinVar = ratings?.length > 0 ?
+    ratings.reduce((sum, r) => sum + Math.pow(r.std_rating || 0, 2) * r.n_ratings, 0) / totalRatings : 0;
+  const betweenVar = ratings?.length > 0 ?
+    ratings.reduce((sum, r) => sum + Math.pow(r.mean_rating - overallMean, 2) * r.n_ratings, 0) / totalRatings : 0;
+  const overallStd = Math.sqrt(withinVar + betweenVar);
 
-  // Calculate category ranking
-  const categoryItems = categoryRatings?.filter(r => r.item_name !== item?.name) || [];
+  // Calculate category ranking (within this item's category only)
+  const categoryItems = categoryRatings?.filter(r => r.item_id !== itemId) || [];
   const betterRatedItems = categoryItems.filter(r => {
     const itemMean = r.mean_rating;
     return itemMean > overallMean;
@@ -219,27 +255,19 @@ const ItemAnalysisPage = () => {
     },
   ];
 
-  // Generate rating distribution histogram
+  // Generate rating distribution histogram. An item's ratings span datasets
+  // with different original scales (0–10, 1–5, −100..100, …), so the pooled
+  // distribution uses normalized ratings and lets Plotly bin them.
   const generateDistributionChart = () => {
     if (!individualRatings?.items?.length) return [];
 
-    const ratingCounts = {};
-    individualRatings.items.forEach(rating => {
-      const score = Math.round(rating.rating);
-      ratingCounts[score] = (ratingCounts[score] || 0) + 1;
-    });
-
-    const scores = Object.keys(ratingCounts).map(Number).sort((a, b) => a - b);
-    const counts = scores.map(score => ratingCounts[score]);
-
     return [{
-      x: scores,
-      y: counts,
-      type: 'bar',
+      x: individualRatings.items
+        .map(r => r.normalized_rating)
+        .filter(v => v !== null && v !== undefined),
+      type: 'histogram',
       name: 'Rating Frequency',
       marker: { color: '#1890ff' },
-      text: counts.map(c => c.toString()),
-      textposition: 'auto',
     }];
   };
 
@@ -268,7 +296,7 @@ const ItemAnalysisPage = () => {
     if (!categoryRatings?.length || !item?.category) return [];
 
     const categoryItems = categoryRatings
-      .filter(r => r.item_name !== item?.name)
+      .filter(r => r.item_id !== itemId)
       .sort((a, b) => b.mean_rating - a.mean_rating)
       .slice(0, 10); // Top 10 in category
 
@@ -332,13 +360,16 @@ const ItemAnalysisPage = () => {
     };
 
     switch (chartType) {
-      case 'distribution':
+      case 'distribution': {
+        const sampled = individualRatings?.total > (individualRatings?.items?.length || 0);
         return {
           ...baseLayout,
-          title: `Rating Distribution for ${item?.name || 'Item'}`,
-          xaxis: { title: 'Rating Value' },
-          yaxis: { title: 'Frequency' }
+          title: `Rating Distribution for ${item?.name || 'Item'}`
+            + (sampled ? ` (sample of ${individualRatings.items.length.toLocaleString()} of ${individualRatings.total.toLocaleString()})` : ''),
+          xaxis: { title: 'Normalized rating (0–1)' },
+          yaxis: { title: 'Count' }
         };
+      }
       case 'datasets':
         return {
           ...baseLayout,
@@ -389,6 +420,14 @@ const ItemAnalysisPage = () => {
           <Spin size="large" />
           <div style={{ marginTop: 16 }}>Loading rating analysis...</div>
         </div>
+      ) : ratingsError ? (
+        <Alert
+          message="Error Loading Ratings"
+          description="The rating data for this item could not be loaded. Please try again."
+          type="error"
+          showIcon
+          style={{ marginBottom: 24 }}
+        />
       ) : !ratings || ratings.length === 0 ? (
         <Alert
           message="No Rating Data"
@@ -404,11 +443,11 @@ const ItemAnalysisPage = () => {
             <Col xs={24} sm={12} md={6}>
               <Card>
                 <Statistic
-                  title="Overall Rating"
+                  title="Overall Rating (normalized)"
                   value={overallMean}
                   precision={2}
                   valueStyle={{ color: '#1890ff' }}
-                  suffix="/ 10"
+                  suffix="/ 1"
                 />
               </Card>
             </Col>
@@ -434,11 +473,12 @@ const ItemAnalysisPage = () => {
               <Card>
                 <Statistic
                   title={item?.category ? `Rank in ${item.category}` : "Category Rank"}
-                  value={`#${categoryRank}`}
-                  valueStyle={{ 
-                    color: categoryRank <= 3 ? '#52c41a' : categoryRank <= 10 ? '#faad14' : '#ff4d4f' 
+                  value={categoryDataReady ? `#${categoryRank}` : '—'}
+                  valueStyle={{
+                    color: !categoryDataReady ? undefined
+                      : categoryRank <= 3 ? '#52c41a' : categoryRank <= 10 ? '#faad14' : '#ff4d4f'
                   }}
-                  suffix={`/ ${totalCategoryItems}`}
+                  suffix={categoryDataReady ? `/ ${totalCategoryItems}` : ''}
                 />
               </Card>
             </Col>
@@ -472,10 +512,11 @@ const ItemAnalysisPage = () => {
               <Card>
                 <Statistic
                   title="Consistency Score"
-                  value={Math.max(0, 100 - (overallStd * 10))}
+                  value={Math.max(0, 100 - (overallStd * 200))}
                   precision={0}
-                  valueStyle={{ 
-                    color: overallStd < 1 ? '#52c41a' : overallStd < 2 ? '#faad14' : '#ff4d4f' 
+                  valueStyle={{
+                    // Std dev of normalized (0-1) ratings tops out at 0.5
+                    color: overallStd < 0.1 ? '#52c41a' : overallStd < 0.2 ? '#faad14' : '#ff4d4f'
                   }}
                   suffix="/ 100"
                 />
@@ -575,8 +616,8 @@ const ItemAnalysisPage = () => {
 
                   <div style={{ marginTop: 16 }}>
                     <Text>Rating Consistency</Text>
-                    <Progress 
-                      percent={Math.max(0, 100 - (overallStd * 20))}
+                    <Progress
+                      percent={Math.max(0, 100 - (overallStd * 200))}
                       strokeColor={{
                         from: '#ff6b6b',
                         to: '#4ecdc4',
@@ -650,18 +691,18 @@ const ItemAnalysisPage = () => {
               <div>
                 <Text strong>Rating Interpretation:</Text>
                 <div style={{ marginTop: 8, marginLeft: 16 }}>
-                  {overallMean >= 4 && <Text>🟢 This item is generally well-liked across studies.</Text>}
-                  {overallMean >= 3 && overallMean < 4 && <Text>🟡 This item receives moderate ratings.</Text>}
-                  {overallMean < 3 && <Text>🔴 This item tends to receive lower ratings.</Text>}
+                  {overallMean >= 0.7 && <Text>🟢 This item is generally well-liked across studies.</Text>}
+                  {overallMean >= 0.5 && overallMean < 0.7 && <Text>🟡 This item receives moderate ratings.</Text>}
+                  {overallMean < 0.5 && <Text>🔴 This item tends to receive lower ratings.</Text>}
                 </div>
               </div>
-              
+
               <div style={{ marginTop: 16 }}>
                 <Text strong>Consistency:</Text>
                 <div style={{ marginTop: 8, marginLeft: 16 }}>
-                  {overallStd < 1 && <Text>🟢 Ratings are highly consistent across studies.</Text>}
-                  {overallStd >= 1 && overallStd < 1.5 && <Text>🟡 Ratings show moderate variation.</Text>}
-                  {overallStd >= 1.5 && <Text>🔴 Ratings vary significantly across studies.</Text>}
+                  {overallStd < 0.1 && <Text>🟢 Ratings are highly consistent across studies.</Text>}
+                  {overallStd >= 0.1 && overallStd < 0.2 && <Text>🟡 Ratings show moderate variation.</Text>}
+                  {overallStd >= 0.2 && <Text>🔴 Ratings vary significantly across studies.</Text>}
                 </div>
               </div>
               

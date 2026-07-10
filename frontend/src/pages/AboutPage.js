@@ -1,25 +1,32 @@
 import React from 'react';
-import { Card, Typography, Space, Button, Divider } from 'antd';
+import { Card, Typography, Space } from 'antd';
+import { useQuery } from 'react-query';
+import { getStatistics } from '../services/api';
 
 const { Title, Paragraph } = Typography;
 
 const AboutPage = () => {
+  const { data: stats } = useQuery('statistics', getStatistics);
+
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto' }}>
       <Title level={1}>About the Liking Rating Database</Title>
-      
+
       <Card style={{ marginBottom: 24 }}>
         <Title level={2}>Overview</Title>
         <Paragraph>
-          The Liking Rating Database is a collection of food preference data 
-          from multiple research studies. This database contains over 700,000 individual 
-          ratings from 30+ research studies, providing researchers with standardized access 
-          to food liking data for analysis and comparison.
+          The Liking Rating Database is a curated collection of subjective liking
+          ratings — food items and consumer products — from published
+          decision-making studies. It currently contains
+          {' '}{(stats?.total_ratings || 588602).toLocaleString()} individual ratings
+          from {stats?.total_studies || 24} published studies
+          ({stats?.total_datasets || 42} datasets), providing researchers with
+          standardized access to preference data.
         </Paragraph>
-        
+
         <Paragraph>
-          All data has been standardized to enable cross-study comparisons, with ratings 
-          normalized to a 0-1 scale and consistent food item categorization.
+          All data has been standardized to enable cross-study comparisons, with ratings
+          normalized to a 0-1 scale and consistent item categorization.
         </Paragraph>
       </Card>
 
@@ -27,19 +34,18 @@ const AboutPage = () => {
         <Title level={2}>Features</Title>
         <Space direction="vertical" size="middle" style={{ width: '100%' }}>
           <div>
-            <Title level={4}>Advanced Search & Filtering</Title>
+            <Title level={4}>Search & Filtering</Title>
             <Paragraph>
               Search datasets by study characteristics, food categories, rating scales, 
-              number of subjects, and more. Our flexible filtering system helps you find 
-              exactly the data you need.
+              number of subjects, and more.
             </Paragraph>
           </div>
           
           <div>
             <Title level={4}>Multiple Export Formats</Title>
             <Paragraph>
-              Download data in CSV, Excel, JSON, or SPSS formats. All exports include 
-              comprehensive metadata and documentation to ensure proper data usage.
+              Download data in CSV, Excel, JSON, or SPSS formats. All exports include
+              metadata and documentation to ensure proper data usage.
             </Paragraph>
           </div>
           
@@ -51,13 +57,6 @@ const AboutPage = () => {
             </Paragraph>
           </div>
           
-          <div>
-            <Title level={4}>Open Science Framework Integration</Title>
-            <Paragraph>
-              All data is stored and versioned through the Open Science Framework (OSF), 
-              ensuring transparency, reproducibility, and long-term accessibility.
-            </Paragraph>
-          </div>
         </Space>
       </Card>
 
@@ -82,18 +81,20 @@ const AboutPage = () => {
         <Paragraph>
           If you use this database in your research, please cite:
         </Paragraph>
-        <div style={{ 
-          background: '#f5f5f5', 
-          padding: '16px', 
+        <div style={{
+          background: '#f5f5f5',
+          padding: '16px',
           borderRadius: '4px',
           fontFamily: 'monospace',
           marginBottom: '16px'
         }}>
-          [Citation format will be provided upon publication]
+          Fernandez, K., Goyal, S., &amp; Krajbich, I. A database of subjective
+          evaluation ratings for decision-making research. (In preparation.)
         </div>
-        <Button type="primary">
-          Generate Citation
-        </Button>
+        <Paragraph type="secondary">
+          Please also cite the original studies whose data you use — each study
+          page provides its citation, DOI, and a BibTeX generator.
+        </Paragraph>
       </Card>
 
       <Card>
