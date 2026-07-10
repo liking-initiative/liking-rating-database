@@ -7,7 +7,9 @@ import csv
 import json
 import os
 import re
+import shutil
 import tempfile
+import uuid
 import zipfile
 from datetime import datetime, timedelta
 from typing import List, Dict, Any, Optional
@@ -71,7 +73,7 @@ class DownloadService:
             raise ValueError(f"Datasets not found: {missing_ids}")
         
         # Generate unique download ID
-        download_id = f"download_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}_{hash(tuple(download_request.dataset_ids)) % 10000}"
+        download_id = f"download_{uuid.uuid4().hex}"
         
         # Create download directory
         download_path = os.path.join(self.download_dir, download_id)
@@ -130,17 +132,30 @@ class DownloadService:
         
         # Find the file
         download_path = os.path.join(self.download_dir, download_id)
-        
-        # Look for files in the directory
-        files = os.listdir(download_path)
-        if not files:
+
+        if not os.path.isdir(download_path):
             raise ValueError("Download file not found")
-        
-        file_path = os.path.join(download_path, files[0])
-        
+
+        # Each download directory holds exactly one deliverable; pick it
+        # deterministically by matching the extension expected for the format
+        format_extensions = {
+            "csv": (".csv", ".zip"),
+            "json": (".json",),
+            "xlsx": (".xlsx",),
+            "spss": (".sav",),
+        }
+        expected = format_extensions.get(download_log.download_format, ())
+        files = sorted(os.listdir(download_path))
+        deliverables = [f for f in files if f.lower().endswith(expected)] or files
+        if not deliverables:
+            raise ValueError("Download file not found")
+
+        filename = deliverables[0]
+        file_path = os.path.join(download_path, filename)
+
         return {
             "file_path": file_path,
-            "filename": files[0],
+            "filename": filename,
             "format": download_log.download_format
         }
     
@@ -222,15 +237,13 @@ class DownloadService:
         with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
             for dataset in datasets:
                 # Create temporary CSV for each dataset
-                temp_path = os.path.join(download_path, "temp.csv")
-                await self._create_single_csv(dataset, os.path.dirname(temp_path), request)
-                
+                csv_path = await self._create_single_csv(dataset, download_path, request)
+
                 # Add to ZIP
-                csv_filename = _safe_filename(f"{dataset.study.name}_{dataset.name}.csv")
-                zipf.write(temp_path, csv_filename)
-                
+                zipf.write(csv_path, os.path.basename(csv_path))
+
                 # Clean up temp file
-                os.remove(temp_path)
+                os.remove(csv_path)
             
             # Add metadata file if requested
             if request.include_metadata:
@@ -411,18 +424,23 @@ class DownloadService:
             })
         
         spss_path = os.path.join(download_path, "datasets.sav")
-        
+
         try:
             import pyreadstat
-            pyreadstat.write_sav(df, spss_path, variable_labels=variable_labels)
-            
-            # Clean up CSV file
+        except ImportError as exc:
+            # Clean up the intermediate CSV so the download dir isn't left
+            # with a deliverable the user did not ask for
             os.remove(csv_path)
-            
-            return spss_path
-        except ImportError:
-            # Fallback to CSV if pyreadstat is not available
-            return csv_path
+            raise NotImplementedError(
+                "SPSS export is not available: the 'pyreadstat' package is not installed"
+            ) from exc
+
+        pyreadstat.write_sav(df, spss_path, column_labels=variable_labels)
+
+        # Clean up CSV file
+        os.remove(csv_path)
+
+        return spss_path
     
     async def _create_metadata_file(self, datasets: List[Dataset], download_path: str) -> str:
         """Create metadata file for the download"""
@@ -485,10 +503,10 @@ class DownloadService:
         # Remove files and database records
         for download in expired_downloads:
             download_path = os.path.join(self.download_dir, download.id)
-            if os.path.exists(download_path):
-                import shutil
-                shutil.rmtree(download_path)
-            
+            # ignore_errors: the directory may already be gone (e.g. temp dir
+            # cleared on restart) — that must not block record cleanup
+            shutil.rmtree(download_path, ignore_errors=True)
+
             await db.delete(download)
         
         await db.commit()

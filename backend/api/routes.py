@@ -2,7 +2,7 @@
 Main API routes for the Liking Rating Database
 """
 from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.responses import FileResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, and_, or_
@@ -10,14 +10,14 @@ from sqlalchemy.orm import selectinload
 
 from backend.models.database import get_db, Study, Dataset, Item, Rating, DownloadLog
 from backend.models.schemas import (
-    StudyResponse, StudyWithDatasets, StudyCreate, StudyUpdate,
-    DatasetResponse, DatasetWithStudy, DatasetCreate, DatasetUpdate,
-    ItemResponse, ItemCreate, ItemUpdate,
-    RatingResponse, RatingWithDetails, PaginatedRatingsResponse,
+    StudyWithDatasets,
+    DatasetWithStudy,
+    ItemResponse,
+    RatingResponse, PaginatedRatingsResponse,
     SearchRequest, SearchResponse, SearchFilters,
     DownloadRequest, DownloadResponse,
     RatingAggregation, StudyStatistics,
-    PaginatedResponse, PaginatedItemsResponse
+    PaginatedItemsResponse, PaginatedStudiesResponse, PaginatedDatasetsResponse
 )
 from backend.services.search_service import SearchService
 from backend.services.download_service import DownloadService
@@ -33,7 +33,7 @@ data_service = DataService()
 
 
 # Studies endpoints
-@api_router.get("/studies", response_model=List[dict])
+@api_router.get("/studies", response_model=PaginatedStudiesResponse)
 async def get_studies(
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
@@ -43,13 +43,32 @@ async def get_studies(
     db: AsyncSession = Depends(get_db)
 ):
     """Get all studies with optional filtering and dataset counts"""
-    return await data_service.get_studies_with_dataset_counts(
+    studies = await data_service.get_studies_with_dataset_counts(
         db=db,
         page=page,
         page_size=page_size,
         author=author,
         year_min=year_min,
         year_max=year_max
+    )
+
+    # Total count of studies matching the same filters (not just this page)
+    count_query = select(func.count(Study.id))
+    if author:
+        count_query = count_query.where(Study.authors.contains(author))
+    if year_min:
+        count_query = count_query.where(Study.year >= year_min)
+    if year_max:
+        count_query = count_query.where(Study.year <= year_max)
+    total_result = await db.execute(count_query)
+    total = total_result.scalar() or 0
+
+    return PaginatedStudiesResponse(
+        items=studies,
+        total=total,
+        page=page,
+        page_size=page_size,
+        pages=(total + page_size - 1) // page_size
     )
 
 
@@ -66,55 +85,8 @@ async def get_study(study_id: str, db: AsyncSession = Depends(get_db)):
     return study
 
 
-@api_router.post("/studies", response_model=StudyResponse, status_code=status.HTTP_201_CREATED)
-async def create_study(study: StudyCreate, db: AsyncSession = Depends(get_db)):
-    """Create a new study"""
-    db_study = Study(**study.dict())
-    db.add(db_study)
-    await db.commit()
-    await db.refresh(db_study)
-    return db_study
-
-
-@api_router.put("/studies/{study_id}", response_model=StudyResponse)
-async def update_study(
-    study_id: str, 
-    study_update: StudyUpdate, 
-    db: AsyncSession = Depends(get_db)
-):
-    """Update a study"""
-    query = select(Study).where(Study.id == study_id)
-    result = await db.execute(query)
-    study = result.scalar_one_or_none()
-    
-    if not study:
-        raise HTTPException(status_code=404, detail="Study not found")
-    
-    # Update fields
-    for field, value in study_update.dict(exclude_unset=True).items():
-        setattr(study, field, value)
-    
-    await db.commit()
-    await db.refresh(study)
-    return study
-
-
-@api_router.delete("/studies/{study_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_study(study_id: str, db: AsyncSession = Depends(get_db)):
-    """Delete a study"""
-    query = select(Study).where(Study.id == study_id)
-    result = await db.execute(query)
-    study = result.scalar_one_or_none()
-    
-    if not study:
-        raise HTTPException(status_code=404, detail="Study not found")
-    
-    await db.delete(study)
-    await db.commit()
-
-
 # Datasets endpoints
-@api_router.get("/datasets", response_model=List[DatasetResponse])
+@api_router.get("/datasets", response_model=PaginatedDatasetsResponse)
 async def get_datasets(
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
@@ -126,7 +98,7 @@ async def get_datasets(
 ):
     """Get datasets with optional filtering"""
     query = select(Dataset)
-    
+
     # Apply filters
     if study_id:
         query = query.where(Dataset.study_id == study_id)
@@ -136,15 +108,26 @@ async def get_datasets(
         query = query.where(Dataset.n_subjects <= max_subjects)
     if rating_scale_type:
         query = query.where(Dataset.rating_scale_type == rating_scale_type)
-    
+
+    # Total count of datasets matching the filters (not just this page)
+    count_query = select(func.count()).select_from(query.subquery())
+    total_result = await db.execute(count_query)
+    total = total_result.scalar() or 0
+
     # Add pagination
     offset = (page - 1) * page_size
     query = query.offset(offset).limit(page_size)
-    
+
     result = await db.execute(query)
     datasets = result.scalars().all()
-    
-    return datasets
+
+    return PaginatedDatasetsResponse(
+        items=datasets,
+        total=total,
+        page=page,
+        page_size=page_size,
+        pages=(total + page_size - 1) // page_size
+    )
 
 
 @api_router.get("/datasets/{dataset_id}", response_model=DatasetWithStudy)
@@ -153,27 +136,18 @@ async def get_dataset(dataset_id: str, db: AsyncSession = Depends(get_db)):
     query = select(Dataset).options(selectinload(Dataset.study)).where(Dataset.id == dataset_id)
     result = await db.execute(query)
     dataset = result.scalar_one_or_none()
-    
+
     if not dataset:
         raise HTTPException(status_code=404, detail="Dataset not found")
-    
-    return dataset
 
+    # Real count of ratings for this dataset
+    count_query = select(func.count(Rating.id)).where(Rating.dataset_id == dataset_id)
+    count_result = await db.execute(count_query)
+    n_ratings = count_result.scalar() or 0
 
-@api_router.post("/datasets", response_model=DatasetResponse, status_code=status.HTTP_201_CREATED)
-async def create_dataset(dataset: DatasetCreate, db: AsyncSession = Depends(get_db)):
-    """Create a new dataset"""
-    # Verify study exists
-    study_query = select(Study).where(Study.id == dataset.study_id)
-    study_result = await db.execute(study_query)
-    if not study_result.scalar_one_or_none():
-        raise HTTPException(status_code=404, detail="Study not found")
-    
-    db_dataset = Dataset(**dataset.dict())
-    db.add(db_dataset)
-    await db.commit()
-    await db.refresh(db_dataset)
-    return db_dataset
+    response = DatasetWithStudy.model_validate(dataset)
+    response.n_ratings = n_ratings
+    return response
 
 
 # Items endpoints
@@ -248,14 +222,24 @@ async def get_item(item_id: str, db: AsyncSession = Depends(get_db)):
     return item
 
 
-# Search endpoint
+# Search endpoints
 @api_router.post("/search", response_model=SearchResponse)
 async def search_datasets(
-    search_request: SearchRequest, 
+    search_request: SearchRequest,
     db: AsyncSession = Depends(get_db)
 ):
     """Advanced search for datasets"""
     return await search_service.search_datasets(search_request, db)
+
+
+@api_router.get("/search/suggestions")
+async def get_search_suggestions(
+    query: str = Query(..., min_length=1),
+    limit: int = Query(10, ge=1, le=50),
+    db: AsyncSession = Depends(get_db)
+):
+    """Get search suggestions for autocomplete"""
+    return await search_service.get_search_suggestions(query=query, db=db, limit=limit)
 
 
 # Ratings endpoints
@@ -311,7 +295,7 @@ async def get_ratings(
         total=total,
         page=page,
         page_size=page_size,
-        total_pages=(total + page_size - 1) // page_size
+        pages=(total + page_size - 1) // page_size
     )
 
 
@@ -321,6 +305,8 @@ async def get_rating_aggregations(
     item_ids: Optional[List[str]] = Query(None),
     dataset_ids: Optional[List[str]] = Query(None),
     min_ratings: int = Query(10, ge=1),
+    limit: Optional[int] = Query(None, ge=1),
+    offset: int = Query(0, ge=0),
     db: AsyncSession = Depends(get_db)
 ):
     """Get aggregated rating statistics for items"""
@@ -328,6 +314,8 @@ async def get_rating_aggregations(
         item_ids=item_ids,
         dataset_ids=dataset_ids,
         min_ratings=min_ratings,
+        limit=limit,
+        offset=offset,
         db=db
     )
 
@@ -348,7 +336,12 @@ async def request_download(
     db: AsyncSession = Depends(get_db)
 ):
     """Request a data download"""
-    return await download_service.create_download(download_request, db)
+    try:
+        return await download_service.create_download(download_request, db)
+    except NotImplementedError as e:
+        raise HTTPException(status_code=501, detail=str(e))
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 
 @api_router.get("/download/{download_id}")

@@ -29,23 +29,6 @@ class StudyBase(BaseSchema):
     osf_project_id: Optional[str] = Field(None, max_length=50)
 
 
-class StudyCreate(StudyBase):
-    """Schema for creating a study"""
-    pass
-
-
-class StudyUpdate(BaseSchema):
-    """Schema for updating a study"""
-    name: Optional[str] = Field(None, max_length=1000)  # Increased for full academic citations
-    authors: Optional[List[str]] = None
-    year: Optional[int] = Field(None, ge=1900, le=2030)
-    doi: Optional[str] = Field(None, max_length=255)
-    description: Optional[str] = None
-    publication_title: Optional[str] = Field(None, max_length=500)
-    journal: Optional[str] = Field(None, max_length=255)
-    osf_project_id: Optional[str] = Field(None, max_length=50)
-
-
 class StudyResponse(StudyBase):
     """Schema for study response"""
     id: str
@@ -74,26 +57,6 @@ class DatasetBase(BaseSchema):
     osf_file_id: Optional[str] = Field(None, max_length=50)
 
 
-class DatasetCreate(DatasetBase):
-    """Schema for creating a dataset"""
-    study_id: str
-
-
-class DatasetUpdate(BaseSchema):
-    """Schema for updating a dataset"""
-    name: Optional[str] = Field(None, max_length=255)
-    description: Optional[str] = None
-    n_subjects: Optional[int] = Field(None, ge=1)
-    n_items: Optional[int] = Field(None, ge=1)
-    rating_scale_min: Optional[float] = None
-    rating_scale_max: Optional[float] = None
-    rating_scale_type: Optional[str] = Field(None, max_length=50)
-    data_completeness: Optional[float] = Field(None, ge=0, le=100)
-    file_format: Optional[str] = Field(None, max_length=20)
-    file_size_mb: Optional[float] = Field(None, ge=0)
-    osf_file_id: Optional[str] = Field(None, max_length=50)
-
-
 class DatasetResponse(DatasetBase):
     """Schema for dataset response"""
     id: str
@@ -105,6 +68,7 @@ class DatasetResponse(DatasetBase):
 class DatasetWithStudy(DatasetResponse):
     """Dataset with study information"""
     study: StudyResponse
+    n_ratings: Optional[int] = None
 
 
 # Item schemas
@@ -165,20 +129,6 @@ class RatingCreate(RatingBase):
     item_id: str
 
 
-class RatingResponse(RatingBase):
-    """Schema for rating response"""
-    id: str
-    dataset_id: str
-    item_id: str
-    created_at: datetime
-
-
-class RatingWithDetails(RatingResponse):
-    """Rating with item and dataset details"""
-    item: ItemResponse
-    dataset: DatasetResponse
-
-
 # Search and filter schemas
 class SearchFilters(BaseSchema):
     """Schema for search filters"""
@@ -233,7 +183,7 @@ class DownloadResponse(BaseSchema):
     format: str
 
 
-# Rating schemas
+# Rating response schemas
 class RatingResponse(BaseSchema):
     """Schema for individual rating responses"""
     id: str
@@ -250,7 +200,7 @@ class PaginatedRatingsResponse(BaseSchema):
     total: int
     page: int
     page_size: int
-    total_pages: int
+    pages: int
 
 
 # Aggregation schemas
@@ -258,6 +208,7 @@ class RatingAggregation(BaseSchema):
     """Schema for rating aggregations"""
     item_id: str
     item_name: str
+    category: Optional[str] = None
     mean_rating: float
     std_rating: float
     median_rating: float
@@ -285,18 +236,6 @@ class ErrorResponse(BaseSchema):
     timestamp: datetime = Field(default_factory=datetime.utcnow)
 
 
-# Pagination schema
-class PaginatedResponse(BaseSchema):
-    """Generic paginated response"""
-    items: List[Any]
-    total: int
-    page: int
-    page_size: int
-    pages: int
-    has_next: bool
-    has_prev: bool
-
-
 class PaginatedItemsResponse(BaseSchema):
     """Paginated response for items"""
     items: List[ItemResponse]
@@ -306,6 +245,24 @@ class PaginatedItemsResponse(BaseSchema):
     pages: int
     has_next: bool
     has_prev: bool
+
+
+class PaginatedStudiesResponse(BaseSchema):
+    """Paginated response for studies (items are dicts with dataset counts)"""
+    items: List[Dict[str, Any]]
+    total: int
+    page: int
+    page_size: int
+    pages: int
+
+
+class PaginatedDatasetsResponse(BaseSchema):
+    """Paginated response for datasets"""
+    items: List[DatasetResponse]
+    total: int
+    page: int
+    page_size: int
+    pages: int
 
 
 # Forward reference resolution

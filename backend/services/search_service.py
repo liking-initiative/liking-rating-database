@@ -25,13 +25,16 @@ class SearchService:
         """
         query = select(Dataset).options(selectinload(Dataset.study))
         
-        # Always join with Study if we have text search or certain filters
-        needs_study_join = (
-            search_request.query or 
+        # Always join with Study if we have text search, certain filters,
+        # or sorting on a Study column (otherwise ORDER BY Study.year would
+        # produce a cartesian product)
+        needs_study_join = bool(
+            search_request.query or
+            search_request.sort_by == "year" or
             (search_request.filters and (
-                search_request.filters.study_name or 
-                search_request.filters.authors or 
-                search_request.filters.year_min or 
+                search_request.filters.study_name or
+                search_request.filters.authors or
+                search_request.filters.year_min or
                 search_request.filters.year_max
             ))
         )
@@ -84,6 +87,19 @@ class SearchService:
         
         filters = []
         for term in search_terms:
+            # Datasets whose items match the term (e.g. searching "chocolate"
+            # should return datasets containing chocolate items). Goes item ->
+            # ratings so it uses the idx_rating_item index.
+            matching_item_ids = select(Item.id).where(
+                or_(
+                    Item.name.ilike(f"%{term}%"),
+                    Item.standardized_name.ilike(f"%{term}%")
+                )
+            )
+            has_matching_item = Dataset.id.in_(
+                select(Rating.dataset_id).where(Rating.item_id.in_(matching_item_ids))
+            )
+
             # For SQLite with JSON, we need to use JSON functions
             # Use case-insensitive search for authors
             term_filter = or_(
@@ -92,7 +108,8 @@ class SearchService:
                 Study.name.ilike(f"%{term}%"),
                 Study.description.ilike(f"%{term}%"),
                 func.lower(func.json_extract(Study.authors, '$')).like(f'%{term}%'),
-                Study.journal.ilike(f"%{term}%")
+                Study.journal.ilike(f"%{term}%"),
+                has_matching_item
             )
             filters.append(term_filter)
         
