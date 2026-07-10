@@ -31,36 +31,6 @@ const AboutPage = () => {
       </Card>
 
       <Card style={{ marginBottom: 24 }}>
-        <Title level={2}>Features</Title>
-        <Space direction="vertical" size="middle" style={{ width: '100%' }}>
-          <div>
-            <Title level={4}>Search & Filtering</Title>
-            <Paragraph>
-              Search datasets by study characteristics, food categories, rating scales, 
-              number of subjects, and more.
-            </Paragraph>
-          </div>
-          
-          <div>
-            <Title level={4}>Multiple Export Formats</Title>
-            <Paragraph>
-              Download data in CSV, Excel, JSON, or SPSS formats. All exports include
-              metadata and documentation to ensure proper data usage.
-            </Paragraph>
-          </div>
-          
-          <div>
-            <Title level={4}>Interactive Visualizations</Title>
-            <Paragraph>
-              Explore rating distributions, cross-study comparisons, and food preference 
-              patterns through interactive charts and visualizations.
-            </Paragraph>
-          </div>
-          
-        </Space>
-      </Card>
-
-      <Card style={{ marginBottom: 24 }}>
         <Title level={2}>Data Standards</Title>
         <Paragraph>
           <strong>Rating Normalization:</strong> All ratings are normalized to a 0-1 scale 

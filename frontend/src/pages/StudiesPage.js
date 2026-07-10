@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Table, Card, Tag, Button, Space, Typography, Row, Col, Modal, message } from 'antd';
 import { useQuery } from 'react-query';
-import { EyeOutlined, TeamOutlined, CalendarOutlined, CopyOutlined, FileTextOutlined } from '@ant-design/icons';
+import { EyeOutlined, TeamOutlined, CalendarOutlined, CopyOutlined, FileTextOutlined, LinkOutlined } from '@ant-design/icons';
 import { getStudies, generateBibtex } from '../services/api';
 import { useNavigate } from 'react-router-dom';
 
@@ -130,6 +130,16 @@ const StudiesPage = () => {
           >
             Cite
           </Button>
+          {record.doi && (
+            <Button
+              size="small"
+              icon={<LinkOutlined />}
+              onClick={() => window.open(`https://doi.org/${record.doi}`, '_blank')}
+              title="Open the paper via its DOI"
+            >
+              Paper
+            </Button>
+          )}
         </Space>
       ),
     },
