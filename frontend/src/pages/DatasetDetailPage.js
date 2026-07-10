@@ -12,7 +12,7 @@ import {
 } from '@ant-design/icons';
 import { getDataset, getRatingAggregations, requestDownload, getDownload, downloadFile } from '../services/api';
 
-const { Title, Paragraph } = Typography;
+const { Title } = Typography;
 const { Option } = Select;
 
 const DatasetDetailPage = () => {

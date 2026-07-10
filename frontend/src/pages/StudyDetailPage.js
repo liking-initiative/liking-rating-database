@@ -12,7 +12,7 @@ import {
 } from '@ant-design/icons';
 import { getStudy, requestDownload, getDownload, downloadFile } from '../services/api';
 
-const { Title, Paragraph } = Typography;
+const { Title } = Typography;
 
 const StudyDetailPage = () => {
   const { studyId } = useParams();
