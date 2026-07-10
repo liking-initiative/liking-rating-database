@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: >-
+  If you use this database, please cite it as below, and also cite the
+  original studies whose data you use (each study's citation and DOI are
+  provided in the database).
+title: "Liking Rating Database: subjective evaluation ratings for decision-making research"
+type: dataset
+authors:
+  - family-names: Fernandez
+    given-names: Kianté
+    affiliation: "Department of Psychology, University of California, Los Angeles"
+  - family-names: Goyal
+    given-names: Sumedha
+    affiliation: "Department of Psychology, University of California, Los Angeles"
+  - family-names: Krajbich
+    given-names: Ian
+    affiliation: "Department of Psychology, University of California, Los Angeles"
+repository-code: "https://github.com/kiante-fernandez/liking-rating-database"
+license: MIT
+notes: >-
+  A paper describing this database is in preparation. This citation will be
+  updated with the DOI and venue upon publication.

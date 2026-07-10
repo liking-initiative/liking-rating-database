@@ -1,165 +1,110 @@
 # Liking Rating Database
 
-A comprehensive user-facing database system for food liking ratings from 35+ research studies with 500k+ data entries. This system provides researchers with easy access to standardized food preference data for analysis and research purposes.
+A curated database of subjective liking ratings for decision-making research:
+**588,602 individual ratings** from **24 published studies** (42 datasets),
+covering **2,248 stimuli** — food items and consumer products. Every study
+links to its source publication (DOI), and ratings are provided both in their
+original scale units and normalized to 0–1 for cross-study comparison.
 
-## 🚀 Quick Start
+The project is modeled on curated dataset initiatives like
+[openESM](https://openesmdata.org/): browse by study or stimulus, inspect
+methodology metadata, and download exactly the data you need.
 
-### Prerequisites
-- Python 3.8+
-- Node.js 16+
-- npm or yarn
+## Quick start
 
-### Automated Setup (Recommended)
+Prerequisites: Python 3.11, Node 16+.
+
 ```bash
-# Clone the repository
-git clone https://github.com/kiante-fernandez/liking-rating-database.git
-cd liking-rating-database
-
-# Start both backend and frontend
-python start.py
-```
-
-The database comes pre-loaded with real research data from 35+ studies.
-
-### Manual Setup
-```bash
-# Install Python dependencies
+# 1. Install dependencies
 pip install -r requirements.txt
+cd frontend && npm install && cd ..
 
-# Copy environment configuration
-cp .env.example .env
-# Edit .env with your configuration if needed
+# 2. Extract the database (ships with the repo as an 86 MB gzip)
+python scripts/setup_database.py     # extracts to ./data/liking_rating_db.db
 
-# Frontend setup
+# 3. Run the backend (from the repo root)
+DATABASE_URL="sqlite+aiosqlite:///./data/liking_rating_db.db" \
+  uvicorn backend.app:app --reload --port 8000
+
+# 4. Run the frontend (second terminal)
 cd frontend
-npm install
-
-# Start both servers using the automated script
-python ../start.py
+REACT_APP_API_URL=http://localhost:8000/api/v1 npm start
 ```
 
-**Note**: The database (`backend/liking_rating_db.db`) comes pre-populated with real research data.
+- Frontend: http://localhost:3000
+- API docs (OpenAPI): http://localhost:8000/api/v1/docs
+- Health check: http://localhost:8000/health
 
-### Access the Application
-- **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:8000
-- **API Documentation**: http://localhost:8000/docs
-
-## ✨ Features
-
-- **Comprehensive Data Access**: 500k+ food liking ratings from 35+ research studies
-- **Advanced Search**: Filter by study, food items, rating scales, and more
-- **Data Standardization**: Normalized rating scales for cross-study comparisons
-- **Multiple Export Formats**: CSV, JSON, Excel, SPSS-compatible formats
-- **Interactive Interface**: Clean, professional UI built with React and Ant Design
-- **Real Research Data**: Pre-loaded with actual academic research datasets
-- **Clean Study Names**: User-friendly study titles for easy browsing
-
-## 📊 Current Implementation Status
-
-### ✅ Completed Features
-- **Backend API**: FastAPI with comprehensive endpoints and data models
-- **Database**: SQLite database pre-loaded with 35+ research studies
-- **Search System**: Advanced filtering and search functionality
-- **Download System**: Multi-format data export (CSV, JSON, Excel, SPSS)
-- **Frontend Interface**: React app with Ant Design components
-- **Data Import**: Real academic research data with clean study names
-- **Documentation**: API documentation and development guides
-
-### � Future Enhancements
-- Interactive data visualizations
-- User authentication system
-- Advanced analytics dashboard
-- Citation management
-- Additional export formats
-
-## 🏗️ Architecture
-
-### Backend (Python/FastAPI)
-- **Database**: SQLAlchemy with async support (SQLite/PostgreSQL)
-- **API**: RESTful API with automatic OpenAPI documentation
-- **Services**: Modular business logic for search, downloads, and data processing
-- **Data Processing**: Standardization and normalization utilities
-
-### Frontend (React/JavaScript)
-- **UI Framework**: Ant Design for consistent, professional interface
-- **State Management**: React Query for server state management
-- **Routing**: React Router for navigation
-- **Styling**: CSS-in-JS with styled-components
-
-### Data Layer
-- **Studies**: 35+ research studies with clean, descriptive titles
-- **Datasets**: 43 individual datasets within studies  
-- **Items**: 2,248 standardized food items
-- **Ratings**: 500k+ individual preference ratings across multiple scales
-
-## 📖 Documentation
-
-- **[Development Guide](docs/DEVELOPMENT.md)**: Complete setup and development instructions
-- **[API Documentation](http://localhost:8000/docs)**: Interactive API documentation (when running)
-- **[Data Dictionary](docs/DATA_DICTIONARY.md)**: Detailed field descriptions
-
-## 🔧 Configuration
-
-The application uses environment variables for configuration. Copy `.env.example` to `.env` and modify as needed:
+## Tests
 
 ```bash
-# Database (SQLite with pre-loaded data)
-DATABASE_URL=sqlite+aiosqlite:///./backend/liking_rating_db.db
-
-# API Configuration  
-SECRET_KEY=liking-rating-db-secure-key-2025
-API_HOST=localhost
-API_PORT=8000
-
-# Development settings
-DEBUG=True
+pip install -r requirements-dev.txt
+python -m pytest backend/tests        # API contract + data-integrity tests
+cd frontend && npm run lint && npm run build
 ```
 
-## 📊 Data Overview
+Data-integrity tests run only when `liking_rating_db.db` is present and verify
+the invariants established by the migrations (scales, normalization bounds,
+no duplicate studies, real completeness values).
 
-The database contains real research data from academic studies:
+## The data
 
-- **35+ Research Studies** with clean, descriptive titles
-- **500k+ Individual Ratings** across multiple rating scales  
-- **2,248 Food Items** standardized across studies
-- **43 Datasets** with comprehensive metadata
+| | |
+|---|---|
+| Studies (publications) | 24, years 2016–2025, all with DOIs |
+| Datasets | 42 (a study can contribute several experiments) |
+| Stimuli | 2,248 (food + consumer products, 17 categories) |
+| Ratings | 588,602 individual (subject, item) ratings |
+| Scale types | likert, continuous, visual-analog, slider, willingness-to-pay |
 
-All data has been validated and is ready for research use.
+Each rating stores the **original value** in the study's own scale plus a
+**normalized value**: `(rating − scale_min) / (scale_max − scale_min)`.
+Repeated ratings of the same item by the same subject are stored as their
+mean. Dataset metadata records the true scale bounds, scale type, and real
+data completeness. See [docs/DATA_DICTIONARY.md](docs/DATA_DICTIONARY.md).
 
-## 🤝 Contributing
+Provenance: the database is built from the source compilation in
+`Liking Rating Database/` (not in git) and corrected by versioned migrations
+in [scripts/migrations/](scripts/migrations/) — every data fix is a tracked,
+re-runnable script recorded in the `schema_migrations` table.
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes
-4. Add tests if applicable
-5. Commit your changes (`git commit -m 'Add amazing feature'`)
-6. Push to the branch (`git push origin feature/amazing-feature`)
-7. Open a Pull Request
+## API
 
-## 📄 License
+Read-only REST API under `/api/v1` (interactive docs at `/api/v1/docs`):
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+- `GET /studies`, `GET /studies/{id}` — publications with citation + DOI
+- `GET /datasets`, `GET /datasets/{id}` — experiments with scale metadata
+- `GET /items`, `GET /items/{id}` — stimuli with categories
+- `POST /search`, `GET /search/suggestions` — full-text search incl. item names
+- `GET /ratings`, `GET /ratings/aggregate` — individual and per-item statistics
+- `POST /download` → `GET /download/{id}` — export as CSV, JSON, XLSX, or SPSS
 
-## 📬 Contact & Support
+List endpoints return `{"items": [...], "total", "page", "page_size", "pages"}`.
 
-- **GitHub**: [kiante-fernandez/liking-rating-database](https://github.com/kiante-fernandez/liking-rating-database)
-- **Issues**: [Project Issues](https://github.com/kiante-fernandez/liking-rating-database/issues)
-- **Documentation**: [Development Guide](docs/DEVELOPMENT.md)
+## Architecture
 
-## 🙏 Citation
+- **Backend** — FastAPI + SQLAlchemy (async) over SQLite. Routes
+  ([backend/api/routes.py](backend/api/routes.py)) delegate to services
+  ([backend/services/](backend/services/)); models in
+  [backend/models/](backend/models/). The API is read-only; data changes only
+  through migrations.
+- **Frontend** — React 18 + Ant Design 5 + react-query v3 + Plotly, in
+  [frontend/](frontend/). All network calls go through
+  [frontend/src/services/api.js](frontend/src/services/api.js).
+- **Deployment** — [render.yaml](render.yaml) (backend web service + static
+  frontend). See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
-If you use this database in your research, please cite:
+## Citation
 
-```
-[Citation format will be provided upon publication]
-```
+If you use this database, please cite it (see [CITATION.cff](CITATION.cff)):
 
-## 🔮 Roadmap
+> Fernandez, K., Goyal, S., & Krajbich, I. A database of subjective
+> evaluation ratings for decision-making research. (In preparation.)
 
-- **Phase 1** ✅ **Complete**: Core functionality and real data integration
-- **Phase 2**: Advanced visualizations and analytics  
-- **Phase 3**: User accounts and collaboration features
-- **Phase 4**: Machine learning insights and recommendations
-- **Phase 5**: Mobile app and API ecosystem
+Please also cite the original studies whose data you use — every study page
+provides its citation and DOI, and the frontend can generate BibTeX.
 
+## License
+
+MIT — see [LICENSE](LICENSE). The underlying data remain subject to the
+original studies' terms; original authors are credited on every study page.

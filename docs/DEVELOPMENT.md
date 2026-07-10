@@ -1,220 +1,121 @@
 # Development Guide
 
-## Quick Start
+## Setup
 
-### Prerequisites
-- Python 3.8+
-- Node.js 14+
-- npm or yarn
-
-### Setup
-
-1. **Automated Setup** (Recommended):
-   ```bash
-   python scripts/setup.py
-   ```
-
-2. **Manual Setup**:
-   ```bash
-   # Backend setup
-   pip install -r requirements.txt
-   cp .env.example .env
-   # Edit .env with your configuration
-   python scripts/init_database.py
-   
-   # Frontend setup
-   cd frontend
-   npm install
-   ```
-
-### Running the Application
-
-**Option 1: Use the start script**
-```bash
-python start.py
-```
-
-**Option 2: Start manually**
-```bash
-# Terminal 1 - Backend
-python backend/app.py
-
-# Terminal 2 - Frontend
-cd frontend
-npm start
-```
-
-### Accessing the Application
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:8000
-- API Documentation: http://localhost:8000/api/v1/docs
-
-## Project Structure
-
-```
-liking-rating-database/
-├── backend/                 # Python FastAPI backend
-│   ├── models/             # Database models and schemas
-│   ├── api/                # API routes
-│   ├── services/           # Business logic
-│   └── utils/              # Utility functions
-├── frontend/               # React frontend
-│   ├── src/
-│   │   ├── components/     # React components
-│   │   ├── pages/          # Page components
-│   │   └── services/       # API client
-├── data_processing/        # Data processing utilities
-├── scripts/                # Setup and utility scripts
-└── docs/                   # Documentation
-```
-
-## Database Schema
-
-### Core Models
-- **Study**: Research studies
-- **Dataset**: Datasets within studies
-- **Item**: Food items being rated
-- **Rating**: Individual ratings
-- **DownloadLog**: Download tracking
-- **SearchLog**: Search analytics
-
-### Relationships
-- Study → Dataset (1:many)
-- Dataset → Rating (1:many)
-- Item → Rating (1:many)
-
-## API Endpoints
-
-### Studies
-- `GET /api/v1/studies` - List studies
-- `GET /api/v1/studies/{id}` - Get study details
-- `POST /api/v1/studies` - Create study
-- `PUT /api/v1/studies/{id}` - Update study
-- `DELETE /api/v1/studies/{id}` - Delete study
-
-### Datasets
-- `GET /api/v1/datasets` - List datasets
-- `GET /api/v1/datasets/{id}` - Get dataset details
-- `POST /api/v1/datasets` - Create dataset
-
-### Items
-- `GET /api/v1/items` - List food items
-- `GET /api/v1/items/{id}` - Get item details
-
-### Search
-- `POST /api/v1/search` - Advanced search
-- `GET /api/v1/search/suggestions` - Search suggestions
-
-### Downloads
-- `POST /api/v1/download` - Request download
-- `GET /api/v1/download/{id}` - Get download file
-
-### Analytics
-- `GET /api/v1/statistics` - Database statistics
-- `GET /api/v1/ratings/aggregate` - Rating aggregations
-
-## Development Workflow
-
-### Adding New Features
-
-1. **Backend Changes**:
-   - Add/modify models in `backend/models/`
-   - Update API routes in `backend/api/`
-   - Add business logic in `backend/services/`
-   - Update schemas in `backend/models/schemas.py`
-
-2. **Frontend Changes**:
-   - Add components in `frontend/src/components/`
-   - Add pages in `frontend/src/pages/`
-   - Update API client in `frontend/src/services/api.js`
-
-3. **Database Changes**:
-   - Modify models in `backend/models/database.py`
-   - Create migration scripts if needed
-   - Update `scripts/init_database.py` for new installations
-
-### Testing
+Prerequisites: Python 3.11, Node 16+.
 
 ```bash
-# Backend tests
-python -m pytest tests/
-
-# Frontend tests (when implemented)
-cd frontend
-npm test
+pip install -r requirements.txt -r requirements-dev.txt
+cd frontend && npm install && cd ..
+cp .env.example .env        # defaults work for local development
 ```
 
-### Code Style
+Extract the database: `python scripts/setup_database.py` unpacks the shipped
+`data-release/liking_rating_db.db.gz` (86 MB in git) to
+`./data/liking_rating_db.db` — the canonical location that `.env`,
+`config.py`, and `render.yaml` all point to.
 
-- **Backend**: Follow PEP 8, use type hints
-- **Frontend**: Use ESLint and Prettier
-- **Documentation**: Use docstrings and comments
+> Pointing `DATABASE_URL` at a path with no database **silently creates an
+> empty one** (startup runs `create_all`) — if every endpoint returns zeros,
+> check the path first.
 
-## Data Processing
-
-### Data Standardization
-The `data_processing/data_standardizer.py` module handles:
-- Rating scale normalization (0-1)
-- Food item name standardization
-- Category assignment
-- Metadata generation
-
-### Adding New Data Sources
-1. Create data cleaning script in `data_processing/`
-2. Use `DataStandardizer` class for normalization
-3. Import using database models
-4. Update metadata
-
-## Configuration
-
-### Environment Variables
-Edit `.env` file:
-- `DATABASE_URL`: Database connection string
-- `OSF_API_TOKEN`: Open Science Framework API token
-- `SECRET_KEY`: Application secret key
-- `REDIS_URL`: Redis cache URL (optional)
-
-### Database Options
-- **Development**: SQLite (default)
-- **Production**: PostgreSQL recommended
+## Running
 
 ```bash
-# SQLite (default)
-DATABASE_URL=sqlite+aiosqlite:///./liking_rating.db
+# backend — must run from the repo root so the `backend` package resolves
+uvicorn backend.app:app --reload --port 8000
+# equivalently: python -m backend.app        (NOT `python backend/app.py`)
 
-# PostgreSQL
-DATABASE_URL=postgresql+asyncpg://user:pass@localhost/dbname
+# frontend
+cd frontend && npm start
 ```
 
-## Deployment
+- Frontend: http://localhost:3000 (set `REACT_APP_API_URL` in `frontend/.env`
+  if the backend is not on `http://localhost:8000/api/v1`)
+- API docs: http://localhost:8000/api/v1/docs
 
-### Backend Deployment
-1. Set production environment variables
-2. Use a production WSGI server (e.g., Gunicorn with Uvicorn workers)
-3. Set up PostgreSQL database
-4. Configure Redis for caching (optional)
+## Tests
 
-### Frontend Deployment
-1. Build the production bundle: `npm run build`
-2. Serve static files with a web server
-3. Configure API proxy for production backend
+```bash
+python -m pytest backend/tests          # API contract + data-integrity tests
+cd frontend && npm run lint             # eslint (config in frontend/.eslintrc.json)
+cd frontend && npm run build            # production build must stay green
+```
 
-### Docker Deployment
-Docker configuration can be added for containerized deployment if needed.
+`backend/tests/test_api.py` runs against a small synthetic database built in a
+temp dir — it never touches real data. `backend/tests/test_data_integrity.py`
+checks the real `data/liking_rating_db.db` when present (auto-skips in CI).
+CI runs both jobs on every push (`.github/workflows/ci.yml`).
 
-## Troubleshooting
+## Architecture
 
-### Common Issues
+```
+backend/
+├── app.py              # FastAPI app, middleware (rate limit, CORS, hosts), lifespan
+├── config.py           # pydantic-settings; reads .env
+├── api/routes.py       # thin route layer — all read-only
+├── services/           # business logic
+│   ├── search_service.py     # dataset search (matches item names too), suggestions
+│   ├── data_service.py       # aggregations + statistics (cached in-process)
+│   └── download_service.py   # csv/json/xlsx/spss exports in temp dir
+└── models/
+    ├── database.py     # SQLAlchemy async models; init_db() in lifespan
+    └── schemas.py      # pydantic response/request models
 
-1. **Import Errors**: Make sure all dependencies are installed with `pip install -r requirements.txt`
+frontend/src/
+├── services/api.js     # every network call goes through here
+├── pages/              # route components (routing in App.js)
+└── components/         # header, sidebar
+```
 
-2. **Database Connection**: Check your `DATABASE_URL` in `.env`
+Key conventions:
 
-3. **Port Conflicts**: Change ports in configuration if 8000 or 3000 are in use
+- **The API is read-only.** There are no mutation endpoints; all data changes
+  go through migrations (below).
+- List endpoints return the envelope
+  `{"items": [...], "total", "page", "page_size", "pages"}`.
+- Primary keys are UUID strings, not autoincrement integers.
+- `ratings.rating` is in the dataset's original scale;
+  `ratings.normalized_rating` is `(rating − min) / (max − min)`.
+- Aggregate/statistics results are cached in-process — the cache is correct
+  because data only changes via migrations, which imply a restart.
 
-4. **Frontend Build Errors**: Delete `node_modules` and run `npm install` again
+## Data migrations
 
-### Getting Help
-- Check the GitHub Issues page
-- Review API documentation at `/api/v1/docs`
-- Check application logs for error details
+Every change to the database is a versioned script in `scripts/migrations/`,
+recorded in the `schema_migrations` table. Scripts are dry-run by default and
+refuse to run twice:
+
+```bash
+python scripts/migrations/00X_*.py ./data/liking_rating_db.db          # dry-run
+python scripts/migrations/00X_*.py ./data/liking_rating_db.db --apply
+```
+
+- `001_reconcile_with_source` — study dedup + DOI/journal enrichment, scale
+  corrections (romfred re-ingest, libain 0–100, deskrab2 clamp), scale-type
+  taxonomy, normalized-rating recompute, real completeness, item frequency.
+- `002_item_categories` — item categories from the curated map in
+  `scripts/migrations/data/item_categories.json`.
+
+When writing a new migration: test on a copy first, assert invariants before
+committing, and keep `backend/tests/test_data_integrity.py` in sync with any
+new guarantees. Back up `data/liking_rating_db.db` before applying. After a
+migration, regenerate the shipped snapshot — checkpoint any WAL first so the
+copy is complete:
+
+```bash
+sqlite3 data/liking_rating_db.db "PRAGMA wal_checkpoint(TRUNCATE);"
+sqlite3 data/liking_rating_db.db ".backup /tmp/snapshot.db"
+gzip -9 -c /tmp/snapshot.db > data-release/liking_rating_db.db.gz
+python -m pytest backend/tests   # integrity tests validate the live DB
+```
+
+## Source data
+
+The authoritative sources live in `Liking Rating Database/` (RA compilation:
+`final_database.csv`, the metadata xlsx, raw study files in `Files.zip`) and
+`reference-papers/`. The CSV stores repeated (subject, item) ratings; the
+database stores their mean. Eight datasets from the CSV are not yet imported
+because their rows lack item names (`desself`, `foljac1`, `kraeglu`,
+`kramits`, `ostroglu`, `sebmar`, `tanhar`, `shenhav1a`) — resolving their
+item names against `Files.zip` is the path to importing them.
