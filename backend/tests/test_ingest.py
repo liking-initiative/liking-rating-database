@@ -76,7 +76,7 @@ def test_apply_ingests_correctly(db, ratings_csv):
     assert report["study"] == "created"
     assert report["items_matched"] == 1          # kitkat reused
     assert report["items_created"] == ["newthing"]
-    assert report["pairs_with_repeats"] == 1
+    assert report["rows_with_duplicates"] == 1
 
     con = sqlite3.connect(db)
     # repeated rating averaged, normalization correct: (1.5 - 1) / 4
@@ -112,3 +112,21 @@ def test_refuses_bad_scale_type(db, ratings_csv):
     bad = {**META, "scale": {"min": 1, "max": 5, "type": "hedonic"}}
     with pytest.raises(SystemExit, match="scale.type"):
         ingest(db, ratings_csv, bad, apply=False)
+
+
+def test_timepoint_column_ingests_repeated_phases(db, tmp_path):
+    path = tmp_path / "tp.csv"
+    with open(path, "w", newline="") as f:
+        w = csv.writer(f)
+        w.writerow(["subject_id", "item_name", "rating", "timepoint"])
+        w.writerows([("s1", "kitkat", 5, 1), ("s1", "kitkat", 3, 2), ("s1", "kitkat", 4, 3)])
+    meta = {**META, "code": "tpset"}
+    report = ingest(db, path, meta, apply=True)
+    assert report["ratings_inserted"] == 3
+    assert report["timepoints"] == [1, 2, 3]
+    con = sqlite3.connect(db)
+    rows = con.execute("""SELECT timepoint, rating FROM ratings
+        ORDER BY timepoint""").fetchall()
+    assert rows == [(1, 5.0), (2, 3.0), (3, 4.0)]
+    # completeness counts distinct pairs, not rows: 1 pair / (1 subj x 1 item)
+    assert con.execute("SELECT data_completeness FROM datasets").fetchone()[0] == 100.0

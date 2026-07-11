@@ -283,6 +283,7 @@ async def get_ratings(
             id=str(rating.id),
             rating=rating.rating,
             normalized_rating=rating.normalized_rating,
+            timepoint=rating.timepoint,
             item_id=str(rating.item_id),
             item_name=rating.item.name if rating.item else None,
             dataset_id=str(rating.dataset_id),

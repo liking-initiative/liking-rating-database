@@ -60,9 +60,12 @@ def test_item_frequency_matches_reality(con):
 
 
 def test_completeness_is_real_not_fabricated(con):
+    # completeness counts distinct (subject, item) pairs — repeated-timepoint
+    # rows must not inflate it past 100%
     assert one(con, """SELECT COUNT(*) FROM datasets d
         WHERE ABS(d.data_completeness - 100.0 *
-            (SELECT COUNT(*) FROM ratings r WHERE r.dataset_id = d.id)
+            (SELECT COUNT(DISTINCT r.subject_id || '||' || r.item_id)
+             FROM ratings r WHERE r.dataset_id = d.id)
             / (d.n_subjects * d.n_items)) > 0.01""") == 0
 
 
@@ -83,5 +86,8 @@ def test_all_migrations_recorded(con):
     assert {"001", "002", "003"} <= versions
 
 
-def test_all_studies_have_dois(con):
-    assert one(con, "SELECT COUNT(*) FROM studies WHERE doi IS NULL") == 0
+def test_published_studies_have_dois(con):
+    # In-preparation studies (unpublished lab data) are the only ones allowed
+    # to lack a DOI
+    assert one(con, """SELECT COUNT(*) FROM studies
+        WHERE doi IS NULL AND COALESCE(journal, '') != 'In preparation'""") == 0

@@ -117,6 +117,7 @@ class Rating(Base):
     dataset_id = Column(String, ForeignKey("datasets.id"), nullable=False)
     item_id = Column(String, ForeignKey("items.id"), nullable=False)
     subject_id = Column(String, nullable=False)  # Subject identifier within dataset
+    timepoint = Column(Integer, nullable=False, default=1)  # Repeated-rating phase (1 = first/only)
     rating = Column(Float, nullable=False)  # Original rating
     normalized_rating = Column(Float, nullable=False)  # Normalized to 0-1 scale
     response_time = Column(Float)  # Response time in seconds
@@ -131,7 +132,7 @@ class Rating(Base):
     
     # Constraints and Indexes
     __table_args__ = (
-        UniqueConstraint("dataset_id", "subject_id", "item_id", name="uq_rating_per_subject_item"),
+        UniqueConstraint("dataset_id", "subject_id", "item_id", "timepoint", name="uq_rating_per_subject_item_timepoint"),
         Index("idx_rating_dataset", "dataset_id"),
         Index("idx_rating_item", "item_id"),
         Index("idx_rating_subject", "subject_id"),
@@ -184,11 +185,23 @@ async def init_db():
     global engine, async_session
     
     if "sqlite" in DATABASE_CONFIG["url"]:
-        # Use sqlite for development
         engine = create_async_engine(
             DATABASE_CONFIG["url"].replace("postgresql://", "sqlite+aiosqlite:///"),
-            echo=DATABASE_CONFIG["echo"]
+            echo=DATABASE_CONFIG["echo"],
+            connect_args={"timeout": 30},
         )
+
+        # WAL lets the long analytics reads coexist with search/download log
+        # writes ("database is locked" otherwise). Anyone snapshotting the DB
+        # must checkpoint the WAL first — procedure in docs/DEVELOPMENT.md.
+        from sqlalchemy import event
+
+        @event.listens_for(engine.sync_engine, "connect")
+        def _sqlite_pragmas(dbapi_conn, _record):
+            cur = dbapi_conn.cursor()
+            cur.execute("PRAGMA journal_mode=WAL")
+            cur.execute("PRAGMA busy_timeout=30000")
+            cur.close()
     else:
         # Use asyncpg for PostgreSQL
         engine = create_async_engine(

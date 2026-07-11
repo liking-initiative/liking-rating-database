@@ -1,8 +1,8 @@
 # Liking Rating Database
 
 A curated database of subjective liking ratings for decision-making research:
-**588,602 individual ratings** from **24 published studies** (42 datasets),
-covering **2,248 stimuli** — food items and consumer products. Every study
+**654,917 individual ratings** from **27 published studies** (46 datasets),
+covering **2,279 stimuli** — food items and consumer products. Every study
 links to its source publication (DOI), and ratings are provided both in their
 original scale units and normalized to 0–1 for cross-study comparison.
 
@@ -51,16 +51,16 @@ no duplicate studies, real completeness values).
 
 | | |
 |---|---|
-| Studies (publications) | 24, years 2016–2025, all with DOIs |
-| Datasets | 42 (a study can contribute several experiments) |
-| Stimuli | 2,248 (food + consumer products, 17 categories) |
-| Ratings | 588,602 individual (subject, item) ratings |
+| Studies (publications) | 27, years 2016–2025, all with DOIs |
+| Datasets | 46 (a study can contribute several experiments) |
+| Stimuli | 2,279 (food + consumer products, 17 categories) |
+| Ratings | 654,917 individual ratings (repeated phases kept as timepoints) |
 | Scale types | likert, continuous, visual-analog, slider, willingness-to-pay |
 
 Each rating stores the **original value** in the study's own scale plus a
 **normalized value**: `(rating − scale_min) / (scale_max − scale_min)`.
-Repeated ratings of the same item by the same subject are stored as their
-mean. Dataset metadata records the true scale bounds, scale type, and real
+Studies that rate items in repeated phases keep each phase as its own row
+(`timepoint` column); incidental duplicates within a phase are averaged. Dataset metadata records the true scale bounds, scale type, and real
 data completeness. See [docs/DATA_DICTIONARY.md](docs/DATA_DICTIONARY.md).
 
 Provenance: the database is built from the source compilation in

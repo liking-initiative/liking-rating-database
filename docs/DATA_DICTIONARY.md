@@ -75,7 +75,7 @@ consumer goods). `unknown` (178 items with opaque source codes like `0488`).
 Categories were assigned by a curated name-based classifier (migration 002);
 see `scripts/migrations/data/item_categories.json` for the full mapping.
 
-## ratings — one row per (dataset, subject, item) (588,602 rows)
+## ratings — one row per (dataset, subject, item, timepoint) (654,917 rows)
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -83,15 +83,16 @@ see `scripts/migrations/data/item_categories.json` for the full mapping.
 | `dataset_id` | UUID string | → `datasets.id` |
 | `item_id` | UUID string | → `items.id` |
 | `subject_id` | String | Subject identifier, **unique only within a dataset** |
+| `timepoint` | Integer | Repeated-rating phase (1 = first/only; e.g. Lee & Holyoak 2021 has phases 1–3) |
 | `rating` | Float | Value in the dataset's original scale |
 | `normalized_rating` | Float | `(rating − scale_min) / (scale_max − scale_min)`, always in [0, 1] |
 | `response_time`, `session_id`, `order_presented`, `demographic_data` | — | Unused (null for all rows) |
 | `created_at` | DateTime | Ingestion timestamp |
 
-Unique constraint: `(dataset_id, subject_id, item_id)`. When a source study
-collected **repeated ratings** of the same item by the same subject (e.g.
-`toyam`, `romfred`, `brusaeb`), the stored value is the **mean** across
-repetitions.
+Unique constraint: `(dataset_id, subject_id, item_id, timepoint)`. Studies
+with structured repeated phases keep each phase as its own timepoint row.
+Legacy datasets whose sources held unstructured repeats (`toyam`, `romfred`,
+`brusaeb`) store the **mean** at timepoint 1.
 
 **Cross-study comparisons must use `normalized_rating`.** Subject `"12"` in
 two datasets is two different people.
@@ -100,5 +101,5 @@ two datasets is two different people.
 
 Every applied migration is recorded with its version, timestamp, and a JSON
 report. Current: `001_reconcile_with_source` (scale corrections, study
-dedup + DOI enrichment, normalization recompute), `002_item_categories`.
+dedup + DOI enrichment, normalization recompute), `002_item_categories`, `003_hascher_doi`, `004_rating_timepoints`, plus `ds-*` ingestion records.
 Scripts live in `scripts/migrations/`.

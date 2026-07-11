@@ -189,6 +189,7 @@ class RatingResponse(BaseSchema):
     id: str
     rating: float
     normalized_rating: Optional[float] = None
+    timepoint: int = 1
     item_id: str
     item_name: Optional[str] = None
     dataset_id: str

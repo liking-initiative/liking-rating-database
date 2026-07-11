@@ -5,9 +5,10 @@ Ingest a new dataset into the Liking Rating Database.
 This is THE standard path for adding data (docs/ADDING_DATASETS.md). It takes
 the two files that define a dataset:
 
-  ratings.csv    long format, columns: subject_id, item_name, rating
-                 (repeated (subject, item) ratings are averaged — the
-                 database-wide policy)
+  ratings.csv    long format, columns: subject_id, item_name, rating and
+                 optionally timepoint (integer, default 1) for studies that
+                 rate the same items repeatedly. Duplicate rows within the
+                 same (subject, item, timepoint) are averaged.
   dataset.json   metadata — see docs/templates/dataset.json
 
 and applies the same discipline as the migrations: validate everything,
@@ -47,7 +48,8 @@ def now():
 
 
 def load_ratings(csv_path):
-    """Read the long-format CSV; average repeated (subject, item) ratings."""
+    """Read the long-format CSV keyed by (subject, item, timepoint);
+    duplicate rows within a key are averaged."""
     sums, counts, n_rows, n_bad = defaultdict(float), defaultdict(int), 0, 0
     with open(csv_path, newline="") as f:
         reader = csv.DictReader(f)
@@ -55,25 +57,29 @@ def load_ratings(csv_path):
         missing = required - set(reader.fieldnames or [])
         if missing:
             raise SystemExit(f"ratings.csv is missing columns: {sorted(missing)}")
+        has_tp = "timepoint" in (reader.fieldnames or [])
         for row in reader:
             n_rows += 1
             subj = (row["subject_id"] or "").strip()
             item = (row["item_name"] or "").strip()
             try:
                 val = float(row["rating"])
+                tp = int(row["timepoint"]) if has_tp and row.get("timepoint") else 1
             except (TypeError, ValueError):
                 n_bad += 1
                 continue
-            if not subj or not item:
+            if not subj or not item or tp < 1:
                 n_bad += 1
                 continue
-            key = (subj, item)
+            key = (subj, item, tp)
             sums[key] += val
             counts[key] += 1
     means = {k: sums[k] / counts[k] for k in sums}
     repeats = sum(1 for k in counts if counts[k] > 1)
+    timepoints = sorted({tp for (_, _, tp) in means})
     return means, {"csv_rows": n_rows, "dropped_rows": n_bad,
-                   "unique_pairs": len(means), "pairs_with_repeats": repeats}
+                   "unique_rows": len(means), "rows_with_duplicates": repeats,
+                   "timepoints": timepoints}
 
 
 def ingest(db_path, csv_path, meta, apply=False):
@@ -133,7 +139,7 @@ def ingest(db_path, csv_path, meta, apply=False):
 
     # --- items: exact-name match, create the rest -------------------------------
     existing = {name: iid for iid, name in cur.execute("SELECT id, name FROM items")}
-    item_names = sorted({item for (_, item) in means})
+    item_names = sorted({item for (_, item, _) in means})
     new_items = [n for n in item_names if n not in existing]
     for n in new_items:
         iid = str(uuid.uuid4())
@@ -148,8 +154,9 @@ def ingest(db_path, csv_path, meta, apply=False):
     report["items_created"] = sorted(new_items)
 
     # --- dataset ------------------------------------------------------------------
-    n_subjects = len({s for (s, _) in means})
+    n_subjects = len({s for (s, _, _) in means})
     n_items = len(item_names)
+    distinct_pairs = len({(s, i) for (s, i, _) in means})
     dataset_id = str(uuid.uuid4())
     cur.execute(
         """INSERT INTO datasets (id, study_id, name, description, n_subjects,
@@ -158,16 +165,16 @@ def ingest(db_path, csv_path, meta, apply=False):
            VALUES (?,?,?,?,?,?,?,?,?,?,?,?)""",
         (dataset_id, study_id, dataset_name, meta.get("description"),
          n_subjects, n_items, lo, hi, stype,
-         round(100.0 * len(means) / (n_subjects * n_items), 2), ts, ts))
+         round(100.0 * distinct_pairs / (n_subjects * n_items), 2), ts, ts))
 
     # --- ratings -------------------------------------------------------------------
     span = hi - lo
     cur.executemany(
-        """INSERT INTO ratings (id, dataset_id, item_id, subject_id, rating,
-           normalized_rating, created_at) VALUES (?,?,?,?,?,?,?)""",
-        [(str(uuid.uuid4()), dataset_id, existing[item], subj,
+        """INSERT INTO ratings (id, dataset_id, item_id, subject_id, timepoint,
+           rating, normalized_rating, created_at) VALUES (?,?,?,?,?,?,?,?)""",
+        [(str(uuid.uuid4()), dataset_id, existing[item], subj, tp,
           val, (val - lo) / span, ts)
-         for (subj, item), val in means.items()])
+         for (subj, item, tp), val in means.items()])
 
     # --- bookkeeping ------------------------------------------------------------------
     cur.execute(

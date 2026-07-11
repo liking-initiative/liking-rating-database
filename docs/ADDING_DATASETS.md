@@ -14,9 +14,10 @@ data migrations.
    | `subject_id` | subject identifier, unique within this dataset |
    | `item_name` | stimulus name (see naming rules below) |
    | `rating` | numeric rating in the study's original scale |
+   | `timepoint` | *(optional)* integer phase for repeated-rating designs (default 1) |
 
-   Repeated (subject, item) rows are averaged — the database-wide policy for
-   repeated measurements.
+   Structured repeated phases keep their own timepoint rows; duplicate rows
+   within the same (subject, item, timepoint) are averaged.
 
 2. **`dataset.json`** — metadata; copy [templates/dataset.json](templates/dataset.json).
    `scale.type` must be one of `likert | continuous | vas | slider | wtp`.
