@@ -1,0 +1,20 @@
+{
+ "code": "fernandezmanyattr",
+ "study": {
+  "name": "Correlated Attributes Support Search Efficiency in Multi-Attribute Choice",
+  "authors": [
+   "Fernandez, K.",
+   "Krajbich, I."
+  ],
+  "year": 2026,
+  "journal": "In preparation",
+  "doi": null,
+  "citation": "Fernandez, K., & Krajbich, I. Correlated Attributes Support Search Efficiency in Multi-Attribute Choice. In preparation."
+ },
+ "scale": {
+  "min": 0,
+  "max": 100,
+  "type": "slider"
+ },
+ "description": "Liking ratings (0-100) extracted from the many-attribute study (100 attributes rated; only the Liking attribute is included here)."
+}

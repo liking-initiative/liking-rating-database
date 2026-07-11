@@ -1,0 +1,40 @@
+{
+ "code": "leehare2023exp1",
+ "study": {
+  "name": "Value certainty and choice confidence are multidimensional constructs that guide decision-making",
+  "authors": [
+   "Lee, D. G.",
+   "Hare, T. A."
+  ],
+  "year": 2023,
+  "journal": "Cognitive, Affective, & Behavioral Neuroscience",
+  "doi": "10.3758/s13415-022-01054-4",
+  "citation": "Lee, D. G., & Hare, T. A. (2023). Value certainty and choice confidence are multidimensional constructs that guide decision-making. Cognitive, Affective, & Behavioral Neuroscience, 23(3), 503-521."
+ },
+ "scale": {
+  "min": 1,
+  "max": 100,
+  "type": "slider"
+ },
+ "description": "Value (liking) ratings of 100 snack foods, 1-100; Experiment 1. Image-number key combines the Lee-lab exp1 and exp2-5 name files (exp2-5 names win overlaps, matching the database); images 20 and 22 were named by direct inspection of the stimulus photos (nectarine; green apple).",
+ "item_categories": {
+  "banananutmuffin": "sweets",
+  "barbequechips": "chips",
+  "blueberry": "fruits",
+  "blueberrymuffin": "sweets",
+  "brioche": "grains_breads",
+  "chocolatechipcookie": "sweets",
+  "curlyfries": "main_dishes",
+  "ferrerorocher": "sweets",
+  "grahamcracker": "sweets",
+  "gumdrops": "sweets",
+  "haagendazsicecreambar": "frozen_desserts",
+  "lemonpoppyseedmuffin": "sweets",
+  "lolipop": "sweets",
+  "mandarinorange": "fruits",
+  "petitécolier": "sweets",
+  "popsicle": "frozen_desserts",
+  "raisinspicecake": "sweets",
+  "stroopwafel": "sweets"
+ }
+}

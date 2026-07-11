@@ -1,0 +1,54 @@
+{
+ "code": "leeholyoak2021",
+ "study": {
+  "name": "Coherence shifts in attribute evaluations",
+  "authors": [
+   "Lee, D. G.",
+   "Holyoak, K. J."
+  ],
+  "year": 2021,
+  "journal": "Decision",
+  "doi": "10.1037/dec0000151",
+  "citation": "Lee, D. G., & Holyoak, K. J. (2021). Coherence shifts in attribute evaluations. Decision, 8(4), 257-276."
+ },
+ "scale": {
+  "min": 1,
+  "max": 100,
+  "type": "slider"
+ },
+ "description": "Overall value (liking) ratings of 60 snack foods on a 1-100 scale, rated in three repeated phases (timepoints 1-3) within the coherence-shift paradigm; subjects pooled across experiments 2-5.",
+ "item_categories": {
+  "boulebread": "grains_breads",
+  "caramel": "sweets",
+  "chickentenders": "meat_fish",
+  "chocolatebark": "sweets",
+  "chocolateicecreamcone": "frozen_desserts",
+  "chocolatewafer": "sweets",
+  "churro": "sweets",
+  "deliturkey": "meat_fish",
+  "eggrolls": "main_dishes",
+  "frostedbrownie": "sweets",
+  "goldendeliciousapple": "fruits",
+  "gouda": "dairy",
+  "lindtlindorchocolatetruffle": "sweets",
+  "madeleine": "sweets",
+  "meatballs": "meat_fish",
+  "nutrigrainbar": "snacks",
+  "peanutmms": "sweets",
+  "pocky": "sweets",
+  "raspberry": "fruits",
+  "ritzcracker": "crackers",
+  "ryebread": "grains_breads",
+  "saltinecracker": "crackers",
+  "slicedloafbread": "grains_breads",
+  "sugarcookie": "sweets",
+  "swisscheese": "dairy",
+  "thumprintcookie": "sweets",
+  "triscuits": "crackers",
+  "tuilecookie": "sweets",
+  "twistdonut": "sweets",
+  "vanillasoftservecone": "frozen_desserts",
+  "vanillawafer": "sweets",
+  "wavylays": "chips"
+ }
+}

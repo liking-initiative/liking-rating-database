@@ -24,6 +24,31 @@ Rule applied: no name mapping is used unless the key is proven from source data.
 | `sebmar` | 2,025 | **Not recoverable locally** | `Behavior_unzipped/ID*/bdm_run` holds numeric item ids 1..45; `choice_set_information.mat` is numeric only. Gluth-lab BDM study — ask for the snack list. |
 | `ostroglu` | 4,368 | **Not recoverable locally** | `osfstorage-archive.zip` contains only per-subject numeric `.mat` matrices; no item list anywhere in the archive. |
 
+### New-dataset queue (from SetFitNetworks sweep, 2026-07-11)
+
+Sources found in `~/Documents/SetFitNetworks` + `~/Downloads` (Yoo + Smith 2025
+CSVs staged into `Liking Rating Database/incoming/`). Citations confirmed by
+Kianté. Ingest via `scripts/ingest_dataset.py` once per-dataset decisions land.
+
+| Dataset | Citation | Shape | Status |
+|---|---|---|---|
+| yoo2025 | Yoo, Bahg, Turner et al. (2025), CABN 25, 923–940, doi:10.3758/s13415-025-01285-1 | 46 subj × 144 items, 0–10 continuous | **INGESTED 2026-07-11** (`ds-yoo2025`) |
+| smithspiller1 / smithspiller2 | Smith, Spiller, & Krajbich (2025), Cognition 261, 106145, doi:10.1016/j.cognition.2025.106145 | s1: 50×144; s2: 108×100; 0–4 continuous | **INGESTED 2026-07-11** |
+| leeholyoak2021 | Lee & Holyoak (2021), Decision 8(4), 257, doi:10.1037/dec0000151 | 267 subj × 60 items × 3 phases (1–100 slider) | **INGESTED 2026-07-11** — phases kept as `timepoint` 1–3 per curator decision (migration 004 added the column) |
+| leeholyoak2024 | Lee & Holyoak (2024), Decision 11(2), 303 | Extracted via MATLAB R2024a: four tables, trial-level only (`vL1/vR1/vL2/vR2`, no item identifiers anywhere) | **UNRECOVERABLE from shared data** — values are anonymized to value-space; needs item-labeled data from Doug Lee |
+| leehare2023exp1 / exp2 | Lee & Hare (2023), CABN 23(3), 503–521, doi:10.3758/s13415-022-01054-4 | exp1: 107 subj × 100 items (1–100); exp2: 72 subj (21 author-flagged excluded) × 60 items × 2 phases (timepoints) | **INGESTED 2026-07-11** — scipy extraction; image-number key proven by exact coverage (100/100 + 60/60 numbers ⊆ the Lee-lab name files); two ambiguous images (nectarine, green apple) named by direct inspection of the stimulus photos |
+| fernandez set-choice exps 1–3 | Fernandez, Karmarkar, & Krajbich (2024 preprint, psyarxiv/3fahj) | 30/75/78 subj, shared 60-item set, 1–100 | **INGESTED 2026-07-11** |
+| fernandez choose-k exp1 | Fernandez, Callaway, Karmarkar, & Krajbich. *Rank-order preferences are not quickly accessible.* In prep | 76 subj × 60 foods, 1–100 | **INGESTED 2026-07-11** |
+| fernandez choose-k exp2 | Fernandez, Karmarkar, & Krajbich. *Choice overload… mouse-tracking.* In prep (mapping confirmed by Kianté) | 102 subj, extracted from per-subject JSONs via the project's own recipe | **INGESTED 2026-07-11** |
+| fernandez many-attribute | Fernandez & Krajbich. *Correlated Attributes Support Search Efficiency in Multi-Attribute Choice.* In prep | 53 subj × 60 foods, 0–100 (Liking attribute only, of 100 rated) | **INGESTED 2026-07-11** |
+| fernandez EEG-ET (w/ Nunez) | Fernandez, Nunez, & Krajbich. *Attention modulates a supramodal decision signal across choice domains.* In prep | 46 subj, 100Foods set (confirmed by Kianté), 1–870 pixel slider | **INGESTED 2026-07-11** — Pic→name key derived from Smith & Krajbich (2021) value-identity (100/100 pics, zero conflicts), key saved with the ingest package |
+| berner (clinical) | — | — | **EXCLUDED** — private clinical data, cannot be included (Kianté, 2026-07-11) |
+
+Excluded after verification: `Smith_2020/TaskRatings.RData` **is** the already-imported
+`smikrab` (Smith & Krajbich 2021 PB&R) — taste ratings match the DB exactly
+(subj 85: n=100, range −436..614, sum 20359 in both); its other three tasks are
+perceptual judgments, out of scope.
+
 ### Data
 - [ ] **Decide: `foljac2` units.** Source values arrived normalized 0–1;
   original scale was WTP £0–3 (Folke et al. 2016). Currently stored as-is with
@@ -43,11 +68,11 @@ Rule applied: no name mapping is used unless the key is proven from source data.
 server-side seeded spring layout, cached: 4.9s cold / 70ms warm) + the
 `/network` page: threshold slider, category filters, item finder with
 highlight, per-category legend toggling, click-through to item pages.
-Grounding facts: the graph is one giant component over **41 of 42 datasets**
-(1,002 shared items; `kitkat` bridges 23); only `larlua` is isolated — its 86
-items are opaque image codes, a stimulus-key problem (ask Larenas et al.).
-Open refinements: apply approved harmonizations (below) to consolidate nodes;
-optional dataset-subset filter; pre-warm the default network at startup.
+Grounding facts (post-ingest 2026-07-11): one giant component over **52 of 53
+datasets** (1,048 connected items); only `larlua` is isolated — its 86 items
+are opaque image codes, a stimulus-key problem (ask Larenas et al.). Startup
+pre-warm shipped. Open refinements: apply approved harmonizations (below) to
+consolidate nodes; optional dataset-subset filter.
 
 **Name harmonization (needs Kianté's review)** —
 `scripts/migrations/data/harmonization_candidates.csv` holds 133 candidate

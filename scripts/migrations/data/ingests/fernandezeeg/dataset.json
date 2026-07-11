@@ -1,0 +1,21 @@
+{
+ "code": "fernandezeeg",
+ "study": {
+  "name": "Attention modulates a supramodal decision signal across choice domains",
+  "authors": [
+   "Fernandez, K.",
+   "Nunez, M. D.",
+   "Krajbich, I."
+  ],
+  "year": 2024,
+  "journal": "In preparation",
+  "doi": null,
+  "citation": "Fernandez, K., Nunez, M. D., & Krajbich, I. Attention modulates a supramodal decision signal across choice domains. In preparation."
+ },
+ "scale": {
+  "min": 1,
+  "max": 870,
+  "type": "continuous"
+ },
+ "description": "Food liking ratings from the value condition of an EEG + eye-tracking study; continuous slider stored in pixel units (1-870). Items are the lab's 100Foods set, mapped via a value-verified key derived from Smith & Krajbich (2021)."
+}

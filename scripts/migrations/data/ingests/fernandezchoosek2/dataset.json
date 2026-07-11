@@ -1,0 +1,21 @@
+{
+ "code": "fernandezchoosek2",
+ "study": {
+  "name": "Choice overload and decisional conflict in multi-alternative multi-response choice: Evidence from mouse-tracking",
+  "authors": [
+   "Fernandez, K.",
+   "Karmarkar, U. R.",
+   "Krajbich, I."
+  ],
+  "year": 2025,
+  "journal": "In preparation",
+  "doi": null,
+  "citation": "Fernandez, K., Karmarkar, U. R., & Krajbich, I. Choice overload and decisional conflict in multi-alternative multi-response choice: Evidence from mouse-tracking. In preparation."
+ },
+ "scale": {
+  "min": 0,
+  "max": 100,
+  "type": "slider"
+ },
+ "description": "Liking ratings from choose-k Experiment 2 (mouse-tracking); extracted from the experiment's per-subject JSON logs via the project's own ratings-screen recipe."
+}

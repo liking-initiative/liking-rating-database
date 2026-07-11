@@ -1,0 +1,21 @@
+{
+ "code": "fernandezset2",
+ "study": {
+  "name": "Preference centrality, but not set similarity, predicts choices between sets",
+  "authors": [
+   "Fernandez, K. A.",
+   "Karmarkar, U. R.",
+   "Krajbich, I."
+  ],
+  "year": 2024,
+  "journal": "PsyArXiv (preprint)",
+  "doi": "10.31234/osf.io/3fahj",
+  "citation": "Fernandez, K. A., Karmarkar, U. R., & Krajbich, I. (2024). Preference centrality, but not set similarity, predicts choices between sets. PsyArXiv."
+ },
+ "scale": {
+  "min": 1,
+  "max": 100,
+  "type": "slider"
+ },
+ "description": "Liking ratings (1-100) from Study 2 of the set-choice project; 60-item snack set shared with Lee & Holyoak (2021)."
+}

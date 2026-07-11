@@ -1,0 +1,20 @@
+{
+ "code": "leehare2023exp2",
+ "study": {
+  "name": "Value certainty and choice confidence are multidimensional constructs that guide decision-making",
+  "authors": [
+   "Lee, D. G.",
+   "Hare, T. A."
+  ],
+  "year": 2023,
+  "journal": "Cognitive, Affective, & Behavioral Neuroscience",
+  "doi": "10.3758/s13415-022-01054-4",
+  "citation": "Lee, D. G., & Hare, T. A. (2023). Value certainty and choice confidence are multidimensional constructs that guide decision-making. Cognitive, Affective, & Behavioral Neuroscience, 23(3), 503-521."
+ },
+ "scale": {
+  "min": 1,
+  "max": 100,
+  "type": "slider"
+ },
+ "description": "Value (liking) ratings of 60 snack foods, 1-100, in two repeated phases (timepoints 1-2); Experiment 2. The 21 author-flagged subjects (badSubs_manual) are excluded."
+}

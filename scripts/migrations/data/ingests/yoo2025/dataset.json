@@ -1,0 +1,21 @@
+{
+ "code": "yoo2025",
+ "study": {
+  "name": "People display consistent recency and primacy effects in behavior and neural activity across perceptual and value-based judgments",
+  "authors": [
+   "Yoo, M.",
+   "Bahg, G.",
+   "Turner, B."
+  ],
+  "year": 2025,
+  "journal": "Cognitive, Affective, & Behavioral Neuroscience",
+  "doi": "10.3758/s13415-025-01285-1",
+  "citation": "Yoo, M., Bahg, G., Turner, B. et al. (2025). People display consistent recency and primacy effects in behavior and neural activity across perceptual and value-based judgments. Cognitive, Affective, & Behavioral Neuroscience, 25, 923-940."
+ },
+ "scale": {
+  "min": 0,
+  "max": 10,
+  "type": "continuous"
+ },
+ "description": "Value ratings of food items (0-10) collected in an fMRI study of recency and primacy effects in value-based judgment."
+}

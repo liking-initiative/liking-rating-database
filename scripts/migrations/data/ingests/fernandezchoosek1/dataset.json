@@ -1,0 +1,22 @@
+{
+ "code": "fernandezchoosek1",
+ "study": {
+  "name": "Rank-order preferences are not quickly accessible",
+  "authors": [
+   "Fernandez, K.",
+   "Callaway, F.",
+   "Karmarkar, U. R.",
+   "Krajbich, I."
+  ],
+  "year": 2025,
+  "journal": "In preparation",
+  "doi": null,
+  "citation": "Fernandez, K., Callaway, F., Karmarkar, U. R., & Krajbich, I. Rank-order preferences are not quickly accessible. In preparation."
+ },
+ "scale": {
+  "min": 1,
+  "max": 100,
+  "type": "slider"
+ },
+ "description": "Liking ratings (1-100) from choose-k Experiment 1; 60-item snack set."
+}

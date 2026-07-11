@@ -1,0 +1,21 @@
+{
+ "code": "smithspiller2",
+ "study": {
+  "name": "The role of visual attention in opportunity cost neglect and consideration",
+  "authors": [
+   "Smith, S. M.",
+   "Spiller, S. A.",
+   "Krajbich, I."
+  ],
+  "year": 2025,
+  "journal": "Cognition",
+  "doi": "10.1016/j.cognition.2025.106145",
+  "citation": "Smith, S. M., Spiller, S. A., & Krajbich, I. (2025). The role of visual attention in opportunity cost neglect and consideration. Cognition, 261, 106145."
+ },
+ "scale": {
+  "min": 0,
+  "max": 4,
+  "type": "continuous"
+ },
+ "description": "Liking ratings (0-4) from Study 2 of an eye-tracked purchase-decision experiment on opportunity cost neglect."
+}
