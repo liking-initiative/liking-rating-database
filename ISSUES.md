@@ -74,13 +74,12 @@ are opaque image codes, a stimulus-key problem (ask Larenas et al.). Startup
 pre-warm shipped. Open refinements: apply approved harmonizations (below) to
 consolidate nodes; optional dataset-subset filter.
 
-**Name harmonization (needs Kianté's review)** —
-`scripts/migrations/data/harmonization_candidates.csv` holds 133 candidate
-pairs (88 would create new dataset connections): plural variants
-(banana/bananas), typos, near-duplicates. Curation, not automation: some
-lookalikes are genuinely different stimuli (100grand vs 100grandsmall).
-Approved pairs get linked via `standardized_name` (items are never merged),
-and the network then groups by `standardized_name`.
+**Name harmonization — APPLIED 2026-07-12 (migration 005).** Kianté reviewed
+all 133 candidates and approved 106; the same-dataset guardrail auto-rejected
+37 of those (both names are deliberately distinct stimuli inside one dataset,
+mostly toyam singular/plural pairs), leaving 69 pairs → 66 groups linked via
+`standardized_name` (135 items touched, no rows merged). Rejected lookalikes
+(pears/peas, chocolatedonuts/chocolatenuts, ritzbits/ritz, …) stay separate.
 
 **EGA + centrality** (network psychometrics) — DOWNSTREAM by decision
 (2026-07-10): run real EGA (EGAnet) **client-side via webR/WebAssembly**, so
