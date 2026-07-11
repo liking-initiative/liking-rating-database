@@ -1,0 +1,22 @@
+{
+  "code": "smithdoe1",
+  "study": {
+    "name": "Full paper title exactly as published",
+    "authors": ["Smith, J.", "Doe, A."],
+    "year": 2026,
+    "journal": "Journal Name",
+    "doi": "10.1000/example",
+    "citation": "Smith, J., & Doe, A. (2026). Full paper title exactly as published. Journal Name, 1(1), 1-10.",
+    "description": "One-line description of the study (optional)"
+  },
+  "scale": {
+    "min": 0,
+    "max": 10,
+    "type": "likert"
+  },
+  "description": "How ratings were elicited: instruction wording, incentivization, presentation format (optional but strongly encouraged)",
+  "item_categories": {
+    "somenewitem": "sweets",
+    "anothernewitem": "consumer_product"
+  }
+}
