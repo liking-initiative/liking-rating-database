@@ -213,17 +213,6 @@ const DatasetDetailPage = () => {
                   )}
                 </div>
               </Descriptions.Item>
-              <Descriptions.Item label="Data Completeness">
-                {dataset.data_completeness != null ? `${dataset.data_completeness.toFixed(1)}%` : 'Not specified'}
-              </Descriptions.Item>
-              <Descriptions.Item label="File Format">
-                {dataset.file_format || 'Not specified'}
-              </Descriptions.Item>
-              {dataset.file_size_mb && (
-                <Descriptions.Item label="File Size">
-                  {dataset.file_size_mb.toFixed(2)} MB
-                </Descriptions.Item>
-              )}
             </Descriptions>
           </Card>
         </Col>
@@ -240,7 +229,7 @@ const DatasetDetailPage = () => {
                 </div>
               </div>
               <div>
-                <div style={{ fontWeight: 'bold' }}>Food Items</div>
+                <div style={{ fontWeight: 'bold' }}>Items</div>
                 <div style={{ fontSize: '24px', color: '#52c41a' }}>
                   <AppleOutlined style={{ marginRight: 8 }} />
                   {dataset.n_items}
@@ -252,14 +241,6 @@ const DatasetDetailPage = () => {
                   {(dataset.n_ratings ?? 0).toLocaleString()}
                 </div>
               </div>
-              {dataset.data_completeness && (
-                <div>
-                  <div style={{ fontWeight: 'bold' }}>Completeness</div>
-                  <div style={{ fontSize: '24px', color: dataset.data_completeness > 90 ? '#52c41a' : '#faad14' }}>
-                    {dataset.data_completeness.toFixed(1)}%
-                  </div>
-                </div>
-              )}
             </Space>
           </Card>
 
@@ -301,7 +282,7 @@ const DatasetDetailPage = () => {
             dataSource={ratingStats}
             rowKey="item_id"
             pagination={{
-              pageSize: 10,
+              defaultPageSize: 10,
               showSizeChanger: true,
               showQuickJumper: true,
             }}

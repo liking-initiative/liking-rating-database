@@ -83,26 +83,6 @@ const ItemsPage = () => {
       ),
     },
     {
-      title: 'Category',
-      dataIndex: 'category',
-      key: 'category',
-      width: 150,
-      render: (category) => category ? (
-        <Tag icon={<TagOutlined />} color="blue">
-          {category}
-        </Tag>
-      ) : '-',
-    },
-    {
-      title: 'Subcategory',
-      dataIndex: 'subcategory',
-      key: 'subcategory',
-      width: 150,
-      render: (subcategory) => subcategory ? (
-        <Tag color="geekblue">{subcategory}</Tag>
-      ) : '-',
-    },
-    {
       title: 'Frequency',
       dataIndex: 'frequency',
       key: 'frequency',

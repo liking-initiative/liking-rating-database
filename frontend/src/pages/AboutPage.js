@@ -41,8 +41,9 @@ const AboutPage = () => {
           standardized using a consistent naming convention to facilitate data aggregation.
         </Paragraph>
         <Paragraph>
-          <strong>Metadata Completeness:</strong> Each dataset includes comprehensive 
-          metadata about the study design, participants, and methodology.
+          <strong>Provenance:</strong> Every dataset links to its source
+          publication, and all data corrections are tracked, versioned
+          migrations.
         </Paragraph>
       </Card>
 

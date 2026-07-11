@@ -83,7 +83,7 @@ const ItemAnalysisPage = () => {
     }
   );
 
-  // Fetch category comparison data
+  // Aggregations used by the "Rank in category" statistic
   const { data: allRatingAggregations } = useQuery(
     ['categoryRatings', item?.category],
     () => getRatingAggregations({ min_ratings: 1 }),
@@ -291,62 +291,12 @@ const ItemAnalysisPage = () => {
     }];
   };
 
-  // Generate competitive comparison chart
-  const generateComparisonChart = () => {
-    if (!categoryRatings?.length || !item?.category) return [];
-
-    const categoryItems = categoryRatings
-      .filter(r => r.item_id !== itemId)
-      .sort((a, b) => b.mean_rating - a.mean_rating)
-      .slice(0, 10); // Top 10 in category
-
-    const currentItemData = ratings?.length > 0 ? {
-      item_name: item.name,
-      mean_rating: overallMean,
-      n_ratings: totalRatings
-    } : null;
-
-    const allItems = currentItemData ? [...categoryItems, currentItemData] : categoryItems;
-    allItems.sort((a, b) => b.mean_rating - a.mean_rating);
-
-    return [{
-      x: allItems.map(r => r.item_name.length > 15 ? r.item_name.substring(0, 15) + '...' : r.item_name),
-      y: allItems.map(r => r.mean_rating),
-      type: 'bar',
-      name: 'Mean Rating',
-      marker: {
-        color: allItems.map(r => r.item_name === item?.name ? '#ff4d4f' : '#1890ff')
-      },
-      text: allItems.map(r => `${r.mean_rating.toFixed(2)} (n=${r.n_ratings || 0})`),
-      textposition: 'auto',
-    }];
-  };
-
-  // Generate rating trend over time (dataset trend)
-  const generateTrendChart = () => {
-    if (!ratings?.length) return [];
-
-    return [{
-      x: ratings.map((r, i) => i + 1),
-      y: ratings.map(r => r.mean_rating),
-      mode: 'lines+markers',
-      type: 'scatter',
-      name: 'Rating Trend',
-      line: { color: '#722ed1', width: 3 },
-      marker: { size: 8, color: '#722ed1' }
-    }];
-  };
-
   const getChartData = () => {
     switch (chartType) {
       case 'distribution':
         return generateDistributionChart();
       case 'datasets':
         return generateDatasetChart();
-      case 'trend':
-        return generateTrendChart();
-      case 'comparison':
-        return generateComparisonChart();
       default:
         return [];
     }
@@ -375,20 +325,6 @@ const ItemAnalysisPage = () => {
           ...baseLayout,
           title: `Mean Ratings Across Datasets`,
           xaxis: { title: 'Dataset' },
-          yaxis: { title: 'Mean Rating' }
-        };
-      case 'trend':
-        return {
-          ...baseLayout,
-          title: `Rating Trend Across Studies`,
-          xaxis: { title: 'Study Order' },
-          yaxis: { title: 'Mean Rating' }
-        };
-      case 'comparison':
-        return {
-          ...baseLayout,
-          title: `Competitive Analysis - ${item?.category || 'Category'} Items`,
-          xaxis: { title: 'Food Items', tickangle: -45 },
           yaxis: { title: 'Mean Rating' }
         };
       default:
@@ -552,10 +488,6 @@ const ItemAnalysisPage = () => {
                 >
                   <Option value="distribution">Rating Distribution</Option>
                   <Option value="datasets">Dataset Comparison</Option>
-                  <Option value="trend">Rating Trend</Option>
-                  <Option value="comparison" disabled={!item?.category || !categoryRatings?.length}>
-                    Competitive Analysis
-                  </Option>
                 </Select>
               </Card>
             </Col>
@@ -600,21 +532,6 @@ const ItemAnalysisPage = () => {
               <Card title="Rating Quality">
                 <Space direction="vertical" style={{ width: '100%' }}>
                   <div>
-                    <Text>Data Completeness</Text>
-                    <Progress 
-                      percent={Math.min(100, (totalRatings / 1000) * 100)}
-                      status="active"
-                      strokeColor={{
-                        from: '#108ee9',
-                        to: '#87d068',
-                      }}
-                    />
-                    <Text type="secondary" style={{ fontSize: '12px' }}>
-                      Based on {totalRatings} total ratings
-                    </Text>
-                  </div>
-
-                  <div style={{ marginTop: 16 }}>
                     <Text>Rating Consistency</Text>
                     <Progress
                       percent={Math.max(0, 100 - (overallStd * 200))}
@@ -685,37 +602,6 @@ const ItemAnalysisPage = () => {
             </Col>
           </Row>
 
-          {/* Analysis Insights */}
-          <Card title="Analysis Insights" style={{ marginTop: 24 }}>
-            <Space direction="vertical" style={{ width: '100%' }}>
-              <div>
-                <Text strong>Rating Interpretation:</Text>
-                <div style={{ marginTop: 8, marginLeft: 16 }}>
-                  {overallMean >= 0.7 && <Text>🟢 This item is generally well-liked across studies.</Text>}
-                  {overallMean >= 0.5 && overallMean < 0.7 && <Text>🟡 This item receives moderate ratings.</Text>}
-                  {overallMean < 0.5 && <Text>🔴 This item tends to receive lower ratings.</Text>}
-                </div>
-              </div>
-
-              <div style={{ marginTop: 16 }}>
-                <Text strong>Consistency:</Text>
-                <div style={{ marginTop: 8, marginLeft: 16 }}>
-                  {overallStd < 0.1 && <Text>🟢 Ratings are highly consistent across studies.</Text>}
-                  {overallStd >= 0.1 && overallStd < 0.2 && <Text>🟡 Ratings show moderate variation.</Text>}
-                  {overallStd >= 0.2 && <Text>🔴 Ratings vary significantly across studies.</Text>}
-                </div>
-              </div>
-              
-              <div style={{ marginTop: 16 }}>
-                <Text strong>Data Quality:</Text>
-                <div style={{ marginTop: 8, marginLeft: 16 }}>
-                  {totalRatings >= 100 && <Text>🟢 Sufficient data for reliable analysis.</Text>}
-                  {totalRatings >= 20 && totalRatings < 100 && <Text>🟡 Moderate amount of data available.</Text>}
-                  {totalRatings < 20 && <Text>🔴 Limited data - results should be interpreted cautiously.</Text>}
-                </div>
-              </div>
-            </Space>
-          </Card>
         </>
       )}
     </div>

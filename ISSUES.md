@@ -36,20 +36,85 @@ Rule applied: no name mapping is used unless the key is proven from source data.
   overrides, sample-audited across four rounds). A human pass over
   `scripts/migrations/data/item_categories.json` would tighten the tail.
 
-### Product (toward the openesm-style vision)
+### Product (toward the Liking Initiative / openESM-style vision)
+
+**Item network visualization** — SHIPPED 2026-07-10 (first version).
+`GET /analytics/item-network` (co-occurrence grouped by `standardized_name`,
+server-side seeded spring layout, cached: 4.9s cold / 70ms warm) + the
+`/network` page: threshold slider, category filters, item finder with
+highlight, per-category legend toggling, click-through to item pages.
+Grounding facts: the graph is one giant component over **41 of 42 datasets**
+(1,002 shared items; `kitkat` bridges 23); only `larlua` is isolated — its 86
+items are opaque image codes, a stimulus-key problem (ask Larenas et al.).
+Open refinements: apply approved harmonizations (below) to consolidate nodes;
+optional dataset-subset filter; pre-warm the default network at startup.
+
+**Name harmonization (needs Kianté's review)** —
+`scripts/migrations/data/harmonization_candidates.csv` holds 133 candidate
+pairs (88 would create new dataset connections): plural variants
+(banana/bananas), typos, near-duplicates. Curation, not automation: some
+lookalikes are genuinely different stimuli (100grand vs 100grandsmall).
+Approved pairs get linked via `standardized_name` (items are never merged),
+and the network then groups by `standardized_name`.
+
+**EGA + centrality** (network psychometrics) — DOWNSTREAM by decision
+(2026-07-10): run real EGA (EGAnet) **client-side via webR/WebAssembly**, so
+users can request EGA on arbitrary item subsets in real time; no server-side
+compute or stats table. What the backend will need then: an endpoint serving
+subject×item rating matrices for a selected dataset/item subset (wide-format
+export). Viability facts to gate/caveat in the UI when it lands: 6 datasets
+have n_subjects ≥ n_items (solid), 26 are glasso-viable (ratio 0.3–1.0), 10
+have p ≫ n. Methods caveat à la openESM's descriptives page.
+
+**Item images** (future — Kianté has the stimulus sets) — schema is already
+prepared (`items.image_available`, `items.image_url`); needs an asset
+pipeline + per-item display. Deferred by design.
+
+**Category analysis chart** — parked DOWNSTREAM (Kianté, 2026-07-10): the
+name-derived category groupings read as ad hoc; the aggregate-by-category
+chart is removed from the Visualizations page until the category map gets a
+human curation pass. Categories still power the item filters and the network
+coloring. Reinstate the chart (or fold it into the network view) after
+curating `scripts/migrations/data/item_categories.json`.
+
+**Completeness removed from the UI** (Kianté, 2026-07-10) — the
+`data_completeness` metric wasn't self-explanatory; all frontend displays
+dropped (dataset page, study table, item quality card), along with the
+always-empty File Format/Size rows. The column itself stays in the DB/API
+(it's real: n_ratings / (n_subjects × n_items)) — drop or rename in a future
+migration if it stays unused.
+
+**Also open**
 - [ ] Per-study landing pages with full methodology metadata (instruction
-  wording, incentivization, presentation format) — the paper's Table 1 fields.
-- [ ] Whole-database download (single archive + codebook) alongside
-  per-dataset downloads.
-- [ ] Data DOI (Zenodo/OSF) + versioned releases of the database file;
-  update CITATION.cff on publication.
+  wording, incentivization, presentation format) — the paper's Table 1 fields
+  and the RA sheet's `question_asked` / "come hungry?" / "eat the food?"
+  columns, which already exist in the source xlsx.
+- [ ] Whole-database download (single archive + codebook).
+- [ ] Python client package (`load_dataset(...)`) — the openESM-style access
+  path; R after.
+- [ ] Public contribution guide for outside labs (docs/ADDING_DATASETS.md is
+  the internal standard; the public "dataset journey" builds on it).
 - [ ] Move off ephemeral SQLite (Render persistent disk or Postgres) if/when
   write features are needed.
-- [ ] Code-split plotly (full bundle loads on four routes).
-- [ ] Frontend tests (React Testing Library) — backend has coverage, frontend
-  has lint+build only.
+- [ ] Code-split plotly; frontend component tests (RTL).
+
+### Tabled (deliberately, 2026-07-10)
+- Zenodo/OSF data DOI + versioned releases — revisit at publication.
+- Per-dataset licensing/attribution fields — revisit before public launch.
 
 ## Resolved (2026-07-10)
+
+### Toward the next production version
+- [x] **Dataset ingestion standard**: `scripts/ingest_dataset.py` +
+  `docs/ADDING_DATASETS.md` + `docs/templates/dataset.json`. Validated,
+  dry-run by default, refuses duplicates/out-of-range/unknown taxonomies,
+  averages repeats, records as `ds-<code>` in schema_migrations; 5 contract
+  tests. This is the path for the queued new datasets.
+- [x] **Visualizations slimmed** to the ones that carry weight: overview page
+  4→2 (distributions + category analysis; the two per-study bar charts cut),
+  dataset page 4→3 (sample-size histogram cut), item analysis 4→3 (the
+  arbitrary-order "trend" line cut). All survivors were verified against the
+  live API in the review pass.
 
 ### Decisions recorded
 - [x] **No art stimuli**: `shevsmith2` (art images) stays excluded — consumer

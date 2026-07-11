@@ -125,38 +125,6 @@ const DatasetVisualizationPage = () => {
     }];
   };
 
-  // Generate sample size distribution
-  const generateSampleSizeData = () => {
-    if (!ratings?.items?.length) return [];
-
-    const itemCounts = {};
-    ratings.items.forEach(rating => {
-      const itemName = rating.item_name || `Item ${rating.item_id}`;
-      itemCounts[itemName] = (itemCounts[itemName] || 0) + 1;
-    });
-
-    const counts = Object.values(itemCounts);
-    const sampleSizeCounts = {};
-    
-    counts.forEach(count => {
-      const bin = Math.floor(count / 5) * 5; // Group into bins of 5
-      sampleSizeCounts[bin] = (sampleSizeCounts[bin] || 0) + 1;
-    });
-
-    const bins = Object.keys(sampleSizeCounts).map(Number).sort((a, b) => a - b);
-    const frequencies = bins.map(bin => sampleSizeCounts[bin]);
-
-    return [{
-      x: bins.map(bin => `${bin}-${bin + 4}`),
-      y: frequencies,
-      type: 'bar',
-      name: 'Number of Items',
-      marker: { color: '#fa8c16' },
-      text: frequencies.map(f => f.toString()),
-      textposition: 'auto',
-    }];
-  };
-
   const getChartData = () => {
     switch (chartType) {
       case 'histogram':
@@ -165,8 +133,6 @@ const DatasetVisualizationPage = () => {
         return generateTopItemsData();
       case 'variability':
         return generateVariabilityData();
-      case 'sampleSize':
-        return generateSampleSizeData();
       default:
         return [];
     }
@@ -200,13 +166,6 @@ const DatasetVisualizationPage = () => {
           title: 'Rating Variability vs Mean Rating',
           xaxis: { title: 'Mean Rating' },
           yaxis: { title: 'Standard Deviation' }
-        };
-      case 'sampleSize':
-        return {
-          ...baseLayout,
-          title: 'Sample Size Distribution',
-          xaxis: { title: 'Number of Ratings per Item' },
-          yaxis: { title: 'Number of Items' }
         };
       default:
         return baseLayout;
@@ -271,7 +230,6 @@ const DatasetVisualizationPage = () => {
               <Option value="histogram">Rating Distribution</Option>
               <Option value="topItems">Top Rated Items</Option>
               <Option value="variability">Rating Variability</Option>
-              <Option value="sampleSize">Sample Size Distribution</Option>
             </Select>
             
             {dataset && (

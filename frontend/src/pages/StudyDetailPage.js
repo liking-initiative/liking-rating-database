@@ -137,13 +137,6 @@ const StudyDetailPage = () => {
       ),
     },
     {
-      title: 'Completeness',
-      dataIndex: 'data_completeness',
-      key: 'data_completeness',
-      width: 120,
-      render: (value) => value ? `${value.toFixed(1)}%` : '-',
-    },
-    {
       title: 'Actions',
       key: 'actions',
       width: 150,

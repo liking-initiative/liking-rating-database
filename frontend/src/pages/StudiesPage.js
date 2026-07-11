@@ -166,7 +166,7 @@ const StudiesPage = () => {
             rowKey="id"
             loading={isLoading}
             pagination={{
-              pageSize: 20,
+              defaultPageSize: 20,
               showSizeChanger: true,
               showQuickJumper: true,
               showTotal: (total, range) =>
