@@ -282,6 +282,7 @@ async def get_ratings(
         RatingResponse(
             id=str(rating.id),
             rating=rating.rating,
+            normalized_rating=rating.normalized_rating,
             item_id=str(rating.item_id),
             item_name=rating.item.name if rating.item else None,
             dataset_id=str(rating.dataset_id),
@@ -393,3 +394,22 @@ async def get_year_range(db: AsyncSession = Depends(get_db)):
     result = await db.execute(query)
     min_year, max_year = result.first()
     return {"min_year": min_year, "max_year": max_year}
+
+
+@api_router.get("/analytics/item-network")
+async def get_item_network(
+    min_shared: int = Query(2, ge=1, description="min datasets two items must share for an edge"),
+    categories: Optional[List[str]] = Query(None),
+    min_frequency: int = Query(2, ge=1, description="min datasets an item must appear in"),
+    max_edges_per_node: int = Query(4, ge=0, le=20, description="backbone: keep each node's strongest K edges (0 = keep all)"),
+    db: AsyncSession = Depends(get_db)
+):
+    """Item co-occurrence network (nodes grouped by standardized name),
+    with a precomputed layout for rendering"""
+    return await data_service.get_item_network(
+        min_shared=min_shared,
+        categories=categories,
+        min_frequency=min_frequency,
+        max_edges_per_node=max_edges_per_node,
+        db=db,
+    )

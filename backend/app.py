@@ -48,6 +48,21 @@ async def _cleanup_downloads_periodically() -> None:
         await asyncio.sleep(3600)
 
 
+async def _prewarm_caches() -> None:
+    """Warm the expensive cached analytics once, so no visitor pays the
+    cold-compute cost (default item network takes ~10s on 588k ratings)"""
+    from backend.api.routes import data_service
+    try:
+        async with database.async_session() as session:
+            await data_service.get_statistics(db=session)
+            await data_service.get_item_network(db=session)
+        logger.info("Analytics caches pre-warmed")
+    except asyncio.CancelledError:
+        raise
+    except Exception as e:
+        logger.warning(f"Cache pre-warm failed (will compute on first request): {e}")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     """Application lifespan events"""
@@ -61,12 +76,14 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
         raise
 
     cleanup_task = asyncio.create_task(_cleanup_downloads_periodically())
+    prewarm_task = asyncio.create_task(_prewarm_caches())
     logger.info("Scheduled hourly download cleanup task")
 
     yield
 
     # Shutdown
     cleanup_task.cancel()
+    prewarm_task.cancel()
     logger.info("Shutting down Liking Rating Database API...")
 
 

@@ -142,3 +142,47 @@ async def test_metadata_endpoints(client):
     assert set(scale["scale_types"]) == {"likert", "continuous"}
     years = (await client.get(f"{V}/metadata/years")).json()
     assert years == {"min_year": 2020, "max_year": 2022}
+
+
+# --- item network -------------------------------------------------------------
+
+async def test_item_network_triangle(client):
+    net = (await client.get(f"{V}/analytics/item-network",
+                            params={"min_shared": 1, "min_frequency": 2})).json()
+    labels = {n["label"] for n in net["nodes"]}
+    assert labels == {"chocolate", "apple", "kale"}  # tortillachips: 1 dataset only
+    assert net["meta"]["edge_count"] == 3            # triangle via shared datasets
+    assert net["meta"]["components"] == 1
+    node = net["nodes"][0]
+    assert {"id", "label", "category", "frequency", "mean_rating", "x", "y"} <= set(node)
+
+
+async def test_item_network_threshold_empties(client):
+    net = (await client.get(f"{V}/analytics/item-network",
+                            params={"min_shared": 2, "min_frequency": 2})).json()
+    assert net["meta"]["edge_count"] == 0 and net["meta"]["node_count"] == 0
+
+
+async def test_item_network_category_filter(client):
+    net = (await client.get(f"{V}/analytics/item-network",
+                            params={"min_shared": 1, "min_frequency": 2,
+                                    "categories": ["fruits", "vegetables"]})).json()
+    assert {n["label"] for n in net["nodes"]} == {"apple", "kale"}
+    assert net["meta"]["edge_count"] == 1
+
+
+async def test_item_network_backbone(client):
+    # top-1 edge per node over the equal-weight triangle -> a 2-edge path,
+    # still one component (backbone must not disconnect the graph here)
+    net = (await client.get(f"{V}/analytics/item-network",
+                            params={"min_shared": 1, "min_frequency": 2,
+                                    "max_edges_per_node": 1})).json()
+    assert net["meta"]["edge_count"] == 2
+    assert net["meta"]["components"] == 1
+    assert net["meta"]["node_count"] == 3
+
+
+async def test_ratings_include_normalized(client):
+    rows = (await client.get(f"{V}/ratings", params={"page_size": 5})).json()["items"]
+    assert all(r["normalized_rating"] is not None for r in rows)
+    assert all(0 <= r["normalized_rating"] <= 1 for r in rows)

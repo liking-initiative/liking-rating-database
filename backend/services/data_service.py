@@ -485,3 +485,129 @@ class DataService:
             })
         
         return studies_with_counts
+
+    # ------------------------------------------------------------------ network
+    # Item co-occurrence network: nodes are items grouped by standardized_name
+    # (so approved name harmonizations consolidate nodes automatically), edges
+    # connect groups rated in the same dataset. Layout is computed server-side
+    # and cached — the data only changes via migrations/ingests + restart.
+    _network_cache: Dict[Tuple, Dict[str, Any]] = {}
+    _NETWORK_CACHE_MAX = 32
+    _NETWORK_MAX_EDGES = 20_000
+
+    async def get_item_network(
+        self,
+        min_shared: int = 2,
+        categories: Optional[List[str]] = None,
+        min_frequency: int = 2,
+        max_edges_per_node: int = 4,
+        db: AsyncSession = None,
+    ) -> Dict[str, Any]:
+        import networkx as nx
+        from itertools import combinations
+        from collections import defaultdict
+
+        cache_key = (min_shared, tuple(sorted(categories)) if categories else None,
+                     min_frequency, max_edges_per_node)
+        cached = self._network_cache.get(cache_key)
+        if cached is not None:
+            return cached
+
+        query = select(
+            Item.standardized_name, Item.id, Item.name, Item.category,
+            Rating.dataset_id, func.avg(Rating.normalized_rating).label("mean_norm"),
+        ).select_from(Rating).join(Item).group_by(Item.id, Rating.dataset_id)
+        if categories:
+            query = query.where(Item.category.in_(categories))
+        rows = (await db.execute(query)).fetchall()
+
+        # Group by standardized_name (fall back to name)
+        groups: Dict[str, Dict[str, Any]] = {}
+        for std, iid, name, category, dataset_id, mean_norm in rows:
+            key = std or name
+            g = groups.setdefault(key, {
+                "datasets": set(), "sum": 0.0, "n": 0,
+                "category": category, "rep_id": iid, "rep_name": name,
+            })
+            g["datasets"].add(dataset_id)
+            g["sum"] += float(mean_norm)
+            g["n"] += 1
+
+        # Node filter: appears in >= min_frequency datasets
+        nodes = {k: g for k, g in groups.items() if len(g["datasets"]) >= min_frequency}
+
+        # Edges: pairs of groups sharing >= min_shared datasets
+        by_dataset = defaultdict(list)
+        for k, g in nodes.items():
+            for d in g["datasets"]:
+                by_dataset[d].append(k)
+        weights = defaultdict(int)
+        for members in by_dataset.values():
+            for a, b in combinations(sorted(members), 2):
+                weights[(a, b)] += 1
+        edges = [(a, b, w) for (a, b), w in weights.items() if w >= min_shared]
+
+        # Backbone extraction: keep each node's strongest K edges. A dense
+        # co-occurrence graph is a near-clique among popular items — rendered
+        # raw it collapses into an unreadable hairball. The union of per-node
+        # top-K edges preserves the connected structure while staying legible.
+        if max_edges_per_node > 0 and edges:
+            per_node = defaultdict(list)
+            for a, b, w in edges:
+                per_node[a].append((w, a, b))
+                per_node[b].append((w, a, b))
+            keep = set()
+            for node_edges in per_node.values():
+                node_edges.sort(key=lambda e: (-e[0], e[1], e[2]))
+                keep.update((a, b) for _, a, b in node_edges[:max_edges_per_node])
+            edges = [(a, b, w) for a, b, w in edges if (a, b) in keep]
+
+        truncated = False
+        if len(edges) > self._NETWORK_MAX_EDGES:
+            edges = sorted(edges, key=lambda e: -e[2])[: self._NETWORK_MAX_EDGES]
+            truncated = True
+
+        # Drop nodes that end up isolated at this threshold
+        connected = {a for a, _, _ in edges} | {b for _, b, _ in edges}
+        nodes = {k: g for k, g in nodes.items() if k in connected}
+
+        graph = nx.Graph()
+        graph.add_nodes_from(nodes)
+        graph.add_weighted_edges_from(edges)
+        # Unweighted spring with stronger repulsion — weighted attraction pulls
+        # the popular hub items into one clump
+        pos = (nx.spring_layout(graph, seed=42, weight=None,
+                                k=1.8 / max(1, len(nodes)) ** 0.5, iterations=200)
+               if nodes else {})
+
+        result = {
+            "nodes": [
+                {
+                    "id": g["rep_id"],
+                    "label": k,
+                    "category": g["category"],
+                    "frequency": len(g["datasets"]),
+                    "mean_rating": round(g["sum"] / g["n"], 4) if g["n"] else None,
+                    "x": round(float(pos[k][0]), 4),
+                    "y": round(float(pos[k][1]), 4),
+                }
+                for k, g in nodes.items()
+            ],
+            "edges": [
+                {"source": a, "target": b, "weight": w} for a, b, w in edges
+            ],
+            "meta": {
+                "min_shared": min_shared,
+                "max_edges_per_node": max_edges_per_node,
+                "min_frequency": min_frequency,
+                "categories": sorted(categories) if categories else None,
+                "node_count": len(nodes),
+                "edge_count": len(edges),
+                "edges_truncated": truncated,
+                "components": nx.number_connected_components(graph) if nodes else 0,
+            },
+        }
+        if len(self._network_cache) >= self._NETWORK_CACHE_MAX:
+            self._network_cache.clear()
+        self._network_cache[cache_key] = result
+        return result

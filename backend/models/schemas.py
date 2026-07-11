@@ -188,6 +188,7 @@ class RatingResponse(BaseSchema):
     """Schema for individual rating responses"""
     id: str
     rating: float
+    normalized_rating: Optional[float] = None
     item_id: str
     item_name: Optional[str] = None
     dataset_id: str

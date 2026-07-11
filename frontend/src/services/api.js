@@ -140,6 +140,11 @@ export const getStatistics = async () => {
 };
 
 // Metadata API
+export const getItemNetwork = async (params = {}) => {
+  const response = await api.get('/analytics/item-network', { params });
+  return response.data;
+};
+
 export const getCategories = async () => {
   const response = await api.get('/metadata/categories');
   return response.data;
