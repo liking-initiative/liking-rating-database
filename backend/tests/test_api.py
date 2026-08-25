@@ -19,7 +19,7 @@ async def test_studies_envelope(client):
     assert r.status_code == 200
     body = r.json()
     assert set(body) >= {"items", "total", "page", "page_size", "pages"}
-    assert body["total"] == 2
+    assert body["total"] == 3
     study = body["items"][0]
     assert study["doi"] and study["journal"]
 
@@ -27,7 +27,7 @@ async def test_studies_envelope(client):
 async def test_datasets_envelope_and_detail_n_ratings(client):
     r = await client.get(f"{V}/datasets")
     body = r.json()
-    assert body["total"] == 3
+    assert body["total"] == 4
     detail = (await client.get(f"{V}/datasets/ds-choc1")).json()
     assert detail["n_ratings"] == 15
     assert detail["study"]["name"].startswith("Chocolate")
@@ -35,7 +35,7 @@ async def test_datasets_envelope_and_detail_n_ratings(client):
 
 async def test_items_envelope(client):
     body = (await client.get(f"{V}/items")).json()
-    assert body["total"] == 4
+    assert body["total"] == 5
 
 
 # --- search (B6 field names, item-matching, sort join) -----------------------
@@ -120,6 +120,142 @@ async def test_spss_download(client):
     assert r.status_code == 200
     blob = await client.get(f"{V}/download/{r.json()['download_id']}")
     assert blob.content[:4] == b"$FL2"  # SAV magic
+
+
+# --- repeated phases must survive export --------------------------------------
+
+async def test_csv_export_carries_timepoint(client):
+    """Repeated phases are indistinguishable in an export that drops `timepoint`."""
+    import csv, io, collections
+    r = await client.post(f"{V}/download",
+                          json={"dataset_ids": ["ds-repeat"], "format": "csv"})
+    assert r.status_code == 200
+    blob = await client.get(f"{V}/download/{r.json()['download_id']}")
+    rows = list(csv.DictReader(io.StringIO(blob.content.decode())))
+
+    assert "timepoint" in rows[0], "export dropped the timepoint column"
+    assert {row["timepoint"] for row in rows} == {"1", "2"}
+    # 3 subjects x 1 item x 2 timepoints, every observation uniquely keyed
+    assert len(rows) == 6
+    keys = collections.Counter(
+        (row["subject_id"], row["item_id"], row["timepoint"]) for row in rows
+    )
+    assert not [k for k, n in keys.items() if n > 1]
+
+
+async def test_json_and_xlsx_exports_carry_timepoint(client):
+    import json as _json
+    r = await client.post(f"{V}/download",
+                          json={"dataset_ids": ["ds-repeat"], "format": "json"})
+    blob = await client.get(f"{V}/download/{r.json()['download_id']}")
+    payload = _json.loads(blob.content.decode())
+    ratings = payload["datasets"][0]["ratings"]
+    assert all("timepoint" in row for row in ratings)
+    assert {row["timepoint"] for row in ratings} == {1, 2}
+
+    pd = pytest.importorskip("pandas")
+    pytest.importorskip("openpyxl")
+    r = await client.post(f"{V}/download",
+                          json={"dataset_ids": ["ds-repeat"], "format": "xlsx"})
+    blob = await client.get(f"{V}/download/{r.json()['download_id']}")
+    df = pd.read_excel(io.BytesIO(blob.content))
+    assert "timepoint" in df.columns
+    assert set(df["timepoint"]) == {1, 2}
+
+
+async def test_ratings_expose_subject_id(client):
+    """The API, the exports, and the archive must all name this field the same."""
+    body = (await client.get(f"{V}/ratings", params={"dataset_id": "ds-choc1"})).json()
+    row = body["items"][0]
+    assert "subject_id" in row
+    assert "participant_id" not in row
+
+
+# --- descriptives --------------------------------------------------------------
+
+async def test_descriptives_index_lists_datasets_and_timepoints(client):
+    rows = (await client.get(f"{V}/descriptives/index")).json()
+    by_id = {r["dataset_id"]: r for r in rows}
+    # only datasets that actually carry ratings are offered
+    assert set(by_id) == {"ds-choc1", "ds-choc2", "ds-veg", "ds-repeat"}
+    assert by_id["ds-repeat"]["timepoints"] == [1, 2]
+    assert by_id["ds-veg"]["timepoints"] == [1]
+    assert by_id["ds-choc1"]["label"].startswith("Doe")
+
+
+async def test_descriptives_dataset_items(client):
+    items = (await client.get(f"{V}/descriptives/datasets/ds-choc1/items")).json()
+    assert {i["item_name"] for i in items} == {"chocolate", "apple", "tortillachips"}
+    missing = await client.get(f"{V}/descriptives/datasets/nope/items")
+    assert missing.status_code == 404
+
+
+async def test_descriptives_dataset_item_stats(client):
+    r = await client.get(f"{V}/descriptives/dataset-item",
+                         params={"dataset_id": "ds-choc1", "item_id": "it-choc"})
+    body = r.json()
+    # ds-choc1 it-choc ratings are 0,2,5,8,10 on a 0-10 scale
+    assert body["n_subjects"] == 5
+    assert body["stats"]["mean"] == pytest.approx(5.0)
+    assert body["stats"]["median"] == pytest.approx(5.0)
+    assert body["stats"]["prop_floor"] == pytest.approx(0.2)   # the single 0
+    assert body["stats"]["prop_ceil"] == pytest.approx(0.2)    # the single 10
+    assert body["distribution"]["dots"] == [0.0, 2.0, 5.0, 8.0, 10.0]
+    assert len(body["distribution"]["kde"]) > 3
+
+
+async def test_descriptives_timepoint_selection(client):
+    """The phase selector must actually change which ratings are summarised."""
+    base = {"dataset_id": "ds-repeat", "item_id": "it-rep"}
+    first = (await client.get(f"{V}/descriptives/dataset-item", params=base)).json()
+    second = (await client.get(f"{V}/descriptives/dataset-item",
+                               params={**base, "timepoint": 2})).json()
+    assert first["timepoint"] == 1 and second["timepoint"] == 2
+    assert first["available_timepoints"] == [1, 2]
+    assert first["stats"]["mean"] == pytest.approx(3.0)   # 1,3,5
+    assert second["stats"]["mean"] == pytest.approx(4.0)  # 2,4,6
+
+    # an out-of-range phase falls back to the first rather than 404ing
+    fallback = (await client.get(f"{V}/descriptives/dataset-item",
+                                 params={**base, "timepoint": 9})).json()
+    assert fallback["timepoint"] == 1
+
+
+async def test_descriptives_dataset_item_404(client):
+    r = await client.get(f"{V}/descriptives/dataset-item",
+                         params={"dataset_id": "ds-veg", "item_id": "it-choc"})
+    assert r.status_code == 404  # kale/apple only in ds-veg
+
+
+async def test_descriptives_item_across_datasets(client):
+    """Cross-study panels summarise each dataset on the normalised 0-1 axis."""
+    body = (await client.get(f"{V}/descriptives/items/it-choc")).json()
+    assert body["n_datasets"] == 2          # it-choc appears in choc1 and choc2
+    assert set(body["stats"]) == {"mean", "sd", "skewness", "prop_floor", "prop_ceil"}
+
+    by_ds = {d["dataset_id"]: d for d in body["datasets"]}
+    # ds-choc1: 0,2,5,8,10 on 0-10 -> normalised mean 0.5
+    assert by_ds["ds-choc1"]["mean"] == pytest.approx(0.5)
+    # ds-choc2: -10,0,10 on -10..10 -> normalised mean 0.5, both ends hit once
+    assert by_ds["ds-choc2"]["mean"] == pytest.approx(0.5)
+    assert by_ds["ds-choc2"]["prop_floor"] == pytest.approx(1 / 3)
+    assert by_ds["ds-choc2"]["prop_ceil"] == pytest.approx(1 / 3)
+    # every dot has a matching dataset label for the hover text
+    assert len(body["stats"]["mean"]["dots"]) == len(body["stats"]["mean"]["dots_detail"])
+
+
+async def test_descriptives_item_uses_first_phase_only(client):
+    """Repeated phases must not double-count a dataset in the cross-study view."""
+    body = (await client.get(f"{V}/descriptives/items/it-rep")).json()
+    assert body["n_datasets"] == 1
+    row = body["datasets"][0]
+    assert row["timepoint"] == 1
+    assert row["n"] == 3                       # not 6
+    assert row["mean_raw"] == pytest.approx(3.0)  # phase 1 values 1,3,5
+
+
+async def test_descriptives_item_404(client):
+    assert (await client.get(f"{V}/descriptives/items/nope")).status_code == 404
 
 
 # --- read-only API (B8) --------------------------------------------------------

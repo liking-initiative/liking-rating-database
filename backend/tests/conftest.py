@@ -41,6 +41,11 @@ async def _seed():
             Study(id="study-veg", name="Vegetable liking in adults",
                   authors=["Poe, E."], year=2022, doi="10.1000/veg",
                   journal="Annals of Fixtures"),
+            # year 2020 keeps the metadata year-range and the 2021-2023 search
+            # filter assertions unchanged
+            Study(id="study-repeat", name="Repeated liking phases",
+                  authors=["Moe, M."], year=2020, doi="10.1000/repeat",
+                  journal="Annals of Fixtures"),
         ]
         datasets = [
             Dataset(id="ds-choc1", study_id="study-choc", name="choc1 Dataset",
@@ -52,6 +57,10 @@ async def _seed():
             Dataset(id="ds-veg", study_id="study-veg", name="veg Dataset",
                     n_subjects=4, n_items=3, rating_scale_min=1, rating_scale_max=5,
                     rating_scale_type="likert", data_completeness=100.0),
+            # repeated-phase dataset: the same subjects rate the same item twice
+            Dataset(id="ds-repeat", study_id="study-repeat", name="repeat Dataset",
+                    n_subjects=3, n_items=1, rating_scale_min=1, rating_scale_max=7,
+                    rating_scale_type="likert", data_completeness=100.0),
         ]
         items = [
             Item(id="it-choc", name="chocolate", standardized_name="chocolate",
@@ -62,13 +71,15 @@ async def _seed():
                  category="vegetables", frequency=2),
             Item(id="it-chip", name="tortillachips", standardized_name="tortillachips",
                  category="chips", frequency=1),
+            Item(id="it-rep", name="repeatsnack", standardized_name="repeatsnack",
+                 category="snacks", frequency=1),
         ]
         s.add_all(studies + datasets + items)
 
-        def spread(ds, item, values, lo, hi):
+        def spread(ds, item, values, lo, hi, timepoint=1):
             for subj, v in enumerate(values, start=1):
                 s.add(Rating(id=str(uuid.uuid4()), dataset_id=ds, item_id=item,
-                             subject_id=str(subj), rating=float(v),
+                             subject_id=str(subj), timepoint=timepoint, rating=float(v),
                              normalized_rating=(v - lo) / (hi - lo)))
 
         # ds-choc1: 0..10 likert, incl. a genuine 0 rating (falsy-zero regression)
@@ -81,6 +92,9 @@ async def _seed():
         # ds-veg: 1..5 likert
         spread("ds-veg", "it-kale", [1, 2, 3, 4], 1, 5)
         spread("ds-veg", "it-apple", [2, 3, 4, 5], 1, 5)
+        # ds-repeat: the same (subject, item) pairs at two timepoints, different values
+        for tp, vals in ((1, [1, 3, 5]), (2, [2, 4, 6])):
+            spread("ds-repeat", "it-rep", vals, 1, 7, timepoint=tp)
         await s.commit()
 
 
