@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Card,
@@ -45,6 +45,15 @@ const SearchPage = () => {
   // Metadata queries
   const { data: scaleTypes } = useQuery('scaleTypes', getScaleTypes);
   const { data: yearRange } = useQuery('yearRange', getYearRange);
+
+  // Seed the year slider from the data's real range rather than a hardcoded
+  // guess, once /metadata/years resolves. Spanning the full range narrows
+  // nothing, so this does not silently filter the default result set.
+  useEffect(() => {
+    if (yearRange?.min_year && yearRange?.max_year) {
+      form.setFieldsValue({ year_range: [yearRange.min_year, yearRange.max_year] });
+    }
+  }, [yearRange, form]);
 
   // Keep the year slider's form value in sync with what it displays, so a
   // submit always sends exactly the range the user sees
@@ -336,11 +345,14 @@ const SearchPage = () => {
               <Row gutter={16}>
                 <Col span={12}>
                   <Form.Item name="year_range" label="Year Range">
+                    {/* No defaultValue: inside a Form.Item the field is
+                        controlled, so antd ignores it and warns. The full
+                        range is seeded through the form once /metadata/years
+                        resolves. */}
                     <Slider
                       range
-                      min={yearRange?.min_year || 2000}
-                      max={yearRange?.max_year || 2024}
-                      defaultValue={[yearRange?.min_year || 2000, yearRange?.max_year || 2024]}
+                      min={yearRange?.min_year}
+                      max={yearRange?.max_year}
                     />
                   </Form.Item>
                 </Col>
