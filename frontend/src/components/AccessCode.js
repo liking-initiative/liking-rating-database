@@ -18,7 +18,7 @@ const codeStyle = {
   padding: '12px 14px',
   background: '#f5f5f5',
   borderRadius: 6,
-  fontSize: 12.5,
+  fontSize: 13.5,
   lineHeight: 1.55,
   overflowX: 'auto',
   fontFamily: "source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace",

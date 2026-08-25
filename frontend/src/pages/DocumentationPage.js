@@ -228,7 +228,7 @@ const DocumentationPage = () => {
           </Paragraph>
           <pre style={{
             margin: 0, padding: '12px 14px', background: '#f5f5f5',
-            borderRadius: 6, fontSize: 12.5, whiteSpace: 'pre-wrap',
+            borderRadius: 6, fontSize: 13.5, whiteSpace: 'pre-wrap',
           }}>
 {`Fernandez, K., Goyal, S., & Krajbich, I. A database of subjective
 evaluation ratings for decision-making research. (In preparation.)`}

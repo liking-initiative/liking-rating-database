@@ -209,7 +209,7 @@ const SearchPage = () => {
       render: (text, record) => (
         <div>
           <div style={{ fontWeight: 'bold' }}>{text}</div>
-          <div style={{ color: '#666', fontSize: '12px' }}>
+          <div style={{ color: '#4a4a4a', fontSize: '13.5px' }}>
             {record.study?.name}
           </div>
         </div>
@@ -474,7 +474,7 @@ const SearchPage = () => {
             </Space>
           </Form.Item>
           
-          <p style={{ color: '#666', fontSize: '14px' }}>
+          <p style={{ color: '#4a4a4a', fontSize: '14px' }}>
             Downloading {selectedDatasets.length} dataset(s) in {downloadFormat.toUpperCase()} format.
           </p>
         </Form>

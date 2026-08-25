@@ -138,7 +138,7 @@ const DatasetDetailPage = () => {
                 <Title level={2} style={{ margin: 0 }}>
                   {dataset.name}
                 </Title>
-                <div style={{ color: '#666' }}>
+                <div style={{ color: '#4a4a4a' }}>
                   From study: <strong>{dataset.study?.name}</strong>
                 </div>
               </div>
@@ -335,7 +335,7 @@ const DatasetDetailPage = () => {
               <Option value="spss">SPSS</Option>
             </Select>
           </div>
-          <div style={{ color: '#666', fontSize: '12px' }}>
+          <div style={{ color: '#4a4a4a', fontSize: '13.5px' }}>
             This will download the complete dataset including ratings, subject IDs, and item information.
           </div>
         </Space>

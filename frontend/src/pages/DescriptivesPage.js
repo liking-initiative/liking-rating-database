@@ -479,7 +479,7 @@ const DescriptivesPage = () => {
                       { title: 'Value', dataIndex: 'value', key: 'value', align: 'right' },
                     ]}
                   />
-                  <div style={{ marginTop: 12, fontSize: 12, color: '#6b6b6b' }}>
+                  <div style={{ marginTop: 12, fontSize: 13.5, color: '#4a4a4a' }}>
                     <div>
                       Observed range: {fmt(detail?.stats?.min, 2)} –{' '}
                       {fmt(detail?.stats?.max, 2)}

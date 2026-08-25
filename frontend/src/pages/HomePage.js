@@ -27,13 +27,13 @@ const HomePage = () => {
         <Title level={1}>
           Liking Rating Database
         </Title>
-        <Paragraph style={{ fontSize: '17px', color: '#666', maxWidth: '760px', margin: '0 auto' }}>
+        <Paragraph style={{ fontSize: '17px', color: '#4a4a4a', maxWidth: '760px', margin: '0 auto' }}>
           The Liking Rating Database is a collection of subjective liking
           ratings from published decision-making studies. It currently contains
           individual item level ratings from published studies providing
           researchers with access to a large set of preference data.
         </Paragraph>
-        <Paragraph style={{ color: '#8c8c8c', fontSize: 14, marginTop: 14 }}>
+        <Paragraph style={{ color: '#5a5a5a', fontSize: 14, marginTop: 14 }}>
           The Liking Initiative is built and maintained by{' '}
           <a
             href="https://kiantefernandez.com"

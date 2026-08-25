@@ -265,7 +265,7 @@ const ItemDetailPage = () => {
                              rating.mean_rating > 0.4 ? '#E78A00' : '#ff4d4f'
                     }}
                   />
-                  <div style={{ fontSize: '12px', color: '#666', marginTop: 8 }}>
+                  <div style={{ fontSize: '13.5px', color: '#4a4a4a', marginTop: 8 }}>
                     Std Dev: {rating.std_rating?.toFixed(2) || 'N/A'}
                   </div>
                 </Card>

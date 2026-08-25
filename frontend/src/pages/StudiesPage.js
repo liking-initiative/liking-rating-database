@@ -53,7 +53,7 @@ const StudiesPage = () => {
         <div>
           <div style={{ fontWeight: 'bold', marginBottom: 4 }}>{text}</div>
           {record.description && (
-            <div style={{ color: '#666', fontSize: '12px' }}>
+            <div style={{ color: '#4a4a4a', fontSize: '13.5px' }}>
               {record.description.length > 100
                 ? record.description.substring(0, 100) + '...'
                 : record.description

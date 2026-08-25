@@ -93,7 +93,7 @@ const StudyDetailPage = () => {
         <div>
           <div style={{ fontWeight: 'bold' }}>{text}</div>
           {record.description && (
-            <div style={{ color: '#666', fontSize: '12px' }}>
+            <div style={{ color: '#4a4a4a', fontSize: '13.5px' }}>
               {record.description}
             </div>
           )}

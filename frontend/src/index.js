@@ -27,6 +27,11 @@ const theme = {
     colorWarning: '#E78A00',
     colorLink: '#085AB3',
     colorBgLayout: '#f7f8fa',
+    // Ant's default secondary/description inks are pale enough to read as
+    // disabled. Darken them so quiet text is quiet, not faint.
+    colorTextSecondary: 'rgba(0, 0, 0, 0.78)',
+    colorTextDescription: 'rgba(0, 0, 0, 0.70)',
+    colorTextTertiary: 'rgba(0, 0, 0, 0.62)',
     borderRadius: 6,
     wireframe: false,
     fontFamily:

@@ -63,7 +63,7 @@ const ItemsPage = () => {
         <div>
           <div style={{ fontWeight: 'bold' }}>{text}</div>
           {record.standardized_name && record.standardized_name !== text && (
-            <div style={{ color: '#666', fontSize: '12px' }}>
+            <div style={{ color: '#4a4a4a', fontSize: '13.5px' }}>
               Also known as: {record.standardized_name}
             </div>
           )}
@@ -91,7 +91,7 @@ const ItemsPage = () => {
       render: (frequency) => (
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontWeight: 'bold' }}>{frequency}</div>
-          <div style={{ fontSize: '12px', color: '#666' }}>
+          <div style={{ fontSize: '13.5px', color: '#4a4a4a' }}>
             {frequency === 1 ? 'dataset' : 'datasets'}
           </div>
         </div>

@@ -313,7 +313,7 @@ const ItemNetworkCanvas = ({
       ctx.lineWidth = 3;
       ctx.strokeStyle = 'rgba(255,255,255,0.92)';
       ctx.strokeText(text, x, y);
-      ctx.fillStyle = n === active ? '#1f1f1f' : '#5b5b5b';
+      ctx.fillStyle = n === active ? '#1f1f1f' : '#3d3d3d';
       ctx.globalAlpha = active && !lit ? 0.25 : 1;
       ctx.fillText(text, x, y);
       ctx.globalAlpha = 1;
@@ -515,8 +515,8 @@ const NetworkLegend = ({ range }) => (
       display: 'flex',
       alignItems: 'center',
       gap: 18,
-      fontSize: 11,
-      color: '#6b6b6b',
+      fontSize: 13.5,
+      color: '#4a4a4a',
       background: 'rgba(255,255,255,0.82)',
       padding: '6px 10px',
       borderRadius: 6,
@@ -534,7 +534,7 @@ const NetworkLegend = ({ range }) => (
           background: `linear-gradient(90deg, ${rampColor(0)}, ${rampColor(0.5)}, ${rampColor(1)})`,
         }}
       />
-      <span style={{ color: '#9a9a9a' }}>
+      <span style={{ color: '#5a5a5a' }}>
         {range ? `${range[0].toFixed(2)} → ${range[1].toFixed(2)}` : 'low → high'}
       </span>
     </span>
@@ -544,7 +544,7 @@ const NetworkLegend = ({ range }) => (
         <span style={{ width: 6, height: 6, borderRadius: '50%', background: BLUE, opacity: 0.65 }} />
         <span style={{ width: 11, height: 11, borderRadius: '50%', background: BLUE, opacity: 0.65 }} />
       </span>
-      <span style={{ color: '#9a9a9a' }}>studies</span>
+      <span style={{ color: '#5a5a5a' }}>studies</span>
     </span>
   </div>
 );

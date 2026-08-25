@@ -146,7 +146,7 @@ const DownloadsPage = () => {
             <Card size="small">
               <div style={{ textAlign: 'center' }}>
                 <Title level={4} style={{ color: '#085AB3', margin: '8px 0' }}>CSV</Title>
-                <Paragraph style={{ fontSize: '12px', margin: 0 }}>
+                <Paragraph style={{ fontSize: '13.5px', margin: 0 }}>
                   Comma-separated values format, compatible with Excel, R, Python, and most data analysis tools.
                 </Paragraph>
               </div>
@@ -156,7 +156,7 @@ const DownloadsPage = () => {
             <Card size="small">
               <div style={{ textAlign: 'center' }}>
                 <Title level={4} style={{ color: '#52c41a', margin: '8px 0' }}>JSON</Title>
-                <Paragraph style={{ fontSize: '12px', margin: 0 }}>
+                <Paragraph style={{ fontSize: '13.5px', margin: 0 }}>
                   JavaScript Object Notation, ideal for web applications and API integration.
                 </Paragraph>
               </div>
@@ -166,7 +166,7 @@ const DownloadsPage = () => {
             <Card size="small">
               <div style={{ textAlign: 'center' }}>
                 <Title level={4} style={{ color: '#E78A00', margin: '8px 0' }}>Excel</Title>
-                <Paragraph style={{ fontSize: '12px', margin: 0 }}>
+                <Paragraph style={{ fontSize: '13.5px', margin: 0 }}>
                   Microsoft Excel format (.xlsx) with formatted sheets and metadata.
                 </Paragraph>
               </div>
@@ -176,7 +176,7 @@ const DownloadsPage = () => {
             <Card size="small">
               <div style={{ textAlign: 'center' }}>
                 <Title level={4} style={{ color: '#722ed1', margin: '8px 0' }}>SPSS</Title>
-                <Paragraph style={{ fontSize: '12px', margin: 0 }}>
+                <Paragraph style={{ fontSize: '13.5px', margin: 0 }}>
                   SPSS format (.sav) for direct import into statistical analysis software.
                 </Paragraph>
               </div>

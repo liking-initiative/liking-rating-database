@@ -540,7 +540,7 @@ const ItemAnalysisPage = () => {
                         to: '#4ecdc4',
                       }}
                     />
-                    <Text type="secondary" style={{ fontSize: '12px' }}>
+                    <Text type="secondary" style={{ fontSize: '13.5px' }}>
                       Lower std dev = higher consistency
                     </Text>
                   </div>
@@ -554,7 +554,7 @@ const ItemAnalysisPage = () => {
                         to: '#6bcf7f',
                       }}
                     />
-                    <Text type="secondary" style={{ fontSize: '12px' }}>
+                    <Text type="secondary" style={{ fontSize: '13.5px' }}>
                       Item appears in {ratings.length} datasets
                     </Text>
                   </div>

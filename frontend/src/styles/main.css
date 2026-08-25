@@ -20,7 +20,7 @@
   --border-gray: #e0e0e0;
 
   --text-primary: #1f1f1f;
-  --text-muted: #6b6b6b;
+  --text-muted: #4a4a4a;
 
   --content-gap: 20px;
   --radius: 6px;
@@ -280,9 +280,9 @@ code {
   border-left: 2px solid var(--border-gray);
   padding-left: 14px;
   margin: 0 0 20px;
-  color: var(--text-muted);
-  font-size: 13px;
-  line-height: 1.6;
+  color: var(--text-primary);
+  font-size: 14.5px;
+  line-height: 1.65;
   max-width: 76ch;
 }
 
@@ -297,8 +297,8 @@ code {
 
 .page-caption {
   color: var(--text-muted);
-  font-size: 12.5px;
-  line-height: 1.55;
+  font-size: 14px;
+  line-height: 1.6;
   margin: 0 0 12px;
 }
 
@@ -327,9 +327,9 @@ code {
 
 .desc-plot-title {
   margin: 0 0 4px;
-  font-size: 0.82rem;
+  font-size: 0.86rem;
   font-weight: 600;
-  color: var(--text-muted);
+  color: var(--text-primary);
   letter-spacing: 0.02em;
 }
 
