@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Card, Descriptions, Tag, Button, Space, Typography, Row, Col, Table, message, Modal, Select, Alert } from 'antd';
 import { useQuery } from 'react-query';
+import AccessCode from '../components/AccessCode';
 import {
   DownloadOutlined,
   DatabaseOutlined,
@@ -172,6 +173,8 @@ const DatasetDetailPage = () => {
         </Row>
       </Card>
 
+      <AccessCode dataset={{ id: datasetId, name: dataset.name }} />
+
       <Row gutter={[24, 24]}>
         {/* Dataset Details */}
         <Col xs={24} lg={16}>
@@ -223,7 +226,7 @@ const DatasetDetailPage = () => {
             <Space direction="vertical" style={{ width: '100%' }}>
               <div>
                 <div style={{ fontWeight: 'bold' }}>Subjects</div>
-                <div style={{ fontSize: '24px', color: '#1890ff' }}>
+                <div style={{ fontSize: '24px', color: '#085AB3' }}>
                   <TeamOutlined style={{ marginRight: 8 }} />
                   {dataset.n_subjects}
                 </div>
@@ -237,7 +240,7 @@ const DatasetDetailPage = () => {
               </div>
               <div>
                 <div style={{ fontWeight: 'bold' }}>Total Ratings</div>
-                <div style={{ fontSize: '24px', color: '#faad14' }}>
+                <div style={{ fontSize: '24px', color: '#E78A00' }}>
                   {(dataset.n_ratings ?? 0).toLocaleString()}
                 </div>
               </div>
@@ -277,6 +280,27 @@ const DatasetDetailPage = () => {
       {/* Rating Statistics */}
       {ratingStats && ratingStats.length > 0 && (
         <Card title="Rating Statistics by Item" style={{ marginTop: 24 }}>
+          {/* Repeated-phase datasets pool every phase into one mean here.
+              Say so, rather than letting the inflated n read as more subjects. */}
+          {dataset.n_ratings > dataset.n_subjects * dataset.n_items && (
+            <Alert
+              type="info"
+              showIcon
+              style={{ marginBottom: 16 }}
+              message="This dataset repeats its rating phase"
+              description={
+                <>
+                  The statistics below pool every phase, so each item&apos;s
+                  rating count is a multiple of the {dataset.n_subjects}{' '}
+                  subjects. To see the phases separately, use the{' '}
+                  <Link to={`/descriptives?dataset=${datasetId}`}>
+                    Descriptives
+                  </Link>{' '}
+                  page.
+                </>
+              }
+            />
+          )}
           <Table
             columns={statsColumns}
             dataSource={ratingStats}

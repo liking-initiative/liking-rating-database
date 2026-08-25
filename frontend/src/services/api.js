@@ -168,6 +168,45 @@ export const getSearchSuggestions = async (query) => {
   return response.data;
 };
 
+// Descriptives
+export const getDescriptivesIndex = async () => {
+  const response = await api.get('/descriptives/index');
+  return response.data;
+};
+
+export const getDescriptivesDatasetItems = async (datasetId) => {
+  const response = await api.get(`/descriptives/datasets/${datasetId}/items`);
+  return response.data;
+};
+
+export const getDescriptivesDatasetItem = async ({ datasetId, itemId, timepoint }) => {
+  const response = await api.get('/descriptives/dataset-item', {
+    params: { dataset_id: datasetId, item_id: itemId, timepoint },
+  });
+  return response.data;
+};
+
+export const getDescriptivesItem = async (itemId) => {
+  const response = await api.get(`/descriptives/items/${itemId}`);
+  return response.data;
+};
+
+// Whole-database archive
+export const getDatabaseArchiveInfo = async () => {
+  const response = await api.get('/database/archive/info');
+  return response.data;
+};
+
+// Absolute URL for the archive, so the browser downloads it directly rather
+// than buffering ~11 MB through axios.
+export const databaseArchiveUrl = () => {
+  const configured = process.env.REACT_APP_API_URL;
+  const base = configured && /^https?:\/\//i.test(configured)
+    ? configured
+    : `${window.location.origin}/api/v1`;
+  return `${base}/database/archive`;
+};
+
 // Utility functions
 export const downloadFile = (blob, filename) => {
   const url = window.URL.createObjectURL(blob);

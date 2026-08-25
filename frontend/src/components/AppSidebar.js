@@ -6,6 +6,8 @@ import {
   ExperimentOutlined, 
   AppleOutlined, 
   BarChartOutlined,
+  LineChartOutlined,
+  BookOutlined,
   InfoCircleOutlined 
 } from '@ant-design/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -36,6 +38,12 @@ const AppSidebar = () => {
       onClick: () => navigate('/items')
     },
     {
+      key: '/descriptives',
+      icon: <LineChartOutlined />,
+      label: 'Descriptives',
+      onClick: () => navigate('/descriptives')
+    },
+    {
       key: '/network',
       icon: <ShareAltOutlined />,
       label: 'Item Network',
@@ -46,6 +54,12 @@ const AppSidebar = () => {
       icon: <BarChartOutlined />,
       label: 'Visualizations',
       onClick: () => navigate('/visualizations')
+    },
+    {
+      key: '/docs',
+      icon: <BookOutlined />,
+      label: 'Documentation',
+      onClick: () => navigate('/docs')
     },
     {
       key: '/about',
