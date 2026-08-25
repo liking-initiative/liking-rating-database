@@ -1,4 +1,4 @@
-# likingdb — R
+# likingInitiative — R
 
 The Liking Rating Database in R: subjective liking ratings from published
 decision-making studies, as tibbles.
@@ -13,7 +13,7 @@ devtools::install_github("kiante-fernandez/liking-rating-database", subdir = "cl
 ## Use
 
 ```r
-library(likingdb)
+library(likingInitiative)
 
 list_datasets()          # 55 datasets
 list_studies()           # 33 publications
@@ -76,7 +76,7 @@ get_dataset("leeholyoak2021", version = "1.0.0")  # pin for reproducibility
 cache_info(); clear_cache()
 ```
 
-Set `options(likingdb.release_dir = )` or `LIKINGDB_RELEASE_DIR` to a
+Set `options(likingInitiative.release_dir = )` or `LIKING_INITIATIVE_RELEASE_DIR` to a
 directory built by `scripts/build_release.py` to work against an unreleased
 build.
 

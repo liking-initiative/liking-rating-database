@@ -91,8 +91,8 @@ Three ways, in rough order of convenience:
 
 ```python
 # 1. The Python client (clients/python)
-import likingdb
-db = likingdb.load_database()        # one request, 700,943 ratings
+import likingInitiative
+db = likingInitiative.load_database()        # one request, 700,943 ratings
 db["ratings"].groupby("item_name").normalized_rating.mean().nlargest(10)
 ```
 

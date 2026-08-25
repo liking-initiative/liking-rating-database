@@ -26,7 +26,7 @@ test_that("exactly the two repeated-phase datasets report multiple phases", {
 test_that("get_dataset returns data with its metadata", {
   skip_without_release()
   d <- get_dataset("leeholyoak2021")
-  expect_s3_class(d, "likingdb_dataset")
+  expect_s3_class(d, "likingInitiative_dataset")
   expect_equal(nrow(d$data), d$metadata$n_ratings)
   expect_equal(d$metadata$rating_scale_max, 100)
 })
@@ -68,7 +68,7 @@ test_that("an unknown dataset is a clear error", {
 test_that("get_item pools an item across datasets, first phase only", {
   skip_without_release()
   k <- get_item("kitkat")
-  expect_s3_class(k, "likingdb_item")
+  expect_s3_class(k, "likingInitiative_item")
   expect_gt(length(k$datasets), 1)
   phases <- tapply(k$data$timepoint, k$data$dataset_code,
                    function(x) length(unique(x)))

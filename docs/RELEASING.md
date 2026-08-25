@@ -38,8 +38,8 @@ Both test suites run against a local build, so nothing has to be published to
 verify it:
 
 ```bash
-LIKINGDB_RELEASE_DIR=$PWD/release python -m pytest clients/python/tests -q
-LIKINGDB_RELEASE_DIR=$PWD/release Rscript -e 'devtools::test("clients/r")'
+LIKING_INITIATIVE_RELEASE_DIR=$PWD/release python -m pytest clients/python/tests -q
+LIKING_INITIATIVE_RELEASE_DIR=$PWD/release Rscript -e 'devtools::test("clients/r")'
 ```
 
 ## 4. Publish
@@ -63,8 +63,8 @@ flattened set.
 ## 5. Verify what you published
 
 ```bash
-unset LIKINGDB_RELEASE_DIR
-python -c "import likingdb; print(likingdb.release_info())"
+unset LIKING_INITIATIVE_RELEASE_DIR
+python -c "import likingInitiative; print(likingInitiative.release_info())"
 ```
 
 That resolves the newest release from the GitHub API and downloads through

@@ -118,7 +118,7 @@ migration if it stays unused.
   a codebook, built once per process and cached. Surfaced on the Downloads
   page.
 - [x] ~~Python client package (`load_dataset(...)`) — the programmatic access
-  path; R after.~~ Done 2026-08-24: `clients/python` (`likingdb`) wraps the API
+  path; R after.~~ Done 2026-08-24: `clients/python` (`likingInitiative`) wraps the API
   and returns DataFrames. R still has no package — the site's generated R
   snippets use `jsonlite` against the REST API directly, which is verified to
   work end to end.
@@ -166,7 +166,7 @@ Found while checking the site for non-functional features before sharing it.
   ratings/studies/datasets/items plus a codebook, built once per process and
   cached. Compression runs off the event loop so the first request does not
   stall the API. Surfaced on the Downloads page.
-- [x] **Python client** — `clients/python` (`likingdb`) wraps the API and
+- [x] **Python client** — `clients/python` (`likingInitiative`) wraps the API and
   returns DataFrames; `load_database()` pulls the whole corpus in one request
   (700,943 rows in ~1s locally).
 - [x] **Generated R/Python snippets** on dataset pages and the Downloads page.
@@ -227,7 +227,7 @@ Found while checking the site for non-functional features before sharing it.
 - [ ] **R and Python packages become the programmatic access path.** Once the
   interface settles, both packages replace the generated snippets now shown on
   dataset pages — the per-page snippet code is a placeholder for exactly this.
-  `clients/python` (`likingdb`) is the first half; the R package is unwritten,
+  `clients/python` (`likingInitiative`) is the first half; the R package is unwritten,
   which is why the R snippets currently drive the REST API through `jsonlite`
   directly. Sequence: settle the interface, ship both packages, then swap the
   snippets to two-line package calls.

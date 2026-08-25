@@ -4,7 +4,7 @@ This release is the versioned form of the Liking Rating Database: subjective
 liking ratings from published decision-making studies, as plain tab-separated
 files.
 
-The `likingdb` packages for R and Python read these files directly. You can
+The `likingInitiative` packages for R and Python read these files directly. You can
 also use them without either package — they are ordinary TSVs.
 
 ## Files

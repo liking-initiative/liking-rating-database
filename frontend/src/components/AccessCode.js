@@ -4,15 +4,6 @@ import { CopyOutlined } from '@ant-design/icons';
 
 const { Text } = Typography;
 
-// The API base the generated snippets should point at. Snippets are meant to
-// be pasted into a terminal, so they need an absolute URL — the relative
-// '/api/v1' the app itself uses would not resolve outside the browser.
-const apiBase = () => {
-  const configured = process.env.REACT_APP_API_URL;
-  if (configured && /^https?:\/\//i.test(configured)) return configured;
-  return `${window.location.origin}/api/v1`;
-};
-
 const codeStyle = {
   margin: 0,
   padding: '12px 14px',
@@ -55,74 +46,66 @@ const CodeBlock = ({ code }) => {
 
 /**
  * Copy-paste code to pull data, in the two languages this field actually
- * uses. Every snippet runs against the live read-only API — the Python one
- * through the `likingdb` client in clients/python, the R one through plain
- * jsonlite, since there is no R package yet.
+ * uses. Both go through the `likingInitiative` packages, which read versioned
+ * release files rather than this API — so an analysis pins a version and
+ * keeps working whether or not this service is up.
  *
  * Pass a `dataset` ({ id, name }) for dataset-scoped code, or nothing for
  * whole-database code.
  */
 const AccessCode = ({ dataset, title = 'Get this data in R or Python' }) => {
-  const base = apiBase();
   // Dataset names are stored as "leeholyoak2021 Dataset"; the client resolves
   // either the code or the UUID, and the code reads better in an example.
   const code = dataset ? String(dataset.name).replace(/\s+Dataset$/i, '') : null;
 
   const python = dataset
-    ? `# pip install -e clients/python
-import likingdb
-likingdb.set_base_url("${base}")
+    ? `# pip install likingInitiative
+import likingInitiative as lk
 
-ratings = likingdb.load_ratings("${code}")
-print(ratings.shape)
-print(ratings.head())
+d = lk.get_dataset("${code}")
+d.data                     # polars DataFrame
+d.scale, d.timepoints      # response scale, rating phases
 
-# Cross-study comparisons must use normalized_rating (0-1), not rating
-print(ratings.groupby("item_name").normalized_rating.mean().nlargest(10))
+# Cross-study comparisons must use normalized_rating, not rating
+d.data.group_by("item_name").agg(
+    pl.col("normalized_rating").mean()
+).sort("normalized_rating", descending=True).head(10)
 
-print(likingdb.cite("${code}"))`
-    : `# pip install -e clients/python
-import likingdb
-likingdb.set_base_url("${base}")
+print(d.cite())`
+    : `# pip install likingInitiative
+import likingInitiative as lk
 
-db = likingdb.load_database()          # one request, the whole corpus
-ratings = db["ratings"]                # 700,943 rows
-print(ratings.shape)
-print(db["codebook"])
+db = lk.load_database()    # the whole corpus, one download
+db["ratings"]              # 700,943 rows
 
-# Cross-study comparisons must use normalized_rating (0-1), not rating
-print(ratings.groupby("item_name").normalized_rating.mean().nlargest(10))`;
+# One item across every study that used it
+lk.get_item("kitkat").by_dataset()
+
+# Cross-study comparisons must use normalized_rating, not rating`;
 
   const r = dataset
-    ? `library(jsonlite)
-base <- "${base}"
+    ? `# devtools::install_github(
+#   "kiante-fernandez/liking-rating-database", subdir = "clients/r")
+library(likingInitiative)
 
-# Page through this dataset's ratings
-page <- fromJSON(paste0(base, "/ratings?dataset_id=${dataset.id}&page_size=1000"))
-ratings <- page$items
-while (page$page < page$pages) {
-  page <- fromJSON(paste0(base, "/ratings?dataset_id=${dataset.id}",
-                          "&page_size=1000&page=", page$page + 1))
-  ratings <- rbind(ratings, page$items)
-}
-nrow(ratings)
+d <- get_dataset("${code}")
+head(d$data)
+d$metadata$rating_scale_max
 
-# Cross-study comparisons must use normalized_rating (0-1), not rating
-aggregate(normalized_rating ~ item_name, ratings, mean)`
-    : `library(jsonlite)
-base <- "${base}"
+# Cross-study comparisons must use normalized_rating, not rating
+aggregate(normalized_rating ~ item_name, d$data, mean)
 
-# The whole database in one download: ratings + metadata + codebook
-tmp <- tempfile(fileext = ".zip")
-download.file(paste0(base, "/database/archive"), tmp, mode = "wb")
-dir <- tempfile(); dir.create(dir); unzip(tmp, exdir = dir)
+cite(d)`
+    : `# devtools::install_github(
+#   "kiante-fernandez/liking-rating-database", subdir = "clients/r")
+library(likingInitiative)
 
-ratings <- read.csv(file.path(dir, "liking_rating_database", "ratings.csv"),
-                    colClasses = c(subject_id = "character"))
-nrow(ratings)   # 700943
+db <- load_database()      # the whole corpus, one download
+nrow(db$ratings)           # 700943
 
-# Cross-study comparisons must use normalized_rating (0-1), not rating
-aggregate(normalized_rating ~ item_name, ratings, mean)`;
+# One item across every study that used it
+k <- get_item("kitkat")
+aggregate(normalized_rating ~ dataset_code, k$data, mean)`;
 
   return (
     <Card title={title} size="small" style={{ marginBottom: 24 }}>

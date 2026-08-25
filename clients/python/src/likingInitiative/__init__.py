@@ -1,18 +1,18 @@
 """
-likingdb — the Liking Rating Database in Python.
+likingInitiative — the Liking Rating Database in Python.
 
 Subjective liking ratings from published decision-making studies, as polars
 frames.
 
-    import likingdb
+    import likingInitiative
 
-    likingdb.list_datasets()                      # the catalogue
-    d = likingdb.get_dataset("leeholyoak2021")    # one study's ratings
+    likingInitiative.list_datasets()                      # the catalogue
+    d = likingInitiative.get_dataset("leeholyoak2021")    # one study's ratings
     d.data                                        # polars DataFrame
     d.cite()
 
-    likingdb.get_item("kitkat")                   # one item, every study
-    likingdb.load_database()                      # the whole corpus
+    likingInitiative.get_item("kitkat")                   # one item, every study
+    likingInitiative.load_database()                      # the whole corpus
 
 Data comes from versioned release files, not a live service, so a pinned
 version returns the same rows however long from now. Assets are cached
@@ -28,7 +28,7 @@ Two things to get right:
   datasets is two different people; key on ``(dataset_code, subject_id)``.
 """
 from .release import (
-    LikingDBError,
+    LikingInitiativeError,
     cache_info,
     clear_cache,
     resolve_version,
@@ -54,7 +54,7 @@ __all__ = [
     "clear_cache",
     "Dataset",
     "Item",
-    "LikingDBError",
+    "LikingInitiativeError",
 ]
 
 __version__ = "0.2.0"

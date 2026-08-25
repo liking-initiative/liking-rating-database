@@ -6,7 +6,7 @@ from typing import Any, Dict, List
 import polars as pl
 
 from .citation import DATABASE_CITATION
-from .release import LikingDBError, load_catalog
+from .release import LikingInitiativeError, load_catalog
 from .database import load_database
 
 
@@ -63,8 +63,8 @@ def get_item(item: str, version: str = "latest") -> Item:
     lowered = item.lower()
     matched = ratings.filter(pl.col("item_name").str.to_lowercase() == lowered)
     if matched.height == 0:
-        raise LikingDBError(
-            f"no item named '{item}'. Use likingdb.list_items() to see the stimuli."
+        raise LikingInitiativeError(
+            f"no item named '{item}'. Use likingInitiative.list_items() to see the stimuli."
         )
 
     # First phase only, per dataset.

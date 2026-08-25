@@ -1,4 +1,4 @@
 library(testthat)
-library(likingdb)
+library(likingInitiative)
 
-test_check("likingdb")
+test_check("likingInitiative")

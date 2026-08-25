@@ -1,4 +1,4 @@
-# likingdb — Python
+# likingInitiative — Python
 
 The Liking Rating Database in Python: subjective liking ratings from
 published decision-making studies, as [polars](https://pola.rs) frames.
@@ -12,19 +12,19 @@ pip install -e clients/python     # from a checkout
 ## Use
 
 ```python
-import likingdb
+import likingInitiative
 
-likingdb.list_datasets()                      # 55 datasets
-likingdb.list_studies()                       # 33 publications
-likingdb.list_items()                         # 2,297 stimuli
+likingInitiative.list_datasets()                      # 55 datasets
+likingInitiative.list_studies()                       # 33 publications
+likingInitiative.list_items()                         # 2,297 stimuli
 
-d = likingdb.get_dataset("leeholyoak2021")
+d = likingInitiative.get_dataset("leeholyoak2021")
 d.data                                        # polars DataFrame
 d.scale                                       # (1.0, 100.0)
 d.timepoints                                  # [1, 2, 3]
 print(d.cite())
 
-likingdb.get_dataset(["leeholyoak2021", "leehare2023exp2"]).data   # stacked
+likingInitiative.get_dataset(["leeholyoak2021", "leehare2023exp2"]).data   # stacked
 ```
 
 ### One item across every study that used it
@@ -32,14 +32,14 @@ likingdb.get_dataset(["leeholyoak2021", "leehare2023exp2"]).data   # stacked
 The cross-study view — the thing this database is built for:
 
 ```python
-k = likingdb.get_item("kitkat")     # 1,842 ratings across 28 datasets
+k = likingInitiative.get_item("kitkat")     # 1,842 ratings across 28 datasets
 k.by_dataset()                      # mean / sd / median per study, 0-1 scale
 ```
 
 ### The whole corpus
 
 ```python
-db = likingdb.load_database()
+db = likingInitiative.load_database()
 db["ratings"]        # 700,943 rows
 ```
 
@@ -59,10 +59,10 @@ Two datasets repeat the whole rating phase, so `(subject_id, item_id)` alone
 is not unique for them:
 
 ```python
-d = likingdb.get_dataset("leeholyoak2021")        # phases 1, 2, 3
+d = likingInitiative.get_dataset("leeholyoak2021")        # phases 1, 2, 3
 d.data.group_by("timepoint").agg(pl.col("normalized_rating").mean())
 
-likingdb.get_dataset("leeholyoak2021", timepoint=2)   # one phase
+likingInitiative.get_dataset("leeholyoak2021", timepoint=2)   # one phase
 ```
 
 `get_item()` uses each dataset's first phase only, so a repeated-phase study
@@ -74,12 +74,12 @@ Data comes from versioned release files, not a live service, so a pinned
 version returns the same rows however long from now.
 
 ```python
-likingdb.release_info()          # version, date, counts, migrations applied
-likingdb.get_dataset("leeholyoak2021", version="1.0.0")
-likingdb.cache_info();  likingdb.clear_cache()
+likingInitiative.release_info()          # version, date, counts, migrations applied
+likingInitiative.get_dataset("leeholyoak2021", version="1.0.0")
+likingInitiative.cache_info();  likingInitiative.clear_cache()
 ```
 
-Set `LIKINGDB_RELEASE_DIR` to a directory built by
+Set `LIKING_INITIATIVE_RELEASE_DIR` to a directory built by
 `scripts/build_release.py` to work against an unreleased build.
 
 ## API

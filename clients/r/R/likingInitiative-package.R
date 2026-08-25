@@ -1,4 +1,4 @@
-#' likingdb: the Liking Rating Database in R
+#' likingInitiative: the Liking Rating Database in R
 #'
 #' Subjective liking ratings from published decision-making studies.
 #'

@@ -8,7 +8,7 @@
 #'
 #' @param item An item name, e.g. `"kitkat"`.
 #' @param version Release version, or `"latest"`.
-#' @return An object of class `likingdb_item` with `data`, `datasets` and
+#' @return An object of class `likingInitiative_item` with `data`, `datasets` and
 #'   `version`.
 #' @examples
 #' \donttest{
@@ -44,12 +44,12 @@ get_item <- function(item, version = "latest") {
       datasets = entries,
       version = resolve_version(version)
     ),
-    class = "likingdb_item"
+    class = "likingInitiative_item"
   )
 }
 
 #' @export
-print.likingdb_item <- function(x, ...) {
+print.likingInitiative_item <- function(x, ...) {
   cli::cli_text("{.strong {x$name}} — {nrow(x$data)} ratings across {length(x$datasets)} datasets")
   cli::cli_text("compare on {.field normalized_rating} · release v{x$version}")
   invisible(x)

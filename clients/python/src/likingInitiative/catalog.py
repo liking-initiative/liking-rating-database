@@ -5,7 +5,7 @@ from typing import Any, Dict
 
 import polars as pl
 
-from .release import LikingDBError, asset_path, load_catalog
+from .release import LikingInitiativeError, asset_path, load_catalog
 
 
 def release_info(version: str = "latest") -> Dict[str, Any]:
@@ -54,8 +54,8 @@ def dataset_entry(code: str, version: str = "latest") -> Dict[str, Any]:
         return prefix[0]
     if len(prefix) > 1:
         names = ", ".join(sorted(d["dataset_code"] for d in prefix))
-        raise LikingDBError(f"'{code}' is ambiguous; matches: {names}")
+        raise LikingInitiativeError(f"'{code}' is ambiguous; matches: {names}")
 
-    raise LikingDBError(
-        f"no dataset named '{code}'. Use likingdb.list_datasets() to see the catalogue."
+    raise LikingInitiativeError(
+        f"no dataset named '{code}'. Use likingInitiative.list_datasets() to see the catalogue."
     )

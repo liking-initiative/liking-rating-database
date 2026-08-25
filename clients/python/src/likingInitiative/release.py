@@ -5,7 +5,7 @@ The client reads versioned release files, never the live API. That keeps an
 analysis reproducible — a pinned version returns the same bytes in three
 years — and keeps the package working when the web service is not.
 
-Assets come from GitHub Releases. Set ``LIKINGDB_RELEASE_DIR`` to a local
+Assets come from GitHub Releases. Set ``LIKING_INITIATIVE_RELEASE_DIR`` to a local
 directory built by ``scripts/build_release.py`` to work against an unreleased
 build; that is also what the test suite uses, so tests never touch the
 network.
@@ -21,14 +21,14 @@ from typing import Any, Dict, Optional
 import requests
 from platformdirs import user_cache_dir
 
-REPO = os.environ.get("LIKINGDB_REPO", "kiante-fernandez/liking-rating-database")
+REPO = os.environ.get("LIKING_INITIATIVE_REPO", "kiante-fernandez/liking-rating-database")
 GITHUB_API = "https://api.github.com"
 TIMEOUT = 120
 
 CATALOG = "catalog.json"
 
 
-class LikingDBError(RuntimeError):
+class LikingInitiativeError(RuntimeError):
     """Raised when a release, asset, or name cannot be resolved."""
 
 
@@ -38,10 +38,10 @@ class LikingDBError(RuntimeError):
 def cache_dir(version: Optional[str] = None, create: bool = True) -> Path:
     """Where downloaded assets live.
 
-    Honours ``LIKINGDB_CACHE_DIR`` so tests and CI never write to a real
+    Honours ``LIKING_INITIATIVE_CACHE_DIR`` so tests and CI never write to a real
     user cache.
     """
-    base = Path(os.environ.get("LIKINGDB_CACHE_DIR", user_cache_dir("likingdb")))
+    base = Path(os.environ.get("LIKING_INITIATIVE_CACHE_DIR", user_cache_dir("likingInitiative")))
     path = base / version if version else base
     if create:
         path.mkdir(parents=True, exist_ok=True)
@@ -81,14 +81,14 @@ _resolved: Dict[str, str] = {}
 
 
 def local_release_dir() -> Optional[Path]:
-    """A locally built release directory, if LIKINGDB_RELEASE_DIR points at one."""
-    raw = os.environ.get("LIKINGDB_RELEASE_DIR")
+    """A locally built release directory, if LIKING_INITIATIVE_RELEASE_DIR points at one."""
+    raw = os.environ.get("LIKING_INITIATIVE_RELEASE_DIR")
     if not raw:
         return None
     path = Path(raw).expanduser()
     if not (path / CATALOG).exists():
-        raise LikingDBError(
-            f"LIKINGDB_RELEASE_DIR={path} has no {CATALOG}; "
+        raise LikingInitiativeError(
+            f"LIKING_INITIATIVE_RELEASE_DIR={path} has no {CATALOG}; "
             "build one with scripts/build_release.py"
         )
     return path
@@ -113,20 +113,20 @@ def resolve_version(version: str = "latest") -> str:
     try:
         response = requests.get(url, timeout=TIMEOUT)
     except requests.RequestException as exc:  # pragma: no cover - network
-        raise LikingDBError(f"could not reach GitHub to resolve a release: {exc}") from exc
+        raise LikingInitiativeError(f"could not reach GitHub to resolve a release: {exc}") from exc
     if response.status_code == 404:
-        raise LikingDBError(
+        raise LikingInitiativeError(
             f"{REPO} has no published release yet. Build one locally with "
-            "scripts/build_release.py and set LIKINGDB_RELEASE_DIR to it."
+            "scripts/build_release.py and set LIKING_INITIATIVE_RELEASE_DIR to it."
         )
     if not response.ok:
-        raise LikingDBError(
+        raise LikingInitiativeError(
             f"GitHub returned {response.status_code} resolving the latest release"
         )
     tag = response.json().get("tag_name", "")
     resolved = tag[1:] if tag.startswith("v") else tag
     if not resolved:
-        raise LikingDBError("latest release has no tag name")
+        raise LikingInitiativeError("latest release has no tag name")
     _resolved["latest"] = resolved
     return resolved
 
@@ -141,7 +141,7 @@ def asset_path(name: str, version: str = "latest", force: bool = False) -> Path:
     if local is not None:
         path = local / name
         if not path.exists():
-            raise LikingDBError(f"{name} is not in {local}")
+            raise LikingInitiativeError(f"{name} is not in {local}")
         return path
 
     resolved = resolve_version(version)
@@ -156,9 +156,9 @@ def asset_path(name: str, version: str = "latest", force: bool = False) -> Path:
     try:
         response = requests.get(url, timeout=TIMEOUT, stream=True)
     except requests.RequestException as exc:  # pragma: no cover - network
-        raise LikingDBError(f"could not download {name}: {exc}") from exc
+        raise LikingInitiativeError(f"could not download {name}: {exc}") from exc
     if not response.ok:
-        raise LikingDBError(
+        raise LikingInitiativeError(
             f"{name} is not in release v{resolved} (HTTP {response.status_code})"
         )
 

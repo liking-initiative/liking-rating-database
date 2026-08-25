@@ -20,7 +20,7 @@ cite <- function(x, ...) UseMethod("cite")
 cite.default <- function(x, ...) DATABASE_CITATION
 
 #' @export
-cite.likingdb_dataset <- function(x, ...) {
+cite.likingInitiative_dataset <- function(x, ...) {
   m <- x$metadata
   citation <- m$citation %||% m$study_name %||% ""
   if (!is.null(m$paper_doi)) {
@@ -30,7 +30,7 @@ cite.likingdb_dataset <- function(x, ...) {
 }
 
 #' @export
-cite.likingdb_item <- function(x, ...) {
+cite.likingInitiative_item <- function(x, ...) {
   refs <- unique(vapply(x$datasets, function(d) d$citation %||% d$study_name %||% "",
                         character(1)))
   refs <- sort(refs[nzchar(refs)])
@@ -51,7 +51,7 @@ cite.likingdb_item <- function(x, ...) {
 bibtex <- function(x, ...) UseMethod("bibtex")
 
 #' @export
-bibtex.likingdb_dataset <- function(x, ...) {
+bibtex.likingInitiative_dataset <- function(x, ...) {
   m <- x$metadata
   authors <- paste(trimws(strsplit(m$authors %||% "", ";")[[1]]), collapse = " and ")
   key <- paste0(tolower(gsub("[^A-Za-z]", "", m$first_author %||% "study")), m$year %||% "")

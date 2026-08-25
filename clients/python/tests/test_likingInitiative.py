@@ -1,8 +1,8 @@
 """
-Tests for the likingdb client.
+Tests for the likingInitiative client.
 
 Hermetic: every test runs against a release directory built by
-scripts/build_release.py and pointed at with LIKINGDB_RELEASE_DIR, so nothing
+scripts/build_release.py and pointed at with LIKING_INITIATIVE_RELEASE_DIR, so nothing
 here touches GitHub or the API.
 """
 import os
@@ -22,15 +22,15 @@ pytestmark = pytest.mark.skipif(
 
 @pytest.fixture(scope="session", autouse=True)
 def _use_local_release():
-    os.environ["LIKINGDB_RELEASE_DIR"] = str(RELEASE)
+    os.environ["LIKING_INITIATIVE_RELEASE_DIR"] = str(RELEASE)
     yield
-    os.environ.pop("LIKINGDB_RELEASE_DIR", None)
+    os.environ.pop("LIKING_INITIATIVE_RELEASE_DIR", None)
 
 
 @pytest.fixture(scope="session")
 def L():
-    import likingdb
-    return likingdb
+    import likingInitiative
+    return likingInitiative
 
 
 # -- catalogue -------------------------------------------------------------
@@ -100,7 +100,7 @@ def test_dataset_accepts_prefix_and_id(L):
 
 
 def test_unknown_dataset_raises(L):
-    with pytest.raises(L.LikingDBError, match="no dataset named"):
+    with pytest.raises(L.LikingInitiativeError, match="no dataset named"):
         L.get_dataset("definitely-not-a-dataset")
 
 
@@ -135,7 +135,7 @@ def test_get_item_uses_first_phase_only(L):
 
 
 def test_unknown_item_raises(L):
-    with pytest.raises(L.LikingDBError, match="no item named"):
+    with pytest.raises(L.LikingInitiativeError, match="no item named"):
         L.get_item("not-a-real-food")
 
 

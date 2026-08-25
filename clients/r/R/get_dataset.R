@@ -12,7 +12,7 @@
 #'   dataset id, or a character vector of them.
 #' @param version Release version, or `"latest"`.
 #' @param timepoint Optional rating phase to keep.
-#' @return An object of class `likingdb_dataset` with elements `data` (a
+#' @return An object of class `likingInitiative_dataset` with elements `data` (a
 #'   tibble), `metadata`, `dataset_code` and `version`. For several datasets, a
 #'   named list of them.
 #' @examples
@@ -27,7 +27,7 @@ get_dataset <- function(dataset, version = "latest", timepoint = NULL) {
   if (length(dataset) > 1) {
     out <- lapply(dataset, get_dataset, version = version, timepoint = timepoint)
     names(out) <- vapply(out, function(d) d$dataset_code, character(1))
-    class(out) <- c("likingdb_dataset_list", "list")
+    class(out) <- c("likingInitiative_dataset_list", "list")
     return(out)
   }
 
@@ -54,12 +54,12 @@ get_dataset <- function(dataset, version = "latest", timepoint = NULL) {
       dataset_code = entry$dataset_code,
       version = resolve_version(version)
     ),
-    class = "likingdb_dataset"
+    class = "likingInitiative_dataset"
   )
 }
 
 #' @export
-print.likingdb_dataset <- function(x, ...) {
+print.likingInitiative_dataset <- function(x, ...) {
   m <- x$metadata
   phases <- length(m$timepoints)
   cli::cli_text("{.strong {m$dataset_code}} — {m$first_author} ({m$year})")

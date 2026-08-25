@@ -10,5 +10,5 @@ skip_without_release <- function() {
   if (!file.exists(file.path(dir, "catalog.json"))) {
     testthat::skip("no local release; build one with scripts/build_release.py")
   }
-  options(likingdb.release_dir = dir)
+  options(likingInitiative.release_dir = dir)
 }

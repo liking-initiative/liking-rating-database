@@ -4,7 +4,7 @@
 #' pinned version returns the same rows however long from now, and analyses
 #' keep working when the web service does not.
 #'
-#' Set the `likingdb.release_dir` option (or the `LIKINGDB_RELEASE_DIR`
+#' Set the `likingInitiative.release_dir` option (or the `LIKING_INITIATIVE_RELEASE_DIR`
 #' environment variable) to a directory built by `scripts/build_release.py` to
 #' work against an unreleased build. The test suite uses this, so tests never
 #' touch the network.
@@ -14,7 +14,7 @@
 NULL
 
 .repo <- function() {
-  Sys.getenv("LIKINGDB_REPO", "kiante-fernandez/liking-rating-database")
+  Sys.getenv("LIKING_INITIATIVE_REPO", "kiante-fernandez/liking-rating-database")
 }
 
 .catalog_file <- "catalog.json"
@@ -23,14 +23,14 @@ NULL
 
 #' Path to the package's asset cache
 #'
-#' Honours `options(likingdb.cache_dir = )` so `R CMD check` and tests never
+#' Honours `options(likingInitiative.cache_dir = )` so `R CMD check` and tests never
 #' write into a real user cache.
 #' @keywords internal
 #' @noRd
 get_cache_dir <- function(version = NULL, create = TRUE) {
   base <- getOption(
-    "likingdb.cache_dir",
-    Sys.getenv("LIKINGDB_CACHE_DIR", unset = tools::R_user_dir("likingdb", "cache"))
+    "likingInitiative.cache_dir",
+    Sys.getenv("LIKING_INITIATIVE_CACHE_DIR", unset = tools::R_user_dir("likingInitiative", "cache"))
   )
   path <- if (is.null(version)) base else fs::path(base, version)
   if (create && !fs::dir_exists(path)) fs::dir_create(path, recurse = TRUE)
@@ -89,7 +89,7 @@ clear_cache <- function(version = NULL) {
 #' @keywords internal
 #' @noRd
 local_release_dir <- function() {
-  raw <- getOption("likingdb.release_dir", Sys.getenv("LIKINGDB_RELEASE_DIR", ""))
+  raw <- getOption("likingInitiative.release_dir", Sys.getenv("LIKING_INITIATIVE_RELEASE_DIR", ""))
   if (!nzchar(raw)) return(NULL)
   path <- fs::path_expand(raw)
   if (!fs::file_exists(fs::path(path, .catalog_file))) {
@@ -121,7 +121,7 @@ resolve_version <- function(version = "latest") {
   if (status == 404) {
     cli::cli_abort(c(
       "{.val {.repo()}} has no published release yet.",
-      i = "Build one with {.code scripts/build_release.py} and set {.envvar LIKINGDB_RELEASE_DIR}."
+      i = "Build one with {.code scripts/build_release.py} and set {.envvar LIKING_INITIATIVE_RELEASE_DIR}."
     ))
   }
   if (status != 200) cli::cli_abort("GitHub returned {status} resolving the latest release.")
