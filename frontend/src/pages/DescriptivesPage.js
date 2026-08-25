@@ -10,6 +10,7 @@ import {
   getDescriptivesDatasetItems,
   getDescriptivesDatasetItem,
   getDescriptivesItem,
+  getSimilarItems,
 } from '../services/api';
 
 const { Title, Text, Paragraph } = Typography;
@@ -166,6 +167,74 @@ const RainCloud = ({ panel, title, height = 170, hoverLabels, scaleRange }) => {
   );
 };
 
+/** Neighbour list for preference similarity. r is bounded, so a bar reads
+ *  faster than the number alone; the number stays for anyone who needs it. */
+const SimilarityTable = ({ rows, itemId }) => (
+  <Table
+    size="small"
+    rowKey="item_id"
+    dataSource={rows}
+    pagination={false}
+    scroll={{ x: 'max-content' }}
+    columns={[
+      {
+        title: 'Item',
+        dataIndex: 'item_name',
+        key: 'item_name',
+        render: (name, row) => (
+          <Link to={`/items/${row.item_id}`} title={`compare with ${itemId}`}>
+            {name}
+          </Link>
+        ),
+      },
+      {
+        title: 'Category',
+        dataIndex: 'category',
+        key: 'category',
+        render: (c) => (c ? <Tag>{c}</Tag> : '—'),
+      },
+      {
+        title: 'r',
+        dataIndex: 'r',
+        key: 'r',
+        align: 'right',
+        render: (r) => (
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+            <span
+              aria-hidden
+              style={{
+                display: 'inline-block',
+                width: Math.max(2, Math.abs(r) * 44),
+                height: 8,
+                borderRadius: 2,
+                background: r >= 0 ? BLUE : ORANGE,
+                opacity: 0.55,
+              }}
+            />
+            {fmt(r, 2)}
+          </span>
+        ),
+      },
+      {
+        // One column, not two: side by side these tables are too narrow to
+        // show a fifth column without clipping it.
+        title: 'Raters',
+        dataIndex: 'n_subjects',
+        key: 'n_subjects',
+        align: 'right',
+        render: (n, row) => (
+          <span title={`${n} shared raters across ${row.n_datasets} dataset(s)`}>
+            {n}
+            <Text type="secondary" style={{ fontSize: 11 }}>
+              {` / ${row.n_datasets} ds`}
+            </Text>
+          </span>
+        ),
+      },
+    ]}
+  />
+);
+
 const DescriptivesPage = () => {
   const [params, setParams] = useSearchParams();
   const datasetId = params.get('dataset') || undefined;
@@ -195,6 +264,12 @@ const DescriptivesPage = () => {
     ['descriptives-across', itemId],
     () => getDescriptivesItem(itemId),
     { enabled: !!itemId, keepPreviousData: true }
+  );
+
+  const { data: similar, isLoading: similarLoading } = useQuery(
+    ['descriptives-similar', itemId],
+    () => getSimilarItems(itemId, { limit: 12 }),
+    { enabled: !!itemId, keepPreviousData: true, retry: false }
   );
 
   const selectedDataset = useMemo(
@@ -476,6 +551,52 @@ const DescriptivesPage = () => {
                   pagination={{ pageSize: 10, hideOnSinglePage: true }}
                   scroll={{ x: 'max-content' }}
                 />
+              </>
+            )}
+          </Card>
+
+          <Card
+            style={{ marginTop: 24 }}
+            title={
+              <Space wrap>
+                <span>Items with similar preference</span>
+                {similar && (
+                  <Tag color="blue">{similar.n_candidates} compared</Tag>
+                )}
+              </Space>
+            }
+          >
+            {similarLoading && !similar ? (
+              <Spin />
+            ) : !similar ? (
+              <Empty description="No other item shares enough raters with this one to compare." />
+            ) : (
+              <>
+                <Text type="secondary" style={{ fontSize: 13 }}>
+                  Similarity by <strong>preference</strong>, not by name: two
+                  items are close when the people who rated both tended to like
+                  them together. Correlations are computed within each dataset
+                  on person-centred ratings — otherwise items would look alike
+                  merely because some people rate everything highly — then
+                  combined across datasets with Fisher&apos;s z, weighted by
+                  the number of shared raters. Pairs need at least{' '}
+                  {similar.min_shared_subjects} shared raters in a dataset to
+                  count.
+                </Text>
+                <Row gutter={[24, 24]} style={{ marginTop: 16 }}>
+                  <Col xs={24} lg={12}>
+                    <Title level={5} style={{ marginTop: 0 }}>
+                      Liked by the same people
+                    </Title>
+                    <SimilarityTable rows={similar.most_similar} itemId={itemId} />
+                  </Col>
+                  <Col xs={24} lg={12}>
+                    <Title level={5} style={{ marginTop: 0 }}>
+                      Liked by opposite people
+                    </Title>
+                    <SimilarityTable rows={similar.most_dissimilar} itemId={itemId} />
+                  </Col>
+                </Row>
               </>
             )}
           </Card>

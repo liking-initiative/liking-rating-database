@@ -41,6 +41,7 @@ const endpoints = [
   { key: 9, ep: 'GET /statistics', ret: 'Database-wide totals' },
   { key: 10, ep: 'GET /descriptives/dataset-item', ret: 'Distribution of one item in one dataset' },
   { key: 11, ep: 'GET /descriptives/items/{id}', ret: 'One item summarised across every dataset' },
+  { key: 15, ep: 'GET /descriptives/items/{id}/similar', ret: 'Items rated similarly by the same people' },
   { key: 12, ep: 'GET /analytics/item-network', ret: 'Item co-occurrence network with a layout' },
   { key: 13, ep: 'POST /download', ret: 'Build a csv/json/xlsx/spss export' },
   { key: 14, ep: 'GET /database/archive', ret: 'The whole database as one ZIP + codebook' },
@@ -160,6 +161,51 @@ const DocumentationPage = () => {
           </Paragraph>
         </Card>
 
+        <Card id="similarity" title="Preference similarity" style={{ marginBottom: 24 }}>
+          <Paragraph>
+            The Descriptives page ranks items by <strong>preference</strong>{' '}
+            similarity: two items are close when the people who rated both
+            tended to like them together. It says nothing about the items&apos;
+            names or descriptions — only about how they were rated.
+          </Paragraph>
+          <Paragraph>
+            For each dataset containing the target item, ratings are{' '}
+            <strong>person-centred</strong> (each subject&apos;s mean across
+            the items they rated is subtracted), then Pearson correlated over
+            the subjects who rated both items. Per-dataset correlations are
+            combined with Fisher&apos;s <Text code>z</Text>, weighted by{' '}
+            <Text code>n − 3</Text>.
+          </Paragraph>
+          <Alert
+            type="info"
+            showIcon
+            style={{ marginBottom: 16 }}
+            message="Why person-centring is not optional here"
+            description={
+              <>
+                Without it, two items correlate merely because some people rate
+                everything highly and others rate everything low — a
+                response-style effect, not shared preference. In{' '}
+                <Text code>foljac2</Text> that artifact is total: each
+                subject&apos;s ratings span about 0.006 while subject means
+                span about 0.6, so uncentred, every pair of items in that
+                dataset correlates at r = 1.00.
+              </>
+            }
+          />
+          <Paragraph style={{ marginBottom: 0 }}>
+            Two consequences worth knowing. Centring makes each subject&apos;s
+            row sum to zero, which biases correlations down by roughly{' '}
+            <Text code>−1/(k − 1)</Text> for <Text code>k</Text> items — under
+            −0.02 at the 60–144 items typical here, but exactly −1 at{' '}
+            <Text code>k = 2</Text>, so datasets with fewer than 20 items are
+            skipped. And a pair needs at least 10 shared raters within a
+            dataset to contribute at all, so a high{' '}
+            <Text code>r</Text> on few raters never outranks a solid one on
+            many.
+          </Paragraph>
+        </Card>
+
         <Card id="categories" title="Item categories" style={{ marginBottom: 24 }}>
           <Paragraph style={{ marginBottom: 0 }}>
             Item categories are derived from item names by a curated lexicon —
@@ -226,6 +272,7 @@ evaluation ratings for decision-making research. (In preparation.)`}
             { key: 'overview', href: '#overview', title: "What's in the database" },
             { key: 'gotchas', href: '#gotchas', title: 'Two things to get right' },
             { key: 'ratings', href: '#ratings', title: 'The ratings table' },
+            { key: 'similarity', href: '#similarity', title: 'Preference similarity' },
             { key: 'categories', href: '#categories', title: 'Item categories' },
             { key: 'access', href: '#access', title: 'R and Python' },
             { key: 'api', href: '#api', title: 'REST API' },

@@ -33,7 +33,6 @@ const SearchPage = () => {
   const [form] = Form.useForm();
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({});
-  const [hasSearched, setHasSearched] = useState(false);
   const [pagination, setPagination] = useState({ page: 1, pageSize: 20 });
   const [suggestionOptions, setSuggestionOptions] = useState([]);
   const [selectedDatasets, setSelectedDatasets] = useState([]);
@@ -57,7 +56,8 @@ const SearchPage = () => {
     }
   }, [yearRange, form]);
 
-  // Search query — an empty submitted search browses all datasets.
+  // Runs on mount with an empty query, which the API treats as "browse all",
+  // so the page opens on the full catalogue instead of a blank panel.
   // keepPreviousData keeps the table mounted while the next page loads.
   const { data: searchResults, isLoading } = useQuery(
     ['search', searchQuery, filters, pagination.page, pagination.pageSize],
@@ -68,7 +68,6 @@ const SearchPage = () => {
       page_size: pagination.pageSize
     }),
     {
-      enabled: hasSearched,
       keepPreviousData: true,
       refetchOnWindowFocus: false
     }
@@ -104,7 +103,6 @@ const SearchPage = () => {
     setSearchQuery(query || '');
     setFilters(newFilters);
     setPagination((p) => ({ ...p, page: 1 }));
-    setHasSearched(true);
   };
 
   const handleClear = () => {
@@ -112,7 +110,6 @@ const SearchPage = () => {
     setSearchQuery('');
     setFilters({});
     setPagination({ page: 1, pageSize: 20 });
-    setHasSearched(false);
     setSelectedDatasets([]);
   };
 

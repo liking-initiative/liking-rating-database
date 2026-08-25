@@ -191,6 +191,11 @@ export const getDescriptivesItem = async (itemId) => {
   return response.data;
 };
 
+export const getSimilarItems = async (itemId, params = {}) => {
+  const response = await api.get(`/descriptives/items/${itemId}/similar`, { params });
+  return response.data;
+};
+
 // Whole-database archive
 export const getDatabaseArchiveInfo = async () => {
   const response = await api.get('/database/archive/info');
