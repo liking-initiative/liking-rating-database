@@ -401,7 +401,7 @@ async def get_year_range(db: AsyncSession = Depends(get_db)):
 
 @api_router.get("/analytics/item-network")
 async def get_item_network(
-    min_shared: int = Query(2, ge=1, description="min datasets two items must share for an edge"),
+    min_shared: int = Query(12, ge=1, description="min datasets two items must share for an edge"),
     categories: Optional[List[str]] = Query(None),
     min_frequency: int = Query(2, ge=1, description="min datasets an item must appear in"),
     max_edges_per_node: int = Query(4, ge=0, le=20, description="backbone: keep each node's strongest K edges (0 = keep all)"),

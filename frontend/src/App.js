@@ -12,12 +12,10 @@ import DatasetVisualizationPage from './pages/DatasetVisualizationPage';
 import ItemsPage from './pages/ItemsPage';
 import ItemDetailPage from './pages/ItemDetailPage';
 import ItemAnalysisPage from './pages/ItemAnalysisPage';
-import VisualizationsPage from './pages/VisualizationsPage';
 import NetworkPage from './pages/NetworkPage';
 import DescriptivesPage from './pages/DescriptivesPage';
 import DocumentationPage from './pages/DocumentationPage';
 import DownloadsPage from './pages/DownloadsPage';
-import AboutPage from './pages/AboutPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 const { Content } = Layout;
@@ -48,12 +46,10 @@ function App() {
               <Route path="/items" element={<ItemsPage />} />
               <Route path="/items/:itemId" element={<ItemDetailPage />} />
               <Route path="/items/:itemId/analyze" element={<ItemAnalysisPage />} />
-              <Route path="/visualizations" element={<VisualizationsPage />} />
               <Route path="/network" element={<NetworkPage />} />
               <Route path="/descriptives" element={<DescriptivesPage />} />
               <Route path="/docs" element={<DocumentationPage />} />
               <Route path="/downloads" element={<DownloadsPage />} />
-              <Route path="/about" element={<AboutPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Content>

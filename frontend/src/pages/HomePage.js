@@ -27,10 +27,22 @@ const HomePage = () => {
         <Title level={1}>
           Liking Rating Database
         </Title>
-        <Paragraph style={{ fontSize: '18px', color: '#666', maxWidth: '800px', margin: '0 auto' }}>
-          A curated database of liking ratings — food and consumer products —
-          from published decision-making studies. Explore, analyze, and download
-          standardized preference data for your research.
+        <Paragraph style={{ fontSize: '17px', color: '#666', maxWidth: '760px', margin: '0 auto' }}>
+          The Liking Rating Database is a collection of subjective liking
+          ratings from published decision-making studies. It currently contains
+          individual item level ratings from published studies providing
+          researchers with access to a large set of preference data.
+        </Paragraph>
+        <Paragraph style={{ color: '#8c8c8c', fontSize: 14, marginTop: 14 }}>
+          The Liking Initiative is built and maintained by{' '}
+          <a
+            href="https://kiantefernandez.com"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Kianté Fernandez
+          </a>
+          .
         </Paragraph>
         <Space size="large" style={{ marginTop: '24px' }}>
           <Button 
@@ -118,8 +130,7 @@ const HomePage = () => {
             style={{ cursor: 'pointer' }}
           >
             <Paragraph>
-              Search and filter datasets by study characteristics, food categories, 
-              rating scales, and more. Find exactly the data you need for your research.
+              Filter datasets by study, category, rating scale, and year.
             </Paragraph>
             <Button type="link" icon={<SearchOutlined />}>
               Explore Search →
@@ -135,8 +146,8 @@ const HomePage = () => {
             style={{ cursor: 'pointer' }}
           >
             <Paragraph>
-              Download data in your preferred format: CSV, Excel, JSON, or SPSS. 
-              All exports include comprehensive metadata and documentation.
+              The whole database as one archive, or any dataset as CSV, Excel,
+              JSON, or SPSS.
             </Paragraph>
             <Button type="link" icon={<DownloadOutlined />}>
               View Downloads →
@@ -146,43 +157,21 @@ const HomePage = () => {
         
         <Col xs={24} md={8}>
           <Card 
-            title="Interactive Visualizations" 
+            title="Descriptive Statistics" 
             hoverable
-            onClick={() => navigate('/visualizations')}
+            onClick={() => navigate('/descriptives')}
             style={{ cursor: 'pointer' }}
           >
             <Paragraph>
-              Explore rating distributions, cross-study comparisons, and food preference 
-              patterns through interactive charts and visualizations.
+              How an item was rated within a study, how that shifts across
+              studies, and which items the same people liked together.
             </Paragraph>
             <Button type="link" icon={<BarChartOutlined />}>
-              View Visualizations →
+              View Descriptives →
             </Button>
           </Card>
         </Col>
       </Row>
-
-      {/* Recent Activity or Quick Links */}
-      <div style={{ marginTop: '48px', textAlign: 'center' }}>
-        <Title level={3}>Get Started</Title>
-        <Space direction="vertical" size="middle">
-          <Paragraph>
-            New to the database? Start by browsing our collection of studies or 
-            search for specific food items and rating data.
-          </Paragraph>
-          <Space>
-            <Button onClick={() => navigate('/studies')}>
-              Browse Studies
-            </Button>
-            <Button onClick={() => navigate('/items')}>
-              View Food Items
-            </Button>
-            <Button onClick={() => navigate('/about')}>
-              Learn More
-            </Button>
-          </Space>
-        </Space>
-      </div>
     </div>
   );
 };

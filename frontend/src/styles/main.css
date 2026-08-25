@@ -273,6 +273,35 @@ code {
   }
 }
 
+/* A quiet note: caveats and method detail that must stay legible without
+ * being shouted. A thin rule reads as an aside; a filled coloured box reads
+ * as an alarm, and a page full of alarms reads as templated. */
+.page-note {
+  border-left: 2px solid var(--border-gray);
+  padding-left: 14px;
+  margin: 0 0 20px;
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.6;
+  max-width: 76ch;
+}
+
+.page-note strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.page-note + .page-note {
+  margin-top: -8px;
+}
+
+.page-caption {
+  color: var(--text-muted);
+  font-size: 12.5px;
+  line-height: 1.55;
+  margin: 0 0 12px;
+}
+
 /* --- Descriptives page ---------------------------------------------------- */
 
 .desc-plot-grid {

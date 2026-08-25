@@ -24,7 +24,6 @@ import debounce from 'lodash/debounce';
 import { useQuery } from 'react-query';
 import { searchDatasets, getCategories, getScaleTypes, getYearRange, getSearchSuggestions, requestDownload, getDownload, downloadFile } from '../services/api';
 
-const { Panel } = Collapse;
 const { Title } = Typography;
 const { Option } = Select;
 
@@ -310,8 +309,14 @@ const SearchPage = () => {
             </Col>
           </Row>
           
-          <Collapse ghost>
-            <Panel header="Advanced Filters" key="filters" extra={<FilterOutlined />}>
+          <Collapse
+            ghost
+            items={[{
+              key: 'filters',
+              label: 'Advanced Filters',
+              extra: <FilterOutlined />,
+              children: (
+                <>
               <Row gutter={16}>
                 <Col span={8}>
                   <Form.Item name="study_name" label="Study Name">
@@ -360,8 +365,10 @@ const SearchPage = () => {
                   </Form.Item>
                 </Col>
               </Row>
-            </Panel>
-          </Collapse>
+                </>
+              ),
+            }]}
+          />
           
           <Form.Item>
             <Space>

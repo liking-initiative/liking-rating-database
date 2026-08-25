@@ -391,7 +391,7 @@ class DataService:
 
     async def get_item_network(
         self,
-        min_shared: int = 2,
+        min_shared: int = 12,
         categories: Optional[List[str]] = None,
         min_frequency: int = 2,
         max_edges_per_node: int = 4,
@@ -471,7 +471,7 @@ class DataService:
         # Unweighted spring with stronger repulsion — weighted attraction pulls
         # the popular hub items into one clump
         pos = (nx.spring_layout(graph, seed=42, weight=None,
-                                k=1.8 / max(1, len(nodes)) ** 0.5, iterations=200)
+                                k=3.2 / max(1, len(nodes)) ** 0.5, iterations=400)
                if nodes else {})
 
         result = {

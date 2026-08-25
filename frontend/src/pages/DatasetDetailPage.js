@@ -283,23 +283,14 @@ const DatasetDetailPage = () => {
           {/* Repeated-phase datasets pool every phase into one mean here.
               Say so, rather than letting the inflated n read as more subjects. */}
           {dataset.n_ratings > dataset.n_subjects * dataset.n_items && (
-            <Alert
-              type="info"
-              showIcon
-              style={{ marginBottom: 16 }}
-              message="This dataset repeats its rating phase"
-              description={
-                <>
-                  The statistics below pool every phase, so each item&apos;s
-                  rating count is a multiple of the {dataset.n_subjects}{' '}
-                  subjects. To see the phases separately, use the{' '}
-                  <Link to={`/descriptives?dataset=${datasetId}`}>
-                    Descriptives
-                  </Link>{' '}
-                  page.
-                </>
-              }
-            />
+            <p className="page-caption">
+              This dataset repeats its rating phase, and the statistics below
+              pool every phase — each item&apos;s rating count is a multiple of
+              the {dataset.n_subjects} subjects. To see the phases separately,
+              use the{' '}
+              <Link to={`/descriptives?dataset=${datasetId}`}>Descriptives</Link>{' '}
+              page.
+            </p>
           )}
           <Table
             columns={statsColumns}

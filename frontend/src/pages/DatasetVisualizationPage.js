@@ -257,12 +257,9 @@ const DatasetVisualizationPage = () => {
             ) : ratings?.items?.length > 0 ? (
               <>
                 {dataset?.n_ratings > ratings.items.length && (
-                  <Alert
-                    type="info"
-                    showIcon
-                    style={{ marginBottom: 16 }}
-                    message={`Charts are computed from a sample of ${ratings.items.length.toLocaleString()} of ${dataset.n_ratings.toLocaleString()} ratings.`}
-                  />
+                  <p className="page-caption">
+                    {`Charts are computed from a sample of ${ratings.items.length.toLocaleString()} of ${dataset.n_ratings.toLocaleString()} ratings.`}
+                  </p>
                 )}
                 <Plot
                   data={getChartData()}

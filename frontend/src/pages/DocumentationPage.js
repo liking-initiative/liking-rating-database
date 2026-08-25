@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Card, Typography, Table, Anchor, Row, Col, Alert, Tag, Space } from 'antd';
+import { Card, Typography, Table, Anchor, Row, Col, Tag, Space } from 'antd';
 import { useQuery } from 'react-query';
 import AccessCode from '../components/AccessCode';
 import { getStatistics, getScaleTypes } from '../services/api';
@@ -93,39 +93,6 @@ const DocumentationPage = () => {
           </Paragraph>
         </Card>
 
-        <Card id="gotchas" title="Two things to get right" style={{ marginBottom: 24 }}>
-          <Alert
-            type="warning"
-            showIcon
-            style={{ marginBottom: 16 }}
-            message="Cross-study comparisons must use normalized_rating"
-            description={
-              <>
-                Studies use different response scales — 0–4, 1–100, 1–870,
-                willingness-to-pay in dollars. Raw <Text code>rating</Text>{' '}
-                values are not comparable across datasets.{' '}
-                <Text code>normalized_rating</Text> is{' '}
-                <Text code>(rating − scale_min) / (scale_max − scale_min)</Text>{' '}
-                and always lies in 0–1.
-              </>
-            }
-          />
-          <Alert
-            type="warning"
-            showIcon
-            message="Subject IDs are unique only within a dataset"
-            description={
-              <>
-                Subject <Text code>"12"</Text> in one dataset and subject{' '}
-                <Text code>"12"</Text> in another are different people. Always
-                key on <Text code>(dataset_id, subject_id)</Text>. Reading
-                subject IDs as numbers will also drop leading zeros — keep them
-                as strings.
-              </>
-            }
-          />
-        </Card>
-
         <Card id="ratings" title="The ratings table" style={{ marginBottom: 24 }}>
           <Table
             size="small"
@@ -161,6 +128,49 @@ const DocumentationPage = () => {
           </Paragraph>
         </Card>
 
+        <Card id="gotchas" title="Two things to get right" style={{ marginBottom: 24 }}>
+          <Title level={5} style={{ marginTop: 0 }}>
+            Cross-study comparisons must use <Text code>normalized_rating</Text>
+          </Title>
+          <Paragraph>
+            Studies use different response scales — 0–4, 1–100, 1–870,
+            willingness-to-pay in dollars. Raw <Text code>rating</Text> values
+            are not comparable across datasets.{' '}
+            <Text code>normalized_rating</Text> is{' '}
+            <Text code>(rating − scale_min) / (scale_max − scale_min)</Text> and
+            always lies in 0–1.
+          </Paragraph>
+
+          <Title level={5}>Subject IDs are unique only within a dataset</Title>
+          <Paragraph style={{ marginBottom: 0 }}>
+            Subject <Text code>&quot;12&quot;</Text> in one dataset and subject{' '}
+            <Text code>&quot;12&quot;</Text> in another are different people.
+            Always key on <Text code>(dataset_id, subject_id)</Text>. Reading
+            subject IDs as numbers will also drop leading zeros — keep them as
+            strings.
+          </Paragraph>
+        </Card>
+
+        <div id="access">
+          <AccessCode title="Downloading the data" />
+        </div>
+
+        <Card id="api" title="REST API" style={{ marginBottom: 24 }}>
+          <Paragraph>
+            The API is <strong>read-only by design</strong> — all data changes
+            go through versioned migrations. List endpoints return{' '}
+            <Text code>{'{items, total, page, page_size, pages}'}</Text>.
+            Interactive docs live at <Text code>/api/v1/docs</Text>.
+          </Paragraph>
+          <Table
+            size="small"
+            pagination={false}
+            columns={endpointColumns}
+            dataSource={endpoints}
+            scroll={{ x: 'max-content' }}
+          />
+        </Card>
+
         <Card id="similarity" title="Preference similarity" style={{ marginBottom: 24 }}>
           <Paragraph>
             The Descriptives page ranks items by <strong>preference</strong>{' '}
@@ -176,23 +186,15 @@ const DocumentationPage = () => {
             combined with Fisher&apos;s <Text code>z</Text>, weighted by{' '}
             <Text code>n − 3</Text>.
           </Paragraph>
-          <Alert
-            type="info"
-            showIcon
-            style={{ marginBottom: 16 }}
-            message="Why person-centring is not optional here"
-            description={
-              <>
-                Without it, two items correlate merely because some people rate
-                everything highly and others rate everything low — a
-                response-style effect, not shared preference. In{' '}
-                <Text code>foljac2</Text> that artifact is total: each
-                subject&apos;s ratings span about 0.006 while subject means
-                span about 0.6, so uncentred, every pair of items in that
-                dataset correlates at r = 1.00.
-              </>
-            }
-          />
+          <p className="page-note">
+            <strong>Why person-centring is not optional here.</strong> Without
+            it, two items correlate merely because some people rate everything
+            highly and others rate everything low — a response-style effect,
+            not shared preference. In <Text code>foljac2</Text> that artifact
+            is total: each subject&apos;s ratings span about 0.006 while
+            subject means span about 0.6, so uncentred, every pair of items in
+            that dataset correlates at r = 1.00.
+          </p>
           <Paragraph style={{ marginBottom: 0 }}>
             Two consequences worth knowing. Centring makes each subject&apos;s
             row sum to zero, which biases correlations down by roughly{' '}
@@ -215,26 +217,6 @@ const DocumentationPage = () => {
             <Text code>0488</Text>, <Text code>mh0021</Text>) are categorised{' '}
             <Text code>unknown</Text>.
           </Paragraph>
-        </Card>
-
-        <div id="access">
-          <AccessCode title="Getting the whole database" />
-        </div>
-
-        <Card id="api" title="REST API" style={{ marginBottom: 24 }}>
-          <Paragraph>
-            The API is <strong>read-only by design</strong> — all data changes
-            go through versioned migrations. List endpoints return{' '}
-            <Text code>{'{items, total, page, page_size, pages}'}</Text>.
-            Interactive docs live at <Text code>/api/v1/docs</Text>.
-          </Paragraph>
-          <Table
-            size="small"
-            pagination={false}
-            columns={endpointColumns}
-            dataSource={endpoints}
-            scroll={{ x: 'max-content' }}
-          />
         </Card>
 
         <Card id="citing" title="Citing" style={{ marginBottom: 24 }}>
@@ -270,12 +252,12 @@ evaluation ratings for decision-making research. (In preparation.)`}
           style={{ position: 'sticky', top: 24 }}
           items={[
             { key: 'overview', href: '#overview', title: "What's in the database" },
-            { key: 'gotchas', href: '#gotchas', title: 'Two things to get right' },
             { key: 'ratings', href: '#ratings', title: 'The ratings table' },
+            { key: 'gotchas', href: '#gotchas', title: 'Two things to get right' },
+            { key: 'access', href: '#access', title: 'Downloading the data' },
+            { key: 'api', href: '#api', title: 'REST API' },
             { key: 'similarity', href: '#similarity', title: 'Preference similarity' },
             { key: 'categories', href: '#categories', title: 'Item categories' },
-            { key: 'access', href: '#access', title: 'R and Python' },
-            { key: 'api', href: '#api', title: 'REST API' },
             { key: 'citing', href: '#citing', title: 'Citing' },
             { key: 'contributing', href: '#contributing', title: 'Contributing' },
           ]}

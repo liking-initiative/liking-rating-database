@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Typography, Button, Space, Row, Col, Alert, Divider, Statistic, Spin } from 'antd';
+import { Card, Typography, Button, Space, Row, Col, Divider, Statistic, Spin } from 'antd';
 import { DownloadOutlined, FileTextOutlined, SearchOutlined, DatabaseOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
@@ -22,13 +22,11 @@ const DownloadsPage = () => {
     <div>
       <Title level={2}>Data Downloads</Title>
       
-      <Alert
-        message="Three ways to get the data"
-        description="Take the whole database as one archive below, pull it straight into R or Python, or download individual datasets from any study, dataset, or search result page."
-        type="info"
-        showIcon
-        style={{ marginBottom: 24 }}
-      />
+      <Paragraph type="secondary" style={{ maxWidth: 720, marginBottom: 24 }}>
+        Take the whole database as one archive, pull it straight into R or
+        Python, or download individual datasets from any study, dataset, or
+        search result page.
+      </Paragraph>
 
       <Card
         title="Download the entire database"
@@ -71,11 +69,9 @@ const DownloadsPage = () => {
             </Col>
           </Row>
         ) : (
-          <Alert
-            type="info"
-            showIcon
-            message="Archive size unavailable right now — the download link still works."
-          />
+          <p className="page-caption" style={{ marginBottom: 0 }}>
+            Archive size unavailable right now — the download link still works.
+          </p>
         )}
       </Card>
 

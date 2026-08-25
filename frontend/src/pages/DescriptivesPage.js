@@ -356,23 +356,15 @@ const DescriptivesPage = () => {
         that used it.
       </Paragraph>
 
-      <Alert
-        type="warning"
-        showIcon
-        style={{ marginBottom: 24, maxWidth: 900 }}
-        message="Read before reusing these numbers"
-        description={
-          <>
-            These summaries apply one fixed set of choices to every dataset: no
-            exclusions, all available subjects, and each dataset&apos;s first
-            rating phase unless you pick another. Cross-study panels use{' '}
-            <Text code>normalized_rating</Text> so that different response
-            scales are comparable. Those choices may not match the
-            preprocessing your research question needs — download the data and
-            verify before publishing.
-          </>
-        }
-      />
+      <p className="page-note">
+        <strong>Before reusing these numbers:</strong> they apply one fixed set
+        of choices to every dataset — no exclusions, all available subjects,
+        and each dataset&apos;s first rating phase unless you pick another.
+        Cross-study panels use <Text code>normalized_rating</Text> so different
+        response scales are comparable. Those choices may not match the
+        preprocessing your question needs; download the data and verify before
+        publishing.
+      </p>
 
       <Card style={{ marginBottom: 24 }}>
         <Row gutter={[16, 16]} align="bottom">
