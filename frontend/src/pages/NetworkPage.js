@@ -12,7 +12,7 @@ const { Title, Text } = Typography;
 const DENSITY = [
   { label: 'Core', value: 12 },
   { label: 'Wider', value: 8 },
-  { label: 'Everything', value: 4 },
+  { label: 'Everything', value: 2 },
 ];
 
 const NetworkPage = () => {

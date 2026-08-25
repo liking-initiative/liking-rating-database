@@ -73,6 +73,11 @@ const ItemNetworkCanvas = ({
       return { nodes: [], edges: [], adjacency: new Map(), meanRange: [0, 1] };
     }
 
+    // Marks shrink as the graph grows: at full density, radii tuned for 65
+    // nodes overlap into a solid mass and hide the structure underneath.
+    const count = data.nodes.length;
+    const sizeScale = count > 700 ? 0.55 : count > 300 ? 0.72 : 1;
+
     const byLabel = new Map();
     const nodes = data.nodes.map((n) => {
       const body = {
@@ -82,7 +87,7 @@ const ItemNetworkCanvas = ({
         y: (n.y ?? 0) * 320,
         vx: 0,
         vy: 0,
-        r: 4 + Math.sqrt(Math.max(1, n.frequency)) * 2.6,
+        r: (4 + Math.sqrt(Math.max(1, n.frequency)) * 2.6) * sizeScale,
       };
       byLabel.set(n.label, body);
       return body;
@@ -170,23 +175,50 @@ const ItemNetworkCanvas = ({
     const CENTER = 0.0016;
     const DAMP = 0.86;
 
-    for (let i = 0; i < nodes.length; i += 1) {
-      const a = nodes[i];
-      for (let j = i + 1; j < nodes.length; j += 1) {
-        const b = nodes[j];
-        let dx = b.x - a.x;
-        let dy = b.y - a.y;
-        let d2 = dx * dx + dy * dy;
-        if (d2 < 1) { d2 = 1; dx = (Math.random() - 0.5); dy = (Math.random() - 0.5); }
-        const d = Math.sqrt(d2);
-        // Repulsion, with a floor so overlapping nodes push apart hard.
-        const force = (REPULSION / d2) * alpha;
-        const fx = (dx / d) * force;
-        const fy = (dy / d) * force;
-        a.vx -= fx; a.vy -= fy;
-        b.vx += fx; b.vy += fy;
+    // Repulsion through a uniform spatial grid rather than every pair. At the
+    // full graph (~1,050 nodes) all-pairs is ~550k distance computations per
+    // frame and drops frames; binning cuts it to the neighbours that can
+    // actually matter, since the force falls off as 1/d^2 and is negligible
+    // past a couple of cells.
+    const CELL = 90;
+    const grid = new Map();
+    const key = (cx, cy) => `${cx},${cy}`;
+    nodes.forEach((n) => {
+      const cx = Math.floor(n.x / CELL);
+      const cy = Math.floor(n.y / CELL);
+      const k = key(cx, cy);
+      let bucket = grid.get(k);
+      if (!bucket) { bucket = []; grid.set(k, bucket); }
+      bucket.push(n);
+      n._cx = cx; n._cy = cy;
+    });
+
+    nodes.forEach((a) => {
+      for (let ox = -1; ox <= 1; ox += 1) {
+        for (let oy = -1; oy <= 1; oy += 1) {
+          const bucket = grid.get(key(a._cx + ox, a._cy + oy));
+          if (!bucket) continue;
+          for (let i = 0; i < bucket.length; i += 1) {
+            const b = bucket[i];
+            // Each unordered pair once: skip until b is "after" a.
+            if (b === a) continue;
+            if (b._cx < a._cx || (b._cx === a._cx && b._cy < a._cy)) continue;
+            if (b._cx === a._cx && b._cy === a._cy && bucket.indexOf(a) > i) continue;
+
+            let dx = b.x - a.x;
+            let dy = b.y - a.y;
+            let d2 = dx * dx + dy * dy;
+            if (d2 < 1) { d2 = 1; dx = (Math.random() - 0.5); dy = (Math.random() - 0.5); }
+            const d = Math.sqrt(d2);
+            const force = (REPULSION / d2) * alpha;
+            const fx = (dx / d) * force;
+            const fy = (dy / d) * force;
+            a.vx -= fx; a.vy -= fy;
+            b.vx += fx; b.vy += fy;
+          }
+        }
       }
-    }
+    });
 
     edges.forEach(({ a, b, weight }) => {
       const dx = b.x - a.x;
