@@ -22,6 +22,8 @@ from backend.models.schemas import (
 from backend.services.search_service import SearchService
 from backend.services.download_service import DownloadService
 from backend.services.data_service import DataService
+from backend.services.descriptives_service import descriptives_service
+from backend.services.database_archive_service import database_archive_service
 
 # Create main router
 api_router = APIRouter()
@@ -413,4 +415,70 @@ async def get_item_network(
         min_frequency=min_frequency,
         max_edges_per_node=max_edges_per_node,
         db=db,
+    )
+
+
+# Descriptives endpoints
+
+
+@api_router.get("/descriptives/index")
+async def get_descriptives_index(db: AsyncSession = Depends(get_db)):
+    """Datasets available in the descriptives view, with their timepoints"""
+    return await descriptives_service.get_index(db=db)
+
+
+@api_router.get("/descriptives/datasets/{dataset_id}/items")
+async def get_descriptives_dataset_items(
+    dataset_id: str, db: AsyncSession = Depends(get_db)
+):
+    """Items rated in one dataset (drives the item selector)"""
+    items = await descriptives_service.get_dataset_items(db=db, dataset_id=dataset_id)
+    if not items:
+        raise HTTPException(status_code=404, detail="Dataset not found or has no ratings")
+    return items
+
+
+@api_router.get("/descriptives/dataset-item")
+async def get_descriptives_dataset_item(
+    dataset_id: str = Query(..., description="dataset to summarise"),
+    item_id: str = Query(..., description="item within that dataset"),
+    timepoint: Optional[int] = Query(None, ge=1, description="repeated phase; defaults to the first"),
+    db: AsyncSession = Depends(get_db),
+):
+    """Across-subject rating distribution for one item in one dataset"""
+    result = await descriptives_service.get_dataset_item(
+        db=db, dataset_id=dataset_id, item_id=item_id, timepoint=timepoint
+    )
+    if result is None:
+        raise HTTPException(status_code=404, detail="No ratings for that dataset/item")
+    return result
+
+
+@api_router.get("/descriptives/items/{item_id}")
+async def get_descriptives_item(item_id: str, db: AsyncSession = Depends(get_db)):
+    """Per-dataset summary statistics for one item, across every study using it"""
+    result = await descriptives_service.get_item_across_datasets(db=db, item_id=item_id)
+    if result is None:
+        raise HTTPException(status_code=404, detail="Item not found or has no ratings")
+    return result
+
+
+# Whole-database export
+
+
+@api_router.get("/database/archive/info")
+async def get_database_archive_info(db: AsyncSession = Depends(get_db)):
+    """Size and contents of the whole-database archive (builds it on first call)"""
+    info = await database_archive_service.get_archive(db=db)
+    return {k: v for k, v in info.items() if k != "path"}
+
+
+@api_router.get("/database/archive")
+async def download_database_archive(db: AsyncSession = Depends(get_db)):
+    """Every rating plus study/dataset/item metadata and a codebook, as one ZIP"""
+    info = await database_archive_service.get_archive(db=db)
+    return FileResponse(
+        path=info["path"],
+        filename=info["filename"],
+        media_type="application/zip",
     )
