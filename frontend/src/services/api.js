@@ -54,17 +54,6 @@ export const getStudy = async (studyId) => {
   return response.data;
 };
 
-// Datasets API
-// Returns a paginated envelope: { items, total, page, page_size, pages }
-export const getDatasets = async (params = {}) => {
-  const defaultParams = {
-    page: 1,
-    page_size: 100,
-    ...params
-  };
-  const response = await api.get('/datasets', { params: defaultParams });
-  return response.data;
-};
 
 export const getDataset = async (datasetId) => {
   const response = await api.get(`/datasets/${datasetId}`);
@@ -145,10 +134,6 @@ export const getItemNetwork = async (params = {}) => {
   return response.data;
 };
 
-export const getCategories = async () => {
-  const response = await api.get('/metadata/categories');
-  return response.data;
-};
 
 export const getScaleTypes = async () => {
   const response = await api.get('/metadata/scale-types');
