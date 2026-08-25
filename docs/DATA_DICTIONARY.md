@@ -105,14 +105,26 @@ Every applied migration is recorded with its version, timestamp, and a JSON
 report. Current: `001_reconcile_with_source` (scale corrections, study
 dedup + DOI enrichment, normalization recompute), `002_item_categories`,
 `003_hascher_doi`, `004_rating_timepoints`, `005_name_harmonization`,
-`006_drop_generated_study_descriptions`, `007_verify_dois`, plus `ds-*`
+`006_drop_generated_study_descriptions`, `007_verify_dois`,
+`008_drop_generated_dataset_descriptions`, `009_fromer_open_mind`, plus `ds-*`
 ingestion records. Scripts live in `scripts/migrations/`.
 
 Migration 007 checked all 29 DOIs against CrossRef and doi.org and corrected
 five studies: two cited preprints or a pinned preprint version rather than the
 published article, one cited a superseded eLife Reviewed Preprint version, and
 two carried a `year` that contradicted the year in their own citation string.
-Re-run the check any time with `python scripts/verify_dois.py`.
+Migration 009 corrected a sixth: Frömer et al. is published in Open Mind
+(2025), which the first pass missed because CrossRef registers no
+`is-preprint-of` relation on that preprint. The checker now searches by title
+as well as following relations. Re-run it any time with
+`python scripts/verify_dois.py`.
+
+Migration 008 cleared 41 dataset descriptions built from the template
+`"Dataset from <study title>"`. They restated the study name displayed beside
+them and had gone stale against the titles corrected in 007. The 13 real
+curatorial notes are untouched, and `foljac2`'s note — recording that its
+ratings arrived pre-normalized from an unrecoverable willingness-to-pay
+scale — was preserved with only its placeholder prefix stripped.
 
 Migration 006 cleared all 24 study descriptions. Every one matched the
 template `"Food preference study from <code> dataset"` — synthesised by an

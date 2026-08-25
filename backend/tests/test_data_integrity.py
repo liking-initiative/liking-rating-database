@@ -42,7 +42,7 @@ def test_dois_are_wellformed_and_not_superseded(con):
 
     # These specific values pointed at preprints or superseded versions.
     superseded = {"10.31234/osf.io/xqhk8", "10.7554/eLife.103736.2",
-                  "10.31234/osf.io/2sqyt_v1"}
+                  "10.31234/osf.io/2sqyt_v1", "10.31234/osf.io/2sqyt"}
     assert not (set(dois) & superseded), "a superseded DOI is back"
 
 
@@ -57,6 +57,16 @@ def test_study_year_matches_its_own_citation(con):
         if m:
             assert int(m.group(1)) == year, (
                 f"{name[:48]}: year={year} but citation says {m.group(1)}")
+
+
+def test_no_generated_dataset_descriptions(con):
+    """Migration 008 cleared 'Dataset from <study title>' placeholders.
+
+    They restated the study name shown beside them, and drifted stale the
+    moment a study was retitled.
+    """
+    n = one(con, "SELECT COUNT(*) FROM datasets WHERE description LIKE 'Dataset from %'")
+    assert n == 0, f"{n} datasets carry a generated description again"
 
 
 def test_no_generated_study_descriptions(con):

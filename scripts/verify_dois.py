@@ -7,9 +7,15 @@ Reports three kinds of problem:
 * **unregistered** — doi.org does not resolve it at all. The citation is broken.
 * **title mismatch** — the DOI resolves, but to a paper whose title does not
   match the study we filed it under. Usually means the DOI is simply wrong.
-* **superseded** — the DOI points at a preprint that CrossRef records as
-  `is-preprint-of` a published article, or at a version-pinned DOI when a
-  later version exists. The link works but sends a reader to a draft.
+* **superseded** — the DOI points at a preprint of a paper that has since
+  been published, or at a version-pinned DOI when a later version exists. The
+  link works but sends a reader to a draft.
+
+  Two ways of detecting this, because one is not enough. CrossRef `relation`
+  fields are only present when a publisher deposits them: Frömer et al. was
+  published in Open Mind with no `is-preprint-of` recorded on the preprint,
+  and relation-following missed it entirely. So every preprint DOI is *also*
+  searched for by title and author among journal articles.
 
 A publisher returning 403 to this script is not a problem: APA, SAGE, PNAS
 and J Neurosci block automated requests. What matters is that doi.org issues
@@ -50,6 +56,34 @@ def crossref(doi):
     req = urllib.request.Request(url, headers={"User-Agent": UA})
     with urllib.request.urlopen(req, timeout=45) as r:
         return json.load(r)["message"]
+
+
+def find_published_version(title, authors):
+    """Search CrossRef for a journal article matching a preprint's title.
+
+    Relations catch the easy cases; this catches the ones where the publisher
+    never deposited a link back to the preprint.
+    """
+    query = {"query.bibliographic": title, "rows": 5, "filter": "type:journal-article"}
+    if authors:
+        query["query.author"] = authors
+    url = "https://api.crossref.org/works?" + urllib.parse.urlencode(query)
+    req = urllib.request.Request(url, headers={"User-Agent": UA})
+    try:
+        with urllib.request.urlopen(req, timeout=45) as r:
+            items = json.load(r)["message"]["items"]
+    except Exception:
+        return None
+    for item in items:
+        found = (item.get("title") or [""])[0]
+        if difflib.SequenceMatcher(None, _norm(title), _norm(found)).ratio() >= 0.85:
+            return {
+                "doi": item.get("DOI"),
+                "title": found,
+                "journal": (item.get("container-title") or [""])[0],
+                "year": (item.get("issued", {}).get("date-parts", [[None]])[0] or [None])[0],
+            }
+    return None
 
 
 def registered(doi):
@@ -112,6 +146,19 @@ def main():
             rec["problem"] = "title mismatch"
             problems.append(rec)
 
+        # A preprint DOI: check by search as well as by relation.
+        if m.get("type") == "posted-content":
+            first_author = ((m.get("author") or [{}])[0].get("family") or "")
+            published = find_published_version(title or s["name"], first_author)
+            if published:
+                rec["published_version"] = published["doi"]
+                rec["published_in"] = f"{published['journal']} ({published['year']})"
+                rec["problem"] = "preprint of a published article"
+                problems.append(rec)
+                rows.append(rec)
+                time.sleep(0.6)
+                continue
+
         relations = m.get("relation") or {}
         if "is-preprint-of" in relations:
             rec["published_version"] = relations["is-preprint-of"][0].get("id")
@@ -132,7 +179,7 @@ def main():
         print(f"    {p['doi']}  {p['name'][:64]}")
         if p.get("crossref_title"):
             print(f"    crossref: {p['crossref_title'][:64]}")
-        for k in ("published_version", "newer_version"):
+        for k in ("published_version", "published_in", "newer_version"):
             if p.get(k):
                 print(f"    {k}: {p[k]}")
 
