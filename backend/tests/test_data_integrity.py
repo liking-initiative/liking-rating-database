@@ -26,6 +26,39 @@ def one(con, sql):
     return con.execute(sql).fetchone()[0]
 
 
+def test_dois_are_wellformed_and_not_superseded(con):
+    """Migration 007 corrected these; nothing may reintroduce them.
+
+    Offline shape checks only — the live resolution check is
+    scripts/verify_dois.py, which needs the network.
+    """
+    dois = [r[0] for r in con.execute(
+        "SELECT doi FROM studies WHERE doi IS NOT NULL AND doi != ''")]
+    assert len(dois) == 29
+    assert len(set(dois)) == len(dois), "duplicate DOIs"
+    for doi in dois:
+        assert doi.startswith("10."), f"not a DOI: {doi}"
+        assert " " not in doi, f"whitespace in DOI: {doi}"
+
+    # These specific values pointed at preprints or superseded versions.
+    superseded = {"10.31234/osf.io/xqhk8", "10.7554/eLife.103736.2",
+                  "10.31234/osf.io/2sqyt_v1"}
+    assert not (set(dois) & superseded), "a superseded DOI is back"
+
+
+def test_study_year_matches_its_own_citation(con):
+    """Two records disagreed with the year in their own citation string."""
+    import re
+    rows = con.execute(
+        "SELECT name, year, publication_title FROM studies "
+        "WHERE publication_title IS NOT NULL AND year IS NOT NULL").fetchall()
+    for name, year, citation in rows:
+        m = re.search(r"\((\d{4})\)", citation or "")
+        if m:
+            assert int(m.group(1)) == year, (
+                f"{name[:48]}: year={year} but citation says {m.group(1)}")
+
+
 def test_no_generated_study_descriptions(con):
     """Migration 006 cleared placeholder descriptions; nothing may reintroduce them."""
     n = one(con, "SELECT COUNT(*) FROM studies WHERE description LIKE 'Food preference study from % dataset'")

@@ -211,6 +211,18 @@ Found while checking the site for non-functional features before sharing it.
   the old About page.
 - [x] **Item network rebuilt** as an interactive force graph (see commit).
 
+- [x] **All 29 DOIs verified** (2026-08-25) against CrossRef and doi.org;
+  migration 007 corrected five. Two pointed at preprints of papers that have
+  since been published (Li et al. → Scientific Reports; the eLife Reviewed
+  Preprint version `.2` → the version of record), one at a version-pinned
+  preprint DOI whose v2 had superseded it, and two carried a `year` that
+  contradicted the year in their own citation string. `scripts/verify_dois.py`
+  re-runs the whole check; two integrity tests guard the offline invariants.
+  Six publishers (APA, SAGE, PNAS, J Neurosci) return 403 to automated
+  requests — that is bot-blocking, not a broken DOI, and the checker
+  distinguishes them by testing doi.org's redirect rather than the
+  destination.
+
 **Still open from this pass**
 - [ ] **R and Python packages become the programmatic access path.** Once the
   interface settles, both packages replace the generated snippets now shown on

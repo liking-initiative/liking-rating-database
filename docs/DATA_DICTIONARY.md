@@ -105,8 +105,14 @@ Every applied migration is recorded with its version, timestamp, and a JSON
 report. Current: `001_reconcile_with_source` (scale corrections, study
 dedup + DOI enrichment, normalization recompute), `002_item_categories`,
 `003_hascher_doi`, `004_rating_timepoints`, `005_name_harmonization`,
-`006_drop_generated_study_descriptions`, plus `ds-*` ingestion records.
-Scripts live in `scripts/migrations/`.
+`006_drop_generated_study_descriptions`, `007_verify_dois`, plus `ds-*`
+ingestion records. Scripts live in `scripts/migrations/`.
+
+Migration 007 checked all 29 DOIs against CrossRef and doi.org and corrected
+five studies: two cited preprints or a pinned preprint version rather than the
+published article, one cited a superseded eLife Reviewed Preprint version, and
+two carried a `year` that contradicted the year in their own citation string.
+Re-run the check any time with `python scripts/verify_dois.py`.
 
 Migration 006 cleared all 24 study descriptions. Every one matched the
 template `"Food preference study from <code> dataset"` — synthesised by an
