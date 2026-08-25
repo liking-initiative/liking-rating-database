@@ -256,3 +256,6 @@ reference-papers/
 *.db.bak
 *.db-wal
 *.db-shm
+
+# Built release assets — regenerate with scripts/build_release.py
+/release/

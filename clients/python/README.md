@@ -1,105 +1,97 @@
-# likingdb — Python client
+# likingdb — Python
 
-Python access to the [Liking Rating Database](https://github.com/kiante-fernandez/liking-rating-database):
-700,943 liking ratings from 33 studies (55 datasets) over 2,297 food and
-consumer-product stimuli.
+The Liking Rating Database in Python: subjective liking ratings from
+published decision-making studies, as [polars](https://pola.rs) frames.
 
 ## Install
 
 ```bash
-pip install -e clients/python          # from a checkout of the repo
+pip install -e clients/python     # from a checkout
 ```
 
-## Quick start
+## Use
 
 ```python
 import likingdb
 
-# What's in here?
-likingdb.list_datasets()               # 55 rows, one per dataset
-likingdb.list_studies()                # 33 rows, one per publication
-likingdb.list_items(category="sweets") # stimuli in one category
+likingdb.list_datasets()                      # 55 datasets
+likingdb.list_studies()                       # 33 publications
+likingdb.list_items()                         # 2,297 stimuli
 
-# Pull one dataset
-ratings = likingdb.load_ratings("leeholyoak2021")
+d = likingdb.get_dataset("leeholyoak2021")
+d.data                                        # polars DataFrame
+d.scale                                       # (1.0, 100.0)
+d.timepoints                                  # [1, 2, 3]
+print(d.cite())
 
-# Pull everything in a single request (much faster than paging)
+likingdb.get_dataset(["leeholyoak2021", "leehare2023exp2"]).data   # stacked
+```
+
+### One item across every study that used it
+
+The cross-study view — the thing this database is built for:
+
+```python
+k = likingdb.get_item("kitkat")     # 1,842 ratings across 28 datasets
+k.by_dataset()                      # mean / sd / median per study, 0-1 scale
+```
+
+### The whole corpus
+
+```python
 db = likingdb.load_database()
-db["ratings"]      # 700,943 rows
-db["studies"]      # citations + DOIs
-print(db["codebook"])
+db["ratings"]        # 700,943 rows
 ```
 
 ## Two things to get right
 
-**Use `normalized_rating` for anything cross-study.** Response scales differ
-across studies (0–4, 1–100, 1–870, willingness-to-pay in dollars), so raw
-`rating` values are not comparable. `normalized_rating` is
+**Cross-study comparisons must use `normalized_rating`.** Studies use
+different response scales (0–4, 1–100, 1–870, willingness-to-pay in dollars),
+so raw `rating` values are not comparable. `normalized_rating` is
 `(rating − scale_min) / (scale_max − scale_min)` and always lies in 0–1.
 
-```python
-db = likingdb.load_database()
-db["ratings"].groupby("item_name").normalized_rating.mean().nlargest(10)
-```
-
-**Subject IDs are only unique within a dataset.** Subject `"12"` in two
-datasets is two different people — always key on
-`(dataset_id, subject_id)`.
+**Subject ids are unique only within a dataset.** Subject `"12"` in two
+datasets is two different people — key on `(dataset_code, subject_id)`.
 
 ## Repeated rating phases
 
-Most datasets hold one rating per (subject, item), all at `timepoint = 1`.
-Two datasets repeat the whole rating phase:
-
-| Dataset | Phases |
-|---------|--------|
-| `leeholyoak2021` | 1, 2, 3 |
-| `leehare2023exp2` | 1, 2 |
+Two datasets repeat the whole rating phase, so `(subject_id, item_id)` alone
+is not unique for them:
 
 ```python
-# Coherence shift: the same subjects, the same items, three phases
-r = likingdb.load_ratings("leeholyoak2021")
-r.groupby("timepoint").normalized_rating.mean()
+d = likingdb.get_dataset("leeholyoak2021")        # phases 1, 2, 3
+d.data.group_by("timepoint").agg(pl.col("normalized_rating").mean())
 
-r2 = likingdb.load_ratings("leeholyoak2021", timepoint=2)   # just phase 2
+likingdb.get_dataset("leeholyoak2021", timepoint=2)   # one phase
 ```
 
-For those datasets `(dataset_id, subject_id, item_id)` is **not** unique.
-Include `timepoint` in your key.
+`get_item()` uses each dataset's first phase only, so a repeated-phase study
+does not carry extra weight in a cross-study comparison.
 
-## Citing
+## Versions and caching
 
-Please cite both the database and the studies whose data you use.
+Data comes from versioned release files, not a live service, so a pinned
+version returns the same rows however long from now.
 
 ```python
-print(likingdb.cite("leeholyoak2021"))   # source paper + the database
-print(likingdb.bibtex("leeholyoak2021")) # BibTeX for the source paper
+likingdb.release_info()          # version, date, counts, migrations applied
+likingdb.get_dataset("leeholyoak2021", version="1.0.0")
+likingdb.cache_info();  likingdb.clear_cache()
 ```
 
-## Pointing at another deployment
+Set `LIKINGDB_RELEASE_DIR` to a directory built by
+`scripts/build_release.py` to work against an unreleased build.
 
-```python
-likingdb.set_base_url("http://localhost:8000/api/v1")
-# or export LIKINGDB_API_URL=http://localhost:8000/api/v1
-```
-
-## API reference
+## API
 
 | Function | Returns |
 |----------|---------|
-| `list_studies()` | DataFrame of publications |
-| `list_datasets()` | DataFrame of datasets, flattened with study fields |
-| `list_items(category=None)` | DataFrame of stimuli |
-| `get_dataset(name)` | dict of dataset metadata incl. its study |
-| `get_study(study_id)` | dict of a publication and its datasets |
-| `load_ratings(dataset, item, timepoint)` | DataFrame of ratings |
-| `load_database()` | dict of DataFrames + codebook text |
-| `search(query, **filters)` | DataFrame of matching datasets |
-| `descriptives(dataset, item, timepoint)` | dict of distributional statistics |
-| `cite(dataset=None)` | citation text |
-| `bibtex(dataset)` | BibTeX entry |
-
-Datasets may be named by code (`"leeholyoak2021"`) or by UUID.
+| `list_studies()` / `list_datasets()` / `list_items()` | catalogue frames |
+| `get_dataset(code, version, timepoint)` | `Dataset` — `.data`, `.metadata`, `.cite()` |
+| `get_item(name, version)` | `Item` — `.data`, `.by_dataset()`, `.cite()` |
+| `load_database(version)` | dict of frames |
+| `cite(x)` / `bibtex(x)` | citation text |
+| `release_info()` / `cache_info()` / `clear_cache()` | housekeeping |
 
 ## License
 
