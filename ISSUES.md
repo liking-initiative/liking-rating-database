@@ -200,9 +200,25 @@ Found while checking the site for non-functional features before sharing it.
   of slack; VACUUM takes the gzip to 63.8 MiB. The unpushed history was
   rewritten to carry the smaller artifact, and a test guards the limit.
 
+- [x] **Interface pass on the site itself.** Warning/info banners stacked above
+  content read as templated; they are now quiet typographic notes with a rule,
+  keeping the caveats without the alarm chrome. Genuine error and empty states
+  stay as-is — those render instead of content, not on top of it. About merged
+  into the home page (home *is* the about page), and the standalone
+  Visualizations tab removed — visualization belongs in the context of a
+  dataset, which `/datasets/:id/visualize` already covers. Sidebar down from
+  seven entries to five. Removed an invented support email that appeared on
+  the old About page.
+- [x] **Item network rebuilt** as an interactive force graph (see commit).
+
 **Still open from this pass**
-- [ ] R client package. Snippets use `jsonlite` against the REST API directly,
-  which works but is more verbose than a package would be.
+- [ ] **R and Python packages become the programmatic access path.** Once the
+  interface settles, both packages replace the generated snippets now shown on
+  dataset pages — the per-page snippet code is a placeholder for exactly this.
+  `clients/python` (`likingdb`) is the first half; the R package is unwritten,
+  which is why the R snippets currently drive the REST API through `jsonlite`
+  directly. Sequence: settle the interface, ship both packages, then swap the
+  snippets to two-line package calls.
 - [ ] Publish the Python client to PyPI (currently install from a checkout).
 
 ### Tabled (deliberately, 2026-07-10)
