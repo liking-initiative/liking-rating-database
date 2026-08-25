@@ -61,7 +61,7 @@ perceptual judgments, out of scope.
   overrides, sample-audited across four rounds). A human pass over
   `scripts/migrations/data/item_categories.json` would tighten the tail.
 
-### Product (toward the Liking Initiative / openESM-style vision)
+### Product (toward the Liking Initiative vision)
 
 **Item network visualization** — SHIPPED 2026-07-10 (first version).
 `GET /analytics/item-network` (co-occurrence grouped by `standardized_name`,
@@ -88,7 +88,7 @@ compute or stats table. What the backend will need then: an endpoint serving
 subject×item rating matrices for a selected dataset/item subset (wide-format
 export). Viability facts to gate/caveat in the UI when it lands: 6 datasets
 have n_subjects ≥ n_items (solid), 26 are glasso-viable (ratio 0.3–1.0), 10
-have p ≫ n. Methods caveat à la openESM's descriptives page.
+have p ≫ n. Methods caveat à la a per-item descriptives page.
 
 **Item images** (future — Kianté has the stimulus sets) — schema is already
 prepared (`items.image_available`, `items.image_url`); needs an asset
@@ -113,14 +113,79 @@ migration if it stays unused.
   wording, incentivization, presentation format) — the paper's Table 1 fields
   and the RA sheet's `question_asked` / "come hungry?" / "eat the food?"
   columns, which already exist in the source xlsx.
-- [ ] Whole-database download (single archive + codebook).
-- [ ] Python client package (`load_dataset(...)`) — the openESM-style access
-  path; R after.
+- [x] ~~Whole-database download (single archive + codebook).~~ Done 2026-08-24:
+  `GET /database/archive` returns a ZIP of ratings/studies/datasets/items plus
+  a codebook, built once per process and cached. Surfaced on the Downloads
+  page.
+- [x] ~~Python client package (`load_dataset(...)`) — the programmatic access
+  path; R after.~~ Done 2026-08-24: `clients/python` (`likingdb`) wraps the API
+  and returns DataFrames. R still has no package — the site's generated R
+  snippets use `jsonlite` against the REST API directly, which is verified to
+  work end to end.
 - [ ] Public contribution guide for outside labs (docs/ADDING_DATASETS.md is
   the internal standard; the public "dataset journey" builds on it).
 - [ ] Move off ephemeral SQLite (Render persistent disk or Postgres) if/when
   write features are needed.
 - [ ] Code-split plotly; frontend component tests (RTL).
+
+### Pre-deployment audit (2026-08-24)
+
+Found while checking the site for non-functional features before sharing it.
+
+- [x] **Exports silently dropped `timepoint`.** Every format wrote
+  `subject_id, item_id, item_name, rating, normalized_rating` with no phase
+  column, so a `leeholyoak2021` download was 48,060 rows in which each
+  (subject, item) pair appeared three times with different ratings and no way
+  to tell the phases apart. Fixed in all four formats (csv/json/xlsx/spss) and
+  pinned by regression tests plus a repeated-phase fixture.
+- [x] **"Recent Downloads" was a dead panel.** A hardcoded empty state with no
+  backing endpoint — `DownloadLog` was imported in routes.py but never
+  exposed, so it could never populate. Removed.
+- [x] **Every public-facing count was stale.** README, CLAUDE.md, and
+  DATA_DICTIONARY said 654,917 ratings / 27 studies / 46 datasets / 2,279
+  stimuli; the database holds 700,943 / 33 / 55 / 2,297. The dictionary's own
+  section headers were stale too (studies 24, datasets 42). All corrected.
+- [x] **README overclaimed DOIs** ("Every study links to its source
+  publication") — 29 of 33; the other 4 are in preparation. Reworded.
+
+### Feature pass toward the public release (2026-08-24)
+
+- [x] **Descriptives page** (`/descriptives`) — per-item distributional
+  statistics as raincloud figures (KDE + median rule + the underlying
+  observations as jittered dots). The unit had to be chosen to fit the data:
+  summarising each participant first and plotting the spread of those
+  per-person numbers is undefined here, because 53 of 55 datasets hold one
+  rating per (subject, item). Two levels instead — dataset x item shows the
+  distribution **across subjects** (~90 per item on average), and item across
+  datasets shows five panels (Mean, SD, Skewness, Prop. Floor, Prop. Ceiling)
+  with **one dot per dataset**, computed on `normalized_rating` so studies on
+  different response scales are comparable. A phase selector appears for the
+  two repeated-phase datasets; on `leeholyoak2021` the mean moves 54.09 ->
+  56.27 across phases, which is the coherence shift the source paper reports.
+- [x] **Whole-database archive** — `GET /database/archive` returns a ZIP of
+  ratings/studies/datasets/items plus a codebook, built once per process and
+  cached. Compression runs off the event loop so the first request does not
+  stall the API. Surfaced on the Downloads page.
+- [x] **Python client** — `clients/python` (`likingdb`) wraps the API and
+  returns DataFrames; `load_database()` pulls the whole corpus in one request
+  (700,943 rows in ~1s locally).
+- [x] **Generated R/Python snippets** on dataset pages and the Downloads page.
+  Both were executed against the live API before shipping — the Python path
+  through the client, the R path through `Rscript` + `jsonlite` — so neither
+  snippet is aspirational.
+- [x] **Documentation page** (`/docs`) — schema, the two things users get
+  wrong (normalized_rating, subject-ID scoping), endpoint table, citation,
+  contribution pointer.
+- [x] **Design pass** — one blue primary, one orange accent reserved for data
+  marks, flat surfaces, system font stack.
+- [x] **API naming fixed**: `/ratings` returned `participant_id` while the DB,
+  exports, archive, and every doc said `subject_id`. Renamed; nothing consumed
+  the old name.
+
+**Still open from this pass**
+- [ ] R client package. Snippets use `jsonlite` against the REST API directly,
+  which works but is more verbose than a package would be.
+- [ ] Publish the Python client to PyPI (currently install from a checkout).
 
 ### Tabled (deliberately, 2026-07-10)
 - Zenodo/OSF data DOI + versioned releases — revisit at publication.

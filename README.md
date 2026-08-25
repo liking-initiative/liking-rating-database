@@ -1,13 +1,13 @@
 # Liking Rating Database
 
 A curated database of subjective liking ratings for decision-making research:
-**654,917 individual ratings** from **27 published studies** (46 datasets),
-covering **2,279 stimuli** — food items and consumer products. Every study
-links to its source publication (DOI), and ratings are provided both in their
+**700,943 individual ratings** from **33 studies** (55 datasets),
+covering **2,297 stimuli** — food items and consumer products. Every published
+study links to its source publication (DOI); 4 studies are still in preparation
+and carry a full citation instead. Ratings are provided both in their
 original scale units and normalized to 0–1 for cross-study comparison.
 
-The project is modeled on curated dataset initiatives like
-[openESM](https://openesmdata.org/): browse by study or stimulus, inspect
+Built as a curated research resource: browse by study or stimulus, inspect
 methodology metadata, and download exactly the data you need.
 
 ## Quick start
@@ -51,10 +51,10 @@ no duplicate studies, real completeness values).
 
 | | |
 |---|---|
-| Studies (publications) | 27, years 2016–2025, all with DOIs |
-| Datasets | 46 (a study can contribute several experiments) |
-| Stimuli | 2,279 (food + consumer products, 17 categories) |
-| Ratings | 654,917 individual ratings (repeated phases kept as timepoints) |
+| Studies (publications) | 33, years 2016–2026, 29 with DOIs (4 in preparation) |
+| Datasets | 55 (a study can contribute several experiments) |
+| Stimuli | 2,297 (food + consumer products, 17 categories) |
+| Ratings | 700,943 individual ratings (repeated phases kept as timepoints) |
 | Scale types | likert, continuous, visual-analog, slider, willingness-to-pay |
 
 Each rating stores the **original value** in the study's own scale plus a
@@ -77,9 +77,42 @@ Read-only REST API under `/api/v1` (interactive docs at `/api/v1/docs`):
 - `GET /items`, `GET /items/{id}` — stimuli with categories
 - `POST /search`, `GET /search/suggestions` — full-text search incl. item names
 - `GET /ratings`, `GET /ratings/aggregate` — individual and per-item statistics
+- `GET /descriptives/dataset-item`, `GET /descriptives/items/{id}` —
+  distributional statistics within a dataset and across studies
+- `GET /analytics/item-network` — item co-occurrence network with a layout
 - `POST /download` → `GET /download/{id}` — export as CSV, JSON, XLSX, or SPSS
+- `GET /database/archive` — the whole database as one ZIP with a codebook
 
 List endpoints return `{"items": [...], "total", "page", "page_size", "pages"}`.
+
+## Getting the data
+
+Three ways, in rough order of convenience:
+
+```python
+# 1. The Python client (clients/python)
+import likingdb
+db = likingdb.load_database()        # one request, 700,943 ratings
+db["ratings"].groupby("item_name").normalized_rating.mean().nlargest(10)
+```
+
+```r
+# 2. The whole-database archive, straight into R
+tmp <- tempfile(fileext = ".zip")
+download.file("https://liking-rating-api.onrender.com/api/v1/database/archive",
+              tmp, mode = "wb")
+dir <- tempfile(); dir.create(dir); unzip(tmp, exdir = dir)
+ratings <- read.csv(file.path(dir, "liking_rating_database", "ratings.csv"),
+                    colClasses = c(subject_id = "character"))
+```
+
+3. Per-dataset CSV / JSON / XLSX / SPSS exports from any dataset page in the
+   web app.
+
+**Two things to get right.** Cross-study comparisons must use
+`normalized_rating`, not `rating` — response scales differ across studies.
+And subject IDs are unique only *within* a dataset, so always key on
+`(dataset_id, subject_id)`.
 
 ## Architecture
 
@@ -91,6 +124,8 @@ List endpoints return `{"items": [...], "total", "page", "page_size", "pages"}`.
 - **Frontend** — React 18 + Ant Design 5 + react-query v3 + Plotly, in
   [frontend/](frontend/). All network calls go through
   [frontend/src/services/api.js](frontend/src/services/api.js).
+- **Python client** — [clients/python/](clients/python/), a thin wrapper over
+  the API returning pandas DataFrames.
 - **Deployment** — [render.yaml](render.yaml) (backend web service + static
   frontend). See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 

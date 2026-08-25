@@ -7,24 +7,25 @@ strings. Six tables: `studies`, `datasets`, `items`, `ratings`, plus
 
 ---
 
-## studies — one row per publication (24 rows)
+## studies — one row per publication (33 rows)
 
 | Field | Type | Description |
 |-------|------|-------------|
 | `id` | UUID string | Primary key |
 | `name` | String | Paper title, e.g. `"Decomposing preferences into predispositions and evaluations"` |
 | `authors` | JSON array | `["Desai, N.", "Krajbich, I."]` |
-| `year` | Integer | Publication year (2016–2025) |
-| `doi` | String | DOI, e.g. `10.1037/xge0001162` (all 24 studies) |
+| `year` | Integer | Publication year (2016–2026) |
+| `doi` | String | DOI, e.g. `10.1037/xge0001162`. Present for 29 of 33; null for the 4 studies in preparation |
 | `journal` | String | Journal, or `"PsyArXiv (preprint)"` |
 | `publication_title` | String | Full formatted citation |
 | `description` | Text | Short description |
-| `osf_project_id` | String | Unused (null) |
+| `osf_project_id` | String | Unused (null for all rows) |
 
-A study can contribute several datasets (e.g. Leng et al. 2025 contributes
-eight; Gandhi et al. 2022 contributes eight).
+A study can contribute several datasets: "Mutual inclusivity improves
+decision-making" (2025) and "Computational Methods for Predicting and
+Understanding Food Judgment" (2022) contribute eight each.
 
-## datasets — one row per experiment/sample (42 rows)
+## datasets — one row per experiment/sample (55 rows)
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -36,7 +37,8 @@ eight; Gandhi et al. 2022 contributes eight).
 | `rating_scale_min` / `rating_scale_max` | Float | True bounds of the original scale |
 | `rating_scale_type` | String | One of `likert`, `continuous`, `vas`, `slider`, `wtp` (below) |
 | `data_completeness` | Float | Real % = `n_ratings / (n_subjects × n_items) × 100` (64.4–100) |
-| `file_format`, `file_size_mb`, `osf_file_id` | — | Unused (null) |
+| `file_format` | String | `"csv"` for the 42 datasets ingested from the RA compilation; null for the 13 added since |
+| `file_size_mb`, `osf_file_id` | — | Unused (null for all rows) |
 
 ### Scale types
 
@@ -52,7 +54,7 @@ Special case: `foljac2`'s source values arrived already normalized to 0–1;
 the original elicitation was WTP 0–3 (Folke et al. 2016). Its scale is
 recorded as 0–1 with a note in the dataset description.
 
-## items — one row per stimulus (2,248 rows)
+## items — one row per stimulus (2,297 rows)
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -75,7 +77,7 @@ consumer goods). `unknown` (178 items with opaque source codes like `0488`).
 Categories were assigned by a curated name-based classifier (migration 002);
 see `scripts/migrations/data/item_categories.json` for the full mapping.
 
-## ratings — one row per (dataset, subject, item, timepoint) (654,917 rows)
+## ratings — one row per (dataset, subject, item, timepoint) (700,943 rows)
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -101,5 +103,16 @@ two datasets is two different people.
 
 Every applied migration is recorded with its version, timestamp, and a JSON
 report. Current: `001_reconcile_with_source` (scale corrections, study
-dedup + DOI enrichment, normalization recompute), `002_item_categories`, `003_hascher_doi`, `004_rating_timepoints`, plus `ds-*` ingestion records.
-Scripts live in `scripts/migrations/`.
+dedup + DOI enrichment, normalization recompute), `002_item_categories`,
+`003_hascher_doi`, `004_rating_timepoints`, `005_name_harmonization`, plus
+`ds-*` ingestion records. Scripts live in `scripts/migrations/`.
+
+## Download exports
+
+Every export format (csv, json, xlsx, spss) carries the observation key in
+full: `subject_id`, `item_id`, `item_name`, `timepoint`, `rating`,
+`normalized_rating`. **`timepoint` is required to disambiguate repeated
+phases** — without it, `leeholyoak2021` and `leehare2023exp2` return several
+rows per (subject, item) with no way to tell the phases apart. Metadata
+columns (`study_name`, `study_authors`, `study_year`, `dataset_name`) are
+appended when `include_metadata` is set.
