@@ -18,7 +18,7 @@ strings. Six tables: `studies`, `datasets`, `items`, `ratings`, plus
 | `doi` | String | DOI, e.g. `10.1037/xge0001162`. Present for 29 of 33; null for the 4 studies in preparation |
 | `journal` | String | Journal, or `"PsyArXiv (preprint)"` |
 | `publication_title` | String | Full formatted citation |
-| `description` | Text | Short description |
+| `description` | Text | Null for every study. The importer had filled this with a generated "Food preference study from <code> dataset" placeholder; migration 006 cleared it (see below) |
 | `osf_project_id` | String | Unused (null for all rows) |
 
 A study can contribute several datasets: "Mutual inclusivity improves
@@ -104,8 +104,16 @@ two datasets is two different people.
 Every applied migration is recorded with its version, timestamp, and a JSON
 report. Current: `001_reconcile_with_source` (scale corrections, study
 dedup + DOI enrichment, normalization recompute), `002_item_categories`,
-`003_hascher_doi`, `004_rating_timepoints`, `005_name_harmonization`, plus
-`ds-*` ingestion records. Scripts live in `scripts/migrations/`.
+`003_hascher_doi`, `004_rating_timepoints`, `005_name_harmonization`,
+`006_drop_generated_study_descriptions`, plus `ds-*` ingestion records.
+Scripts live in `scripts/migrations/`.
+
+Migration 006 cleared all 24 study descriptions. Every one matched the
+template `"Food preference study from <code> dataset"` — synthesised by an
+early import, never supplied by a source study. They carried no information
+the dataset code did not already give, and asserted "food preference study"
+for the consumer-product studies. The substantive study metadata lives in
+`publication_title` and `journal`, which are untouched.
 
 ## Download exports
 

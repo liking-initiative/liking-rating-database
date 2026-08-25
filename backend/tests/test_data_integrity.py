@@ -26,6 +26,12 @@ def one(con, sql):
     return con.execute(sql).fetchone()[0]
 
 
+def test_no_generated_study_descriptions(con):
+    """Migration 006 cleared placeholder descriptions; nothing may reintroduce them."""
+    n = one(con, "SELECT COUNT(*) FROM studies WHERE description LIKE 'Food preference study from % dataset'")
+    assert n == 0, f"{n} studies carry the generated description template again"
+
+
 def test_no_duplicate_study_rows(con):
     assert one(con, "SELECT COUNT(*) - COUNT(DISTINCT name) FROM studies") == 0
 
