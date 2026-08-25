@@ -193,7 +193,7 @@ class RatingResponse(BaseSchema):
     item_id: str
     item_name: Optional[str] = None
     dataset_id: str
-    participant_id: Optional[str] = None
+    subject_id: Optional[str] = None  # unique only within a dataset
 
 
 class PaginatedRatingsResponse(BaseSchema):

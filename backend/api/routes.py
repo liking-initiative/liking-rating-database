@@ -287,7 +287,7 @@ async def get_ratings(
             item_id=str(rating.item_id),
             item_name=rating.item.name if rating.item else None,
             dataset_id=str(rating.dataset_id),
-            participant_id=rating.subject_id
+            subject_id=rating.subject_id
         )
         for rating in ratings
     ]
