@@ -188,12 +188,6 @@ const SimilarityTable = ({ rows, itemId }) => (
         ),
       },
       {
-        title: 'Category',
-        dataIndex: 'category',
-        key: 'category',
-        render: (c) => (c ? <Tag>{c}</Tag> : '—'),
-      },
-      {
         title: 'r',
         dataIndex: 'r',
         key: 'r',
@@ -442,7 +436,6 @@ const DescriptivesPage = () => {
                 <span>
                   {detail?.item_name} in {detail?.dataset_name}
                 </span>
-                {detail?.category && <Tag color="blue">{detail.category}</Tag>}
                 {detail?.available_timepoints?.length > 1 && (
                   <Tag color="orange">phase {detail.timepoint}</Tag>
                 )}

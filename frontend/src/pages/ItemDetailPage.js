@@ -14,7 +14,7 @@ import {
   Statistic,
   Divider
 } from 'antd';
-import { ArrowLeftOutlined, BarChartOutlined, TagOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, BarChartOutlined } from '@ant-design/icons';
 import { useQuery } from 'react-query';
 import { getItem, getItemRatingsByDataset } from '../services/api';
 
@@ -141,22 +141,6 @@ const ItemDetailPage = () => {
               {item.standardized_name && item.standardized_name !== item.name && (
                 <Descriptions.Item label="Standardized Name">
                   {item.standardized_name}
-                </Descriptions.Item>
-              )}
-              
-              <Descriptions.Item label="Category">
-                {item.category ? (
-                  <Tag icon={<TagOutlined />} color="blue">
-                    {item.category}
-                  </Tag>
-                ) : (
-                  <Text type="secondary">Not specified</Text>
-                )}
-              </Descriptions.Item>
-              
-              {item.subcategory && (
-                <Descriptions.Item label="Subcategory">
-                  <Tag color="geekblue">{item.subcategory}</Tag>
                 </Descriptions.Item>
               )}
               

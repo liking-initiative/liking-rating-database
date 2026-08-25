@@ -18,24 +18,10 @@ import {
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import Plot from 'react-plotly.js';
 import { useQuery } from 'react-query';
-import { getItem, getItems, getRatingAggregations, getRatings, getItemRatingsByDataset } from '../services/api';
+import { getItem, getRatingAggregations, getRatings, getItemRatingsByDataset } from '../services/api';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
-
-// Fetch the ids of every item in a category (paging through /items)
-const getCategoryItemIds = async (category) => {
-  const ids = [];
-  let page = 1;
-  let pages = 1;
-  do {
-    const response = await getItems({ category, page, page_size: 100 });
-    (response.items || []).forEach((item) => ids.push(item.id));
-    pages = response.pages || 1;
-    page += 1;
-  } while (page <= pages);
-  return ids;
-};
 
 const ItemAnalysisPage = () => {
   const { itemId } = useParams();
@@ -83,32 +69,17 @@ const ItemAnalysisPage = () => {
     }
   );
 
-  // Aggregations used by the "Rank in category" statistic
+  // Aggregations behind the rank statistic. Ranking runs over every item in
+  // the database rather than within a category: categories here are derived
+  // from item names, not supplied by the source studies, so a "rank within
+  // category" would report a number that depends on our own guess.
   const { data: allRatingAggregations } = useQuery(
-    ['categoryRatings', item?.category],
+    'allRatingAggregations',
     () => getRatingAggregations({ min_ratings: 1 }),
-    {
-      enabled: !!item?.category,
-      retry: 3,
-      staleTime: 10 * 60 * 1000,
-    }
+    { retry: 3, staleTime: 10 * 60 * 1000 }
   );
 
-  // Fetch the ids of the items that actually belong to this item's category,
-  // so the "category rank" / competitive analysis only compare within it
-  const { data: categoryItemIds } = useQuery(
-    ['categoryItemIds', item?.category],
-    () => getCategoryItemIds(item.category),
-    {
-      enabled: !!item?.category,
-      retry: 3,
-      staleTime: 10 * 60 * 1000,
-    }
-  );
-
-  const categoryIdSet = new Set(categoryItemIds || []);
-  const categoryRatings = allRatingAggregations?.filter(r => categoryIdSet.has(r.item_id));
-  const categoryDataReady = !!(categoryItemIds && allRatingAggregations);
+  const rankDataReady = !!allRatingAggregations;
 
   if (!validId) {
     return (
@@ -181,14 +152,11 @@ const ItemAnalysisPage = () => {
     ratings.reduce((sum, r) => sum + Math.pow(r.mean_rating - overallMean, 2) * r.n_ratings, 0) / totalRatings : 0;
   const overallStd = Math.sqrt(withinVar + betweenVar);
 
-  // Calculate category ranking (within this item's category only)
-  const categoryItems = categoryRatings?.filter(r => r.item_id !== itemId) || [];
-  const betterRatedItems = categoryItems.filter(r => {
-    const itemMean = r.mean_rating;
-    return itemMean > overallMean;
-  }).length;
-  const totalCategoryItems = categoryItems.length + 1; // +1 for current item
-  const categoryRank = betterRatedItems + 1;
+  // Rank by mean liking across every item with ratings.
+  const otherItems = allRatingAggregations?.filter(r => r.item_id !== itemId) || [];
+  const betterRatedItems = otherItems.filter(r => r.mean_rating > overallMean).length;
+  const totalRankedItems = otherItems.length + 1; // +1 for the current item
+  const overallRank = betterRatedItems + 1;
 
   // Prepare data for rating distribution table
   const ratingDistribution = ratings?.map((rating, index) => ({
@@ -408,13 +376,13 @@ const ItemAnalysisPage = () => {
             <Col xs={24} sm={12} md={6}>
               <Card>
                 <Statistic
-                  title={item?.category ? `Rank in ${item.category}` : "Category Rank"}
-                  value={categoryDataReady ? `#${categoryRank}` : '—'}
+                  title="Rank by mean liking"
+                  value={rankDataReady ? `#${overallRank}` : '—'}
                   valueStyle={{
-                    color: !categoryDataReady ? undefined
-                      : categoryRank <= 3 ? '#52c41a' : categoryRank <= 10 ? '#E78A00' : '#ff4d4f'
+                    color: !rankDataReady ? undefined
+                      : overallRank <= 10 ? '#3f8600' : undefined
                   }}
-                  suffix={categoryDataReady ? `/ ${totalCategoryItems}` : ''}
+                  suffix={rankDataReady ? `/ ${totalRankedItems}` : ''}
                 />
               </Card>
             </Col>
@@ -564,15 +532,6 @@ const ItemAnalysisPage = () => {
               {/* Item Properties */}
               <Card title="Item Properties" style={{ marginTop: 16 }}>
                 <Space direction="vertical" style={{ width: '100%' }}>
-                  <div>
-                    <Text strong>Category: </Text>
-                    {item.category ? (
-                      <Tag color="blue">{item.category}</Tag>
-                    ) : (
-                      <Text type="secondary">Not categorized</Text>
-                    )}
-                  </div>
-                  
                   <div>
                     <Text strong>Frequency: </Text>
                     <Text>{item.frequency || 0} datasets</Text>

@@ -34,7 +34,7 @@ const endpoints = [
   { key: 2, ep: 'GET /studies/{id}', ret: 'One publication and its datasets' },
   { key: 3, ep: 'GET /datasets', ret: 'Datasets, paginated' },
   { key: 4, ep: 'GET /datasets/{id}', ret: 'One dataset, its study, and its rating count' },
-  { key: 5, ep: 'GET /items', ret: 'Stimuli, paginated and filterable by category' },
+  { key: 5, ep: 'GET /items', ret: 'Stimuli, paginated and searchable by name' },
   { key: 6, ep: 'GET /ratings', ret: 'Ratings, filterable by dataset and item' },
   { key: 7, ep: 'GET /ratings/aggregate', ret: 'Per-item means, SDs, and counts' },
   { key: 8, ep: 'POST /search', ret: 'Datasets matching a query and filters' },
@@ -208,16 +208,6 @@ const DocumentationPage = () => {
           </Paragraph>
         </Card>
 
-        <Card id="categories" title="Item categories" style={{ marginBottom: 24 }}>
-          <Paragraph style={{ marginBottom: 0 }}>
-            Item categories are derived from item names by a curated lexicon —
-            they are not author-assigned ground truth. They are good enough to
-            filter and group by, but check them before treating them as data.
-            178 items whose source files carried opaque codes (
-            <Text code>0488</Text>, <Text code>mh0021</Text>) are categorised{' '}
-            <Text code>unknown</Text>.
-          </Paragraph>
-        </Card>
 
         <Card id="citing" title="Citing" style={{ marginBottom: 24 }}>
           <Paragraph>
@@ -257,7 +247,6 @@ evaluation ratings for decision-making research. (In preparation.)`}
             { key: 'access', href: '#access', title: 'Downloading the data' },
             { key: 'api', href: '#api', title: 'REST API' },
             { key: 'similarity', href: '#similarity', title: 'Preference similarity' },
-            { key: 'categories', href: '#categories', title: 'Item categories' },
             { key: 'citing', href: '#citing', title: 'Citing' },
             { key: 'contributing', href: '#contributing', title: 'Contributing' },
           ]}

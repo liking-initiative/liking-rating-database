@@ -5,7 +5,6 @@ import {
   Table, 
   Tag, 
   Input, 
-  Select, 
   Button, 
   Space, 
   Typography, 
@@ -14,35 +13,28 @@ import {
   Statistic 
 } from 'antd';
 import { useQuery } from 'react-query';
-import { AppleOutlined, TagOutlined } from '@ant-design/icons';
-import { getItems, getCategories } from '../services/api';
+import { AppleOutlined } from '@ant-design/icons';
+import { getItems } from '../services/api';
 
 const { Title } = Typography;
-const { Option } = Select;
 const { Search } = Input;
 
 const ItemsPage = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [searchInput, setSearchInput] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState(null);
   const [pagination, setPagination] = useState({ page: 1, pageSize: 20 });
 
-  // New search or category filter always restarts from page 1
+  // A new search always restarts from page 1
   const applySearch = (value) => {
     setSearchTerm(value);
     setPagination((p) => ({ ...p, page: 1 }));
   };
-  const applyCategory = (value) => {
-    setSelectedCategory(value);
-    setPagination((p) => ({ ...p, page: 1 }));
-  };
 
   const { data: items, isLoading } = useQuery(
-    ['items', searchTerm, selectedCategory, pagination],
+    ['items', searchTerm, pagination],
     () => getItems({
       search: searchTerm,
-      category: selectedCategory,
       page: pagination.page,
       page_size: pagination.pageSize
     }),
@@ -52,7 +44,6 @@ const ItemsPage = () => {
     }
   );
 
-  const { data: categories } = useQuery('categories', getCategories);
 
   const columns = [
     {
@@ -141,7 +132,7 @@ const ItemsPage = () => {
 
       {/* Summary Stats */}
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
-        <Col xs={24} sm={8}>
+        <Col xs={24} sm={12}>
           <Card>
             <Statistic
               title="Total Items"
@@ -151,17 +142,7 @@ const ItemsPage = () => {
             />
           </Card>
         </Col>
-        <Col xs={24} sm={8}>
-          <Card>
-            <Statistic
-              title="Categories"
-              value={categories?.categories?.length || 0}
-              prefix={<TagOutlined />}
-              valueStyle={{ color: '#52c41a' }}
-            />
-          </Card>
-        </Col>
-        <Col xs={24} sm={8}>
+        <Col xs={24} sm={12}>
           <Card>
             <Statistic
               title="With Images (current page)"
@@ -187,27 +168,11 @@ const ItemsPage = () => {
             />
           </Col>
           <Col xs={24} sm={12} md={8}>
-            <Select
-              placeholder="Filter by category"
-              allowClear
-              value={selectedCategory}
-              style={{ width: '100%' }}
-              onChange={applyCategory}
-            >
-              {categories?.categories?.map(category => (
-                <Option key={category} value={category}>
-                  {category}
-                </Option>
-              ))}
-            </Select>
-          </Col>
-          <Col xs={24} sm={12} md={8}>
             <Space>
               <Button
                 onClick={() => {
                   setSearchInput('');
                   applySearch('');
-                  applyCategory(null);
                 }}
               >
                 Clear Filters

@@ -22,7 +22,7 @@ import {
 import { SearchOutlined, FilterOutlined, DownloadOutlined } from '@ant-design/icons';
 import debounce from 'lodash/debounce';
 import { useQuery } from 'react-query';
-import { searchDatasets, getCategories, getScaleTypes, getYearRange, getSearchSuggestions, requestDownload, getDownload, downloadFile } from '../services/api';
+import { searchDatasets, getScaleTypes, getYearRange, getSearchSuggestions, requestDownload, getDownload, downloadFile } from '../services/api';
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -43,7 +43,6 @@ const SearchPage = () => {
   const [includeDemographics, setIncludeDemographics] = useState(false);
 
   // Metadata queries
-  const { data: categories } = useQuery('categories', getCategories);
   const { data: scaleTypes } = useQuery('scaleTypes', getScaleTypes);
   const { data: yearRange } = useQuery('yearRange', getYearRange);
 
@@ -328,15 +327,6 @@ const SearchPage = () => {
                     <Select placeholder="Select scale type" allowClear>
                       {scaleTypes?.scale_types?.map(type => (
                         <Option key={type} value={type}>{type}</Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <Form.Item name="food_category" label="Food Category">
-                    <Select placeholder="Select category" allowClear>
-                      {categories?.categories?.map(category => (
-                        <Option key={category} value={category}>{category}</Option>
                       ))}
                     </Select>
                   </Form.Item>

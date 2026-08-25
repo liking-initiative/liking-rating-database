@@ -132,7 +132,6 @@ const NetworkPage = () => {
             }}
           >
             <strong style={{ fontSize: 15 }}>{detail.label}</strong>
-            {detail.category && <Tag color="blue">{detail.category}</Tag>}
             <Text type="secondary" style={{ fontSize: 13 }}>
               {detail.frequency} studies
             </Text>
