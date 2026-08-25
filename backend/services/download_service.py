@@ -187,7 +187,7 @@ class DownloadService:
             writer = csv.writer(csvfile)
             
             # Write header
-            header = ['subject_id', 'item_id', 'item_name', 'rating', 'normalized_rating']
+            header = ['subject_id', 'item_id', 'item_name', 'timepoint', 'rating', 'normalized_rating']
             if request.include_demographics:
                 header.extend(['response_time', 'session_id', 'order_presented', 'demographic_data'])
             if request.include_metadata:
@@ -201,6 +201,7 @@ class DownloadService:
                     rating.subject_id,
                     rating.item_id,
                     rating.item.name,
+                    rating.timepoint,
                     rating.rating,
                     rating.normalized_rating
                 ]
@@ -304,6 +305,7 @@ class DownloadService:
                     "subject_id": rating.subject_id,
                     "item_id": rating.item_id,
                     "item_name": rating.item.name,
+                    "timepoint": rating.timepoint,
                     "rating": rating.rating,
                     "normalized_rating": rating.normalized_rating
                 }
@@ -344,6 +346,7 @@ class DownloadService:
                         'subject_id': rating.subject_id,
                         'item_id': rating.item_id,
                         'item_name': rating.item.name,
+                        'timepoint': rating.timepoint,
                         'rating': rating.rating,
                         'normalized_rating': rating.normalized_rating
                     }
@@ -411,6 +414,7 @@ class DownloadService:
             'subject_id': 'Subject identifier',
             'item_id': 'Item identifier',
             'item_name': 'Food item name',
+            'timepoint': 'Repeated-rating phase (1 = first/only)',
             'rating': 'Original rating value',
             'normalized_rating': 'Normalized rating (0-1 scale)'
         }
