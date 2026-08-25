@@ -68,7 +68,7 @@ const HomePage = () => {
               value={statistics?.total_studies || 0}
               loading={isLoading}
               prefix={<ExperimentOutlined />}
-              valueStyle={{ color: '#1890ff' }}
+              valueStyle={{ color: '#085AB3' }}
             />
           </Card>
         </Col>
@@ -90,7 +90,7 @@ const HomePage = () => {
               value={statistics?.total_ratings || 0}
               loading={isLoading}
               prefix={<StarOutlined />}
-              valueStyle={{ color: '#faad14' }}
+              valueStyle={{ color: '#E78A00' }}
               formatter={(value) => value?.toLocaleString()}
             />
           </Card>

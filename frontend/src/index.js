@@ -17,17 +17,31 @@ const queryClient = new QueryClient({
   },
 });
 
-// Ant Design theme configuration
+// Ant Design theme configuration.
+// The same values are declared as CSS custom properties in styles/main.css,
+// so charts and UI chrome resolve to one palette.
 const theme = {
   token: {
-    colorPrimary: '#1890ff',
+    colorPrimary: '#085AB3',
+    colorInfo: '#085AB3',
+    colorWarning: '#E78A00',
+    colorLink: '#085AB3',
+    colorBgLayout: '#f7f8fa',
     borderRadius: 6,
     wireframe: false,
+    fontFamily:
+      "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', " +
+      "'Ubuntu', 'Cantarell', 'Open Sans', 'Helvetica Neue', sans-serif",
   },
   components: {
     Layout: {
-      headerBg: '#001529',
-      headerColor: 'rgba(255, 255, 255, 0.85)',
+      headerBg: '#085AB3',
+      headerColor: 'rgba(255, 255, 255, 0.92)',
+    },
+    Menu: {
+      darkItemBg: '#0b3c74',
+      darkSubMenuItemBg: '#0b3c74',
+      darkItemSelectedBg: '#085AB3',
     },
   },
 };

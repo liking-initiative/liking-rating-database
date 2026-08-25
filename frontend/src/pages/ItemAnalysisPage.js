@@ -267,7 +267,7 @@ const ItemAnalysisPage = () => {
         .filter(v => v !== null && v !== undefined),
       type: 'histogram',
       name: 'Rating Frequency',
-      marker: { color: '#1890ff' },
+      marker: { color: '#085AB3' },
     }];
   };
 
@@ -382,7 +382,7 @@ const ItemAnalysisPage = () => {
                   title="Overall Rating (normalized)"
                   value={overallMean}
                   precision={2}
-                  valueStyle={{ color: '#1890ff' }}
+                  valueStyle={{ color: '#085AB3' }}
                   suffix="/ 1"
                 />
               </Card>
@@ -401,7 +401,7 @@ const ItemAnalysisPage = () => {
                 <Statistic
                   title="Datasets"
                   value={ratings.length}
-                  valueStyle={{ color: '#faad14' }}
+                  valueStyle={{ color: '#E78A00' }}
                 />
               </Card>
             </Col>
@@ -412,7 +412,7 @@ const ItemAnalysisPage = () => {
                   value={categoryDataReady ? `#${categoryRank}` : '—'}
                   valueStyle={{
                     color: !categoryDataReady ? undefined
-                      : categoryRank <= 3 ? '#52c41a' : categoryRank <= 10 ? '#faad14' : '#ff4d4f'
+                      : categoryRank <= 3 ? '#52c41a' : categoryRank <= 10 ? '#E78A00' : '#ff4d4f'
                   }}
                   suffix={categoryDataReady ? `/ ${totalCategoryItems}` : ''}
                 />
@@ -452,7 +452,7 @@ const ItemAnalysisPage = () => {
                   precision={0}
                   valueStyle={{
                     // Std dev of normalized (0-1) ratings tops out at 0.5
-                    color: overallStd < 0.1 ? '#52c41a' : overallStd < 0.2 ? '#faad14' : '#ff4d4f'
+                    color: overallStd < 0.1 ? '#52c41a' : overallStd < 0.2 ? '#E78A00' : '#ff4d4f'
                   }}
                   suffix="/ 100"
                 />
@@ -465,7 +465,7 @@ const ItemAnalysisPage = () => {
                   value={Math.min(100, (totalRatings / 100) * 100)}
                   precision={0}
                   valueStyle={{ 
-                    color: totalRatings >= 100 ? '#52c41a' : totalRatings >= 20 ? '#faad14' : '#ff4d4f' 
+                    color: totalRatings >= 100 ? '#52c41a' : totalRatings >= 20 ? '#E78A00' : '#ff4d4f' 
                   }}
                   suffix="/ 100"
                 />

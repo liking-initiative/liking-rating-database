@@ -49,7 +49,7 @@ const VisualizationsPage = () => {
       x: values,
       type: 'histogram',
       name: 'Rating Frequency',
-      marker: { color: '#1890ff' },
+      marker: { color: '#085AB3' },
       opacity: 0.7
     };
   };

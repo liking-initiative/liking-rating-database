@@ -191,7 +191,7 @@ const StudyDetailPage = () => {
         <Row align="middle">
           <Col flex="auto">
             <Space size="large">
-              <ExperimentOutlined style={{ fontSize: '24px', color: '#1890ff' }} />
+              <ExperimentOutlined style={{ fontSize: '24px', color: '#085AB3' }} />
               <div>
                 <Title level={2} style={{ margin: 0 }}>
                   {study.name}
@@ -277,7 +277,7 @@ const StudyDetailPage = () => {
             <Space direction="vertical" style={{ width: '100%' }}>
               <div>
                 <div style={{ fontWeight: 'bold' }}>Total Datasets</div>
-                <div style={{ fontSize: '24px', color: '#1890ff' }}>
+                <div style={{ fontSize: '24px', color: '#085AB3' }}>
                   {study.datasets?.length || 0}
                 </div>
               </div>
@@ -289,7 +289,7 @@ const StudyDetailPage = () => {
               </div>
               <div>
                 <div style={{ fontWeight: 'bold' }}>Total Items</div>
-                <div style={{ fontSize: '24px', color: '#faad14' }}>
+                <div style={{ fontSize: '24px', color: '#E78A00' }}>
                   {study.datasets?.reduce((sum, ds) => sum + ds.n_items, 0) || 0}
                 </div>
               </div>

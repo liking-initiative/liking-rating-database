@@ -194,7 +194,7 @@ const ItemDetailPage = () => {
                   title="Appears in Datasets"
                   value={ratings ? ratings.length : 0}
                   suffix="datasets"
-                  valueStyle={{ color: '#1890ff' }}
+                  valueStyle={{ color: '#085AB3' }}
                 />
               </Col>
               
@@ -227,7 +227,7 @@ const ItemDetailPage = () => {
                          ratings.reduce((sum, r) => sum + r.n_ratings, 0)).toFixed(2) : 0
                       }
                       precision={2}
-                      valueStyle={{ color: '#faad14' }}
+                      valueStyle={{ color: '#E78A00' }}
                     />
                   </Col>
                 </>
@@ -262,7 +262,7 @@ const ItemDetailPage = () => {
                     valueStyle={{
                       // Ratings are normalized to 0-1, so threshold on that domain
                       color: rating.mean_rating > 0.6 ? '#52c41a' :
-                             rating.mean_rating > 0.4 ? '#faad14' : '#ff4d4f'
+                             rating.mean_rating > 0.4 ? '#E78A00' : '#ff4d4f'
                     }}
                   />
                   <div style={{ fontSize: '12px', color: '#666', marginTop: 8 }}>

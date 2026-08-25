@@ -1,4 +1,30 @@
-/* Global styles for Liking Rating Database */
+/* Global styles for Liking Rating Database
+ *
+ * A restrained palette for a reference tool: the system font stack, one blue
+ * primary, one orange accent reserved for data marks, and flat low-chrome
+ * surfaces so the figures carry the visual weight rather than the chrome.
+ * Chart code reads these same variables, keeping figures and UI in one system.
+ */
+
+:root {
+  --primary-blue: #085AB3;
+  --primary-blue-hover: #0a6ad3;
+  --primary-blue-soft: #e8f1fb;
+  --accent-orange: #E78A00;
+  --accent-orange-soft: #fdf3e0;
+
+  --bg-offwhite: #FDFDFD;
+  --bg-page: #f7f8fa;
+  --light-gray: #f5f5f5;
+  --hover-gray: #f0f0f0;
+  --border-gray: #e0e0e0;
+
+  --text-primary: #1f1f1f;
+  --text-muted: #6b6b6b;
+
+  --content-gap: 20px;
+  --radius: 6px;
+}
 
 * {
   box-sizing: border-box;
@@ -7,11 +33,11 @@
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+    'Ubuntu', 'Cantarell', 'Open Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f0f2f5;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
 }
 
 code {
@@ -25,56 +51,57 @@ code {
 }
 
 .ant-layout-content {
-  background: #f0f2f5;
+  background: var(--bg-page);
 }
 
-/* Card enhancements */
+/* Card enhancements — flat, bordered, minimal shadow */
 .ant-card {
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02);
-  border-radius: 8px;
+  border: 1px solid var(--border-gray);
+  border-radius: var(--radius);
+  box-shadow: none;
 }
 
 .ant-card-hoverable:hover {
-  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.05), 0 2px 16px -2px rgba(0, 0, 0, 0.03), 0 4px 8px 0 rgba(0, 0, 0, 0.03);
-  transform: translateY(-2px);
-  transition: all 0.3s ease;
+  border-color: var(--primary-blue);
+  box-shadow: 0 2px 8px rgba(8, 90, 179, 0.08);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 /* Table improvements */
 .ant-table {
   background: white;
-  border-radius: 8px;
+  border-radius: var(--radius);
 }
 
 .ant-table-thead > tr > th {
-  background: #fafafa;
+  background: var(--light-gray);
   font-weight: 600;
 }
 
-/* Button enhancements */
+/* Button enhancements — flat fills, no gradients */
 .ant-btn {
-  border-radius: 6px;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  border-radius: var(--radius);
+  box-shadow: none;
 }
 
 .ant-btn-primary {
-  background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
-  border: none;
+  background: var(--primary-blue);
+  border-color: var(--primary-blue);
 }
 
-.ant-btn-primary:hover {
-  background: linear-gradient(135deg, #40a9ff 0%, #1890ff 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px 0 rgba(24, 144, 255, 0.3);
+.ant-btn-primary:hover,
+.ant-btn-primary:focus {
+  background: var(--primary-blue-hover) !important;
+  border-color: var(--primary-blue-hover) !important;
 }
 
 /* Search and filter enhancements */
 .ant-input-search .ant-input {
-  border-radius: 6px 0 0 6px;
+  border-radius: var(--radius) 0 0 var(--radius);
 }
 
 .ant-input-search .ant-btn {
-  border-radius: 0 6px 6px 0;
+  border-radius: 0 var(--radius) var(--radius) 0;
 }
 
 /* Statistic card styling */
@@ -84,7 +111,7 @@ code {
 
 .ant-statistic-title {
   font-weight: 500;
-  color: #666;
+  color: var(--text-muted);
   margin-bottom: 8px;
 }
 
@@ -96,63 +123,67 @@ code {
 /* Header styling */
 .ant-layout-header {
   padding: 0 24px;
-  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  background: var(--primary-blue);
+  box-shadow: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   z-index: 1;
 }
 
 /* Sidebar styling */
 .ant-layout-sider {
-  box-shadow: 2px 0 6px rgba(0, 21, 41, 0.08);
+  box-shadow: none;
+  border-right: 1px solid var(--border-gray);
 }
 
-.ant-menu-dark {
-  background: #001529;
+.ant-menu-dark,
+.ant-menu-dark .ant-menu-sub {
+  background: #0b3c74;
 }
 
 .ant-menu-dark .ant-menu-item:hover {
-  background: #1890ff;
+  background: var(--primary-blue);
 }
 
 .ant-menu-dark .ant-menu-item-selected {
-  background: #1890ff;
+  background: var(--primary-blue);
 }
 
 /* Form improvements */
 .ant-form-item-label > label {
   font-weight: 500;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .ant-input, .ant-select-selector {
-  border-radius: 6px;
+  border-radius: var(--radius);
 }
 
 .ant-input:focus, .ant-input-focused {
-  border-color: #40a9ff;
-  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 2px rgba(8, 90, 179, 0.15);
 }
 
 /* Tag styling */
 .ant-tag {
   border-radius: 4px;
   border: none;
-  background: #f0f2f5;
-  color: #333;
+  background: var(--light-gray);
+  color: var(--text-primary);
 }
 
 .ant-tag-blue {
-  background: #e6f7ff;
-  color: #1890ff;
+  background: var(--primary-blue-soft);
+  color: var(--primary-blue);
 }
 
 .ant-tag-green {
   background: #f6ffed;
-  color: #52c41a;
+  color: #3f8600;
 }
 
 .ant-tag-orange {
-  background: #fff7e6;
-  color: #fa8c16;
+  background: var(--accent-orange-soft);
+  color: var(--accent-orange);
 }
 
 /* Pagination styling */
@@ -171,11 +202,11 @@ code {
   .ant-layout-content {
     padding: 16px;
   }
-  
+
   .ant-card {
     margin-bottom: 16px;
   }
-  
+
   .ant-table-wrapper {
     overflow-x: auto;
   }
@@ -213,7 +244,7 @@ code {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: var(--light-gray);
   border-radius: 4px;
 }
 
@@ -242,13 +273,94 @@ code {
   }
 }
 
+/* --- Descriptives page ---------------------------------------------------- */
+
+.desc-plot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--content-gap);
+}
+
+/* The five statistics read as one row of small multiples on a desktop. */
+@media (min-width: 1200px) {
+  .desc-plot-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+.desc-plot-panel {
+  border: 1px solid var(--border-gray);
+  border-radius: var(--radius);
+  background: var(--bg-offwhite);
+  padding: 12px 12px 8px;
+  overflow: hidden;
+}
+
+.desc-plot-title {
+  margin: 0 0 4px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+.desc-plot-empty {
+  margin: 0;
+  color: #bbb;
+  font-size: 0.8rem;
+}
+
+/* Small count-bucket bar chart, drawn in CSS rather than a plot library */
+.desc-modes-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 150px;
+  padding-top: 8px;
+}
+
+.desc-modes-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.desc-modes-count {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  height: 14px;
+}
+
+.desc-modes-bar-wrap {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.desc-modes-bar {
+  width: 100%;
+  background: var(--primary-blue);
+  opacity: 0.75;
+  border-radius: 2px 2px 0 0;
+  min-height: 1px;
+}
+
+.desc-modes-label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  padding-top: 4px;
+}
+
 /* Print styles */
 @media print {
   .ant-layout-sider,
   .ant-layout-header {
     display: none !important;
   }
-  
+
   .ant-layout-content {
     margin: 0 !important;
     padding: 20px !important;
@@ -259,7 +371,7 @@ code {
 .ant-btn:focus,
 .ant-input:focus,
 .ant-select:focus {
-  outline: 2px solid #1890ff;
+  outline: 2px solid var(--primary-blue);
   outline-offset: 2px;
 }
 
@@ -268,7 +380,7 @@ code {
   .ant-card {
     border: 2px solid #000;
   }
-  
+
   .ant-btn-primary {
     background: #000;
     border-color: #000;

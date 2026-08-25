@@ -147,7 +147,7 @@ const ItemsPage = () => {
               title="Total Items"
               value={items?.total || 0}
               prefix={<AppleOutlined />}
-              valueStyle={{ color: '#1890ff' }}
+              valueStyle={{ color: '#085AB3' }}
             />
           </Card>
         </Col>
@@ -166,7 +166,7 @@ const ItemsPage = () => {
             <Statistic
               title="With Images (current page)"
               value={items?.items?.filter(item => item.image_available).length || 0}
-              valueStyle={{ color: '#faad14' }}
+              valueStyle={{ color: '#E78A00' }}
               suffix={`/ ${items?.items?.length || 0}`}
             />
           </Card>

@@ -40,7 +40,7 @@ const DatasetVisualizationPage = () => {
       x: ratings.items.map(r => r.rating),
       type: 'histogram',
       name: 'Rating Frequency',
-      marker: { color: '#1890ff' },
+      marker: { color: '#085AB3' },
     }];
   };
 
