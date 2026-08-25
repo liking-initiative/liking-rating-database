@@ -3,9 +3,14 @@
 Provision the SQLite database for a deployment or a fresh checkout.
 
 The database ships WITH the repository as data-release/liking_rating_db.db.gz
-(86 MB gzipped; ~830 MB extracted), so setup is fully self-contained: no
+(64 MB gzipped; ~306 MB extracted), so setup is fully self-contained: no
 network access, no external hosting, and the data is versioned in git next to
 the migrations that produced it (see the schema_migrations table inside).
+
+Keep the artifact VACUUMed before re-gzipping. An un-VACUUMed database carries
+enough free-page slack to push the gzip over GitHub's 100 MiB per-file hard
+limit, at which point `git push` is rejected outright — see
+GITHUB_BLOB_LIMIT below and the guard in backend/tests/test_data_integrity.py.
 
 Extraction target: ./data/liking_rating_db.db (what render.yaml's DATABASE_URL
 points at). If the gzip is missing or corrupt this FAILS LOUDLY — an empty
@@ -22,6 +27,10 @@ SHIPPED_GZ = REPO_ROOT / "data-release" / "liking_rating_db.db.gz"
 TARGET = REPO_ROOT / "data" / "liking_rating_db.db"
 
 EXPECTED_TABLES = {"studies", "datasets", "items", "ratings", "schema_migrations"}
+
+# GitHub rejects any single file larger than this, so a release artifact above
+# it cannot be pushed at all.
+GITHUB_BLOB_LIMIT = 100 * 1024 * 1024
 
 
 def validate(db_path: Path) -> dict:
@@ -56,6 +65,13 @@ def setup_database() -> None:
     if not SHIPPED_GZ.exists():
         sys.exit(f"❌ {SHIPPED_GZ} not found — the repo checkout is incomplete. "
                  "The database ships with the repository; nothing to download.")
+
+    gz_size = SHIPPED_GZ.stat().st_size
+    if gz_size > GITHUB_BLOB_LIMIT:
+        print(f"⚠️  {SHIPPED_GZ.name} is {gz_size / 1048576:.1f} MiB, over GitHub's "
+              f"{GITHUB_BLOB_LIMIT / 1048576:.0f} MiB limit — this checkout pushes only "
+              "because the file came from somewhere else. VACUUM the database "
+              "before re-gzipping.", file=sys.stderr)
 
     TARGET.parent.mkdir(exist_ok=True)
     print(f"📦 Extracting {SHIPPED_GZ.name} "
