@@ -23,6 +23,7 @@ only changes via migrations plus a restart, matching the caching assumption in
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 import numpy as np
+import pandas as pd
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -41,6 +42,18 @@ STAT_LABELS = {
 
 _KDE_GRID = 128
 _MIN_N_FOR_KDE = 3
+
+# A correlation on a handful of shared raters is noise; require a floor per
+# dataset before a pair contributes anything.
+_MIN_SHARED_SUBJECTS = 10
+# Fisher's z is undefined at |r| = 1, which a tiny sample can produce exactly.
+_R_CLIP = 0.999999
+# Person-centring makes rows sum to zero, so correlations carry an ipsative
+# bias of about -1/(k - 1) for k items. At k = 2 that is exactly -1: the two
+# centred columns are forced to be negatives of each other and the
+# correlation says nothing at all. Require enough items that the bias is
+# small (<= -0.053). Every real dataset here clears this but one.
+_MIN_ITEMS_PER_DATASET = 20
 
 
 def _skewness(values: np.ndarray) -> Optional[float]:
@@ -150,6 +163,7 @@ class DescriptivesService:
     _CACHE_MAX_ENTRIES = 256
     _dataset_item_cache: Dict[Tuple, Dict[str, Any]] = {}
     _item_cache: Dict[str, Dict[str, Any]] = {}
+    _similar_cache: Dict[Tuple, Dict[str, Any]] = {}
     _index_cache: Optional[List[Dict[str, Any]]] = None
 
     # -- selectors ---------------------------------------------------------
@@ -455,6 +469,174 @@ class DescriptivesService:
         if len(self._item_cache) >= self._CACHE_MAX_ENTRIES:
             self._item_cache.clear()
         self._item_cache[item_id] = result
+        return result
+
+
+    # -- preference similarity --------------------------------------------
+
+    async def get_similar_items(
+        self,
+        db: AsyncSession,
+        item_id: str,
+        limit: int = 15,
+        min_shared_subjects: int = _MIN_SHARED_SUBJECTS,
+    ) -> Optional[Dict[str, Any]]:
+        """Items whose ratings move with this one, across people who rated both.
+
+        Similarity here is *preference* similarity, not similarity of the
+        items' names or descriptions: two items are close if the people who
+        liked one tended to like the other.
+
+        Correlations are computed **within** a dataset, on person-centred
+        ratings, and only then combined. All three parts matter:
+
+        * Subject ids are dataset-scoped, so a pooled correlation would
+          silently pair up unrelated people.
+        * Ratings are centred on each subject's own mean before correlating.
+          Without that, two items correlate merely because some people rate
+          everything highly and others rate everything low -- a response-style
+          effect, not shared preference. In ``foljac2`` that artifact is total:
+          each subject's ratings span ~0.006 while subject means span ~0.6, so
+          every pair of items correlates at r = 1.00 uncentred.
+        * Per-dataset r is combined by Fisher's z weighted by (n - 3), so a
+          study with more shared raters counts for more.
+
+        Centring makes the data ipsative, which biases correlations down by
+        roughly -1/(k - 1) for k items -- at k = 2 the two centred columns are
+        forced to be exact negatives, so datasets under
+        _MIN_ITEMS_PER_DATASET items are skipped. Above it the bias is small
+        next to the response-style effect that centring removes.
+        """
+        cached = self._similar_cache.get((item_id, limit, min_shared_subjects))
+        if cached is not None:
+            return cached
+
+        item = (
+            await db.execute(select(Item).where(Item.id == item_id))
+        ).scalar_one_or_none()
+        if item is None:
+            return None
+
+        dataset_ids = [
+            d for (d,) in (
+                await db.execute(
+                    select(Rating.dataset_id)
+                    .where(Rating.item_id == item_id)
+                    .distinct()
+                )
+            ).all()
+        ]
+        if not dataset_ids:
+            return None
+
+        rows = (
+            await db.execute(
+                select(
+                    Rating.dataset_id,
+                    Rating.subject_id,
+                    Rating.item_id,
+                    Rating.timepoint,
+                    Rating.normalized_rating,
+                ).where(Rating.dataset_id.in_(dataset_ids))
+            )
+        ).all()
+        if not rows:
+            return None
+
+        frame = pd.DataFrame(
+            rows,
+            columns=["dataset_id", "subject_id", "item_id", "timepoint", "rating"],
+        )
+        # One phase per dataset, so a repeated-phase study cannot contribute the
+        # same people more than once.
+        first = frame.groupby("dataset_id")["timepoint"].transform("min")
+        frame = frame[frame["timepoint"] == first]
+
+        # Accumulate Fisher-z numerator/denominator per candidate item.
+        z_sum: Dict[str, float] = {}
+        w_sum: Dict[str, float] = {}
+        n_subjects: Dict[str, int] = {}
+        n_datasets: Dict[str, int] = {}
+
+        for dataset_id, chunk in frame.groupby("dataset_id"):
+            wide = chunk.pivot_table(
+                index="subject_id", columns="item_id", values="rating",
+                aggfunc="mean",
+            )
+            if item_id not in wide.columns or wide.shape[1] < _MIN_ITEMS_PER_DATASET:
+                continue
+
+            # Person-centre: what matters is how a person ranked this item
+            # relative to the others they saw, not how generous a rater
+            # they are.
+            wide = wide.sub(wide.mean(axis=1), axis=0)
+
+            target = wide[item_id]
+            others = wide.drop(columns=[item_id])
+
+            # Pairwise-complete n for each candidate, before correlating.
+            counts = others.notna().mul(target.notna(), axis=0).sum()
+            eligible = counts[counts >= min_shared_subjects].index
+            if not len(eligible):
+                continue
+
+            correlations = others[eligible].corrwith(target)
+
+            for other_id, r in correlations.items():
+                if not np.isfinite(r):
+                    continue  # zero variance in one of the two columns
+                n = int(counts[other_id])
+                weight = n - 3
+                if weight <= 0:
+                    continue
+                z = np.arctanh(float(np.clip(r, -_R_CLIP, _R_CLIP)))
+                z_sum[other_id] = z_sum.get(other_id, 0.0) + z * weight
+                w_sum[other_id] = w_sum.get(other_id, 0.0) + weight
+                n_subjects[other_id] = n_subjects.get(other_id, 0) + n
+                n_datasets[other_id] = n_datasets.get(other_id, 0) + 1
+
+        if not w_sum:
+            return None
+
+        names = {
+            i: (n, c)
+            for i, n, c in (
+                await db.execute(
+                    select(Item.id, Item.name, Item.category)
+                    .where(Item.id.in_(list(w_sum.keys())))
+                )
+            ).all()
+        }
+
+        neighbours = []
+        for other_id, weight in w_sum.items():
+            name, category = names.get(other_id, (other_id, None))
+            neighbours.append(
+                {
+                    "item_id": other_id,
+                    "item_name": name,
+                    "category": category,
+                    "r": float(np.tanh(z_sum[other_id] / weight)),
+                    "n_subjects": n_subjects[other_id],
+                    "n_datasets": n_datasets[other_id],
+                }
+            )
+
+        neighbours.sort(key=lambda d: -d["r"])
+        result = {
+            "item_id": item_id,
+            "item_name": item.name,
+            "category": item.category,
+            "n_candidates": len(neighbours),
+            "min_shared_subjects": min_shared_subjects,
+            "min_items_per_dataset": _MIN_ITEMS_PER_DATASET,
+            "most_similar": neighbours[:limit],
+            "most_dissimilar": sorted(neighbours, key=lambda d: d["r"])[:limit],
+        }
+
+        if len(self._similar_cache) >= self._CACHE_MAX_ENTRIES:
+            self._similar_cache.clear()
+        self._similar_cache[(item_id, limit, min_shared_subjects)] = result
         return result
 
 

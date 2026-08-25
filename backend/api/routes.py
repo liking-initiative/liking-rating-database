@@ -454,6 +454,27 @@ async def get_descriptives_dataset_item(
     return result
 
 
+@api_router.get("/descriptives/items/{item_id}/similar")
+async def get_similar_items(
+    item_id: str,
+    limit: int = Query(15, ge=1, le=50),
+    min_shared_subjects: int = Query(10, ge=3, le=500,
+                                     description="min people rating both, per dataset"),
+    db: AsyncSession = Depends(get_db),
+):
+    """Items whose ratings move with this one, across people who rated both"""
+    result = await descriptives_service.get_similar_items(
+        db=db, item_id=item_id, limit=limit,
+        min_shared_subjects=min_shared_subjects,
+    )
+    if result is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Item not found, or no other item shares enough raters with it",
+        )
+    return result
+
+
 @api_router.get("/descriptives/items/{item_id}")
 async def get_descriptives_item(item_id: str, db: AsyncSession = Depends(get_db)):
     """Per-dataset summary statistics for one item, across every study using it"""

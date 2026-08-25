@@ -27,7 +27,7 @@ async def test_studies_envelope(client):
 async def test_datasets_envelope_and_detail_n_ratings(client):
     r = await client.get(f"{V}/datasets")
     body = r.json()
-    assert body["total"] == 4
+    assert body["total"] == 5
     detail = (await client.get(f"{V}/datasets/ds-choc1")).json()
     assert detail["n_ratings"] == 15
     assert detail["study"]["name"].startswith("Chocolate")
@@ -35,7 +35,7 @@ async def test_datasets_envelope_and_detail_n_ratings(client):
 
 async def test_items_envelope(client):
     body = (await client.get(f"{V}/items")).json()
-    assert body["total"] == 5
+    assert body["total"] == 29
 
 
 # --- search (B6 field names, item-matching, sort join) -----------------------
@@ -177,7 +177,7 @@ async def test_descriptives_index_lists_datasets_and_timepoints(client):
     rows = (await client.get(f"{V}/descriptives/index")).json()
     by_id = {r["dataset_id"]: r for r in rows}
     # only datasets that actually carry ratings are offered
-    assert set(by_id) == {"ds-choc1", "ds-choc2", "ds-veg", "ds-repeat"}
+    assert set(by_id) == {"ds-choc1", "ds-choc2", "ds-veg", "ds-repeat", "ds-pref"}
     assert by_id["ds-repeat"]["timepoints"] == [1, 2]
     assert by_id["ds-veg"]["timepoints"] == [1]
     assert by_id["ds-choc1"]["label"].startswith("Doe")
@@ -258,6 +258,59 @@ async def test_descriptives_item_404(client):
     assert (await client.get(f"{V}/descriptives/items/nope")).status_code == 404
 
 
+# --- preference similarity -----------------------------------------------------
+
+async def test_similar_items_are_ranked_by_shared_preference(client):
+    """Items liked by the same people rank together; opposite tastes rank apart."""
+    r = await client.get(f"{V}/descriptives/items/it-pref-sweet-0/similar",
+                         params={"min_shared_subjects": 5, "limit": 30})
+    assert r.status_code == 200
+    body = r.json()
+
+    top = body["most_similar"]
+    assert all(n["item_name"].startswith("prefsweet") for n in top[:5]), \
+        [n["item_name"] for n in top[:5]]
+    assert top[0]["r"] > 0.9
+
+    bottom = body["most_dissimilar"]
+    assert all(n["item_name"].startswith("prefsavoury") for n in bottom[:5]), \
+        [n["item_name"] for n in bottom[:5]]
+    assert bottom[0]["r"] < -0.9
+
+    # the target itself is never its own neighbour
+    assert all(n["item_id"] != "it-pref-sweet-0"
+               for n in top + bottom)
+
+
+async def test_similarity_is_person_centred(client):
+    """Without centring, a response-style offset makes everything correlate.
+
+    ds-pref gives each subject a generosity offset far larger than the taste
+    difference. Uncentred, even opposite-taste items correlate at about +0.97;
+    the centred result must instead be strongly negative.
+    """
+    body = (await client.get(f"{V}/descriptives/items/it-pref-sweet-0/similar",
+                             params={"min_shared_subjects": 5, "limit": 30})).json()
+    by_name = {n["item_name"]: n["r"] for n in
+               body["most_similar"] + body["most_dissimilar"]}
+    assert by_name["prefsavoury0"] < -0.9, by_name["prefsavoury0"]
+
+
+async def test_similarity_skips_narrow_datasets(client):
+    """A 2-item dataset yields r = -1 mechanically once centred, so it is skipped."""
+    body = (await client.get(f"{V}/descriptives/items/it-pref-sweet-0/similar",
+                             params={"min_shared_subjects": 5})).json()
+    assert body["min_items_per_dataset"] >= 20
+    # ds-choc1 (3 items) and ds-repeat (1 item) must contribute nothing
+    names = {n["item_name"] for n in body["most_similar"] + body["most_dissimilar"]}
+    assert not names & {"chocolate", "apple", "kale", "tortillachips", "repeatsnack"}
+
+
+async def test_similar_items_404_for_unknown_item(client):
+    r = await client.get(f"{V}/descriptives/items/nope/similar")
+    assert r.status_code == 404
+
+
 # --- read-only API (B8) --------------------------------------------------------
 
 async def test_mutation_endpoints_removed(client):
@@ -275,7 +328,7 @@ async def test_health(client):
 
 async def test_metadata_endpoints(client):
     scale = (await client.get(f"{V}/metadata/scale-types")).json()
-    assert set(scale["scale_types"]) == {"likert", "continuous"}
+    assert set(scale["scale_types"]) == {"likert", "continuous", "slider"}
     years = (await client.get(f"{V}/metadata/years")).json()
     assert years == {"min_year": 2020, "max_year": 2022}
 
