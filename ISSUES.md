@@ -182,6 +182,24 @@ Found while checking the site for non-functional features before sharing it.
   exports, archive, and every doc said `subject_id`. Renamed; nothing consumed
   the old name.
 
+- [x] **Preference similarity** — `GET /descriptives/items/{id}/similar` ranks
+  related items by how the same people rated them, rather than by any
+  similarity of names or descriptions (the database stores bare stimulus
+  names, so there is no text to compare). Ratings are person-centred before
+  correlating; without that, items correlate because some people rate
+  everything highly. `foljac2` is the extreme case — subject ratings span
+  ~0.006 against subject means spanning ~0.6, so uncentred every pair in it
+  sits at r = 1.00. Per-dataset r combined by Fisher's z weighted by (n − 3);
+  datasets under 20 items are skipped because centring forces r = −1 at k = 2.
+- [x] **Search opens on the full catalogue** instead of a blank panel — the
+  `hasSearched` gate started false, so a first-time visitor saw nothing until
+  they typed.
+- [x] **Deployment unblocked**: the release artifact was 100.15 MiB, over
+  GitHub's 100 MiB per-file limit, so pushes were rejected at the two commits
+  that introduced it. The database had never been VACUUMed and carried 522 MB
+  of slack; VACUUM takes the gzip to 63.8 MiB. The unpushed history was
+  rewritten to carry the smaller artifact, and a test guards the limit.
+
 **Still open from this pass**
 - [ ] R client package. Snippets use `jsonlite` against the REST API directly,
   which works but is more verbose than a package would be.
