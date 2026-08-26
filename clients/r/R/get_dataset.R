@@ -3,7 +3,7 @@
 #' Reads a dataset's ratings from the release, with the metadata needed to
 #' interpret them.
 #'
-#' Two datasets repeat their rating phase — `leeholyoak2021` (phases 1-3) and
+#' Two datasets repeat their rating phase -- `leeholyoak2021` (phases 1-3) and
 #' `leehare2023exp2` (phases 1-2). For those, `subject_id` and `item_id`
 #' together are **not** unique; include `timepoint`, or pass the `timepoint`
 #' argument to take a single phase.
@@ -62,8 +62,8 @@ get_dataset <- function(dataset, version = "latest", timepoint = NULL) {
 print.likingInitiative_dataset <- function(x, ...) {
   m <- x$metadata
   phases <- length(m$timepoints)
-  cli::cli_text("{.strong {m$dataset_code}} — {m$first_author} ({m$year})")
-  cli::cli_text("{nrow(x$data)} ratings · {m$n_subjects} subjects · {m$n_items} items{if (phases > 1) paste0(' · ', phases, ' phases') else ''}")
-  cli::cli_text("scale {m$rating_scale_min}–{m$rating_scale_max} ({m$rating_scale_type}) · release v{x$version}")
+  cli::cli_text("{.strong {m$dataset_code}} \u2014 {m$first_author} ({m$year})")
+  cli::cli_text("{nrow(x$data)} ratings \u00b7 {m$n_subjects} subjects \u00b7 {m$n_items} items{if (phases > 1) paste0(' \u00b7 ', phases, ' phases') else ''}")
+  cli::cli_text("scale {m$rating_scale_min}\u2013{m$rating_scale_max} ({m$rating_scale_type}) \u00b7 release v{x$version}")
   invisible(x)
 }

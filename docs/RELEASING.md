@@ -70,6 +70,30 @@ python -c "import likingInitiative; print(likingInitiative.release_info())"
 That resolves the newest release from the GitHub API and downloads through
 the real path, so it exercises what a user will hit.
 
+## Checking the packages before release
+
+Both must pass their own build checks, not just their test suites:
+
+```bash
+# R -- must report Status: OK, with no NOTEs
+Rscript -e 'roxygen2::roxygenise("clients/r")'
+R CMD build clients/r
+R CMD check --no-manual likingInitiative_*.tar.gz
+
+# Python -- twine check is what PyPI validates on upload
+cd clients/python && python -m build && python -m twine check dist/*
+```
+
+Two things that bite:
+
+* **CRAN requires ASCII in R code.** Em dashes and accented characters in
+  strings must be `\uXXXX` escapes; only comments may hold them literally.
+  `tools::showNonASCIIfile()` finds them.
+* **PyPI normalises the distribution name to lowercase.** The project installs
+  as `likinginitiative` and imports as `likingInitiative`. That is normal — pip
+  is case-insensitive on the install name — but it looks inconsistent if you
+  are not expecting it.
+
 ## Versioning
 
 Semantic, on the data:

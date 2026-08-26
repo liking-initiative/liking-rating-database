@@ -2,7 +2,7 @@ Package: likingInitiative
 Title: Access the Liking Rating Database
 Version: 0.2.0
 Authors@R: 
-    person("Kianté", "Fernandez", email = "kiantefernan@gmail.com", role = c("aut", "cre"))
+    person("Kiant\u00e9", "Fernandez", email = "kiantefernan@gmail.com", role = c("aut", "cre"))
 Description: Download and work with the Liking Rating Database, a curated
     collection of subjective liking ratings from published decision-making
     studies. Data is read from versioned release files and cached locally, so
@@ -12,7 +12,7 @@ Description: Download and work with the Liking Rating Database, a curated
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Depends: R (>= 4.1)
 Imports:
     cli,

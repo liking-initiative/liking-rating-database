@@ -259,3 +259,10 @@ reference-papers/
 
 # Built release assets — regenerate with scripts/build_release.py
 /release/
+
+# R and Python package build artifacts
+/likingInitiative_*.tar.gz
+/likingInitiative.Rcheck/
+clients/python/dist/
+clients/python/build/
+clients/python/src/*.egg-info/

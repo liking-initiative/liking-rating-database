@@ -50,7 +50,7 @@ get_item <- function(item, version = "latest") {
 
 #' @export
 print.likingInitiative_item <- function(x, ...) {
-  cli::cli_text("{.strong {x$name}} — {nrow(x$data)} ratings across {length(x$datasets)} datasets")
-  cli::cli_text("compare on {.field normalized_rating} · release v{x$version}")
+  cli::cli_text("{.strong {x$name}} \u2014 {nrow(x$data)} ratings across {length(x$datasets)} datasets")
+  cli::cli_text("compare on {.field normalized_rating} \u00b7 release v{x$version}")
   invisible(x)
 }
