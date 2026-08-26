@@ -126,7 +126,10 @@ migration if it stays unused.
   the internal standard; the public "dataset journey" builds on it).
 - [ ] Move off ephemeral SQLite (Render persistent disk or Postgres) if/when
   write features are needed.
-- [ ] Code-split plotly; frontend component tests (RTL).
+- [x] ~~Code-split plotly~~ Done 2026-08-25: routes are lazy-loaded, so the
+  initial download went from 1.67 MB gzipped to 0.23 MB. Plotly is a 1.28 MB
+  chunk fetched only by the three pages that plot.
+- [ ] Frontend component tests (RTL).
 
 ### Pre-deployment audit (2026-08-24)
 
