@@ -260,6 +260,35 @@ Two integrity tests guard this: no generated description may return, and the
 empty columns must stay empty — if one is ever populated, the test fails and
 the interface may legitimately show it again.
 
+### Per-dataset preference networks with bootEGA (2026-08-27)
+
+- [x] Each dataset page can now show its own network, estimated with EGAnet's
+  `bootEGA` (500 resampling bootstraps, glasso, walktrap communities, fixed
+  seed) and drawn with the site's own network canvas. Edges are signed partial
+  correlations: blue joins items rated alike, orange items rated oppositely.
+- [x] Estimated offline by `scripts/estimate_networks.R` and shipped as JSON
+  (540 KB for all 55). Bootstrapping a graphical model hundreds of times is
+  seconds per dataset — not something to run per page view, and not something
+  to ask a visitor's browser for via webR.
+
+**The constraint that shaped this.** A graphical model over items needs more
+subjects than items. **41 of 55 datasets have the opposite** — `gwikrab`, for
+instance, is 36 subjects by 147 items — and fitting all items there produces a
+network from a singular correlation matrix. EGA on the full item set fails
+outright on that dataset (`infinite or missing values in 'x'`).
+
+Each dataset is therefore reduced to items that are replicated across studies
+(present in >= 10 datasets, most-replicated first) and completely observed,
+capped so subjects >= 2x items. That makes the networks estimable *and*
+comparable between datasets, and every file records the restriction so the
+page states it.
+
+Outcome: **35 estimated, 17 skipped, 3 failed.** Skips carry their reason
+("only 3 items are replicated across >= 10 datasets"), so a dataset without a
+network says why rather than showing nothing. The 3 failures are an EGAnet
+edge case where the glasso shrinks every edge to zero, leaving no communities
+for `itemStability` to count.
+
 **Still open from this pass**
 - [ ] **R and Python packages become the programmatic access path.** Once the
   interface settles, both packages replace the generated snippets now shown on

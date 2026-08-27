@@ -266,3 +266,6 @@ reference-papers/
 clients/python/dist/
 clients/python/build/
 clients/python/src/*.egg-info/
+
+# Intermediate EGA inputs/outputs — regenerate with the scripts
+/build/

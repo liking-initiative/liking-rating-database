@@ -1,0 +1,1 @@
+{"dataset_code":"hasdes","estimated":false,"reason":"bootEGA failed: Error in seq_len(max(convert_keep)) : argument must be coercible to non-negative integer","n_subjects":22,"n_items_total":144}

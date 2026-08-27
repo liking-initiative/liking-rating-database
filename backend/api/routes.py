@@ -24,6 +24,7 @@ from backend.services.download_service import DownloadService
 from backend.services.data_service import DataService
 from backend.services.descriptives_service import descriptives_service
 from backend.services.database_archive_service import database_archive_service
+from backend.services.network_service import network_service
 
 # Create main router
 api_router = APIRouter()
@@ -503,3 +504,36 @@ async def download_database_archive(db: AsyncSession = Depends(get_db)):
         filename=info["filename"],
         media_type="application/zip",
     )
+
+
+# Per-dataset preference networks (precomputed with bootEGA)
+
+
+@api_router.get("/analytics/dataset-networks")
+async def list_dataset_networks():
+    """Which datasets have an estimated network, and why the others do not"""
+    return network_service.available()
+
+
+@api_router.get("/analytics/dataset-network/{dataset_id}")
+async def get_dataset_network(dataset_id: str, db: AsyncSession = Depends(get_db)):
+    """One dataset's preference network.
+
+    Accepts a dataset id or its code. Returns the bootEGA result: nodes with
+    their community and bootstrap stability, weighted edges, and a record of
+    how the items were selected.
+    """
+    code = dataset_id
+    row = (await db.execute(
+        select(Dataset.name).where(Dataset.id == dataset_id)
+    )).scalar_one_or_none()
+    if row:
+        code = row.replace(" Dataset", "").strip()
+
+    data = network_service.get(code)
+    if data is None:
+        raise HTTPException(
+            status_code=404,
+            detail=f"No network has been estimated for '{code}'",
+        )
+    return data

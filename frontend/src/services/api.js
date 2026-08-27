@@ -181,6 +181,12 @@ export const getSimilarItems = async (itemId, params = {}) => {
   return response.data;
 };
 
+// Per-dataset preference network (precomputed with bootEGA)
+export const getDatasetNetwork = async (datasetId) => {
+  const response = await api.get(`/analytics/dataset-network/${datasetId}`);
+  return response.data;
+};
+
 // Whole-database archive
 export const getDatabaseArchiveInfo = async () => {
   const response = await api.get('/database/archive/info');

@@ -3,8 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Card, Typography, Row, Col, Spin, Button, Select, Alert } from 'antd';
 import { ArrowLeftOutlined, BarChartOutlined } from '@ant-design/icons';
 import Plot from 'react-plotly.js';
+import ItemNetworkCanvas from '../components/ItemNetworkCanvas';
 import { useQuery } from 'react-query';
-import { getDataset, getRatings } from '../services/api';
+import { getDataset, getRatings, getDatasetNetwork } from '../services/api';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -12,7 +13,7 @@ const { Option } = Select;
 const DatasetVisualizationPage = () => {
   const { datasetId } = useParams();
   const navigate = useNavigate();
-  const [chartType, setChartType] = useState('histogram');
+  const [chartType, setChartType] = useState('network');
 
   // Fetch dataset details and ratings
   const { data: dataset, isLoading: datasetLoading, error: datasetError } = useQuery(
@@ -27,7 +28,36 @@ const DatasetVisualizationPage = () => {
     { enabled: !!datasetId }
   );
 
+  // The network is estimated offline; a dataset without one returns 404,
+  // which is a normal outcome rather than an error worth retrying.
+  const { data: network, isLoading: networkLoading } = useQuery(
+    ['dataset-network', datasetId],
+    () => getDatasetNetwork(datasetId),
+    { enabled: !!datasetId, retry: false, staleTime: 30 * 60 * 1000 }
+  );
+
   const isLoading = datasetLoading || ratingsLoading;
+
+  // The canvas seeds positions from server coordinates and keys edges by node
+  // label; bootEGA output has neither, so lay the nodes on a ring and let the
+  // simulation find the structure.
+  const networkGraph = React.useMemo(() => {
+    if (!network?.estimated) return null;
+    const n = network.nodes.length;
+    return {
+      nodes: network.nodes.map((node, i) => ({
+        id: node.id,
+        label: node.label,
+        frequency: node.n_datasets ?? 1,
+        mean_rating: node.mean_rating,
+        community: node.community,
+        stability: node.stability,
+        x: Math.cos((2 * Math.PI * i) / n) * 0.8,
+        y: Math.sin((2 * Math.PI * i) / n) * 0.8,
+      })),
+      edges: network.edges,
+    };
+  }, [network]);
   const hasError = datasetError || ratingsError;
 
   // Generate rating distribution histogram.
@@ -227,6 +257,7 @@ const DatasetVisualizationPage = () => {
               style={{ width: '100%' }}
               placeholder="Select chart type"
             >
+              <Option value="network">Preference Network</Option>
               <Option value="histogram">Rating Distribution</Option>
               <Option value="topItems">Top Rated Items</Option>
               <Option value="variability">Rating Variability</Option>
@@ -250,7 +281,50 @@ const DatasetVisualizationPage = () => {
         
         <Col xs={24} md={16}>
           <Card title="Visualization">
-            {isLoading ? (
+            {chartType === 'network' ? (
+              networkLoading ? (
+                <div style={{ height: 560, display: 'grid', placeItems: 'center' }}>
+                  <Spin size="large" />
+                </div>
+              ) : !network?.estimated ? (
+                <div style={{ height: 240, display: 'grid', placeItems: 'center', padding: 24 }}>
+                  <Text type="secondary" style={{ textAlign: 'center', maxWidth: 520 }}>
+                    No network could be estimated for this dataset.
+                    {network?.reason ? ` ${network.reason}.` : ''}{' '}
+                    A network over items needs more subjects than items, and
+                    enough items rated in common with other studies.
+                  </Text>
+                </div>
+              ) : (
+                <>
+                  <p className="page-note">
+                    <strong>How to read this.</strong> Items are joined when the
+                    people who rated both rated them alike, after removing each
+                    person&apos;s overall generosity. Blue links items rated
+                    together, orange items rated oppositely; thickness is the
+                    strength of the partial correlation. Colours of the nodes
+                    are mean liking, size is how many studies use the item.
+                  </p>
+                  <p className="page-caption">
+                    Estimated with bootEGA ({network.method?.iterations}{' '}
+                    {network.method?.type} bootstraps, {network.method?.model},{' '}
+                    {network.method?.community_detection} communities) on{' '}
+                    <strong>{network.selection?.items_estimated} of{' '}
+                    {network.selection?.items_in_dataset} items</strong> and{' '}
+                    {network.selection?.subjects_complete} subjects. A graphical
+                    model needs more subjects than items, so only items rated in
+                    at least {network.selection?.min_item_frequency} datasets are
+                    included, most-replicated first. {network.n_dimensions}{' '}
+                    dimensions were found.
+                  </p>
+                  <ItemNetworkCanvas
+                    data={networkGraph}
+                    height={560}
+                    signed
+                  />
+                </>
+              )
+            ) : isLoading ? (
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 500 }}>
                 <Spin size="large" />
               </div>

@@ -56,6 +56,9 @@ const ItemNetworkCanvas = ({
   focusId = null,
   onSelect,
   onHoverChange,
+  /** Edge weights are signed partial correlations rather than shared-dataset
+   *  counts, so sign and magnitude are drawn instead of tie strength. */
+  signed = false,
 }) => {
   const wrapRef = useRef(null);
   const canvasRef = useRef(null);
@@ -224,7 +227,7 @@ const ItemNetworkCanvas = ({
       const dx = b.x - a.x;
       const dy = b.y - a.y;
       const d = Math.sqrt(dx * dx + dy * dy) || 1;
-      const target = 46 + 120 / (1 + weight);
+      const target = 46 + 120 / (1 + Math.abs(weight) * (st.signed ? 12 : 1));
       const f = (d - target) * SPRING * alpha * Math.min(3, weight);
       const fx = (dx / d) * f;
       const fy = (dy / d) * f;
@@ -269,6 +272,8 @@ const ItemNetworkCanvas = ({
     ctx.translate(width / 2 + tx, h / 2 + ty);
     ctx.scale(scale, scale);
 
+    const signed = st.signed;
+    const maxWeight = st.maxWeight || 1;
     const active = st.hover || st.focus;
     const neighbours = active ? st.adjacency.get(active.id) : null;
     const isLit = (n) => !active || n === active || (neighbours && neighbours.has(n.id));
@@ -287,9 +292,19 @@ const ItemNetworkCanvas = ({
       ctx.beginPath();
       ctx.moveTo(a.x, a.y);
       ctx.quadraticCurveTo(cx, cy, b.x, b.y);
-      ctx.lineWidth = lit ? Math.min(2.4, 0.5 + weight * 0.12) : 0.5;
+      // `signed` networks (partial correlations) carry meaning in the sign:
+      // blue draws items rated alike, orange items rated oppositely.
+      const w = signed ? Math.abs(weight) / maxWeight : weight;
+      const alpha = signed
+        ? Math.min(0.75, 0.12 + w * 0.75)
+        : Math.min(0.34, 0.10 + weight * 0.014);
+      ctx.lineWidth = lit
+        ? (signed ? Math.min(3, 0.4 + w * 3.2) : Math.min(2.4, 0.5 + weight * 0.12))
+        : 0.5;
       ctx.strokeStyle = lit
-        ? `rgba(8, 90, 179, ${active ? 0.5 : Math.min(0.34, 0.10 + weight * 0.014)})`
+        ? (signed && weight < 0
+            ? `rgba(231, 138, 0, ${active ? 0.6 : alpha})`
+            : `rgba(8, 90, 179, ${active ? 0.6 : alpha})`)
         : 'rgba(150, 150, 150, 0.06)';
       ctx.stroke();
     });
@@ -363,6 +378,10 @@ const ItemNetworkCanvas = ({
     st.adjacency = graph.adjacency;
     st.hover = null;
     st.focus = null;
+    st.signed = signed;
+    st.maxWeight = graph.edges.length
+      ? Math.max(...graph.edges.map((e) => Math.abs(e.weight)), 1e-6)
+      : 1;
     st.alpha = 0.9;
     st.userAdjusted = false;
 
@@ -382,7 +401,7 @@ const ItemNetworkCanvas = ({
       running = false;
       if (st.raf) window.cancelAnimationFrame(st.raf);
     };
-  }, [graph, step, draw, fitToBounds]);
+  }, [graph, step, draw, fitToBounds, signed]);
 
   // Keep the backing store matched to the element and the pixel ratio.
   useEffect(() => {
