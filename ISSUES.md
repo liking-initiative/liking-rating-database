@@ -226,6 +226,40 @@ Found while checking the site for non-functional features before sharing it.
   distinguishes them by testing doi.org's redirect rather than the
   destination.
 
+### Fabricated-data audit (2026-08-27)
+
+Went column by column through the database and every value the interface
+renders, looking for anything presented as data that was not measured.
+
+- [x] **Ten columns are empty for every row** — `items.image_available`
+  (constant false), `image_url`, `aliases`, `nutritional_info`, `subcategory`,
+  `studies.osf_project_id`, `datasets.file_size_mb`, `osf_file_id`, and
+  `ratings.response_time` / `session_id` / `order_presented` /
+  `demographic_data`. Several were rendered anyway: an "Image" column reading
+  "No" for all 2,297 items implies it was checked, and a "With Images" stat
+  read 0 of N. All removed from the interface; the columns stay in the schema.
+- [x] **Two invented metrics on the item analysis page.** "Consistency Score"
+  was `100 − SD×200`, a rescaled standard deviation dressed as a quality
+  score — and backwards for preference data, where a high SD means people
+  genuinely disagree. "Data Quality" was `min(100, ratingCount)`: the rating
+  count with a percent sign. A third card repeated the first as a progress bar
+  at 14 decimal places. All removed.
+- [x] **A mislabelled statistic.** "Total Occurrences: 28 ratings" showed
+  `item.frequency`, which is the dataset count — the same number as the stat
+  above it, with the wrong unit.
+- [x] **2,248 generated item descriptions** (migration 010): every one was
+  "Food item: <name>", restating the name column, and 540 of them labelled a
+  consumer product as food.
+- [x] **Traffic-light colouring on per-dataset means** replaced with a
+  sortable table. The red/amber/green cutoffs were arbitrary points on a
+  preference scale, and coloured a low mean liking as an error.
+- [x] Item pages now link through to Descriptives, which is where the real
+  distributions live; `/descriptives?item=<id>` works without a dataset.
+
+Two integrity tests guard this: no generated description may return, and the
+empty columns must stay empty — if one is ever populated, the test fails and
+the interface may legitimately show it again.
+
 **Still open from this pass**
 - [ ] **R and Python packages become the programmatic access path.** Once the
   interface settles, both packages replace the generated snippets now shown on

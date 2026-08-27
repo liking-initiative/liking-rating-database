@@ -5,20 +5,20 @@ import {
   Typography, 
   Row, 
   Col, 
-  Tag, 
   Button, 
   Space, 
   Descriptions,
+  Table,
   Spin,
   Alert,
   Statistic,
   Divider
 } from 'antd';
-import { ArrowLeftOutlined, BarChartOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, BarChartOutlined, LineChartOutlined } from '@ant-design/icons';
 import { useQuery } from 'react-query';
 import { getItem, getItemRatingsByDataset } from '../services/api';
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 const ItemDetailPage = () => {
   const { itemId } = useParams();
@@ -119,52 +119,41 @@ const ItemDetailPage = () => {
           </Space>
         </Col>
         <Col>
-          <Button 
-            type="primary" 
-            icon={<BarChartOutlined />}
-            onClick={() => navigate(`/items/${itemId}/analyze`)}
-          >
-            Analyze Item
-          </Button>
+          <Space>
+            <Button
+              type="primary"
+              icon={<LineChartOutlined />}
+              onClick={() => navigate(`/descriptives?item=${itemId}`)}
+            >
+              Descriptives
+            </Button>
+            <Button
+              icon={<BarChartOutlined />}
+              onClick={() => navigate(`/items/${itemId}/analyze`)}
+            >
+              Analyze Item
+            </Button>
+          </Space>
         </Col>
       </Row>
 
       <Row gutter={[24, 24]}>
-        {/* Item Information */}
+        {/* Only `name` and `standardized_name` hold real values; every other
+            item column is empty for all 2,297 rows. */}
         <Col xs={24} lg={16}>
-          <Card title="Item Information">
+          <Card title="Item">
             <Descriptions column={1} bordered>
               <Descriptions.Item label="Name">
                 <strong>{item.name}</strong>
               </Descriptions.Item>
-              
               {item.standardized_name && item.standardized_name !== item.name && (
-                <Descriptions.Item label="Standardized Name">
+                <Descriptions.Item label="Grouped under">
                   {item.standardized_name}
                 </Descriptions.Item>
               )}
-              
-              <Descriptions.Item label="Description">
-                {item.description || <Text type="secondary">No description available</Text>}
+              <Descriptions.Item label="Appears in">
+                {item.frequency || 0} datasets
               </Descriptions.Item>
-              
-              <Descriptions.Item label="Image Available">
-                <Tag color={item.image_available ? 'green' : 'default'}>
-                  {item.image_available ? 'Yes' : 'No'}
-                </Tag>
-              </Descriptions.Item>
-              
-              {item.aliases && item.aliases.length > 0 && (
-                <Descriptions.Item label="Aliases">
-                  <Space wrap>
-                    {item.aliases.map((alias, index) => (
-                      <Tag key={index} color="purple">
-                        {alias}
-                      </Tag>
-                    ))}
-                  </Space>
-                </Descriptions.Item>
-              )}
             </Descriptions>
           </Card>
         </Col>
@@ -179,15 +168,6 @@ const ItemDetailPage = () => {
                   value={ratings ? ratings.length : 0}
                   suffix="datasets"
                   valueStyle={{ color: '#085AB3' }}
-                />
-              </Col>
-              
-              <Col span={24}>
-                <Statistic
-                  title="Total Occurrences"
-                  value={item.frequency || 0}
-                  suffix="ratings"
-                  valueStyle={{ color: '#722ed1' }}
                 />
               </Col>
               
@@ -219,43 +199,71 @@ const ItemDetailPage = () => {
             </Row>
           </Card>
 
-          {/* Nutritional Information */}
-          {item.nutritional_info && (
-            <Card title="Nutritional Information" style={{ marginTop: 16 }}>
-              <Text type="secondary">
-                Nutritional information is available for this item.
-              </Text>
-              {/* You can expand this to show detailed nutritional info */}
-            </Card>
-          )}
         </Col>
       </Row>
 
-      {/* Rating Details */}
+      {/* Per-dataset breakdown */}
       {ratings && ratings.length > 0 && (
-        <Card title="Rating Details" style={{ marginTop: 24 }}>
-          <Row gutter={[16, 16]}>
-            {ratings.map((rating, index) => (
-              <Col key={index} xs={24} sm={12} md={8} lg={6}>
-                <Card size="small">
-                  <Statistic
-                    title={rating.study_name || rating.dataset_name || `Dataset ${index + 1}`}
-                    value={rating.mean_rating}
-                    precision={2}
-                    suffix={`(${rating.n_ratings} ratings)`}
-                    valueStyle={{
-                      // Ratings are normalized to 0-1, so threshold on that domain
-                      color: rating.mean_rating > 0.6 ? '#52c41a' :
-                             rating.mean_rating > 0.4 ? '#E78A00' : '#ff4d4f'
-                    }}
-                  />
-                  <div style={{ fontSize: '13.5px', color: '#4a4a4a', marginTop: 8 }}>
-                    Std Dev: {rating.std_rating?.toFixed(2) || 'N/A'}
-                  </div>
-                </Card>
-              </Col>
-            ))}
-          </Row>
+        <Card
+          title={`Rated in ${ratings.length} datasets`}
+          style={{ marginTop: 24 }}
+          extra={
+            <Button
+              type="link"
+              onClick={() => navigate(`/descriptives?item=${itemId}`)}
+            >
+              See the distributions →
+            </Button>
+          }
+        >
+          <p className="page-caption">
+            Means are on the normalized 0–1 scale, so they are comparable
+            across studies that used different response scales.
+          </p>
+          <Table
+            size="small"
+            rowKey={(r) => r.dataset_id || r.dataset_name}
+            dataSource={ratings}
+            pagination={{ pageSize: 12, hideOnSinglePage: true }}
+            scroll={{ x: 'max-content' }}
+            columns={[
+              {
+                title: 'Study',
+                dataIndex: 'study_name',
+                key: 'study_name',
+                render: (v, r) => v || r.dataset_name || '—',
+              },
+              {
+                title: 'Dataset',
+                dataIndex: 'dataset_name',
+                key: 'dataset_name',
+                render: (v) => (v ? String(v).replace(/\s+Dataset$/i, '') : '—'),
+              },
+              {
+                title: 'Mean (0–1)',
+                dataIndex: 'mean_rating',
+                key: 'mean_rating',
+                align: 'right',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => (a.mean_rating ?? 0) - (b.mean_rating ?? 0),
+                render: (v) => (Number.isFinite(v) ? v.toFixed(3) : '—'),
+              },
+              {
+                title: 'SD',
+                dataIndex: 'std_rating',
+                key: 'std_rating',
+                align: 'right',
+                render: (v) => (Number.isFinite(v) ? v.toFixed(3) : '—'),
+              },
+              {
+                title: 'Ratings',
+                dataIndex: 'n_ratings',
+                key: 'n_ratings',
+                align: 'right',
+                sorter: (a, b) => (a.n_ratings ?? 0) - (b.n_ratings ?? 0),
+              },
+            ]}
+          />
         </Card>
       )}
 

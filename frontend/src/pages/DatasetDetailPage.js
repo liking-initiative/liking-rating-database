@@ -193,7 +193,7 @@ const DatasetDetailPage = () => {
                   ))}
                 </Space>
               </Descriptions.Item>
-              <Descriptions.Item label="Publication Year">
+              <Descriptions.Item label="Year">
                 {dataset.study?.year}
               </Descriptions.Item>
               <Descriptions.Item label="Number of Subjects">

@@ -238,7 +238,7 @@ const StudyDetailPage = () => {
         <Col xs={24} lg={16}>
           <Card title="Study Information">
             <Descriptions column={1} bordered>
-              <Descriptions.Item label="Study Name">
+              <Descriptions.Item label="Title">
                 {study.name}
               </Descriptions.Item>
               <Descriptions.Item label="Authors">
@@ -248,7 +248,7 @@ const StudyDetailPage = () => {
                   ))}
                 </Space>
               </Descriptions.Item>
-              <Descriptions.Item label="Publication Year">
+              <Descriptions.Item label="Year">
                 {study.year}
               </Descriptions.Item>
               {study.journal && (
@@ -257,7 +257,7 @@ const StudyDetailPage = () => {
                 </Descriptions.Item>
               )}
               {study.publication_title && (
-                <Descriptions.Item label="Publication Title">
+                <Descriptions.Item label="Citation">
                   {study.publication_title}
                 </Descriptions.Item>
               )}

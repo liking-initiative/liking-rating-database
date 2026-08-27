@@ -421,14 +421,21 @@ const DescriptivesPage = () => {
         </Row>
       </Card>
 
-      {!datasetId || !itemId ? (
+      {!itemId ? (
         <Card>
           <Empty description="Select a dataset and item above to view distributional statistics." />
         </Card>
-      ) : detailError ? (
+      ) : detailError && datasetId ? (
         <Alert type="error" showIcon message="No ratings for that dataset and item." />
       ) : (
         <>
+          {!datasetId && (
+            <p className="page-caption">
+              Showing this item across every study that rated it. Pick a
+              dataset above to also see its distribution within one study.
+            </p>
+          )}
+          {datasetId && (
           <Card
             style={{ marginBottom: 24 }}
             title={
@@ -489,11 +496,12 @@ const DescriptivesPage = () => {
               </Row>
             )}
           </Card>
+          )}
 
           <Card
             title={
               <Space wrap>
-                <span>{detail?.item_name} across datasets</span>
+                <span>{across?.item_name ?? detail?.item_name} across datasets</span>
                 {across && <Tag color="blue">{across.n_datasets} datasets</Tag>}
                 {across && (
                   <Tag>{across.n_ratings.toLocaleString()} ratings</Tag>

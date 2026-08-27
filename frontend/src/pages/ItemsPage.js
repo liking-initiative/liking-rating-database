@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { 
   Card, 
   Table, 
-  Tag, 
   Input, 
   Button, 
   Space, 
@@ -58,18 +57,6 @@ const ItemsPage = () => {
               Also known as: {record.standardized_name}
             </div>
           )}
-          {record.aliases && record.aliases.length > 0 && (
-            <div style={{ marginTop: 4 }}>
-              {record.aliases.slice(0, 3).map((alias, index) => (
-                <Tag key={index} size="small" style={{ marginRight: 4 }}>
-                  {alias}
-                </Tag>
-              ))}
-              {record.aliases.length > 3 && (
-                <Tag size="small">+{record.aliases.length - 3} more</Tag>
-              )}
-            </div>
-          )}
         </div>
       ),
     },
@@ -86,17 +73,6 @@ const ItemsPage = () => {
             {frequency === 1 ? 'dataset' : 'datasets'}
           </div>
         </div>
-      ),
-    },
-    {
-      title: 'Image',
-      dataIndex: 'image_available',
-      key: 'image_available',
-      width: 80,
-      render: (hasImage) => (
-        <Tag color={hasImage ? 'green' : 'default'}>
-          {hasImage ? 'Yes' : 'No'}
-        </Tag>
       ),
     },
     {
@@ -132,23 +108,13 @@ const ItemsPage = () => {
 
       {/* Summary Stats */}
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
-        <Col xs={24} sm={12}>
+        <Col xs={24}>
           <Card>
             <Statistic
               title="Total Items"
               value={items?.total || 0}
               prefix={<AppleOutlined />}
               valueStyle={{ color: '#085AB3' }}
-            />
-          </Card>
-        </Col>
-        <Col xs={24} sm={12}>
-          <Card>
-            <Statistic
-              title="With Images (current page)"
-              value={items?.items?.filter(item => item.image_available).length || 0}
-              valueStyle={{ color: '#E78A00' }}
-              suffix={`/ ${items?.items?.length || 0}`}
             />
           </Card>
         </Col>

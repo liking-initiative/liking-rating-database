@@ -10,12 +10,10 @@ import {
   Spin,
   Alert,
   Statistic,
-  Progress,
   Table,
-  Tag,
   Select
 } from 'antd';
-import { ArrowLeftOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, LineChartOutlined } from '@ant-design/icons';
 import Plot from 'react-plotly.js';
 import { useQuery } from 'react-query';
 import { getItem, getRatingAggregations, getRatings, getItemRatingsByDataset } from '../services/api';
@@ -317,6 +315,15 @@ const ItemAnalysisPage = () => {
             </Title>
           </Space>
         </Col>
+        <Col>
+          <Button
+            type="primary"
+            icon={<LineChartOutlined />}
+            onClick={() => navigate(`/descriptives?item=${itemId}`)}
+          >
+            Descriptives
+          </Button>
+        </Col>
       </Row>
 
       {ratingsLoading || individualRatingsLoading ? (
@@ -412,33 +419,6 @@ const ItemAnalysisPage = () => {
                 />
               </Card>
             </Col>
-            <Col xs={24} sm={12} md={6}>
-              <Card>
-                <Statistic
-                  title="Consistency Score"
-                  value={Math.max(0, 100 - (overallStd * 200))}
-                  precision={0}
-                  valueStyle={{
-                    // Std dev of normalized (0-1) ratings tops out at 0.5
-                    color: overallStd < 0.1 ? '#52c41a' : overallStd < 0.2 ? '#E78A00' : '#ff4d4f'
-                  }}
-                  suffix="/ 100"
-                />
-              </Card>
-            </Col>
-            <Col xs={24} sm={12} md={6}>
-              <Card>
-                <Statistic
-                  title="Data Quality"
-                  value={Math.min(100, (totalRatings / 100) * 100)}
-                  precision={0}
-                  valueStyle={{ 
-                    color: totalRatings >= 100 ? '#52c41a' : totalRatings >= 20 ? '#E78A00' : '#ff4d4f' 
-                  }}
-                  suffix="/ 100"
-                />
-              </Card>
-            </Col>
           </Row>
 
           {/* Visualization Section */}
@@ -495,67 +475,15 @@ const ItemAnalysisPage = () => {
               </Card>
             </Col>
 
-            {/* Rating Quality Indicators */}
             <Col xs={24} lg={8}>
-              <Card title="Rating Quality">
+              {/* image_available, aliases and nutritional_info are empty for
+                  every item in the database, so only frequency is real here. */}
+              <Card title="Item Properties">
                 <Space direction="vertical" style={{ width: '100%' }}>
                   <div>
-                    <Text>Rating Consistency</Text>
-                    <Progress
-                      percent={Math.max(0, 100 - (overallStd * 200))}
-                      strokeColor={{
-                        from: '#ff6b6b',
-                        to: '#4ecdc4',
-                      }}
-                    />
-                    <Text type="secondary" style={{ fontSize: '13.5px' }}>
-                      Lower std dev = higher consistency
-                    </Text>
-                  </div>
-
-                  <div style={{ marginTop: 16 }}>
-                    <Text>Dataset Coverage</Text>
-                    <Progress 
-                      percent={Math.min(100, (ratings.length / 10) * 100)}
-                      strokeColor={{
-                        from: '#ffd93d',
-                        to: '#6bcf7f',
-                      }}
-                    />
-                    <Text type="secondary" style={{ fontSize: '13.5px' }}>
-                      Item appears in {ratings.length} datasets
-                    </Text>
-                  </div>
-                </Space>
-              </Card>
-
-              {/* Item Properties */}
-              <Card title="Item Properties" style={{ marginTop: 16 }}>
-                <Space direction="vertical" style={{ width: '100%' }}>
-                  <div>
-                    <Text strong>Frequency: </Text>
+                    <Text strong>Appears in: </Text>
                     <Text>{item.frequency || 0} datasets</Text>
                   </div>
-                  
-                  <div>
-                    <Text strong>Image Available: </Text>
-                    <Tag color={item.image_available ? 'green' : 'default'}>
-                      {item.image_available ? 'Yes' : 'No'}
-                    </Tag>
-                  </div>
-                  
-                  {item.aliases && item.aliases.length > 0 && (
-                    <div>
-                      <Text strong>Aliases: </Text>
-                      <div style={{ marginTop: 4 }}>
-                        {item.aliases.map((alias, index) => (
-                          <Tag key={index} size="small" style={{ marginBottom: 4 }}>
-                            {alias}
-                          </Tag>
-                        ))}
-                      </div>
-                    </div>
-                  )}
                 </Space>
               </Card>
             </Col>

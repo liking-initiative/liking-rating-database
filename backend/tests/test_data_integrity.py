@@ -59,6 +59,42 @@ def test_study_year_matches_its_own_citation(con):
                 f"{name[:48]}: year={year} but citation says {m.group(1)}")
 
 
+def test_no_generated_item_descriptions(con):
+    """Migration 010 cleared 'Food item: <name>' placeholders.
+
+    They restated the name column and labelled 540 consumer products as food.
+    """
+    n = one(con, "SELECT COUNT(*) FROM items WHERE description = 'Food item: ' || name")
+    assert n == 0, f"{n} items carry a generated description again"
+
+
+def test_empty_columns_stay_out_of_the_interface(con):
+    """Columns with no data anywhere must not be rendered as though they had any.
+
+    These are real schema columns that were never populated. Showing
+    `image_available` as "No" implies it was checked; showing an empty
+    aliases list implies the item has none. Both are claims the data cannot
+    support.
+    """
+    for table, column in [
+        ("items", "image_available"), ("items", "image_url"),
+        ("items", "aliases"), ("items", "nutritional_info"),
+        ("items", "subcategory"), ("studies", "osf_project_id"),
+        ("datasets", "file_size_mb"), ("datasets", "osf_file_id"),
+        ("ratings", "response_time"), ("ratings", "session_id"),
+        ("ratings", "order_presented"), ("ratings", "demographic_data"),
+    ]:
+        filled = one(
+            con,
+            f"SELECT COUNT(*) FROM {table} "
+            f"WHERE \"{column}\" IS NOT NULL AND \"{column}\" != '' AND \"{column}\" != 0",
+        )
+        assert filled == 0, (
+            f"{table}.{column} now has {filled} value(s) — it is no longer "
+            "empty, so the interface may legitimately show it again"
+        )
+
+
 def test_no_generated_dataset_descriptions(con):
     """Migration 008 cleared 'Dataset from <study title>' placeholders.
 
