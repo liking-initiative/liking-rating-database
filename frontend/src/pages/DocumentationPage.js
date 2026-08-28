@@ -180,6 +180,46 @@ const DocumentationPage = () => {
           />
         </Card>
 
+        <Card id="descriptives" title="Descriptives" style={{ marginBottom: 24 }}>
+          <Paragraph>
+            The Descriptives page reports item-level distributional statistics:
+            how one item was rated within a single study, and how that
+            distribution varies across every study that used it.
+          </Paragraph>
+          <p className="page-note">
+            <strong>Before reusing these numbers.</strong> They apply one fixed
+            set of choices to every dataset — no exclusions, all available
+            subjects, and each dataset&apos;s first rating phase unless you pick
+            another. Those choices may not match the preprocessing your question
+            needs. Download the data and verify before publishing.
+          </p>
+          <Paragraph>
+            <strong>Inclusion.</strong> Nothing is filtered out. Every subject
+            who rated the item contributes, with no outlier rule and no
+            attention-check screen, because the exclusions a study applied are
+            not recorded here and inventing our own would silently change what
+            each paper reported.
+          </Paragraph>
+          <Paragraph>
+            <strong>Repeated phases.</strong> Two datasets rate the same items
+            more than once (<Text code>leeholyoak2021</Text>, three phases, and{' '}
+            <Text code>leehare2023exp2</Text>, two). Only the first phase counts
+            unless you select another, so a subject who rated an item three
+            times is one observation rather than three.
+          </Paragraph>
+          <Paragraph style={{ marginBottom: 0 }}>
+            <strong>Which scale each statistic is on.</strong> Location and
+            spread — mean, SD, median, IQR, skewness — are computed on{' '}
+            <Text code>normalized_rating</Text>, so studies on different
+            response scales sit on a common 0–1 axis and the cross-study panels
+            are comparable. Floor and ceiling proportions are read against each
+            study&apos;s <em>own</em> scale, since hitting the end of a 1–9
+            Likert is a different event from hitting the end of a 0–870 slider.
+            The Range column is likewise in the study&apos;s own units.
+          </Paragraph>
+        </Card>
+
+
         <Card id="similarity" title="Preference similarity" style={{ marginBottom: 24 }}>
           <Paragraph>
             The Descriptives page ranks items by <strong>preference</strong>{' '}
@@ -307,6 +347,7 @@ evaluation ratings for decision-making research. (In preparation.)`}
             { key: 'gotchas', href: '#gotchas', title: 'Two things to get right' },
             { key: 'access', href: '#access', title: 'Downloading the data' },
             { key: 'api', href: '#api', title: 'REST API' },
+            { key: 'descriptives', href: '#descriptives', title: 'Descriptives' },
             { key: 'similarity', href: '#similarity', title: 'Preference similarity' },
             { key: 'networks', href: '#networks', title: 'Preference networks' },
             { key: 'citing', href: '#citing', title: 'Citing' },

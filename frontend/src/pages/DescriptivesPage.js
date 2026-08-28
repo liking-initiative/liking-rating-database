@@ -358,18 +358,9 @@ const DescriptivesPage = () => {
         Item-level distributional statistics computed from the ratings in this
         database. Choose a dataset and item to see how that item was rated
         within one study, and how its distribution varies across every study
-        that used it.
+        that used it. For the inclusion criteria behind these numbers, see the{' '}
+        <Link to="/docs#descriptives">documentation</Link>.
       </Paragraph>
-
-      <p className="page-note">
-        <strong>Before reusing these numbers:</strong> they apply one fixed set
-        of choices to every dataset — no exclusions, all available subjects,
-        and each dataset&apos;s first rating phase unless you pick another.
-        Cross-study panels use <Text code>normalized_rating</Text> so different
-        response scales are comparable. Those choices may not match the
-        preprocessing your question needs; download the data and verify before
-        publishing.
-      </p>
 
       <Card style={{ marginBottom: 24 }}>
         <Row gutter={[16, 16]} align="bottom">
