@@ -304,10 +304,10 @@ const DatasetVisualizationPage = () => {
                     <strong>How to read this.</strong> Items are joined when
                     the people who rated both rated them alike. Blue links items
                     rated together, orange items rated oppositely; thickness is
-                    the strength of the partial correlation. Node colour is mean
-                    liking, size is how many studies use the item. Only items
-                    whose grouping held up under resampling are shown — the rest
-                    were dropped rather than drawn as though they were solid.
+                    the strength of the partial correlation. Node color is mean
+                    liking, size is how many studies use the item. Note for
+                    network illustration we only show a subset of items whose
+                    grouping held up under resampling.
                   </p>
                   <p className="page-caption">
                     Fitted with bootEGA ({network.method?.iterations}{' '}

@@ -218,6 +218,58 @@ const DocumentationPage = () => {
         </Card>
 
 
+        <Card id="networks" title="Preference networks" style={{ marginBottom: 24 }}>
+          <Paragraph>
+            Each dataset&apos;s visualization page can draw a{' '}
+            <strong>preference network</strong>: items are nodes, and an edge
+            means the people who rated both tended to rate them alike. Edges are{' '}
+            <strong>partial</strong> correlations, so a link survives only if it
+            is not explained by the other items in the network — which is what
+            separates a real pairing from two items that merely ride the same
+            general appetite.
+          </Paragraph>
+          <Paragraph>
+            Networks are fitted in R with{' '}
+            <Text code>EGAnet</Text>&apos;s <Text code>bootEGA</Text>: 500
+            resampling bootstraps, a graphical lasso model, and walktrap
+            community detection, at a fixed seed. Fitting runs offline and the
+            results ship with the database — bootstrapping a graphical model
+            several hundred times is not something to ask a visitor&apos;s
+            browser for.
+          </Paragraph>
+          <Paragraph>
+            The fit is then repeated on a subset. <Text code>itemStability</Text>{' '}
+            reports how often each item returns to its own dimension across
+            bootstraps; items reaching{' '}
+            <strong>45%</strong> are kept and the model is refitted on those
+            alone. Selection is therefore made by the data rather than by us,
+            and the cutoff travels with each result so the page can state it.
+            The published cutoff for this method is nearer 0.70 — 0.45 is
+            deliberately loose, chosen so that most datasets yield a network at
+            all, and it is the reason the figures are illustrative rather than
+            confirmatory.
+          </Paragraph>
+          <p className="page-note">
+            <strong>Why most datasets are capped first.</strong> A graphical
+            model over items needs more subjects than items, and 41 of the 55
+            datasets here have the opposite. Where that holds, the first fit is
+            restricted to the most completely observed items — enough to make
+            an estimate possible at all. That cap is a feasibility limit, and it
+            is recorded separately from the stability selection so the two are
+            never read as the same thing. It applies to 43 of the 45 datasets
+            that yield a network; the remaining 10 cannot clear even this bar,
+            get no network, and say why.
+          </p>
+          <Paragraph style={{ marginBottom: 0 }}>
+            Each network also reports{' '}
+            <strong>structural consistency</strong> per dimension: how often
+            that dimension reappears intact across bootstraps. Low values mean
+            the grouping is unstable — read the communities on such a plot as a
+            suggestion, not a finding.
+          </Paragraph>
+        </Card>
+
+
         <Card id="citing" title="Citing" style={{ marginBottom: 24 }}>
           <Paragraph>
             Please cite both the database and the original studies whose data
@@ -256,6 +308,7 @@ evaluation ratings for decision-making research. (In preparation.)`}
             { key: 'access', href: '#access', title: 'Downloading the data' },
             { key: 'api', href: '#api', title: 'REST API' },
             { key: 'similarity', href: '#similarity', title: 'Preference similarity' },
+            { key: 'networks', href: '#networks', title: 'Preference networks' },
             { key: 'citing', href: '#citing', title: 'Citing' },
             { key: 'contributing', href: '#contributing', title: 'Contributing' },
           ]}
