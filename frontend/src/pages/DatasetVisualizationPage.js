@@ -309,38 +309,6 @@ const DatasetVisualizationPage = () => {
                     network illustration we only show a subset of items whose
                     grouping held up under resampling.
                   </p>
-                  <p className="page-caption">
-                    Fitted with bootEGA ({network.method?.iterations}{' '}
-                    {network.method?.type} bootstraps, {network.method?.model},{' '}
-                    {network.method?.community_detection} communities, seed{' '}
-                    {network.method?.seed}), then refitted on the items whose
-                    dimension placement replicated in at least{' '}
-                    {Math.round(100 * (network.method?.stability_cutoff ?? 0.7))}%
-                    of bootstraps.{' '}
-                    <strong>
-                      {network.selection?.items_retained} of{' '}
-                      {network.selection?.items_tested} items kept
-                    </strong>
-                    {network.selection?.items_dropped_unstable > 0 && (
-                      <> — {network.selection.items_dropped_unstable} dropped as
-                      unstable</>
-                    )}
-                    , across {network.selection?.subjects_complete} subjects who
-                    rated all of them. {network.n_dimensions} dimensions.
-                    {network.selection?.feasibility_capped && (
-                      <> This dataset has more items than subjects, so the first
-                      fit was capped to its most completely observed items before
-                      stability was assessed.</>
-                    )}
-                  </p>
-                  {network.dimension_stability?.length > 0 && (
-                    <p className="page-caption" style={{ marginTop: -4 }}>
-                      Dimension structural consistency:{' '}
-                      {network.dimension_stability
-                        .map((d) => `${d.dimension}: ${d.structural_consistency.toFixed(2)}`)
-                        .join(' · ')}
-                    </p>
-                  )}
                   <ItemNetworkCanvas
                     data={networkGraph}
                     height={560}
