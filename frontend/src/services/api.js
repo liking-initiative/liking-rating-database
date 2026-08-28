@@ -1,5 +1,5 @@
 /**
- * API service for the Liking Rating Database frontend
+ * API service for The Liking Initiative frontend
  */
 import axios from 'axios';
 

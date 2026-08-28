@@ -1,1 +1,1 @@
-{"dataset_code":"fernandezeeg","estimated":false,"reason":"a network over items needs more subjects than items; 0 subjects rated 23 items in common","n_subjects":46,"n_items_total":100}
+{"dataset_code":"fernandezeeg","estimated":false,"reason":"a network over items needs more subjects than items; 0 subjects rated 100 items in common","n_subjects":46,"n_items_total":100}

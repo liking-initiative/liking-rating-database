@@ -26,7 +26,7 @@ const AppHeader = () => {
           }}
           onClick={() => navigate('/')}
         >
-          Liking Rating Database
+          The Liking Initiative
         </Title>
       </div>
       

@@ -44,7 +44,10 @@ BOOT       <- as.integer(get_arg("--boot", "500"))
 ONLY       <- get_arg("--only", NA)
 MATRIX_DIR <- get_arg("--matrices", "build/ega-matrices")
 
-STABILITY_CUTOFF   <- 0.70   # EGAnet documents 0.70-0.75 as sufficient
+STABILITY_CUTOFF   <- 0.45   # loosened from EGAnet's documented 0.70-0.75
+                             # to give every dataset a chance at a network;
+                             # the cutoff travels with the result so the
+                             # page can say what it was.
 SUBJECT_ITEM_RATIO <- 2      # feasibility only: subjects >= 2 x items
 MIN_ITEMS          <- 5
 MIN_SUBJECTS       <- 15
@@ -84,19 +87,45 @@ for (f in files) {
   item_id <- meta[, 1]; item_name <- meta[, 2]; item_freq <- as.integer(meta[, 3])
   n_all <- nrow(raw); p_all <- ncol(raw)
 
-  # Complete cases only -- a correlation matrix from ragged pairwise data is
-  # not guaranteed positive definite.
-  d0 <- raw[complete.cases(raw), , drop = FALSE]
-  cols <- seq_len(ncol(d0))
+  # Choose items and subjects together. Taking the most-complete items and
+  # then dropping incomplete rows is the wrong order: it can leave a single
+  # subject who happened to rate all of them. Instead grow the item set in
+  # order of completeness and keep the largest block that still has twice as
+  # many complete subjects as items. Adding an item can only reduce the
+  # complete-case count, so the first infeasible size ends the search.
+  cols <- seq_len(ncol(raw))
   feasibility_capped <- FALSE
+  full_n <- sum(complete.cases(raw))
 
-  if (ncol(d0) >= 2 && nrow(d0) < SUBJECT_ITEM_RATIO * ncol(d0)) {
-    cap <- floor(nrow(raw) / SUBJECT_ITEM_RATIO)
-    if (cap >= MIN_ITEMS) {
-      completeness <- colSums(!is.na(raw))
-      cols <- order(completeness, decreasing = TRUE)[seq_len(min(cap, ncol(raw)))]
-      d0 <- raw[, cols, drop = FALSE]
-      d0 <- d0[complete.cases(d0), , drop = FALSE]
+  if (ncol(raw) >= MIN_ITEMS && full_n >= SUBJECT_ITEM_RATIO * ncol(raw)) {
+    d0 <- raw[complete.cases(raw), , drop = FALSE]
+  } else {
+    # Every extra item costs subjects, because a subject is only usable if
+    # they rated all of the retained items. Rather than taking the largest
+    # feasible item set -- which spends subjects freely -- take the one that
+    # retains the most ratings overall (subjects x items), and break ties
+    # toward more subjects. That keeps as many people in the estimate as the
+    # data allows instead of trading them away for extra items.
+    ordering <- order(colSums(!is.na(raw)), decreasing = TRUE)
+    best <- NULL; best_score <- -1
+    for (k in seq(MIN_ITEMS, ncol(raw))) {
+      cand <- ordering[seq_len(k)]
+      keep_rows <- complete.cases(raw[, cand, drop = FALSE])
+      n_k <- sum(keep_rows)
+      if (n_k < MIN_SUBJECTS) break          # only gets worse from here
+      if (n_k >= SUBJECT_ITEM_RATIO * k) {
+        score <- n_k * k
+        if (score > best_score || (score == best_score && n_k > best$n)) {
+          best <- list(cols = cand, rows = keep_rows, p = k, n = n_k)
+          best_score <- score
+        }
+      }
+    }
+    if (is.null(best)) {
+      d0 <- raw[complete.cases(raw), , drop = FALSE]
+    } else {
+      cols <- best$cols
+      d0 <- raw[best$rows, best$cols, drop = FALSE]
       feasibility_capped <- TRUE
     }
   }
@@ -202,6 +231,7 @@ for (f in files) {
       items_dropped_unstable = length(dropped),
       subjects_in_dataset = n_all,
       subjects_complete = nrow(d1),
+      subjects_retained_pct = round(100 * nrow(d1) / n_all, 1),
       feasibility_capped = feasibility_capped
     ),
     # I() keeps a length-1 vector an array; auto_unbox would make it a string

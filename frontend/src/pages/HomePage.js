@@ -25,13 +25,13 @@ const HomePage = () => {
       {/* Hero Section */}
       <div style={{ textAlign: 'center', marginBottom: '48px' }}>
         <Title level={1}>
-          Liking Rating Database
+          The Liking Initiative
         </Title>
         <Paragraph style={{ fontSize: '17px', color: '#4a4a4a', maxWidth: '760px', margin: '0 auto' }}>
-          The Liking Rating Database is a collection of subjective liking
-          ratings from published decision-making studies. It currently contains
-          individual item level ratings from published studies providing
-          researchers with access to a large set of preference data.
+          The Liking Initiative is a database of subjective evaluations
+          collected across published decision-making studies. It contains
+          individual item level ratings, aggregated so that researchers can
+          use them in their own work.
         </Paragraph>
         <Paragraph style={{ color: '#5a5a5a', fontSize: 14, marginTop: 14 }}>
           The Liking Initiative is built and maintained by{' '}

@@ -56,11 +56,20 @@ const DocumentationPage = () => {
       <Col xs={24} lg={19}>
         <Title level={2}>Documentation</Title>
         <Paragraph type="secondary" style={{ maxWidth: 720 }}>
-          How the database is structured, what the columns mean, and how to get
-          the data into R or Python.
+          What the initiative collects, how the database is structured, what the
+          columns mean, and how to get the data into R or Python.
         </Paragraph>
 
-        <Card id="overview" title="What's in the database" style={{ marginBottom: 24 }}>
+        <Card id="overview" title="What the Liking Initiative is" style={{ marginBottom: 24 }}>
+          <Paragraph>
+            The Liking Initiative is a database of subjective evaluations —
+            how much people report liking individual items — collected from
+            published decision-making studies and put on a common footing so
+            they can be used together. Studies measured liking for their own
+            purposes and on their own scales; the initiative gathers those
+            ratings, records how each was elicited, and normalizes them so a
+            question can be asked across studies rather than within one.
+          </Paragraph>
           <Paragraph>
             {stats ? (
               <>
@@ -241,7 +250,7 @@ evaluation ratings for decision-making research. (In preparation.)`}
         <Anchor
           style={{ position: 'sticky', top: 24 }}
           items={[
-            { key: 'overview', href: '#overview', title: "What's in the database" },
+            { key: 'overview', href: '#overview', title: 'What the Liking Initiative is' },
             { key: 'ratings', href: '#ratings', title: 'The ratings table' },
             { key: 'gotchas', href: '#gotchas', title: 'Two things to get right' },
             { key: 'access', href: '#access', title: 'Downloading the data' },

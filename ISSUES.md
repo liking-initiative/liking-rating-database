@@ -274,18 +274,25 @@ the interface may legitimately show it again.
   (376 KB for all 55). Two rounds of 500 bootstraps is roughly a minute per
   dataset — too slow to run per page view, so webR was not the right tool.
 
-**Outcome: 28 estimated, 27 skipped**, every skip carrying its reason:
+**Outcome: 45 estimated, 10 not**, every skip carrying its reason. Two changes
+got there from an initial 28:
 
-* 14 have more items than subjects, so a graphical model cannot be fitted at
-  all (`smithspiller2`: 1 subject rated all 54 retained items)
-* 7 had too few items clear the cutoff (`sucro`: only 4 of 12)
-* 6 hit EGAnet errors where the glasso shrinks every edge and no dimensions
-  remain
+* the stability cutoff was lowered from EGAnet's documented 0.70 to **0.45**,
+  a deliberate loosening for coverage — the value ships with each result so
+  the page states it rather than implying the stricter default
+* items and subjects are now chosen **together**. Taking the most-complete
+  items and then dropping incomplete rows is the wrong order: it once left a
+  single subject who happened to have rated all of them. The selection now
+  keeps the block that retains the most ratings overall, breaking ties toward
+  subjects. Median 100% of each dataset's subjects are retained, minimum 49%.
 
-Across the 28 that estimated, **497 of 1,091 items survived the cutoff (46%)**.
-That is the honest headline: at these sample sizes, over half the items do not
-have a stable position in their dataset's structure, and they are dropped
-rather than drawn as though they were solid.
+**1,256 of 1,644 items (76%)** now clear the cutoff, up from 46% at 0.70.
+
+The remaining 10 are genuinely blocked, not thresholded out: 7 hit EGAnet
+errors where the glasso shrinks every edge and no dimensions remain, 2 still
+have more items than subjects after selection (`fernandezeeg` is 40%
+complete, `smithspiller1` 57%), and `brusaeb` has a single item — a network of
+one node.
 
 **Still open from this pass**
 - [ ] **R and Python packages become the programmatic access path.** Once the
