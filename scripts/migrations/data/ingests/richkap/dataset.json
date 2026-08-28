@@ -1,0 +1,24 @@
+{
+  "code": "richkap",
+  "study": {
+    "name": "Prior preferences interfere with the associative learning of food values",
+    "authors": [
+      "Rich, A.",
+      "Kapadia, S.",
+      "Henry, R.",
+      "Dan, O.",
+      "Levy, I."
+    ],
+    "year": 2026,
+    "journal": "Research Square",
+    "doi": "10.21203/rs.3.rs-8651706/v1",
+    "citation": "Rich, A., Kapadia, S., Henry, R., Dan, O., & Levy, I. (2026). Prior preferences interfere with the associative learning of food values. Research Square. https://doi.org/10.21203/rs.3.rs-8651706/v1",
+    "description": "Preprint."
+  },
+  "scale": {
+    "min": 1,
+    "max": 5,
+    "type": "likert"
+  },
+  "description": "Collected online via Prolific. Participants rated 65 food images on a five-point Likert scale (1 = Strongly Dislike, 5 = Strongly Like); every subject rated every item. Stimuli are a subset of the Columbia FoodFolio image set. The source files flag 65 of the 395 subjects as invalid on a rating-variance criterion; all 395 are retained here, so anyone reproducing the paper's analyses should apply that screen themselves."
+}

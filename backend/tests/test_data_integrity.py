@@ -34,7 +34,7 @@ def test_dois_are_wellformed_and_not_superseded(con):
     """
     dois = [r[0] for r in con.execute(
         "SELECT doi FROM studies WHERE doi IS NOT NULL AND doi != ''")]
-    assert len(dois) == 29
+    assert len(dois) == 30
     assert len(set(dois)) == len(dois), "duplicate DOIs"
     for doi in dois:
         assert doi.startswith("10."), f"not a DOI: {doi}"
@@ -44,6 +44,12 @@ def test_dois_are_wellformed_and_not_superseded(con):
     superseded = {"10.31234/osf.io/xqhk8", "10.7554/eLife.103736.2",
                   "10.31234/osf.io/2sqyt_v1", "10.31234/osf.io/2sqyt"}
     assert not (set(dois) & superseded), "a superseded DOI is back"
+
+    # Not every version suffix is a mistake. Migration 007 removed them where
+    # an unversioned DOI was the canonical one; Research Square mints only
+    # versioned DOIs, and 10.21203/rs.3.rs-8651706 without the suffix returns
+    # 404 with no CrossRef record, so richkap's must keep its /v1.
+    assert "10.21203/rs.3.rs-8651706/v1" in dois
 
 
 def test_study_year_matches_its_own_citation(con):
