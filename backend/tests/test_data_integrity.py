@@ -176,3 +176,52 @@ def test_published_studies_have_dois(con):
     # to lack a DOI
     assert one(con, """SELECT COUNT(*) FROM studies
         WHERE doi IS NULL AND COALESCE(journal, '') != 'In preparation'""") == 0
+
+
+def test_normalized_rating_matches_declared_scale(con):
+    # normalized_rating is what cross-study comparison is defined on, so it
+    # must be exactly (rating - min) / (max - min) for the dataset's own
+    # scale. romfred failed this for its whole history: its scale_min was
+    # inherited as -10 from the source compilation while the paper and the
+    # data both say 0, which squeezed every normalized value into 0.5..1.0
+    # and biased the dataset high against every other one (migration 012).
+    assert one(con, """SELECT COUNT(*) FROM ratings r
+        JOIN datasets d ON d.id = r.dataset_id
+        WHERE ABS(r.normalized_rating -
+              (r.rating - d.rating_scale_min) /
+              (d.rating_scale_max - d.rating_scale_min)) > 1e-9""") == 0
+
+
+def test_no_rating_falls_outside_its_declared_scale(con):
+    assert one(con, """SELECT COUNT(*) FROM ratings r
+        JOIN datasets d ON d.id = r.dataset_id
+        WHERE r.rating < d.rating_scale_min OR r.rating > d.rating_scale_max""") == 0
+
+
+def test_romfred_scale_is_zero_to_ten(con):
+    # Frömer et al. (2025), Open Mind 9:791-813: ratings were made "on a scale
+    # from 0 (not at all) to 10 (a great deal)".
+    row = con.execute("""SELECT rating_scale_min, rating_scale_max FROM datasets
+        WHERE name = 'romfred' OR name = 'romfred Dataset'""").fetchone()
+    assert row is not None, "romfred dataset is missing"
+    assert (row[0], row[1]) == (0.0, 10.0)
+
+
+def test_quality_flags_are_known_and_explained(con):
+    # A flag with no note tells a user something is wrong without saying what,
+    # which is worse than not flagging at all.
+    assert one(con, """SELECT COUNT(*) FROM datasets
+        WHERE quality_flag IS NOT NULL
+          AND quality_flag NOT IN ('placeholder_items', 'coded_items')""") == 0
+    assert one(con, """SELECT COUNT(*) FROM datasets
+        WHERE quality_flag IS NOT NULL
+          AND (quality_note IS NULL OR TRIM(quality_note) = '')""") == 0
+
+
+def test_datasets_with_placeholder_items_are_flagged(con):
+    # 'nouniqueitem' is the source compilation's marker for "this file had no
+    # item labels". Any dataset still carrying it must say so.
+    assert one(con, """SELECT COUNT(*) FROM datasets d
+        WHERE EXISTS (SELECT 1 FROM ratings r JOIN items i ON i.id = r.item_id
+                      WHERE r.dataset_id = d.id AND i.name = 'nouniqueitem')
+          AND COALESCE(d.quality_flag, '') != 'placeholder_items'""") == 0

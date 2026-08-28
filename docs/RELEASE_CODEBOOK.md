@@ -67,13 +67,21 @@ repeats in their source files and store the per-subject **mean** at
 ## Known caveats
 
 **`foljac2`** arrived already normalized to 0–1; its original elicitation was
-willingness-to-pay, $0–3. Within-subject spread there is very small (about
+willingness-to-pay, £0–3. Within-subject spread there is very small (about
 0.006) relative to differences between subjects (about 0.6), so the file
 mostly records who the rater was rather than which foods they preferred. Treat
 it with care in any within-person analysis.
 
 **168 items** carry opaque source codes as names (`0488`, `mh0021`) because
-their source files did not include readable item labels.
+their source files did not include readable item labels. The datasets holding
+them are marked in `catalog.json` with `quality_flag = "coded_items"`:
+`larlua` (all 86 items) and eight `shenhav*` datasets (3–76 items each).
+
+**Two datasets carry a placeholder item name**, marked
+`quality_flag = "placeholder_items"`. `brusaeb` consists entirely of it — the
+source file had no item labels at all, so its 33 ratings are per-subject means
+over stimuli that cannot be identified, and it supports no item-level
+analysis. `romfred` has one such value out of 27,108.
 
 **Item categories are not included in this release.** The database holds a
 `category` column, but it was derived from item names by a curated lexicon

@@ -169,6 +169,11 @@ def main() -> None:
             "rating_scale_max": d["rating_scale_max"],
             "rating_scale_type": d["rating_scale_type"],
             "data_completeness": d["data_completeness"],
+            # Declared defects inherited from the source compilation (migration
+            # 011). Null for the great majority; where set, the note says what
+            # is wrong so a consumer never has to guess from the data.
+            "quality_flag": d["quality_flag"],
+            "quality_note": d["quality_note"],
             "file": f"datasets/{code}.tsv.gz",
         })
 

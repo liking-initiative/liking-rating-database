@@ -52,6 +52,8 @@ class DatasetBase(BaseSchema):
     rating_scale_max: float
     rating_scale_type: Optional[str] = Field(None, max_length=50)
     data_completeness: Optional[float] = Field(None, ge=0, le=100)
+    quality_flag: Optional[str] = Field(None, max_length=50)
+    quality_note: Optional[str] = None
     file_format: Optional[str] = Field(None, max_length=20)
     file_size_mb: Optional[float] = Field(None, ge=0)
     osf_file_id: Optional[str] = Field(None, max_length=50)

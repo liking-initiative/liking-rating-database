@@ -61,6 +61,10 @@ class Dataset(Base):
     rating_scale_max = Column(Float, nullable=False)
     rating_scale_type = Column(String(50))  # e.g., "likert", "visual_analog", "hedonic"
     data_completeness = Column(Float)  # Percentage of complete responses
+    # Source-inherited defects, declared rather than silently corrected
+    # (migration 011): "placeholder_items" | "coded_items" | NULL.
+    quality_flag = Column(String(50))
+    quality_note = Column(Text)
     file_format = Column(String(20))  # csv, xlsx, sav, etc.
     file_size_mb = Column(Float)
     osf_file_id = Column(String(50))

@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Card, Descriptions, Tag, Button, Space, Typography, Row, Col, Table, message, Modal, Select, Alert } from 'antd';
 import { useQuery } from 'react-query';
 import AccessCode from '../components/AccessCode';
+import DataQualityNotice from '../components/DataQualityNotice';
 import {
   DownloadOutlined,
   DatabaseOutlined,
@@ -172,6 +173,8 @@ const DatasetDetailPage = () => {
           </Col>
         </Row>
       </Card>
+
+      <DataQualityNotice dataset={dataset} />
 
       <AccessCode dataset={{ id: datasetId, name: dataset.name }} />
 

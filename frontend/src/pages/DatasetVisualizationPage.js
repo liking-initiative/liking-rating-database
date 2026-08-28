@@ -6,6 +6,7 @@ import Plot from 'react-plotly.js';
 import ItemNetworkCanvas from '../components/ItemNetworkCanvas';
 import { useQuery } from 'react-query';
 import { getDataset, getRatings, getDatasetNetwork } from '../services/api';
+import DataQualityNotice from '../components/DataQualityNotice';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -244,6 +245,8 @@ const DatasetVisualizationPage = () => {
           )}
         </div>
       </div>
+
+      <DataQualityNotice dataset={dataset} />
 
       <Row gutter={[24, 24]}>
         <Col xs={24} md={8}>

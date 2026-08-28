@@ -49,6 +49,20 @@ data migrations.
 - Ratings must be subjective evaluations (liking, WTP) — verify which source
   column actually holds them before ingesting.
 
+### Do not import
+
+**`shevsmith2`** — listed as a final dataset on the RA sheet, but out of scope
+twice over, and its labels are wrong. The sheet's own `question_asked` says the
+stimuli were *"107 abstract art images"*, which the scope rule above excludes.
+Its item names in `final_database.csv` are also **100% identical to
+`shevsmith1`'s candy names** — the food key was joined onto the art ratings, so
+every label is attached to the wrong stimulus. Only `shevsmith1` (144 foods)
+belongs in the database.
+
+Before importing anything from `final_database.csv`, check that its item names
+are real: eight datasets there have no labels at all (see CLAUDE.md), and this
+one has labels that belong to a different experiment.
+
 ## Run it
 
 ```bash
