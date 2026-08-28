@@ -1,1 +1,1 @@
-{"dataset_code":"larlua","estimated":false,"reason":"only 0 items are replicated across >= 10 datasets","n_subjects":957,"n_items_total":86}
+{"dataset_code":"larlua","estimated":false,"reason":"a network over items needs more subjects than items; 7 subjects rated 86 items in common","n_subjects":957,"n_items_total":86}

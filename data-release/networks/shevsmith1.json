@@ -1,1 +1,1 @@
-{"dataset_code":"shevsmith1","estimated":false,"reason":"only 6 subjects rated all 22 retained items","n_subjects":44,"n_items_total":144}
+{"dataset_code":"shevsmith1","estimated":false,"reason":"a network over items needs more subjects than items; 11 subjects rated 22 items in common","n_subjects":44,"n_items_total":144}

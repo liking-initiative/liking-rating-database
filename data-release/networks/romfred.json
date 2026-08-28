@@ -1,1 +1,1 @@
-{"dataset_code":"romfred","estimated":false,"reason":"only 0 items are replicated across >= 10 datasets","n_subjects":92,"n_items_total":352}
+{"dataset_code":"romfred","estimated":false,"reason":"a network over items needs more subjects than items; 84 subjects rated 46 items in common","n_subjects":92,"n_items_total":352}

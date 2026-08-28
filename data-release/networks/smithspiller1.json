@@ -1,1 +1,1 @@
-{"dataset_code":"smithspiller1","estimated":false,"reason":"only 0 subjects rated all 25 retained items","n_subjects":50,"n_items_total":144}
+{"dataset_code":"smithspiller1","estimated":false,"reason":"a network over items needs more subjects than items; 0 subjects rated 25 items in common","n_subjects":50,"n_items_total":144}

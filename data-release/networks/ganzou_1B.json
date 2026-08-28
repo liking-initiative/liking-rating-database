@@ -1,1 +1,185 @@
-{"dataset_code":"ganzou_1B","estimated":true,"method":{"algorithm":"bootEGA (EGAnet)","model":"glasso","type":"resampling","iterations":500,"seed":42,"community_detection":"walktrap"},"selection":{"min_item_frequency":10,"subject_item_ratio":2,"items_in_dataset":171,"items_estimated":9,"subjects_in_dataset":19,"subjects_complete":19},"n_dimensions":2,"nodes":[{"id":"611f48ee-684a-4861-959d-1aeea0ae3af6","label":"kitkat","community":1,"stability":0.958,"mean_rating":0.250789,"n_datasets":28},{"id":"e660f1d0-2bdf-40f1-96e0-0d34058204b0","label":"skittles","community":1,"stability":0.85,"mean_rating":0.166053,"n_datasets":25},{"id":"21e19f99-4cd5-4fb4-af23-f6eec95052c0","label":"apple","community":2,"stability":0.8,"mean_rating":0.945526,"n_datasets":24},{"id":"bcdcfb30-286e-44d7-9dbc-5943c0fb8f14","label":"frenchfries","community":1,"stability":0.842,"mean_rating":0.208421,"n_datasets":23},{"id":"5fac7ef8-85eb-4b79-a4a5-e90c3bcf967f","label":"orange","community":2,"stability":0.824,"mean_rating":0.924211,"n_datasets":22},{"id":"0969c6e0-a93b-49a4-abae-f10ba23133d3","label":"peach","community":2,"stability":0.708,"mean_rating":0.911053,"n_datasets":20},{"id":"6b528be4-c366-4bb5-95c8-80ffb2b3c8d5","label":"darkchocolate","community":1,"stability":0.818,"mean_rating":0.555526,"n_datasets":18},{"id":"42ef3667-1645-41f8-a837-8517ea94da46","label":"honeydewmelon","community":1,"stability":0.368,"mean_rating":0.858421,"n_datasets":18},{"id":"5f57e95a-351a-43dc-803d-8a68836b0db3","label":"banana","community":2,"stability":0.764,"mean_rating":0.926316,"n_datasets":16}],"edges":[{"source":"kitkat","target":"skittles","weight":0.259333},{"source":"kitkat","target":"frenchfries","weight":0.287096},{"source":"skittles","target":"frenchfries","weight":0.094614},{"source":"apple","target":"frenchfries","weight":-0.381439},{"source":"apple","target":"orange","weight":0.414188},{"source":"apple","target":"peach","weight":0.034363},{"source":"orange","target":"peach","weight":0.432158},{"source":"kitkat","target":"darkchocolate","weight":0.188865},{"source":"skittles","target":"darkchocolate","weight":-0.380604},{"source":"orange","target":"darkchocolate","weight":0.090233},{"source":"kitkat","target":"honeydewmelon","weight":-0.306619},{"source":"frenchfries","target":"honeydewmelon","weight":0.229365},{"source":"peach","target":"honeydewmelon","weight":0.402442},{"source":"darkchocolate","target":"honeydewmelon","weight":-0.141156},{"source":"kitkat","target":"banana","weight":0.108058},{"source":"skittles","target":"banana","weight":-0.021383},{"source":"orange","target":"banana","weight":0.391607},{"source":"peach","target":"banana","weight":0.313404}]}
+{
+  "dataset_code": "ganzou_1B",
+  "estimated": true,
+  "method": {
+    "algorithm": "bootEGA + itemStability (EGAnet)",
+    "model": "glasso",
+    "type": "resampling",
+    "iterations": 500,
+    "seed": 42,
+    "community_detection": "walktrap",
+    "stability_cutoff": 0.7
+  },
+  "selection": {
+    "rule": "items whose dimension placement replicated in >= 70% of bootstraps",
+    "items_in_dataset": 171,
+    "items_tested": 9,
+    "items_retained": 8,
+    "items_dropped_unstable": 1,
+    "subjects_in_dataset": 19,
+    "subjects_complete": 19,
+    "feasibility_capped": true
+  },
+  "dropped_items": [
+    "honeydewmelon"
+  ],
+  "n_dimensions": 3,
+  "dimension_stability": [
+    {
+      "dimension": 1,
+      "structural_consistency": 0.816,
+      "average_item_stability": 0.911333
+    },
+    {
+      "dimension": 2,
+      "structural_consistency": 0.158,
+      "average_item_stability": 0.225
+    },
+    {
+      "dimension": 3,
+      "structural_consistency": 0.644,
+      "average_item_stability": 0.829333
+    }
+  ],
+  "nodes": [
+    {
+      "id": "611f48ee-684a-4861-959d-1aeea0ae3af6",
+      "label": "kitkat",
+      "community": 1,
+      "stability": 0.942,
+      "stability_before_selection": 0.958,
+      "mean_rating": 0.250789,
+      "n_datasets": 28
+    },
+    {
+      "id": "e660f1d0-2bdf-40f1-96e0-0d34058204b0",
+      "label": "skittles",
+      "community": 1,
+      "stability": 0.898,
+      "stability_before_selection": 0.85,
+      "mean_rating": 0.166053,
+      "n_datasets": 25
+    },
+    {
+      "id": "21e19f99-4cd5-4fb4-af23-f6eec95052c0",
+      "label": "apple",
+      "community": 2,
+      "stability": 0.28,
+      "stability_before_selection": 0.8,
+      "mean_rating": 0.945526,
+      "n_datasets": 24
+    },
+    {
+      "id": "bcdcfb30-286e-44d7-9dbc-5943c0fb8f14",
+      "label": "frenchfries",
+      "community": 2,
+      "stability": 0.17,
+      "stability_before_selection": 0.842,
+      "mean_rating": 0.208421,
+      "n_datasets": 23
+    },
+    {
+      "id": "5fac7ef8-85eb-4b79-a4a5-e90c3bcf967f",
+      "label": "orange",
+      "community": 3,
+      "stability": 0.83,
+      "stability_before_selection": 0.824,
+      "mean_rating": 0.924211,
+      "n_datasets": 22
+    },
+    {
+      "id": "0969c6e0-a93b-49a4-abae-f10ba23133d3",
+      "label": "peach",
+      "community": 3,
+      "stability": 0.89,
+      "stability_before_selection": 0.708,
+      "mean_rating": 0.911053,
+      "n_datasets": 20
+    },
+    {
+      "id": "6b528be4-c366-4bb5-95c8-80ffb2b3c8d5",
+      "label": "darkchocolate",
+      "community": 1,
+      "stability": 0.894,
+      "stability_before_selection": 0.818,
+      "mean_rating": 0.555526,
+      "n_datasets": 18
+    },
+    {
+      "id": "5f57e95a-351a-43dc-803d-8a68836b0db3",
+      "label": "banana",
+      "community": 3,
+      "stability": 0.768,
+      "stability_before_selection": 0.764,
+      "mean_rating": 0.926316,
+      "n_datasets": 16
+    }
+  ],
+  "edges": [
+    {
+      "source": "kitkat",
+      "target": "skittles",
+      "weight": 0.286419
+    },
+    {
+      "source": "kitkat",
+      "target": "frenchfries",
+      "weight": 0.242978
+    },
+    {
+      "source": "skittles",
+      "target": "frenchfries",
+      "weight": 0.110929
+    },
+    {
+      "source": "apple",
+      "target": "frenchfries",
+      "weight": -0.341015
+    },
+    {
+      "source": "apple",
+      "target": "orange",
+      "weight": 0.426917
+    },
+    {
+      "source": "orange",
+      "target": "peach",
+      "weight": 0.482164
+    },
+    {
+      "source": "kitkat",
+      "target": "darkchocolate",
+      "weight": 0.2559
+    },
+    {
+      "source": "skittles",
+      "target": "darkchocolate",
+      "weight": -0.401484
+    },
+    {
+      "source": "orange",
+      "target": "darkchocolate",
+      "weight": 0.048907
+    },
+    {
+      "source": "kitkat",
+      "target": "banana",
+      "weight": 0.018786
+    },
+    {
+      "source": "skittles",
+      "target": "banana",
+      "weight": -0.014345
+    },
+    {
+      "source": "orange",
+      "target": "banana",
+      "weight": 0.39501
+    },
+    {
+      "source": "peach",
+      "target": "banana",
+      "weight": 0.332047
+    }
+  ]
+}

@@ -1,1 +1,1 @@
-{"dataset_code":"shenhav5a","estimated":false,"reason":"only 1 items are replicated across >= 10 datasets","n_subjects":39,"n_items_total":201}
+{"dataset_code":"shenhav5a","estimated":false,"reason":"bootEGA failed: Error : The 'structure' provided contains all missing values. Check the empirical structure. If you did not provide an empirical structure, ","n_subjects":39,"n_items_total":201}

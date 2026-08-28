@@ -32,20 +32,48 @@ def test_every_dataset_has_a_file():
             assert d.get("reason"), f"{d['dataset_code']} has no reason recorded"
 
 
-def test_estimated_networks_declare_their_restriction():
-    """The item selection is part of what the figure means, so it must ship."""
+def test_estimated_networks_declare_their_selection():
+    """Items are chosen by bootstrap stability, and that must ship with them."""
     for d in _load_all():
         if not d["estimated"]:
             continue
         sel = d["selection"]
-        assert sel["items_estimated"] <= sel["items_in_dataset"]
+        code = d["dataset_code"]
+        assert sel["items_retained"] <= sel["items_tested"] <= sel["items_in_dataset"], code
+        assert sel["items_retained"] + sel["items_dropped_unstable"] == sel["items_tested"], code
         # a graphical model over items needs more subjects than items
-        assert sel["subjects_complete"] >= 2 * sel["items_estimated"], d["dataset_code"]
-        assert sel["min_item_frequency"] >= 1
+        assert sel["subjects_complete"] >= 2 * sel["items_retained"], code
+        assert len(d["dropped_items"]) == sel["items_dropped_unstable"], code
+
         method = d["method"]
-        assert method["algorithm"].startswith("bootEGA")
+        assert "bootEGA" in method["algorithm"]
         assert method["iterations"] >= 100
         assert method["seed"] is not None, "results must be reproducible"
+        assert 0.5 <= method["stability_cutoff"] <= 0.95
+
+
+def test_retained_items_were_stable_before_selection():
+    """Every kept item cleared the cutoff on the fit that selected it."""
+    for d in _load_all():
+        if not d["estimated"]:
+            continue
+        cutoff = d["method"]["stability_cutoff"]
+        for n in d["nodes"]:
+            before = n.get("stability_before_selection")
+            assert before is not None, d["dataset_code"]
+            assert before >= cutoff - 1e-9, (
+                f"{d['dataset_code']}/{n['label']} kept at {before} below {cutoff}"
+            )
+
+
+def test_dimension_stability_is_reported():
+    for d in _load_all():
+        if not d["estimated"] or not d.get("dimension_stability"):
+            continue
+        for dim in d["dimension_stability"]:
+            assert 0.0 <= dim["structural_consistency"] <= 1.0, d["dataset_code"]
+            if dim["average_item_stability"] is not None:
+                assert 0.0 <= dim["average_item_stability"] <= 1.0
 
 
 def test_edges_reference_real_nodes():

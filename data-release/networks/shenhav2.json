@@ -1,1 +1,1 @@
-{"dataset_code":"shenhav2","estimated":false,"reason":"only 3 items are replicated across >= 10 datasets","n_subjects":98,"n_items_total":259}
+{"dataset_code":"shenhav2","estimated":false,"reason":"only 0 of 49 items reached the 0.70 stability cutoff","n_subjects":98,"n_items_total":259,"items_tested":49,"items_stable":0}

@@ -298,25 +298,46 @@ const DatasetVisualizationPage = () => {
               ) : (
                 <>
                   <p className="page-note">
-                    <strong>How to read this.</strong> Items are joined when the
-                    people who rated both rated them alike, after removing each
-                    person&apos;s overall generosity. Blue links items rated
-                    together, orange items rated oppositely; thickness is the
-                    strength of the partial correlation. Colours of the nodes
-                    are mean liking, size is how many studies use the item.
+                    <strong>How to read this.</strong> Items are joined when
+                    the people who rated both rated them alike. Blue links items
+                    rated together, orange items rated oppositely; thickness is
+                    the strength of the partial correlation. Node colour is mean
+                    liking, size is how many studies use the item. Only items
+                    whose grouping held up under resampling are shown — the rest
+                    were dropped rather than drawn as though they were solid.
                   </p>
                   <p className="page-caption">
-                    Estimated with bootEGA ({network.method?.iterations}{' '}
+                    Fitted with bootEGA ({network.method?.iterations}{' '}
                     {network.method?.type} bootstraps, {network.method?.model},{' '}
-                    {network.method?.community_detection} communities) on{' '}
-                    <strong>{network.selection?.items_estimated} of{' '}
-                    {network.selection?.items_in_dataset} items</strong> and{' '}
-                    {network.selection?.subjects_complete} subjects. A graphical
-                    model needs more subjects than items, so only items rated in
-                    at least {network.selection?.min_item_frequency} datasets are
-                    included, most-replicated first. {network.n_dimensions}{' '}
-                    dimensions were found.
+                    {network.method?.community_detection} communities, seed{' '}
+                    {network.method?.seed}), then refitted on the items whose
+                    dimension placement replicated in at least{' '}
+                    {Math.round(100 * (network.method?.stability_cutoff ?? 0.7))}%
+                    of bootstraps.{' '}
+                    <strong>
+                      {network.selection?.items_retained} of{' '}
+                      {network.selection?.items_tested} items kept
+                    </strong>
+                    {network.selection?.items_dropped_unstable > 0 && (
+                      <> — {network.selection.items_dropped_unstable} dropped as
+                      unstable</>
+                    )}
+                    , across {network.selection?.subjects_complete} subjects who
+                    rated all of them. {network.n_dimensions} dimensions.
+                    {network.selection?.feasibility_capped && (
+                      <> This dataset has more items than subjects, so the first
+                      fit was capped to its most completely observed items before
+                      stability was assessed.</>
+                    )}
                   </p>
+                  {network.dimension_stability?.length > 0 && (
+                    <p className="page-caption" style={{ marginTop: -4 }}>
+                      Dimension structural consistency:{' '}
+                      {network.dimension_stability
+                        .map((d) => `${d.dimension}: ${d.structural_consistency.toFixed(2)}`)
+                        .join(' · ')}
+                    </p>
+                  )}
                   <ItemNetworkCanvas
                     data={networkGraph}
                     height={560}

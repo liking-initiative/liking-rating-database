@@ -1,25 +1,29 @@
 #!/usr/bin/env Rscript
 #
-# Estimate a preference network per dataset with bootEGA (EGAnet).
+# Estimate a preference network per dataset with EGAnet.
 #
-# Why this is precomputed rather than fitted in the browser: bootEGA resamples
-# the network hundreds of times, which is seconds of compute per dataset and
-# not something to ask a visitor's laptop for. Results are written as JSON,
-# served by the API, and drawn by the site's own network canvas.
+# The workflow is EGAnet's own, in the order the package intends:
 #
-# WHICH ITEMS. A Gaussian graphical model over items needs more subjects than
-# items. In this database 41 of 55 datasets have the opposite -- more items
-# than subjects -- so fitting every item is not possible and pretending
-# otherwise would produce a network estimated from a singular correlation
-# matrix. Each dataset is therefore reduced to the items that are
+#   1. bootEGA() on the dataset
+#   2. itemStability() -- how often each item returns to its empirical
+#      dimension across bootstraps
+#   3. keep only items at or above STABILITY_CUTOFF, drop the rest
+#   4. bootEGA() again on the retained items
+#   5. dimensionStability() on that refit, for structural consistency
 #
-#   1. replicated across studies (present in >= MIN_ITEM_FREQ datasets), so
-#      the networks mean the same thing from one dataset to the next, and
-#   2. completely observed for the subjects retained, and
-#   3. capped at n/SUBJECT_ITEM_RATIO items, most-replicated first.
+# Selection is therefore made by the data, not by us: an item survives if its
+# placement replicates, which is what "robust" means here.
 #
-# That is a real restriction on what the figure shows, and the JSON records
-# it so the interface can say so.
+# Precomputed rather than fitted in the browser: two rounds of several hundred
+# bootstraps is seconds of compute per dataset, and all results together are
+# well under a megabyte, so shipping them beats refitting on every page view.
+#
+# ONE THING THE WORKFLOW CANNOT FIX. A graphical model over items needs more
+# subjects than items, and most datasets here have the opposite. Where that
+# holds, step 1 cannot run at all, so there is no stability to measure. Those
+# datasets are cut to their most completely observed items purely so a first
+# fit exists -- a feasibility cap, recorded separately from the stability
+# selection so the two are never confused.
 #
 # Usage:
 #   Rscript scripts/estimate_networks.R [--out DIR] [--boot N] [--only CODE]
@@ -35,144 +39,192 @@ get_arg <- function(flag, default) {
   if (is.na(i) || i == length(args)) default else args[i + 1]
 }
 
-OUT_DIR   <- get_arg("--out", "release/networks")
-BOOT      <- as.integer(get_arg("--boot", "500"))
-ONLY      <- get_arg("--only", NA)
+OUT_DIR    <- get_arg("--out", "build/networks")
+BOOT       <- as.integer(get_arg("--boot", "500"))
+ONLY       <- get_arg("--only", NA)
 MATRIX_DIR <- get_arg("--matrices", "build/ega-matrices")
 
-MIN_ITEM_FREQ       <- 10   # item must appear in at least this many datasets
-SUBJECT_ITEM_RATIO  <- 2    # keep subjects >= 2 x items
-MIN_ITEMS           <- 5
-MIN_SUBJECTS        <- 15
-SEED                <- 42
+STABILITY_CUTOFF   <- 0.70   # EGAnet documents 0.70-0.75 as sufficient
+SUBJECT_ITEM_RATIO <- 2      # feasibility only: subjects >= 2 x items
+MIN_ITEMS          <- 5
+MIN_SUBJECTS       <- 15
+SEED               <- 42
 
 dir.create(OUT_DIR, recursive = TRUE, showWarnings = FALSE)
 
 files <- list.files(MATRIX_DIR, pattern = "csv$", full.names = TRUE)
-if (!length(files)) stop("no matrices in ", MATRIX_DIR, " -- run scripts/export_ega_matrices.py first")
+if (!length(files)) stop("no matrices in ", MATRIX_DIR)
 if (!is.na(ONLY)) files <- files[basename(files) == paste0(ONLY, ".csv")]
 
-summary_rows <- list()
+write_skip <- function(code, reason, extra = list()) {
+  out <- c(list(dataset_code = code, estimated = FALSE, reason = reason), extra)
+  write_json(out, file.path(OUT_DIR, paste0(code, ".json")),
+             auto_unbox = TRUE, digits = 6, na = "null")
+  cat(sprintf("%-22s skipped  %s\n", code, reason))
+}
 
-for (f in files) {
-  code <- sub(".csv$", "", basename(f))
-  raw <- read.csv(f, check.names = FALSE)
-
-  # Columns are named "<item_id>|<item_name>|<frequency>" by the exporter.
-  meta <- do.call(rbind, strsplit(colnames(raw), "|", fixed = TRUE))
-  item_id   <- meta[, 1]
-  item_name <- meta[, 2]
-  item_freq <- as.integer(meta[, 3])
-
-  n_all <- nrow(raw); p_all <- ncol(raw)
-  status <- NA_character_
-
-  keep <- which(item_freq >= MIN_ITEM_FREQ)
-  # most-replicated first, so the retained set is the most comparable one
-  keep <- keep[order(item_freq[keep], decreasing = TRUE)]
-  cap <- floor(n_all / SUBJECT_ITEM_RATIO)
-  if (length(keep) > cap) keep <- keep[seq_len(cap)]
-
-  if (length(keep) < MIN_ITEMS) {
-    status <- sprintf("only %d items are replicated across >= %d datasets",
-                      length(keep), MIN_ITEM_FREQ)
-  } else {
-    sub <- raw[, keep, drop = FALSE]
-    sub <- sub[complete.cases(sub), , drop = FALSE]
-    if (nrow(sub) < MIN_SUBJECTS) {
-      status <- sprintf("only %d subjects rated all %d retained items",
-                        nrow(sub), ncol(sub))
-    } else if (nrow(sub) < SUBJECT_ITEM_RATIO * ncol(sub)) {
-      # trim further so the ratio holds after dropping incomplete rows
-      cap2 <- floor(nrow(sub) / SUBJECT_ITEM_RATIO)
-      if (cap2 < MIN_ITEMS) {
-        status <- sprintf("%d complete subjects cannot support %d items",
-                          nrow(sub), MIN_ITEMS)
-      } else {
-        sub <- sub[, seq_len(cap2), drop = FALSE]
-        sub <- sub[complete.cases(sub), , drop = FALSE]
-      }
-    }
-  }
-
-  if (!is.na(status)) {
-    summary_rows[[code]] <- list(dataset_code = code, estimated = FALSE,
-                                 reason = status, n_subjects = n_all, n_items_total = p_all)
-    write_json(summary_rows[[code]], file.path(OUT_DIR, paste0(code, ".json")),
-               auto_unbox = TRUE, digits = 6)
-    cat(sprintf("%-22s skipped  %s\n", code, status))
-    next
-  }
-
-  kept_idx <- keep[seq_len(ncol(sub))]
-  fit <- try(suppressWarnings(
-    bootEGA(data = sub, iter = BOOT, type = "resampling", seed = SEED,
+run_boot <- function(d) {
+  try(suppressWarnings(
+    bootEGA(data = d, iter = BOOT, type = "resampling", seed = SEED,
             plot.itemStability = FALSE, plot.typicalStructure = FALSE,
             verbose = FALSE)
   ), silent = TRUE)
+}
 
-  if (inherits(fit, "try-error")) {
-    reason <- trimws(gsub("\\s+", " ", as.character(fit)))
-    summary_rows[[code]] <- list(dataset_code = code, estimated = FALSE,
-                                 reason = paste("bootEGA failed:", substr(reason, 1, 160)),
-                                 n_subjects = nrow(sub), n_items_total = p_all)
-    write_json(summary_rows[[code]], file.path(OUT_DIR, paste0(code, ".json")),
-               auto_unbox = TRUE, digits = 6)
-    cat(sprintf("%-22s FAILED\n", code))
-    next
+n_ok <- 0
+for (f in files) {
+  code <- sub(".csv$", "", basename(f))
+  # Already estimated? leave it alone, so an interrupted sweep can resume.
+  if (file.exists(file.path(OUT_DIR, paste0(code, ".json")))) {
+    cat(sprintf("%-22s (already present)\n", code)); next
+  }
+  estimate_one <- function() {
+  raw <- read.csv(f, check.names = FALSE)
+  meta <- do.call(rbind, strsplit(colnames(raw), "|", fixed = TRUE))
+  item_id <- meta[, 1]; item_name <- meta[, 2]; item_freq <- as.integer(meta[, 3])
+  n_all <- nrow(raw); p_all <- ncol(raw)
+
+  # Complete cases only -- a correlation matrix from ragged pairwise data is
+  # not guaranteed positive definite.
+  d0 <- raw[complete.cases(raw), , drop = FALSE]
+  cols <- seq_len(ncol(d0))
+  feasibility_capped <- FALSE
+
+  if (ncol(d0) >= 2 && nrow(d0) < SUBJECT_ITEM_RATIO * ncol(d0)) {
+    cap <- floor(nrow(raw) / SUBJECT_ITEM_RATIO)
+    if (cap >= MIN_ITEMS) {
+      completeness <- colSums(!is.na(raw))
+      cols <- order(completeness, decreasing = TRUE)[seq_len(min(cap, ncol(raw)))]
+      d0 <- raw[, cols, drop = FALSE]
+      d0 <- d0[complete.cases(d0), , drop = FALSE]
+      feasibility_capped <- TRUE
+    }
   }
 
-  # Empirical network and communities from the bootstrap object
-  net <- fit$EGA$network
-  wc  <- fit$EGA$wc
-  stab <- try(suppressWarnings(itemStability(fit, plot.itemStability = FALSE)), silent = TRUE)
-  item_stab <- rep(NA_real_, ncol(sub))
-  if (!inherits(stab, "try-error")) {
-    s <- stab$item.stability$empirical.dimensions
-    if (!is.null(s)) item_stab <- as.numeric(s[colnames(sub)])
+  if (ncol(d0) < MIN_ITEMS || nrow(d0) < MIN_SUBJECTS ||
+      nrow(d0) < SUBJECT_ITEM_RATIO * ncol(d0)) {
+    write_skip(code, sprintf(
+      "a network over items needs more subjects than items; %d subjects rated %d items in common",
+      nrow(d0), ncol(d0)),
+      list(n_subjects = n_all, n_items_total = p_all))
+    return(FALSE)
   }
+
+  # --- step 1: bootEGA on everything estimable --------------------------
+  first <- run_boot(d0)
+  if (inherits(first, "try-error")) {
+    write_skip(code, paste("bootEGA failed:", substr(trimws(gsub("\\s+", " ",
+      as.character(first))), 1, 140)), list(n_subjects = nrow(d0), n_items_total = p_all))
+    return(FALSE)
+  }
+
+  # --- step 2: how often each item returns to its dimension -------------
+  is1 <- try(suppressWarnings(itemStability(first, plot.itemStability = FALSE)), silent = TRUE)
+  if (inherits(is1, "try-error") || is.null(is1$item.stability$empirical.dimensions)) {
+    write_skip(code, "item stability could not be computed (no dimensions were recovered)",
+               list(n_subjects = nrow(d0), n_items_total = p_all))
+    return(FALSE)
+  }
+  stab1 <- is1$item.stability$empirical.dimensions
+
+  # --- step 3: keep only the stable items -------------------------------
+  # itemStability can return NA for an item that never landed in a dimension;
+  # NA here becomes an NA column name and takes the whole run down.
+  stable <- names(stab1)[!is.na(stab1) & stab1 >= STABILITY_CUTOFF]
+  stable <- intersect(stable, colnames(d0))
+  dropped <- setdiff(colnames(d0), stable)
+  if (length(stable) < MIN_ITEMS) {
+    write_skip(code, sprintf(
+      "only %d of %d items reached the %.2f stability cutoff",
+      length(stable), ncol(d0), STABILITY_CUTOFF),
+      list(n_subjects = nrow(d0), n_items_total = p_all,
+           items_tested = ncol(d0), items_stable = length(stable)))
+    return(FALSE)
+  }
+  d1 <- d0[, stable, drop = FALSE]
+
+  # --- step 4: refit on the retained items ------------------------------
+  final <- run_boot(d1)
+  if (inherits(final, "try-error")) {
+    write_skip(code, paste("refit on stable items failed:", substr(trimws(gsub("\\s+", " ",
+      as.character(final))), 1, 120)), list(n_subjects = nrow(d1), n_items_total = p_all))
+    return(FALSE)
+  }
+  is2 <- try(suppressWarnings(itemStability(final, plot.itemStability = FALSE)), silent = TRUE)
+  stab2 <- if (!inherits(is2, "try-error")) is2$item.stability$empirical.dimensions else NULL
+
+  # --- step 5: dimension stability on the refit -------------------------
+  ds <- try(suppressWarnings(dimensionStability(final)), silent = TRUE)
+  dims <- NULL
+  if (!inherits(ds, "try-error")) {
+    sc <- ds$dimension.stability$structural.consistency
+    ai <- ds$dimension.stability$average.item.stability
+    dims <- lapply(seq_along(sc), function(k) list(
+      dimension = as.integer(names(sc)[k]),
+      structural_consistency = unname(sc[k]),
+      average_item_stability = unname(ai[names(sc)[k]])
+    ))
+  }
+
+  net <- final$EGA$network
+  wc  <- final$EGA$wc
+  keep_idx <- cols[match(stable, colnames(d0))]
 
   idx <- which(upper.tri(net) & net != 0, arr.ind = TRUE)
-  edges <- if (nrow(idx)) lapply(seq_len(nrow(idx)), function(k) {
-    list(source = unname(item_name[kept_idx[idx[k, 1]]]),
-         target = unname(item_name[kept_idx[idx[k, 2]]]),
-         weight = unname(net[idx[k, 1], idx[k, 2]]))
-  }) else list()
+  edges <- if (nrow(idx)) lapply(seq_len(nrow(idx)), function(k) list(
+    source = unname(item_name[keep_idx[idx[k, 1]]]),
+    target = unname(item_name[keep_idx[idx[k, 2]]]),
+    weight = unname(net[idx[k, 1], idx[k, 2]]))) else list()
 
-  nodes <- lapply(seq_len(ncol(sub)), function(k) {
-    list(id = unname(item_id[kept_idx[k]]),
-         label = unname(item_name[kept_idx[k]]),
-         community = unname(as.integer(wc[k])),
-         stability = unname(item_stab[k]),
-         mean_rating = unname(mean(sub[[k]], na.rm = TRUE)),
-         n_datasets = unname(item_freq[kept_idx[k]]))
-  })
+  nodes <- lapply(seq_along(stable), function(k) list(
+    id = unname(item_id[keep_idx[k]]),
+    label = unname(item_name[keep_idx[k]]),
+    community = unname(as.integer(wc[k])),
+    stability = if (is.null(stab2)) NA_real_ else unname(stab2[stable[k]]),
+    stability_before_selection = unname(stab1[stable[k]]),
+    mean_rating = unname(mean(d1[[k]], na.rm = TRUE)),
+    n_datasets = unname(item_freq[keep_idx[k]])))
 
   out <- list(
     dataset_code = code,
     estimated = TRUE,
     method = list(
-      algorithm = "bootEGA (EGAnet)", model = "glasso", type = "resampling",
-      iterations = BOOT, seed = SEED, community_detection = "walktrap"
+      algorithm = "bootEGA + itemStability (EGAnet)", model = "glasso",
+      type = "resampling", iterations = BOOT, seed = SEED,
+      community_detection = "walktrap", stability_cutoff = STABILITY_CUTOFF
     ),
     selection = list(
-      min_item_frequency = MIN_ITEM_FREQ,
-      subject_item_ratio = SUBJECT_ITEM_RATIO,
+      rule = sprintf("items whose dimension placement replicated in >= %.0f%% of bootstraps",
+                     100 * STABILITY_CUTOFF),
       items_in_dataset = p_all,
-      items_estimated = ncol(sub),
+      items_tested = ncol(d0),
+      items_retained = length(stable),
+      items_dropped_unstable = length(dropped),
       subjects_in_dataset = n_all,
-      subjects_complete = nrow(sub)
+      subjects_complete = nrow(d1),
+      feasibility_capped = feasibility_capped
     ),
-    n_dimensions = unname(fit$EGA$n.dim),
+    # I() keeps a length-1 vector an array; auto_unbox would make it a string
+    # and change the shape of the field between datasets.
+    dropped_items = I(unname(item_name[cols[match(dropped, colnames(d0))]])),
+    n_dimensions = unname(final$EGA$n.dim),
+    dimension_stability = dims,
     nodes = nodes,
     edges = edges
   )
   write_json(out, file.path(OUT_DIR, paste0(code, ".json")),
              auto_unbox = TRUE, digits = 6, na = "null")
-  summary_rows[[code]] <- out
-  cat(sprintf("%-22s ok  n=%-4d p=%-3d dims=%-3s edges=%-4d\n",
-              code, nrow(sub), ncol(sub), fit$EGA$n.dim, length(edges)))
+  cat(sprintf("%-22s ok  tested=%-3d kept=%-3d dropped=%-3d dims=%-3s edges=%d\n",
+              code, ncol(d0), length(stable), length(dropped),
+              final$EGA$n.dim, length(edges)))
+  TRUE
+  }
+  ok <- tryCatch(estimate_one(), error = function(e) {
+    write_skip(code, paste("estimation error:",
+      substr(trimws(gsub("\\s+", " ", conditionMessage(e))), 1, 140)))
+    FALSE
+  })
+  if (isTRUE(ok)) n_ok <- n_ok + 1
 }
 
-est <- sum(vapply(summary_rows, function(x) isTRUE(x$estimated), logical(1)))
-cat(sprintf("\nestimated %d of %d datasets -> %s\n", est, length(summary_rows), OUT_DIR))
+cat(sprintf("\nestimated %d of %d datasets -> %s\n", n_ok, length(files), OUT_DIR))

@@ -1,1 +1,1 @@
-{"dataset_code":"shenhav5b","estimated":false,"reason":"only 0 items are replicated across >= 10 datasets","n_subjects":38,"n_items_total":188}
+{"dataset_code":"shenhav5b","estimated":false,"reason":"bootEGA failed: Error in seq_len(max(convert_keep)) : argument must be coercible to non-negative integer","n_subjects":38,"n_items_total":188}

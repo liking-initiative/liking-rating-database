@@ -262,32 +262,30 @@ the interface may legitimately show it again.
 
 ### Per-dataset preference networks with bootEGA (2026-08-27)
 
-- [x] Each dataset page can now show its own network, estimated with EGAnet's
-  `bootEGA` (500 resampling bootstraps, glasso, walktrap communities, fixed
-  seed) and drawn with the site's own network canvas. Edges are signed partial
-  correlations: blue joins items rated alike, orange items rated oppositely.
+- [x] Each dataset page can show its own network, following EGAnet's own
+  workflow: `bootEGA()` → `itemStability()` → **keep only items whose
+  dimension placement replicated in ≥ 70% of bootstraps** → refit `bootEGA()`
+  on those items → `dimensionStability()` for structural consistency. The
+  selection is made by the data, not by us.
+- [x] Drawn with the site's network canvas, which gained signed edges: blue
+  joins items rated alike, orange items rated oppositely, width from the
+  magnitude of the partial correlation.
 - [x] Estimated offline by `scripts/estimate_networks.R` and shipped as JSON
-  (540 KB for all 55). Bootstrapping a graphical model hundreds of times is
-  seconds per dataset — not something to run per page view, and not something
-  to ask a visitor's browser for via webR.
+  (376 KB for all 55). Two rounds of 500 bootstraps is roughly a minute per
+  dataset — too slow to run per page view, so webR was not the right tool.
 
-**The constraint that shaped this.** A graphical model over items needs more
-subjects than items. **41 of 55 datasets have the opposite** — `gwikrab`, for
-instance, is 36 subjects by 147 items — and fitting all items there produces a
-network from a singular correlation matrix. EGA on the full item set fails
-outright on that dataset (`infinite or missing values in 'x'`).
+**Outcome: 28 estimated, 27 skipped**, every skip carrying its reason:
 
-Each dataset is therefore reduced to items that are replicated across studies
-(present in >= 10 datasets, most-replicated first) and completely observed,
-capped so subjects >= 2x items. That makes the networks estimable *and*
-comparable between datasets, and every file records the restriction so the
-page states it.
+* 14 have more items than subjects, so a graphical model cannot be fitted at
+  all (`smithspiller2`: 1 subject rated all 54 retained items)
+* 7 had too few items clear the cutoff (`sucro`: only 4 of 12)
+* 6 hit EGAnet errors where the glasso shrinks every edge and no dimensions
+  remain
 
-Outcome: **35 estimated, 17 skipped, 3 failed.** Skips carry their reason
-("only 3 items are replicated across >= 10 datasets"), so a dataset without a
-network says why rather than showing nothing. The 3 failures are an EGAnet
-edge case where the glasso shrinks every edge to zero, leaving no communities
-for `itemStability` to count.
+Across the 28 that estimated, **497 of 1,091 items survived the cutoff (46%)**.
+That is the honest headline: at these sample sizes, over half the items do not
+have a stable position in their dataset's structure, and they are dropped
+rather than drawn as though they were solid.
 
 **Still open from this pass**
 - [ ] **R and Python packages become the programmatic access path.** Once the

@@ -1,1 +1,1 @@
-{"dataset_code":"gwikrab","estimated":false,"reason":"only 5 subjects rated all 18 retained items","n_subjects":36,"n_items_total":147}
+{"dataset_code":"gwikrab","estimated":false,"reason":"a network over items needs more subjects than items; 9 subjects rated 18 items in common","n_subjects":36,"n_items_total":147}
