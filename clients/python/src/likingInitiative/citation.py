@@ -19,9 +19,12 @@ def _entry(x: Any) -> Optional[dict]:
 
 
 def cite(x: Any = None) -> str:
-    """Citation text for a dataset, or for the database itself.
+    """Citation for a dataset's source publication.
 
-    Please cite both: the database, and the study whose data you used.
+    Returns only that study's citation. Appending the database's every time
+    would be noise in a loop over datasets -- call ``cite()`` with no argument
+    for the database's own citation, and please include it alongside whichever
+    studies you use.
     """
     entry = _entry(x)
     if entry is None:
@@ -31,7 +34,7 @@ def cite(x: Any = None) -> str:
     doi = entry.get("paper_doi")
     if doi:
         citation = f"{citation} https://doi.org/{doi}"
-    return f"{citation}\n\nPlease also cite the database:\n{DATABASE_CITATION}"
+    return citation
 
 
 def bibtex(x: Any) -> str:

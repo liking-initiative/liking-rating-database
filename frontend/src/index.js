@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { ConfigProvider } from 'antd';
+import { App as AntApp, ConfigProvider } from 'antd';
 import App from './App';
 import './styles/main.css';
 
@@ -56,9 +56,13 @@ root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <ConfigProvider theme={theme}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        {/* antd's App provides the context that message/notification need;
+            without it the static calls warn that they cannot read the theme. */}
+        <AntApp>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </AntApp>
       </ConfigProvider>
     </QueryClientProvider>
   </React.StrictMode>

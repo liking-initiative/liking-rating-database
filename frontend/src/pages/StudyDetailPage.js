@@ -8,9 +8,10 @@ import {
   CalendarOutlined,
   TeamOutlined,
   DatabaseOutlined,
-  FileTextOutlined
+  FileTextOutlined,
+  CopyOutlined
 } from '@ant-design/icons';
-import { getStudy, requestDownload, getDownload, downloadFile } from '../services/api';
+import { generateCitationBundle, getStudy, requestDownload, getDownload, downloadFile } from '../services/api';
 
 const { Title } = Typography;
 
@@ -24,6 +25,18 @@ const StudyDetailPage = () => {
     ['study', studyId],
     () => getStudy(studyId)
   );
+
+  // Copies the study's entry together with the initiative's, so crediting
+  // both the original authors and this collection takes one action.
+  const handleCopyCitation = async () => {
+    if (!study) return;
+    try {
+      await navigator.clipboard.writeText(generateCitationBundle(study));
+      message.success('Copied both citations — the study and the database');
+    } catch {
+      message.error('Could not copy to the clipboard');
+    }
+  };
 
   const handleDatasetDownload = async (dataset) => {
     try {
@@ -211,6 +224,12 @@ const StudyDetailPage = () => {
           </Col>
           <Col>
             <Space>
+              <Button
+                icon={<CopyOutlined />}
+                onClick={handleCopyCitation}
+              >
+                Copy citation
+              </Button>
               {study.doi && (
                 <Button
                   icon={<FileTextOutlined />}

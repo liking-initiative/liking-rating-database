@@ -242,4 +242,26 @@ export const generateBibtex = (study) => {
   return `@article{${citationKey},\n${fields.join(',\n')}\n}`;
 };
 
+/**
+ * BibTeX for the initiative itself.
+ *
+ * Anyone using a study's ratings from here is using two things: the original
+ * work, and the collection that made it reusable. Shipping both together
+ * means crediting both takes no extra effort.
+ */
+export const DATABASE_BIBTEX = `@misc{likinginitiative,
+  author = {Fernandez, Kianté and Goyal, Sumedha and Krajbich, Ian},
+  title = {The Liking Initiative: a database of subjective evaluation ratings
+           for decision-making research},
+  note = {In preparation},
+  url = {https://github.com/kiante-fernandez/liking-rating-database}
+}`;
+
+/**
+ * A study's citation together with the initiative's, ready to paste into a
+ * .bib file.
+ */
+export const generateCitationBundle = (study) =>
+  `${generateBibtex(study)}\n\n${DATABASE_BIBTEX}`;
+
 export default api;

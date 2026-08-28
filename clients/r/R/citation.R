@@ -21,12 +21,14 @@ cite.default <- function(x, ...) DATABASE_CITATION
 
 #' @export
 cite.likingInitiative_dataset <- function(x, ...) {
+  # Only the study's own citation. Appending the database's on every call
+  # would be noise in a loop; `cite()` with no argument returns ours.
   m <- x$metadata
   citation <- m$citation %||% m$study_name %||% ""
   if (!is.null(m$paper_doi)) {
     citation <- paste0(citation, " https://doi.org/", m$paper_doi)
   }
-  paste0(citation, "\n\nPlease also cite the database:\n", DATABASE_CITATION)
+  citation
 }
 
 #' @export

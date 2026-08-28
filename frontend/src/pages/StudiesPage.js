@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Table, Card, Tag, Button, Space, Typography, Row, Col, Modal, message } from 'antd';
 import { useQuery } from 'react-query';
 import { EyeOutlined, TeamOutlined, CalendarOutlined, CopyOutlined, FileTextOutlined, LinkOutlined } from '@ant-design/icons';
-import { getStudies, generateBibtex } from '../services/api';
+import { getStudies, generateCitationBundle } from '../services/api';
 import { useNavigate } from 'react-router-dom';
 
 const { Title } = Typography;
@@ -35,10 +35,11 @@ const StudiesPage = () => {
 
   const handleCopyCitation = async () => {
     if (!citationStudy) return;
-    const bibtex = generateBibtex(citationStudy);
+    // Both entries: the study's, and the initiative's.
+    const bibtex = generateCitationBundle(citationStudy);
     try {
       await navigator.clipboard.writeText(bibtex);
-      message.success('BibTeX citation copied to clipboard');
+      message.success('Copied both citations — the study and the database');
     } catch (err) {
       message.error('Failed to copy citation to clipboard');
     }
@@ -180,12 +181,13 @@ const StudiesPage = () => {
       </Card>
 
       <Modal
-        title="BibTeX Citation"
+        title="BibTeX citations"
+        width={720}
         open={!!citationStudy}
         onCancel={() => setCitationStudy(null)}
         footer={[
           <Button key="copy" type="primary" icon={<CopyOutlined />} onClick={handleCopyCitation}>
-            Copy to Clipboard
+            Copy both
           </Button>,
           <Button key="close" onClick={() => setCitationStudy(null)}>
             Close
@@ -193,6 +195,11 @@ const StudiesPage = () => {
         ]}
       >
         {citationStudy && (
+          <>
+          <p className="page-caption">
+            Two entries: the study whose ratings you are using, and the
+            initiative that collected them. Please cite both.
+          </p>
           <pre
             style={{
               background: '#f5f5f5',
@@ -202,8 +209,9 @@ const StudiesPage = () => {
               wordBreak: 'break-word',
             }}
           >
-            {generateBibtex(citationStudy)}
+            {generateCitationBundle(citationStudy)}
           </pre>
+          </>
         )}
       </Modal>
     </div>

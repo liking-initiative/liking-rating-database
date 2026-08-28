@@ -5,7 +5,6 @@ from typing import Any, Dict, List
 
 import polars as pl
 
-from .citation import DATABASE_CITATION
 from .release import LikingInitiativeError, load_catalog
 from .database import load_database
 
@@ -40,8 +39,7 @@ class Item:
     def cite(self) -> str:
         lines = [d.get("citation") or d.get("study_name", "") for d in self.datasets]
         return ("Ratings of this item come from:\n  - "
-                + "\n  - ".join(sorted(set(filter(None, lines))))
-                + f"\n\nPlease also cite the database:\n{DATABASE_CITATION}")
+                + "\n  - ".join(sorted(set(filter(None, lines)))))
 
     def __repr__(self) -> str:
         return (f"<Item {self.name!r}: {self.data.height:,} ratings "

@@ -103,11 +103,14 @@ test_that("per-dataset files agree with the bulk file", {
   }
 })
 
-test_that("citation covers the study and the database", {
+test_that("cite() returns the study only, and cite() alone returns ours", {
+  # Appending the database citation to every call would be noise in a loop;
+  # the web UI bundles both on copy instead.
   skip_without_release()
   txt <- cite(get_dataset("leeholyoak2021"))
   expect_match(txt, "Holyoak")
-  expect_match(txt, "Fernandez")
+  expect_false(grepl("Fernandez", txt))
+  expect_match(cite(), "Fernandez")
 })
 
 test_that("bibtex is well formed", {

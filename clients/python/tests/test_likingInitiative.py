@@ -166,10 +166,16 @@ def test_per_dataset_files_sum_to_the_corpus(L):
 # -- citation --------------------------------------------------------------
 
 
-def test_cite_covers_study_and_database(L):
+def test_cite_returns_only_the_study(L):
+    """Bundling the database citation into every call would be noise in a loop.
+
+    The web UI bundles both on copy; the library keeps them separate and
+    offers the database's citation through cite() with no argument.
+    """
     text = L.get_dataset("leeholyoak2021").cite()
     assert "Holyoak" in text
-    assert "Fernandez" in text  # the database itself must also be cited
+    assert "Fernandez" not in text
+    assert "Fernandez" in L.cite()
 
 
 def test_bibtex_is_wellformed(L):
