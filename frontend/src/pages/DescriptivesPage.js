@@ -334,6 +334,17 @@ const DescriptivesPage = () => {
     { title: 'Floor', dataIndex: 'prop_floor', key: 'prop_floor', render: (v) => fmt(v, 3) },
     { title: 'Ceiling', dataIndex: 'prop_ceil', key: 'prop_ceil', render: (v) => fmt(v, 3) },
     {
+      // Observed range in the study's own units, beside the scale it was
+      // rated on — so a narrow range is visible as narrow rather than having
+      // to be inferred from the mean.
+      title: 'Range',
+      key: 'range',
+      render: (_, r) =>
+        r.min_raw == null || r.max_raw == null
+          ? '—'
+          : `${fmt(r.min_raw, 2)}–${fmt(r.max_raw, 2)}`,
+    },
+    {
       title: 'Scale',
       key: 'scale',
       render: (_, r) => `${r.scale_min}–${r.scale_max}`,

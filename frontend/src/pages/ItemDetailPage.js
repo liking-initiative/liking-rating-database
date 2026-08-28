@@ -14,7 +14,7 @@ import {
   Statistic,
   Divider
 } from 'antd';
-import { ArrowLeftOutlined, BarChartOutlined, LineChartOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, LineChartOutlined } from '@ant-design/icons';
 import { useQuery } from 'react-query';
 import { getItem, getItemRatingsByDataset } from '../services/api';
 
@@ -126,12 +126,6 @@ const ItemDetailPage = () => {
               onClick={() => navigate(`/descriptives?item=${itemId}`)}
             >
               Descriptives
-            </Button>
-            <Button
-              icon={<BarChartOutlined />}
-              onClick={() => navigate(`/items/${itemId}/analyze`)}
-            >
-              Analyze Item
             </Button>
           </Space>
         </Col>

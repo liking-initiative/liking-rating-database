@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate, useParams } from 'react-router-dom';
 import { Layout, Spin } from 'antd';
 import AppHeader from './components/AppHeader';
 import AppSidebar from './components/AppSidebar';
@@ -17,7 +17,6 @@ const DatasetDetailPage = lazy(() => import('./pages/DatasetDetailPage'));
 const DatasetVisualizationPage = lazy(() => import('./pages/DatasetVisualizationPage'));
 const ItemsPage = lazy(() => import('./pages/ItemsPage'));
 const ItemDetailPage = lazy(() => import('./pages/ItemDetailPage'));
-const ItemAnalysisPage = lazy(() => import('./pages/ItemAnalysisPage'));
 const NetworkPage = lazy(() => import('./pages/NetworkPage'));
 const DescriptivesPage = lazy(() => import('./pages/DescriptivesPage'));
 const DocumentationPage = lazy(() => import('./pages/DocumentationPage'));
@@ -25,6 +24,15 @@ const DownloadsPage = lazy(() => import('./pages/DownloadsPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 const { Content } = Layout;
+
+// The item Analysis page was retired: Descriptives showed everything it did
+// and more, was timepoint-aware where Analysis silently pooled repeated
+// phases, and Analysis's own primary button already pointed here. Existing
+// links keep working.
+const AnalyzeRedirect = () => {
+  const { itemId } = useParams();
+  return <Navigate to={`/descriptives?item=${itemId}`} replace />;
+};
 
 const PageFallback = () => (
   <div style={{ display: 'grid', placeItems: 'center', minHeight: 320 }}>
@@ -58,7 +66,7 @@ function App() {
                 <Route path="/datasets/:datasetId/visualize" element={<DatasetVisualizationPage />} />
                 <Route path="/items" element={<ItemsPage />} />
                 <Route path="/items/:itemId" element={<ItemDetailPage />} />
-                <Route path="/items/:itemId/analyze" element={<ItemAnalysisPage />} />
+                <Route path="/items/:itemId/analyze" element={<AnalyzeRedirect />} />
                 <Route path="/network" element={<NetworkPage />} />
                 <Route path="/descriptives" element={<DescriptivesPage />} />
                 <Route path="/docs" element={<DocumentationPage />} />

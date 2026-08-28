@@ -436,6 +436,11 @@ class DescriptivesService:
                     "prop_floor": raw_stats.get("prop_floor"),
                     "prop_ceil": raw_stats.get("prop_ceil"),
                     "mean_raw": raw_stats.get("mean"),
+                    # Observed range in the study's own units. Floor/ceiling
+                    # proportions say how often the scale ends were hit; these
+                    # say whether they were reached at all.
+                    "min_raw": raw_stats.get("min"),
+                    "max_raw": raw_stats.get("max"),
                     "scale_min": entry["scale_min"],
                     "scale_max": entry["scale_max"],
                 }

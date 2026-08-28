@@ -87,12 +87,6 @@ const ItemsPage = () => {
           >
             View
           </Button>
-          <Button 
-            size="small"
-            onClick={() => navigate(`/items/${record.id}/analyze`)}
-          >
-            Analyze
-          </Button>
         </Space>
       ),
     },
