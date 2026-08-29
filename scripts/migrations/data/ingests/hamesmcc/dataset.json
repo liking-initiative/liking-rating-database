@@ -1,0 +1,28 @@
+{
+  "code": "hamesmcc",
+  "study": {
+    "name": "Assessing the relationship between food-related mental imagery and appetite",
+    "authors": [
+      "Hames, M.",
+      "McCormack, J. C.",
+      "Roberts, R.",
+      "Halberstadt, J.",
+      "Spence, C.",
+      "Peng, M."
+    ],
+    "year": 2026,
+    "journal": "Appetite",
+    "doi": "10.1016/j.appet.2026.108592",
+    "citation": "Hames, M., McCormack, J. C., Roberts, R., Halberstadt, J., Spence, C., & Peng, M. (2026). Assessing the relationship between food-related mental imagery and appetite. Appetite, 108592. https://doi.org/10.1016/j.appet.2026.108592",
+    "description": "Data and analysis code at https://osf.io/zun95/."
+  },
+  "scale": {
+    "min": 0,
+    "max": 100,
+    "type": "vas"
+  },
+  "description": "Liking for eight food photographs, rated on a 0-100 visual analogue scale anchored 'Dislike extremely' to 'Like extremely'. Experiment 1 of the paper. Each participant rated every food twice, once in a hungry session and once after a preload, and the paper reports a significant effect of metabolic state on liking, so the two are kept apart rather than averaged: timepoint 1 is the hungry session and timepoint 2 the sated one. Session order was counterbalanced across participants, so the timepoints encode metabolic state rather than the order a given person met them in. The published file repeats each liking rating across the flavour- and texture-imagery rows of the mental-imagery manipulation; liking was measured once per food per session, so those duplicates are collapsed here and 944 ratings are held rather than the file's 1,888 rows. 'Hot chips' is New Zealand English for what the database already holds as frenchfries, and the study's separate 'potato chips' stimulus makes the distinction explicit.",
+  "item_categories": {
+    "driedfruit": "fruits"
+  }
+}
