@@ -23,7 +23,7 @@ subject_id,item_name,rating,timepoint
 10,nestlenuts,0.84,1
 10,almondfilledcake,1.47,1
 10,autodroptotalloss,0.55,1
-10,nestlecrunch,1.08,1
+10,crunch,1.08,1
 10,cappuccinoontbijtkoek,1.39,1
 10,stroopwafel,1.14,1
 10,kitkatchunkywhite,1.59,1
@@ -109,7 +109,7 @@ subject_id,item_name,rating,timepoint
 11,milkyway,0.0,1
 11,maltesers,0.44,1
 11,kitkatchunky,0.4,1
-11,nestlecrunch,0.0,1
+11,crunch,0.0,1
 11,cotedorpralinewhite,0.84,1
 11,buglesnachocheese,0.13,1
 11,lion,0.23,1
@@ -178,7 +178,7 @@ subject_id,item_name,rating,timepoint
 12,redbandcolabottles,0.53,1
 12,kaneelstokjes,0.63,1
 12,almondfilledcake,1.11,1
-12,nestlecrunch,0.55,1
+12,crunch,0.55,1
 13,nestlebros,0.75,1
 13,sugarwaffle,0.2,1
 13,maltesers,0.9,1
@@ -221,7 +221,7 @@ subject_id,item_name,rating,timepoint
 13,stroopwafel,0.23,1
 13,autodropcadillacs,0.76,1
 13,kitkatchunky,0.99,1
-13,nestlecrunch,1.0,1
+13,crunch,1.0,1
 13,kindermaxi,1.0,1
 13,peanutsticks,0.26,1
 13,cotedorpralinemilk,0.51,1
@@ -240,7 +240,7 @@ subject_id,item_name,rating,timepoint
 13,nibbitsticks,0.22,1
 13,twix,1.13,1
 14,kitkat,0.72,1
-14,nestlecrunch,0.63,1
+14,crunch,0.63,1
 14,pinkfondantbiscuit,0.77,1
 14,dovecaramelmilkchocolate,0.84,1
 14,maltesers,0.83,1
@@ -307,7 +307,7 @@ subject_id,item_name,rating,timepoint
 15,snackajackscheese,0.0,1
 15,milkyway,0.26,1
 15,autodropcadillacs,1.23,1
-15,nestlecrunch,0.49,1
+15,crunch,0.49,1
 15,maltesers,1.28,1
 15,smarties,1.26,1
 15,nibbitsticks,0.0,1
@@ -373,7 +373,7 @@ subject_id,item_name,rating,timepoint
 16,nibbitsticks,1.47,1
 16,rittersportmilkhazelnut,1.43,1
 16,cotedorpralinewhite,1.55,1
-16,nestlecrunch,0.81,1
+16,crunch,0.81,1
 16,lion,0.72,1
 16,milkadaim,0.71,1
 16,applecake,0.73,1
@@ -426,7 +426,7 @@ subject_id,item_name,rating,timepoint
 17,snickers,0.0,1
 17,nestlebros,0.23,1
 17,redbanddropfruitduo,1.33,1
-17,nestlecrunch,0.68,1
+17,crunch,0.68,1
 17,nibbitsticks,0.47,1
 17,kinderbueno,1.2,1
 17,laysclassic,0.5,1
@@ -506,7 +506,7 @@ subject_id,item_name,rating,timepoint
 18,haribocherries,0.53,1
 18,engelsedrop,0.0,1
 18,buglesnachocheese,0.52,1
-18,nestlecrunch,0.07,1
+18,crunch,0.07,1
 18,milkyway,0.0,1
 18,sultanayofruitstrawberry,0.39,1
 18,kitkatchunky,0.38,1
@@ -597,7 +597,7 @@ subject_id,item_name,rating,timepoint
 19,kinderbuenowhite,0.36,1
 19,skittlestropical,0.59,1
 19,nestlebros,0.88,1
-19,nestlecrunch,0.2,1
+19,crunch,0.2,1
 19,twix,0.89,1
 20,lion,1.16,1
 20,cotedorpralinemilk,1.27,1
@@ -649,7 +649,7 @@ subject_id,item_name,rating,timepoint
 20,kindermaxi,0.96,1
 20,redbandcolabottles,0.96,1
 20,buglesnachocheese,1.18,1
-20,nestlecrunch,1.15,1
+20,crunch,1.15,1
 20,maltesers,1.28,1
 20,engelsedrop,0.76,1
 20,sugarwaffle,0.62,1
@@ -695,7 +695,7 @@ subject_id,item_name,rating,timepoint
 21,almondfilledcake,1.0,1
 21,mikado,1.0,1
 21,snackajackscheese,1.23,1
-21,nestlecrunch,1.0,1
+21,crunch,1.0,1
 21,milkyway,0.69,1
 21,redbandcolabottles,0.67,1
 21,btweenhazelnutbar,1.0,1
@@ -747,7 +747,7 @@ subject_id,item_name,rating,timepoint
 22,haribocherries,0.58,1
 22,balisto,0.76,1
 22,cappuccinoontbijtkoek,0.51,1
-22,nestlecrunch,0.86,1
+22,crunch,0.86,1
 22,cakeslice,0.5,1
 22,applecake,0.59,1
 22,pringleshotandspicy,0.89,1
@@ -825,7 +825,7 @@ subject_id,item_name,rating,timepoint
 23,smarties,0.45,1
 23,milkyway,0.46,1
 23,pringleshotandspicy,0.46,1
-23,nestlecrunch,0.18,1
+23,crunch,0.18,1
 23,kitkat,1.46,1
 23,mmspeanuts,0.63,1
 23,redbanddropfruitduo,0.77,1
@@ -839,7 +839,7 @@ subject_id,item_name,rating,timepoint
 23,cinnamonbiscuit,1.01,1
 23,stroopwafel,0.81,1
 23,laysclassic,0.41,1
-24,nestlecrunch,0.33,1
+24,crunch,0.33,1
 24,snickers,0.3,1
 24,snackajackscheese,0.5,1
 24,cotedorpralinewhite,0.54,1
@@ -914,7 +914,7 @@ subject_id,item_name,rating,timepoint
 25,laysclassic,1.56,1
 25,kitkatchunkywhite,0.79,1
 25,kindermaxi,0.54,1
-25,nestlecrunch,0.76,1
+25,crunch,0.76,1
 25,snickers,0.92,1
 25,twix,1.13,1
 25,stroopwafel,1.32,1
@@ -962,7 +962,7 @@ subject_id,item_name,rating,timepoint
 26,lion,1.19,1
 26,applecake,1.17,1
 26,cappuccinoontbijtkoek,0.75,1
-26,nestlecrunch,0.91,1
+26,crunch,0.91,1
 26,tucminibites,0.7,1
 26,mikado,0.84,1
 26,cakeslice,0.87,1
@@ -1026,7 +1026,7 @@ subject_id,item_name,rating,timepoint
 27,schoolkrijtdrop,1.1,1
 27,lion,0.87,1
 27,wokkelspaprika,0.62,1
-27,nestlecrunch,0.51,1
+27,crunch,0.51,1
 27,twix,0.69,1
 27,almondfilledcake,0.94,1
 27,snickers,0.82,1
@@ -1098,7 +1098,7 @@ subject_id,item_name,rating,timepoint
 28,btweenhazelnutbar,1.0,1
 28,smarties,0.65,1
 28,sugarwaffle,1.0,1
-28,nestlecrunch,0.17,1
+28,crunch,0.17,1
 28,cakeslice,0.48,1
 28,snickers,0.57,1
 28,cinnamonbiscuit,0.35,1
@@ -1186,7 +1186,7 @@ subject_id,item_name,rating,timepoint
 29,kinderbuenowhite,0.96,1
 29,nestlebros,0.62,1
 29,haribopeaches,0.73,1
-29,nestlecrunch,0.68,1
+29,crunch,0.68,1
 29,stroopwafel,0.68,1
 29,mars,0.47,1
 29,tucminibites,0.95,1
@@ -1255,7 +1255,7 @@ subject_id,item_name,rating,timepoint
 2,autodropcadillacs,0.82,1
 2,tucminibites,1.06,1
 2,kindermaxi,1.15,1
-2,nestlecrunch,1.06,1
+2,crunch,1.06,1
 2,skittlestropical,1.08,1
 2,mars,1.16,1
 2,sultanayofruitstrawberry,1.14,1
@@ -1312,7 +1312,7 @@ subject_id,item_name,rating,timepoint
 30,chocolatecaramelwafer,0.02,1
 30,werthersoriginal,0.06,1
 30,nibbitsticks,1.11,1
-30,nestlecrunch,0.96,1
+30,crunch,0.96,1
 30,sugarwaffle,0.26,1
 30,wokkelspaprika,0.56,1
 30,cotedorpralinewhite,1.06,1
@@ -1338,7 +1338,7 @@ subject_id,item_name,rating,timepoint
 31,rittersportmilkhazelnut,1.5,1
 31,milkadaim,0.5,1
 31,dovecaramelmilkchocolate,0.31,1
-31,nestlecrunch,0.42,1
+31,crunch,0.42,1
 31,kitkatchunky,0.78,1
 31,mmspeanuts,1.14,1
 31,haribocherries,0.47,1
@@ -1417,7 +1417,7 @@ subject_id,item_name,rating,timepoint
 32,skittlestropical,0.41,1
 32,mikado,0.82,1
 32,chocolatecaramelwafer,0.79,1
-32,nestlecrunch,1.0,1
+32,crunch,1.0,1
 32,twix,0.8,1
 32,btweenhazelnutbar,0.51,1
 32,balisto,0.49,1
@@ -1451,7 +1451,7 @@ subject_id,item_name,rating,timepoint
 3,kitkatchunkywhite,1.56,1
 3,tucminibites,1.69,1
 3,engelsedrop,0.02,1
-3,nestlecrunch,1.68,1
+3,crunch,1.68,1
 3,cotedorpralinewhite,1.72,1
 3,wokkelspaprika,1.38,1
 3,kaneelstokjes,0.0,1
@@ -1523,7 +1523,7 @@ subject_id,item_name,rating,timepoint
 4,stroopwafel,0.42,1
 4,haribocherries,0.9,1
 4,redbanddropfruitduo,1.15,1
-4,nestlecrunch,0.08,1
+4,crunch,0.08,1
 4,autodropcadillacs,1.0,1
 4,kinderbuenowhite,0.74,1
 4,werthersoriginal,0.02,1
@@ -1614,7 +1614,7 @@ subject_id,item_name,rating,timepoint
 5,nestlebros,0.89,1
 5,cakeslice,0.37,1
 5,hamkas,0.0,1
-5,nestlecrunch,0.56,1
+5,crunch,0.56,1
 5,kitkatchunkywhite,0.73,1
 5,maltesers,1.0,1
 5,cotedorpralinewhite,0.69,1
@@ -1669,7 +1669,7 @@ subject_id,item_name,rating,timepoint
 6,kaneelstokjes,0.28,1
 6,cotedorpralinewhite,0.35,1
 6,kitkat,0.0,1
-6,nestlecrunch,0.0,1
+6,crunch,0.0,1
 6,snackajackscheese,0.21,1
 6,milkyway,0.0,1
 6,haribocherries,0.0,1
@@ -1683,7 +1683,7 @@ subject_id,item_name,rating,timepoint
 7,nibbitsticks,0.6,1
 7,nestlenuts,1.25,1
 7,milkadaim,1.45,1
-7,nestlecrunch,1.79,1
+7,crunch,1.79,1
 7,redbanddropfruitduo,1.61,1
 7,cinnamonbiscuit,1.87,1
 7,laysclassic,1.28,1
@@ -1795,7 +1795,7 @@ subject_id,item_name,rating,timepoint
 8,skittlestropical,0.0,1
 8,nestlenuts,0.0,1
 8,dovecaramelmilkchocolate,0.02,1
-8,nestlecrunch,0.0,1
+8,crunch,0.0,1
 8,wokkelspaprika,0.0,1
 8,nestlebros,0.0,1
 8,balisto,0.0,1
@@ -1832,7 +1832,7 @@ subject_id,item_name,rating,timepoint
 9,engelsedrop,0.99,1
 9,kinderbuenowhite,1.76,1
 9,cinnamonbiscuit,0.53,1
-9,nestlecrunch,1.53,1
+9,crunch,1.53,1
 9,peanutsticks,0.12,1
 9,sugarwaffle,0.51,1
 9,pinkfondantbiscuit,0.47,1
@@ -1918,7 +1918,7 @@ subject_id,item_name,rating,timepoint
 10,stroopwafel,1.75,2
 10,cinnamonbiscuit,1.34,2
 10,engelsedrop,0.0,2
-10,nestlecrunch,0.85,2
+10,crunch,0.85,2
 11,werthersoriginal,0.2,2
 11,cotedorpralinewhite,0.79,2
 11,chocolatecaramelwafer,0.21,2
@@ -1943,7 +1943,7 @@ subject_id,item_name,rating,timepoint
 11,haribopeaches,0.15,2
 11,dovecaramelmilkchocolate,0.25,2
 11,peanutsticks,0.0,2
-11,nestlecrunch,0.15,2
+11,crunch,0.15,2
 11,mmspeanuts,0.72,2
 11,sugarwaffle,0.0,2
 11,wokkelspaprika,0.16,2
@@ -2025,7 +2025,7 @@ subject_id,item_name,rating,timepoint
 12,cinnamonbiscuit,1.06,2
 12,oreos,0.78,2
 12,bounty,0.74,2
-12,nestlecrunch,0.78,2
+12,crunch,0.78,2
 12,mmspeanuts,0.97,2
 12,smarties,0.0,2
 12,nestlebros,1.07,2
@@ -2040,7 +2040,7 @@ subject_id,item_name,rating,timepoint
 12,kinderbueno,1.71,2
 12,sugarwaffle,0.91,2
 13,pinkfondantbiscuit,0.37,2
-13,nestlecrunch,0.55,2
+13,crunch,0.55,2
 13,nestlerolo,0.7,2
 13,mikado,0.57,2
 13,milkadaim,0.81,2
@@ -2156,7 +2156,7 @@ subject_id,item_name,rating,timepoint
 14,redbandcolabottles,1.6,2
 14,kaneelstokjes,1.15,2
 14,mars,0.84,2
-14,nestlecrunch,0.77,2
+14,crunch,0.77,2
 14,pinkfondantbiscuit,0.82,2
 14,smarties,0.66,2
 15,nestlerolo,1.18,2
@@ -2212,7 +2212,7 @@ subject_id,item_name,rating,timepoint
 15,mikado,1.11,2
 15,engelsedrop,0.0,2
 15,haribopeaches,0.43,2
-15,nestlecrunch,0.34,2
+15,crunch,0.34,2
 15,btweenhazelnutbar,1.43,2
 15,haribocherries,0.31,2
 15,cakeslice,0.0,2
@@ -2264,7 +2264,7 @@ subject_id,item_name,rating,timepoint
 16,milkadaim,0.67,2
 16,maltesers,0.87,2
 16,oreos,0.83,2
-16,nestlecrunch,1.39,2
+16,crunch,1.39,2
 16,sultanayofruitstrawberry,0.73,2
 16,kinderbueno,1.36,2
 16,mmspeanuts,0.61,2
@@ -2285,7 +2285,7 @@ subject_id,item_name,rating,timepoint
 17,lion,0.36,2
 17,wokkelspaprika,1.24,2
 17,applecake,0.16,2
-17,nestlecrunch,0.59,2
+17,crunch,0.59,2
 17,balisto,0.32,2
 17,pringleshotandspicy,1.35,2
 17,kitkatchunkywhite,1.24,2
@@ -2359,7 +2359,7 @@ subject_id,item_name,rating,timepoint
 18,wokkelspaprika,0.86,2
 18,kaneelstokjes,0.36,2
 18,twix,0.77,2
-18,nestlecrunch,0.11,2
+18,crunch,0.11,2
 18,redbandcolabottles,0.18,2
 18,autodroptotalloss,0.0,2
 18,nibbitsticks,0.0,2
@@ -2410,7 +2410,7 @@ subject_id,item_name,rating,timepoint
 19,pinkfondantbiscuit,0.38,2
 19,nestlenuts,0.37,2
 19,twix,0.83,2
-19,nestlecrunch,0.41,2
+19,crunch,0.41,2
 19,sugarwaffle,0.48,2
 19,kaneelstokjes,0.3,2
 19,btweenhazelnutbar,0.26,2
@@ -2464,7 +2464,7 @@ subject_id,item_name,rating,timepoint
 20,almondfilledcake,0.5,2
 20,sugarwaffle,0.51,2
 20,hamkas,1.24,2
-20,nestlecrunch,1.21,2
+20,crunch,1.21,2
 20,redbandcolabottles,1.05,2
 20,schoolkrijtdrop,1.03,2
 20,milkacrispello,1.54,2
@@ -2522,7 +2522,7 @@ subject_id,item_name,rating,timepoint
 21,btweenhazelnutbar,1.41,2
 21,peanutsticks,1.0,2
 21,milkadaim,0.74,2
-21,nestlecrunch,0.8,2
+21,crunch,0.8,2
 21,sugarwaffle,1.0,2
 21,pinkfondantbiscuit,1.0,2
 21,lion,1.0,2
@@ -2623,7 +2623,7 @@ subject_id,item_name,rating,timepoint
 22,pinkfondantbiscuit,0.44,2
 22,balisto,0.77,2
 22,schoolkrijtdrop,1.0,2
-22,nestlecrunch,0.9,2
+22,crunch,0.9,2
 22,milkyway,0.68,2
 22,engelsedrop,1.35,2
 22,nestlebros,0.83,2
@@ -2679,7 +2679,7 @@ subject_id,item_name,rating,timepoint
 23,milkyway,0.99,2
 23,cinnamonbiscuit,1.23,2
 23,kinderbueno,1.46,2
-23,nestlecrunch,0.75,2
+23,crunch,0.75,2
 23,milkacrispello,0.68,2
 23,rittersportmilkhazelnut,1.51,2
 23,stroopwafel,0.99,2
@@ -2728,7 +2728,7 @@ subject_id,item_name,rating,timepoint
 24,skittlestropical,0.74,2
 24,maltesers,0.58,2
 24,milkyway,1.22,2
-24,nestlecrunch,1.3,2
+24,crunch,1.3,2
 24,nestlebros,1.34,2
 24,autodroptotalloss,0.53,2
 24,stroopwafel,1.29,2
@@ -2790,7 +2790,7 @@ subject_id,item_name,rating,timepoint
 25,snackajackscheese,1.34,2
 25,kinderbuenowhite,1.6,2
 25,oreos,1.48,2
-25,nestlecrunch,0.8,2
+25,crunch,0.8,2
 25,sugarwaffle,0.86,2
 25,werthersoriginal,0.88,2
 25,kinderbueno,1.28,2
@@ -2857,7 +2857,7 @@ subject_id,item_name,rating,timepoint
 26,lion,1.03,2
 26,engelsedrop,0.52,2
 26,milkyway,1.18,2
-26,nestlecrunch,0.7,2
+26,crunch,0.7,2
 26,kitkat,1.04,2
 26,btweenhazelnutbar,0.84,2
 26,sultanayofruitstrawberry,0.98,2
@@ -2926,7 +2926,7 @@ subject_id,item_name,rating,timepoint
 27,autodropcadillacs,0.91,2
 27,peanutsticks,0.95,2
 27,dovecaramelmilkchocolate,0.74,2
-27,nestlecrunch,0.65,2
+27,crunch,0.65,2
 27,sultanayofruitstrawberry,0.15,2
 27,smarties,0.37,2
 27,nestlerolo,0.75,2
@@ -2946,7 +2946,7 @@ subject_id,item_name,rating,timepoint
 28,haribopeaches,0.46,2
 28,werthersoriginal,0.15,2
 28,peanutsticks,0.0,2
-28,nestlecrunch,0.23,2
+28,crunch,0.23,2
 28,sugarwaffle,1.48,2
 28,kitkatchunkywhite,0.46,2
 28,schoolkrijtdrop,0.0,2
@@ -2999,7 +2999,7 @@ subject_id,item_name,rating,timepoint
 28,cinnamonbiscuit,0.68,2
 28,skittlestropical,0.21,2
 28,wokkelspaprika,1.16,2
-29,nestlecrunch,0.48,2
+29,crunch,0.48,2
 29,milkyway,0.26,2
 29,schoolkrijtdrop,1.0,2
 29,lion,0.83,2
@@ -3063,7 +3063,7 @@ subject_id,item_name,rating,timepoint
 2,chocolatecaramelwafer,0.91,2
 2,smarties,0.69,2
 2,milkacrispello,1.16,2
-2,nestlecrunch,0.93,2
+2,crunch,0.93,2
 2,haribocherries,0.88,2
 2,cappuccinoontbijtkoek,0.62,2
 2,mmspeanuts,1.07,2
@@ -3139,7 +3139,7 @@ subject_id,item_name,rating,timepoint
 30,haribocherries,1.18,2
 30,sultanayofruitstrawberry,0.19,2
 30,kinderbuenowhite,1.17,2
-30,nestlecrunch,1.03,2
+30,crunch,1.03,2
 30,cotedorpralinewhite,1.07,2
 30,applecake,0.79,2
 30,mikado,0.74,2
@@ -3192,7 +3192,7 @@ subject_id,item_name,rating,timepoint
 31,rittersportmilkhazelnut,0.99,2
 31,kinderbuenowhite,0.48,2
 31,nestlerolo,0.0,2
-31,nestlecrunch,0.3,2
+31,crunch,0.3,2
 31,milkyway,0.0,2
 31,maltesers,0.51,2
 31,sultanayofruitstrawberry,0.79,2
@@ -3298,7 +3298,7 @@ subject_id,item_name,rating,timepoint
 32,dovecaramelmilkchocolate,1.16,2
 32,pringleshotandspicy,0.13,2
 32,oreos,1.13,2
-32,nestlecrunch,0.88,2
+32,crunch,0.88,2
 3,redbandcolabottles,0.0,2
 3,engelsedrop,0.0,2
 3,mikado,0.0,2
@@ -3350,7 +3350,7 @@ subject_id,item_name,rating,timepoint
 3,nestlerolo,1.79,2
 3,stroopwafel,0.0,2
 3,schoolkrijtdrop,1.75,2
-3,nestlecrunch,1.83,2
+3,crunch,1.83,2
 3,kitkatchunkywhite,1.82,2
 3,skittlestropical,0.0,2
 3,cappuccinoontbijtkoek,0.0,2
@@ -3369,7 +3369,7 @@ subject_id,item_name,rating,timepoint
 4,engelsedrop,0.11,2
 4,nestlerolo,0.33,2
 4,wokkelspaprika,1.13,2
-4,nestlecrunch,0.53,2
+4,crunch,0.53,2
 4,cotedorpralinemilk,0.43,2
 4,milkacrispello,0.5,2
 4,tucminibites,0.71,2
@@ -3468,7 +3468,7 @@ subject_id,item_name,rating,timepoint
 5,haribocherries,1.44,2
 5,mars,1.48,2
 5,buglesnachocheese,0.71,2
-5,nestlecrunch,0.55,2
+5,crunch,0.55,2
 5,tikkelsdrop,0.06,2
 5,hamkas,0.0,2
 5,smarties,0.41,2
@@ -3530,7 +3530,7 @@ subject_id,item_name,rating,timepoint
 6,tikkelsdrop,0.35,2
 6,kinderbueno,0.18,2
 6,laysclassic,0.14,2
-6,nestlecrunch,0.15,2
+6,crunch,0.15,2
 6,haribocherries,0.21,2
 6,smarties,0.0,2
 6,engelsedrop,0.48,2
@@ -3574,7 +3574,7 @@ subject_id,item_name,rating,timepoint
 7,twix,1.2,2
 7,mikado,1.24,2
 7,engelsedrop,0.66,2
-7,nestlecrunch,1.64,2
+7,crunch,1.64,2
 7,autodropcadillacs,1.42,2
 7,redbanddropfruitduo,0.95,2
 7,nestlebros,1.35,2
@@ -3599,7 +3599,7 @@ subject_id,item_name,rating,timepoint
 7,maltesers,1.92,2
 7,kitkatchunky,1.35,2
 7,cinnamonbiscuit,1.94,2
-8,nestlecrunch,0.0,2
+8,crunch,0.0,2
 8,werthersoriginal,0.14,2
 8,laysclassic,0.0,2
 8,buglesnachocheese,0.0,2
@@ -3697,7 +3697,7 @@ subject_id,item_name,rating,timepoint
 9,kitkat,1.48,2
 9,chocolatecaramelwafer,1.01,2
 9,stroopwafel,1.0,2
-9,nestlecrunch,1.31,2
+9,crunch,1.31,2
 9,redbandcolabottles,1.01,2
 9,maltesers,0.73,2
 9,nestlenuts,0.7,2
