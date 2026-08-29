@@ -269,3 +269,9 @@ clients/python/src/*.egg-info/
 
 # Intermediate EGA inputs/outputs — regenerate with the scripts
 /build/
+
+# The database ships as a GitHub release asset, not in git. gzip does not
+# delta-compress, so committing each rebuild added its full size to history
+# permanently — seven copies had reached 486 MiB and were failing deploys.
+# scripts/setup_database.py fetches it and verifies the committed checksum.
+data-release/*.db.gz

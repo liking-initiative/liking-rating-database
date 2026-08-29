@@ -105,10 +105,35 @@ copy is complete:
 
 ```bash
 sqlite3 data/liking_rating_db.db "PRAGMA wal_checkpoint(TRUNCATE);"
+sqlite3 data/liking_rating_db.db "VACUUM;"          # see below — not optional
 sqlite3 data/liking_rating_db.db ".backup /tmp/snapshot.db"
 gzip -9 -c /tmp/snapshot.db > data-release/liking_rating_db.db.gz
+shasum -a 256 data-release/liking_rating_db.db.gz \
+  | awk '{print $1"  liking_rating_db.db.gz"}' > data-release/liking_rating_db.db.gz.sha256
 python -m pytest backend/tests   # integrity tests validate the live DB
+
+# publish it — the gzip is NOT committed (see below)
+gh release create vX.Y.Z data-release/liking_rating_db.db.gz \
+  data-release/liking_rating_db.db.gz.sha256 --title "Database vX.Y.Z" --notes "..."
 ```
+
+**VACUUM before gzipping.** The live database accumulates free-page slack —
+it reached 790 MB of which more than half was empty — and gzipping it in that
+state produces an artifact over GitHub's 100 MiB hard limit.
+
+**The gzip is not committed.** It is published as a release asset and
+`data-release/*.db.gz` is gitignored; only the `.sha256` sidecar is in the
+repo, which is what `scripts/setup_database.py` verifies a download against.
+This is because gzip does not delta-compress: every rebuild that was committed
+added its full size to git history permanently, and seven copies had grown the
+repository to 501 MiB of blobs — 97% of it that one file — which made a clone
+large enough to fail deployments before any build command ran.
+
+After cutting a release, bump `RELEASE_TAG` in `scripts/setup_database.py`.
+
+**Private repository.** Release assets are not publicly readable, so a
+deployment needs `GITHUB_TOKEN` (or `GH_TOKEN`) with read access set in its
+environment. Without one the setup script says so explicitly.
 
 ## Source data
 
