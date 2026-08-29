@@ -1,0 +1,111 @@
+stimulus_index,source_table_name,item_name,category,resolved_via
+1,3 Musketeers,3musketeers,food,sucro
+2,Barnum's Animal Crackers,barnumsanimals,food,sucro
+3,Doritos Nacho Cheese,doritos,food,sucro
+4,Chips Ahoy!,chipsahoy,food,sucro
+5,Kit Kat,kitkat,food,sucro
+6,Pop-Tarts Brown Sugar Cinnamon,poptarts,food,sucro
+7,Pop-Tarts Brown Sugar Strawberry,poptartsstrawberry,food,sucro
+8,Ghirardelli Chocolates,ghirardellichocolates,food,new
+9,Twix Cookie Bars,twix,food,sucro
+10,Hershey's Whatchamacallit Candy,whatchamacallit,food,sucro
+11,Apple Pie,applepie,food,sucro
+12,Avocado,avocado,food,sucro
+13,Blackberries,blackberries,food,sucro
+14,Cauliflower,cauliflower,food,sucro
+15,Ritz Crackers'n Cheese Dip,ritz,food,sucro
+16,Cherry Pie,cherrypie,food,sucro
+17,Chocolate Muffins,chocolatemuffines,food,sucro
+18,Powdered Donuts,powdereddonettes,food,sucro
+19,Granny Smith Apple,grannysmithapple,food,sucro
+20,Green Grapes,greengrapes,food,sucro
+21,Mango,mango,food,sucro
+22,Milano Cookies,milano,food,sucro
+23,Orange,orange,food,sucro
+24,Raspberries,raspberries,food,sucro
+25,Red Velvet Cake,redvelvetcake,food,sucro
+26,Quaker Chewy Granola Bar,quakerchewybar,food,sucro
+27,Starburst,starburst,food,sucro
+28,Strawberry,strawberry,food,sucro
+29,Crunchy Donuts,crunchydonuts,food,new
+30,Chicken Tikka Masala,chickentikkamasala,food,new
+31,Lamb Vindaloo,lambvindaloo,food,new
+32,Pollo Asado Burrito,polloasadoburrito,food,new
+33,Bean and Cheese Burrito,beanandcheeseburrito,food,new
+34,Chocolate Chip Clif Bars,chocolatechipclifbars,food,new
+35,Ferrero Chocolates,ferrerochocolates,food,new
+36,Sun Chips,sunchips,food,sucro
+37,Dole Mixed Fruit,dolemixedfruit,food,sucro
+38,Grapefruit,grapefruit,food,sucro
+39,Banana Chips,bananachips,food,sucro
+40,Dark Chocolate Bananas,chocolatebananas,food,sucro
+41,Crispy Apple,crispyapple,food,sucro
+42,Vegetable Chips,vegetablechips,food,sucro
+43,Sweet Potato Chips,sweetpotatochips,food,sucro
+44,Chopped Salad Chicken,choppedsaladchicken,food,sucro
+45,Mexicali Salad,mexicalisalad,food,sucro
+46,Caesar Salad,caesarsalad,food,sucro
+47,Veggie Wrap,veggiewrap,food,sucro
+48,Super Burrito,superburrito,food,sucro
+49,Chocolate and Berry,chocolateberry,food,sucro
+50,Green Beans Chips,greenbeanschips,food,sucro
+51,Salami,salame,food,sucro
+52,Smoked Turkey,smokedturkey,food,sucro
+53,American Cheese,americancheese,food,sucro
+54,Chicken and Roasted Beet,chickenroastedbeet,food,sucro
+55,Mozzarella Cheese,mozzarellacheese,food,sucro
+56,Roast Beef,roastbeef,food,sucro
+57,Caprese Sandwich,capresesandwich,food,sucro
+58,Tuna Salad Wrap,tunasaladwrap,food,sucro
+59,Smoked Salmon,smokedsalmon,food,sucro
+60,Plain Yogurt,plainyogurt,food,sucro
+61,Strawberry Yogurt,strawberryyogurt,food,sucro
+62,Blueberry Yogurt,blueberryyogurt,food,sucro
+63,Deviled Eggs,deviledeggs,food,sucro
+64,S'mores Chewy Bars,smoreschewybars,food,new
+65,Gnocchi,gnocchi,food,new
+66,Margherita Pizza,margheritapizza,food,new
+67,Macarons,macarons,food,new
+68,Blueberry Crisp Clif Bars,blueberrycrispclifbars,food,new
+69,Yogurt Pretzels,yogurtpretzels,food,new
+70,Chocolate Pretzels,chocolatepretzels,food,new
+101,A Brief History of Time (book),abriefhistoryoftime,consumer_product,norm
+102,Freakonomics (book),freakonomics,consumer_product,norm
+103,1984 (book),1984,consumer_product,norm
+104,Water bottle,waterbottle,consumer_product,norm
+105,Wireless mouse,wirelessmouse,consumer_product,norm
+106,Yoga mat,yogamat,consumer_product,norm
+107,Hitchhiker's Guide (book),hitchhikersguide,consumer_product,norm
+108,Lord of the Rings (book),lordoftherings,consumer_product,norm
+109,Caltech backpack,caltechbackpack,consumer_product,norm
+110,Caltech hat,caltechhat,consumer_product,norm
+111,Caltech banner,caltechbanner,consumer_product,norm
+112,Caltech keychain,caltechkeychain,consumer_product,norm
+113,USB stick 16GB,usbstick16gb,consumer_product,norm
+114,Caltech mug,caltechmug,consumer_product,norm
+115,Caltech drawstring bag,caltechdrawstringbag,consumer_product,norm
+116,Desk lamp,desklamp,consumer_product,norm
+117,Stapler,stapler,consumer_product,norm
+118,Over-the-ear headphones,overtheearheadphones,consumer_product,norm
+119,Head backpack,headbackpack,consumer_product,norm
+120,Batteries,batteries,consumer_product,norm
+121,Lock,lock,consumer_product,norm
+122,Notebook,notebook,consumer_product,norm
+123,Bathroom scale,bathroomscale,consumer_product,norm
+124,Playing cards,playingcards,consumer_product,norm
+125,Honey clementine candle,honeyclementinecandle,consumer_product,norm
+126,Roses candle,rosescandle,consumer_product,norm
+127,Umbrella,umbrella,consumer_product,norm
+128,Android charger,androidcharger,consumer_product,norm
+129,iPhone charger,iphonecharger,consumer_product,norm
+130,Clothes hangers,clotheshangers,consumer_product,norm
+131,Beach towel,beachtowel,consumer_product,norm
+132,Cooking supplies,cookingsupplies,consumer_product,norm
+133,Kitchen utensils,kitchenutensils,consumer_product,norm
+134,Pens,pens,consumer_product,norm
+135,Plates,plates,consumer_product,norm
+136,Portable charger,portablecharger,consumer_product,norm
+137,Portable speaker,portablespeaker,consumer_product,norm
+138,Screwdrivers,screwdrivers,consumer_product,norm
+139,Sunglasses,sunglasses,consumer_product,norm
+140,Surge protector,surgeprotector,consumer_product,norm
