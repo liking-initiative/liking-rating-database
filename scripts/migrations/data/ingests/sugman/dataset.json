@@ -1,0 +1,26 @@
+{
+  "code": "sugman",
+  "study": {
+    "name": "A densely sampled fMRI dataset for investigating food valuation",
+    "authors": [
+      "Sugawara, M.",
+      "Mano, Y.",
+      "Aoki, Y.",
+      "Nakaya, K.",
+      "Matsuda, Y.",
+      "Toyama, A.",
+      "Suzuki, S."
+    ],
+    "year": 2026,
+    "journal": "Scientific Data",
+    "doi": "10.1038/s41597-026-07323-y",
+    "citation": "Sugawara, M., Mano, Y., Aoki, Y., Nakaya, K., Matsuda, Y., Toyama, A., & Suzuki, S. (2026). A densely sampled fMRI dataset for investigating food valuation. Scientific Data. https://doi.org/10.1038/s41597-026-07323-y",
+    "description": "Densely sampled fMRI study; behavioural ratings released on OpenNeuro (ds007267)."
+  },
+  "scale": {
+    "min": 1,
+    "max": 4,
+    "type": "likert"
+  },
+  "description": "Ratings collected during fMRI across three separate days, four runs per day. On each trial participants saw one food image and answered \"How much do you want to eat this food?\" on a four-point scale (4 = high value), pressing a key within 2.5 s; the key-to-value mapping was randomised across trials. Stimuli are the 568 images of the original Food-pics set. Item names were resolved from the numeric image IDs in the OpenNeuro event files against the Food-pics extended database, and verified against the per-trial nutritional values shipped with the events. Food-pics gives several distinct images the same description, so the 568 images collapse to 427 named items and a subject's ratings of same-named images are averaged -- the same treatment toyam receives. 591 trials with no response within the deadline are excluded."
+}

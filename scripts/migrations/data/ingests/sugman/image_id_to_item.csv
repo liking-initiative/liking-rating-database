@@ -1,0 +1,569 @@
+image_id,food_pics_description_english,item_name
+1,cheesecake with cherry topping,cheesecakewithcherrytopping
+2,Hamburger with bacon,hamburgerwithbacon
+3,"cheese burger, french fries and cola",cheeseburgerfrenchfriesandcola
+4,chocolate cookie,chocolatecookie
+5,cookie mix,cookiemix
+6,cheese cake with strawberries and crumbles,cheesecakewithstrawberriesandcrumbles
+7,croissants,croissants
+8,snack mix,snackmix
+9,waffles,waffles
+10,Spaghetti with tomato sauce,spaghettiwithtomatosauce
+11,cheese and cold meat platter,cheeseandcoldmeatplatter
+12,ham sandwich,hamsandwich
+13,Frankfurt crown cake,frankfurtcrowncake
+14,muffin,muffin
+15,croissants,croissants
+16,pancakes,pancakes
+17,"cheese burger, french fries and cola",cheeseburgerfrenchfriesandcola
+18,German krapfen,germankrapfen
+19,German krapfen,germankrapfen
+20,German krapfen,germankrapfen
+21,raspberry candies,raspberrycandies
+22,french fries,frenchfries
+23,ham sandwich,hamsandwich
+24,ice cream sandwiches,icecreamsandwiches
+25,ice cream with chocolate beans,icecreamwithchocolatebeans
+26,chips,chips
+27,opened chips bag,openedchipsbag
+28,fruit cake,fruitcake
+29,cake (with gelatinized fruits),cakewithgelatinizedfruits
+30,"french fries, chicken",frenchfrieschicken
+31,cookies (mixed),cookiesmixed
+32,pizza (with mushrooms),pizzawithmushrooms
+33,spaghetti with tomato sauce,spaghettiwithtomatosauce
+34,ham and cheese sandwich,hamandcheesesandwich
+35,Raffaelo (coconut wafer balls),raffaelococonutwaferballs
+36,some different cake wedges,somedifferentcakewedges
+37,pasta meal,pastameal
+38,chocolate and strawberry ice cream,chocolateandstrawberryicecream
+39,cake with tangerines,cakewithtangerines
+40,pastries,pastries
+41,Donut with chocolate sprinkles,donutwithchocolatesprinkles
+42,chocolate cake with nuts,chocolatecakewithnuts
+43,chips,chips
+44,cookie (filled with jelly),cookiefilledwithjelly
+45,Hamburger,hamburger
+46,french fries,frenchfries
+47,french fries and chicken drumsticks,frenchfriesandchickendrumsticks
+48,chocolate muffin,chocolatemuffin
+49,chocolate popsicles,chocolatepopsicles
+50,donuts and pastries,donutsandpastries
+51,cake with powdered sugar,cakewithpowderedsugar
+52,hot dog,hotdog
+53,hot dog,hotdog
+54,cheese platter,cheeseplatter
+55,raspberry cake,raspberrycake
+56,chocolate and vanilla ice cream,chocolateandvanillaicecream
+57,ham sandwich with chips,hamsandwichwithchips
+58,ham sandwich,hamsandwich
+59,apple pie,applepie
+60,french fries,frenchfries
+61,pizza (salami),pizzasalami
+62,challah (braided yeast bun),challahbraidedyeastbun
+63,pretzels,pretzels
+64,butter,butter
+65,cheese burger,cheeseburger
+66,croissants,croissants
+67,ice cream,icecream
+68,doner kebab,donerkebab
+69,fish sandwich,fishsandwich
+70,cheese,cheese
+71,cheese platter,cheeseplatter
+72,sandwich roastbeef,sandwichroastbeef
+73,Spaghetti Bolognese,spaghettibolognese
+74,chocolate cake,chocolatecake
+75,ham sandwich,hamsandwich
+76,spaghetti with tomato sauce,spaghettiwithtomatosauce
+77,ham sandwich with chips,hamsandwichwithchips
+78,muffins,muffins
+79,chocolate cookie,chocolatecookie
+80,chocolate muffin,chocolatemuffin
+81,pizza slices (assorted),pizzaslicesassorted
+82,cheese platter,cheeseplatter
+83,filled chocolates,filledchocolates
+84,cake,cake
+85,Pizza (with salami),pizzawithsalami
+86,"cheese burger, french fries",cheeseburgerfrenchfries
+87,cheese burger,cheeseburger
+88,stracciatella cake,stracciatellacake
+89,strawberry cake,strawberrycake
+90,muffins,muffins
+91,cheese burger,cheeseburger
+92,cheddar cheese,cheddarcheese
+93,muffins,muffins
+94,jelly candies,jellycandies
+95,raspberry cake,raspberrycake
+96,cake (gugelhupf),cakegugelhupf
+97,chocolate cake,chocolatecake
+98,cheese platter,cheeseplatter
+99,cake,cake
+100,chocolate cake,chocolatecake
+101,Donut (chocolate),donutchocolate
+102,hard candies,hardcandies
+103,raspberry cake,raspberrycake
+104,tortilla chips,tortillachips
+105,filled waffles,filledwaffles
+106,Sacher cake,sachercake
+107,chocolate cake,chocolatecake
+108,pizza (ham and mushrooms),pizzahamandmushrooms
+109,peanuts,peanuts
+110,Nuts (cashews),nutscashews
+111,bar of chocolate with nuts,barofchocolatewithnuts
+112,opened bar of chocolate with nuts,openedbarofchocolatewithnuts
+113,chips,chips
+114,croissants,croissants
+115,sundae (with raspberries),sundaewithraspberries
+116,chocolate popsicle with nuts,chocolatepopsiclewithnuts
+117,chips,chips
+118,sundae (peach),sundaepeach
+119,donut,donut
+120,croissants,croissants
+121,filled cookie with walnut,filledcookiewithwalnut
+122,cake,cake
+123,lollipops,lollipops
+124,lollipops,lollipops
+125,hard candies,hardcandies
+126,pastries and donuts,pastriesanddonuts
+127,Sacher cake,sachercake
+128,hard candies,hardcandies
+129,christmas sweets,christmassweets
+130,cake,cake
+131,pizza (veggie/cheese),pizzaveggiecheese
+132,cheese,cheese
+133,strawberry cake,strawberrycake
+134,chocolate muffin,chocolatemuffin
+135,cake,cake
+136,cake,cake
+137,chocolate muffin,chocolatemuffin
+138,muffin with green topping,muffinwithgreentopping
+139,cake,cake
+140,chocolate popsicle with nuts,chocolatepopsiclewithnuts
+141,lasagna,lasagna
+142,pasta bake,pastabake
+143,pasta bake,pastabake
+144,pasta bake,pastabake
+145,lasagna,lasagna
+146,cheese cake,cheesecake
+147,marshmallows (flat),marshmallowsflat
+148,round shortbread cookies,roundshortbreadcookies
+149,NicNac (crusty peanuts),nicnaccrustypeanuts
+150,popcorn,popcorn
+151,lemon cake,lemoncake
+152,peanut puffs,peanutpuffs
+153,gummi candy (cola),gummicandycola
+154,gummi candy and licorice mix,gummicandyandlicoricemix
+155,crackers,crackers
+156,challah (braided yeast bun) with raisins,challahbraidedyeastbunwithraisins
+157,gummi candy (gold bears),gummicandygoldbears
+158,cookies filled with chocolate cream,cookiesfilledwithchocolatecream
+159,mini chocolate cake bar,minichocolatecakebar
+160,nuts covered in chocolate,nutscoveredinchocolate
+161,mini chocolate marshmallows,minichocolatemarshmallows
+162,chocolate cream cake,chocolatecreamcake
+163,chocolate cake,chocolatecake
+164,mini cookies with chocolate on one side,minicookieswithchocolateononeside
+165,cornflakes and almonds covered in chocolate,cornflakesandalmondscoveredinchocolate
+166,chocolate marshmallows,chocolatemarshmallows
+167,some bars of chocolate (stacked),somebarsofchocolatestacked
+168,puffed rice covered in chocolate,puffedricecoveredinchocolate
+169,donut (chocolate topping),donutchocolatetopping
+170,chocolate bar filled with strawberry and yogurt cream,chocolatebarfilledwithstrawberryandyogurtcream
+171,jaffa cookies,jaffacookies
+172,Toffifay (filled caramel cup),toffifayfilledcaramelcup
+173,chocolate bar filled with milk cream,chocolatebarfilledwithmilkcream
+174,chocolate pieces,chocolatepieces
+175,brie cheese,briecheese
+176,salami sausage,salamisausage
+177,cookies filled with chocolate cream,cookiesfilledwithchocolatecream
+178,German krapfen,germankrapfen
+179,marble cake,marblecake
+180,muesli bar (oatmeal),mueslibaroatmeal
+181,bowl of muesli (granola),bowlofmuesligranola
+182,bowl of rice,bowlofrice
+183,peanuts,peanuts
+184,chocolate croissants,chocolatecroissants
+185,sausages (frankfurter),sausagesfrankfurter
+186,pretzel sticks,pretzelsticks
+187,croissant,croissant
+188,doner kebab,donerkebab
+189,slice of bread topped with chocolate cream,sliceofbreadtoppedwithchocolatecream
+190,meatballs (patties),meatballspatties
+191,grilled bavarian sausage,grilledbavariansausage
+192,apple,apple
+193,crisp bread,crispbread
+194,kiwi,kiwi
+195,cucumber slice,cucumberslice
+196,salad plate,saladplate
+197,tomatoes,tomatoes
+198,"paprika peppers (red, green, yellow)",paprikapeppersredgreenyellow
+199,watermelon,watermelon
+200,oranges,oranges
+201,salad plate,saladplate
+202,blueberries,blueberries
+203,wildberries mix,wildberriesmix
+204,apples,apples
+205,crisp bread with cottage cheese,crispbreadwithcottagecheese
+206,raspberries,raspberries
+207,redcurrants,redcurrants
+208,carrots,carrots
+209,wildberries mix,wildberriesmix
+210,raspberries,raspberries
+211,strawberries,strawberries
+212,veggie mix with dip,veggiemixwithdip
+213,crisp bread with cottage cheese,crispbreadwithcottagecheese
+214,wildberries mix,wildberriesmix
+215,cucumber and carrot,cucumberandcarrot
+216,nectarines,nectarines
+217,"fruit mix: kiwi, cherries, strawberries...",fruitmixkiwicherriesstrawberries
+218,"fruit mix: nectarines, raspberries, cherries ...",fruitmixnectarinesraspberriescherries
+219,salad plate,saladplate
+220,"fruit plate: melon, pineapple, grapes...",fruitplatemelonpineapplegrapes
+221,oranges,oranges
+222,strawberries,strawberries
+223,wildberries mix,wildberriesmix
+224,wildberries mix,wildberriesmix
+225,crisp read with cottage cheese,crispreadwithcottagecheese
+226,crisp bread,crispbread
+227,bowl of muesli (granola),bowlofmuesligranola
+228,bowl of salad,bowlofsalad
+229,salad plate,saladplate
+230,oranges,oranges
+231,apples,apples
+232,bowl of salad,bowlofsalad
+233,tomatoes,tomatoes
+234,strawberries,strawberries
+235,blood oranges,bloodoranges
+236,bowl of rice,bowlofrice
+237,curd with chives,curdwithchives
+238,apples,apples
+239,"paprika peppers (red, yellow, orange)",paprikapeppersredyelloworange
+240,crisp bread with cottage cheese,crispbreadwithcottagecheese
+241,pears,pears
+242,"veggie mix: cucumber, tomato, peppers...",veggiemixcucumbertomatopeppers
+243,strawberries,strawberries
+244,rice waffles,ricewaffles
+245,oranges,oranges
+246,red paprika peppers,redpaprikapeppers
+247,green paprika peppers,greenpaprikapeppers
+248,blueberries,blueberries
+249,cauliflower,cauliflower
+250,broccoli,broccoli
+251,chinese cabbage,chinesecabbage
+252,lettuce (iceberg),lettuceiceberg
+253,pickles,pickles
+254,figs,figs
+255,pomegranate,pomegranate
+256,grapefruit,grapefruit
+257,lettuce (lollo rosso),lettucelollorosso
+258,radishes,radishes
+259,red cabbage,redcabbage
+260,asparagus,asparagus
+261,soybean sprouts,soybeansprouts
+262,celery,celery
+263,mushrooms (brown),mushroomsbrown
+264,mushrooms (white),mushroomswhite
+265,zucchini,zucchini
+266,green onion (shallot),greenonionshallot
+267,cucumber with slices,cucumberwithslices
+268,kohlrabi,kohlrabi
+269,limes,limes
+270,corn (on a cob),cornonacob
+271,parsley,parsley
+272,chives,chives
+273,arugula,arugula
+274,spinach,spinach
+275,tomatoes,tomatoes
+276,lemons,lemons
+277,fennel,fennel
+278,fennel,fennel
+279,sushi,sushi
+280,cherries,cherries
+281,grapes,grapes
+282,banana,banana
+283,avocado,avocado
+284,grapes,grapes
+285,pineapple,pineapple
+286,bar of chocolate,barofchocolate
+287,chocolate (candy) bar,chocolatecandybar
+288,carrots,carrots
+289,chocolate cookies,chocolatecookies
+290,bars of white chocolate,barsofwhitechocolate
+291,chocolate truffle,chocolatetruffle
+292,bread roll,breadroll
+293,KitKat (chocolate wafer bars),kitkatchocolatewaferbars
+294,popcorn,popcorn
+295,toblerone,toblerone
+296,colored chocolate beans,coloredchocolatebeans
+297,m&ms (peanut),mmspeanut
+298,cookies (oreos),cookiesoreos
+299,mixed vegetables,mixedvegetables
+300,loaf of bread,loafofbread
+301,roasted chicken,roastedchicken
+302,fish sticks,fishsticks
+303,cauliflower,cauliflower
+304,potato gratin,potatogratin
+305,"peas, corn and potatos",peascornandpotatos
+306,roast potatoes,roastpotatoes
+307,salmon,salmon
+308,salmon sushi,salmonsushi
+309,Wiener schnitzel,wienerschnitzel
+310,pasta with bacon,pastawithbacon
+311,Roast Beef,roastbeef
+312,"chicken fillets, grilled",chickenfilletsgrilled
+313,strawberry ice cream cone,strawberryicecreamcone
+314,shashlik with baked potato,shashlikwithbakedpotato
+315,shashlik,shashlik
+316,spinach-potatoe casserole,spinachpotatoecasserole
+317,Potatoe Wedges,potatoewedges
+318,fried sausage with roll,friedsausagewithroll
+319,"canard , roasted",canardroasted
+320,Crème Brûlée,cremebrulee
+321,"egg, boiled",eggboiled
+322,knuckle of pork with sauerkraut,knuckleofporkwithsauerkraut
+323,"trout with potatoes, pan fried",troutwithpotatoespanfried
+324,rissole,rissole
+325,fruit salad,fruitsalad
+326,Hot Dog,hotdog
+327,mashed potatoes,mashedpotatoes
+328,"fillet of pork, grilled",filletofporkgrilled
+329,salmon,salmon
+330,latte macchiato,lattemacchiato
+331,marble cake,marblecake
+332,mixed salad,mixedsalad
+333,spring onions,springonions
+334,carrots,carrots
+335,sugar snap pea,sugarsnappea
+336,black licorice wheels,blacklicoricewheels
+337,"meat fillets and vegetables, grilled",meatfilletsandvegetablesgrilled
+338,mixed licorice,mixedlicorice
+339,wine gum,winegum
+340,gummi bears with extra sugar,gummibearswithextrasugar
+341,banana,banana
+342,artichoke,artichoke
+343,eggs in eggboard,eggsineggboard
+344,brownie with nuts,browniewithnuts
+345,"grapes, red and white",grapesredandwhite
+346,potatoes,potatoes
+347,toast with jam,toastwithjam
+348,rusk,rusk
+349,corn flakes with milk,cornflakeswithmilk
+350,quiche,quiche
+351,croissant,croissant
+352,baguette,baguette
+353,strawberry tartlet,strawberrytartlet
+354,blueberry a. strawberry tartlet,blueberryastrawberrytartlet
+355,cream cake with fruits,creamcakewithfruits
+356,"sprouts, potatoes, carrots",sproutspotatoescarrots
+357,Black Forest cake,blackforestcake
+358,glass of orange juice,glassoforangejuice
+359,green asparagus,greenasparagus
+360,artichoke,artichoke
+361,"carrots, cooked",carrotscooked
+362,"beans and carrots, cooked",beansandcarrotscooked
+363,chips / French fries,chipsfrenchfries
+364,green beans,greenbeans
+365,orange,orange
+366,bagels with sesame and poppy seed,bagelswithsesameandpoppyseed
+367,zucchini,zucchini
+368,chiccory,chiccory
+369,sushi roll with cucumber,sushirollwithcucumber
+370,mixed vegetables,mixedvegetables
+371,sushi with salmon,sushiwithsalmon
+372,breakfast cereals,breakfastcereals
+373,vanilla ice cream,vanillaicecream
+374,doughnut / donut  icing,doughnutdonuticing
+375,doughnut / donut  jam,doughnutdonutjam
+376,french cruller,frenchcruller
+377,doughnut / donut  plain,doughnutdonutplain
+378,ravioli,ravioli
+379,banana,banana
+380,gherkin,gherkin
+381,spaghetti,spaghetti
+382,"gherkin, sliced",gherkinsliced
+383,ravioli,ravioli
+384,tortellini,tortellini
+385,tagliatelle,tagliatelle
+386,papaya,papaya
+387,"goose, roasted",gooseroasted
+388,glass of white wine,glassofwhitewine
+389,cantaloup,cantaloup
+390,glass of red wine,glassofredwine
+391,red grapes,redgrapes
+392,mandarins,mandarins
+393,honeydew melon,honeydewmelon
+394,"grape, whites",grapewhites
+395,head of cabbage,headofcabbage
+396,pears,pears
+397,"grapes, red",grapesred
+398,cherries,cherries
+399,cherry,cherry
+400,éclair,eclair
+401,red chilli,redchilli
+402,pear,pear
+403,pizza with mushrooms and bell pepper,pizzawithmushroomsandbellpepper
+404,apples,apples
+405,head of green lettuce,headofgreenlettuce
+406,"salmon with vegetables, grilled",salmonwithvegetablesgrilled
+407,blackberries,blackberries
+408,"fish with vegetables, grilled",fishwithvegetablesgrilled
+409,salmon,salmon
+410,peanuts,peanuts
+411,mixed vegetables,mixedvegetables
+412,potatoes,potatoes
+413,kiwis,kiwis
+414,mixed vegetables,mixedvegetables
+415,lemon,lemon
+416,pistachios,pistachios
+417,pea pod,peapod
+418,cauliflower,cauliflower
+419,strawberry cream cake,strawberrycreamcake
+420,raspberry cream cake,raspberrycreamcake
+421,raspberry cream cake,raspberrycreamcake
+422,cream roll,creamroll
+423,roll,roll
+424,peas cooked,peascooked
+425,roll,roll
+426,Bread,bread
+427,walnuts,walnuts
+428,artichoke,artichoke
+429,"yellow bell pepper, sliced",yellowbellpeppersliced
+430,head of iceberg lettuce,headoficeberglettuce
+431,carrots,carrots
+432,roman lettuce,romanlettuce
+433,squash / pumpkin,squashpumpkin
+434,leek,leek
+435,Brussels sprouts,brusselssprouts
+436,carambola / star fruit,carambolastarfruit
+437,potatoes,potatoes
+438,onion,onion
+439,toast/ white bread,toastwhitebread
+440,bread,bread
+441,doughnut / donut   chocolate,doughnutdonutchocolate
+442,red bell pepper,redbellpepper
+443,chroisant,chroisant
+444,green bell pepper,greenbellpepper
+445,yellow bell pepper,yellowbellpepper
+446,"tomato, sliced",tomatosliced
+447,mixed vegetables,mixedvegetables
+448,garden radish,gardenradish
+449,garden radish,gardenradish
+450,hazelnuts,hazelnuts
+451,hazelnut,hazelnut
+452,water melon,watermelon
+453,peach,peach
+454,pineapple,pineapple
+455,spinach,spinach
+456,glass of beer,glassofbeer
+457,pine nuts,pinenuts
+458,"lemon 1, half",lemon1half
+459,corn / maize,cornmaize
+460,tomato,tomato
+461,vegetables,vegetables
+462,plate with raw hamburger patties and sausages,platewithrawhamburgerpattiesandsausages
+463,fruits,fruits
+464,fruits,fruits
+465,pralines,pralines
+466,green apple,greenapple
+467,rasberry,rasberry
+468,blackberry,blackberry
+469,toast,toast
+470,pancakes with blueberries,pancakeswithblueberries
+471,French Toast,frenchtoast
+472,Cappuccino,cappuccino
+473,cheeseburger,cheeseburger
+474,croissant with butter and jam,croissantwithbutterandjam
+475,apple Danish,appledanish
+476,espresso,espresso
+477,glass of gherkins,glassofgherkins
+478,pineapple,pineapple
+479,papaya,papaya
+480,rolls in a basket,rollsinabasket
+481,flat cake with salad,flatcakewithsalad
+482,mixed salad,mixedsalad
+483,pancake with fruits,pancakewithfruits
+484,steak with backed potato and vegetables,steakwithbackedpotatoandvegetables
+485,burger patty with french fries and salad,burgerpattywithfrenchfriesandsalad
+486,spare ribs with french fries and salad,spareribswithfrenchfriesandsalad
+487,bagel with cream cheese and vegetables,bagelwithcreamcheeseandvegetables
+488,waffle with whipped cream,wafflewithwhippedcream
+489,pizza with salami,pizzawithsalami
+490,potatoes and corn,potatoesandcorn
+491,sundae,sundae
+492,vanilla and chocolate icecream cone,vanillaandchocolateicecreamcone
+493,spare ribs with french fries and salad,spareribswithfrenchfriesandsalad
+494,pretzel,pretzel
+495,breads,breads
+496,sausage,sausage
+497,meat pie,meatpie
+498,meat pie,meatpie
+499,pieces of chocolate,piecesofchocolate
+500,chocolate bar,chocolatebar
+501,"chocolate bar , bite",chocolatebarbite
+502,"mixed vegetables, cooked",mixedvegetablescooked
+503,shortbreads,shortbreads
+504,shortbread,shortbread
+505,cookies,cookies
+506,cookie,cookie
+507,waffle,waffle
+508,head of green lettuce,headofgreenlettuce
+509,mixed vegetables,mixedvegetables
+510,"chocolate bar, broken",chocolatebarbroken
+511,marzipan chocolate,marzipanchocolate
+512,crispbread with cooked ham,crispbreadwithcookedham
+513,olives,olives
+514,camembert,camembert
+515,emmentaler cheese,emmentalercheese
+516,Edam cheese,edamcheese
+517,cheese,cheese
+518,glass of beer,glassofbeer
+519,camembert,camembert
+520,green chili,greenchili
+521,rigatoni with vegetable,rigatoniwithvegetable
+522,vegetables,vegetables
+523,chocolate  biscuit,chocolatebiscuit
+524,vanilla icecream cone,vanillaicecreamcone
+525,walnut,walnut
+526,plate of salad,plateofsalad
+527,tuna sandwiches,tunasandwiches
+528,peaches,peaches
+529,mixed vegetables,mixedvegetables
+530,"strawberry,  half",strawberryhalf
+531,rasberries,rasberries
+532,water bottle,waterbottle
+533,cookie,cookie
+534,pieces of fruit,piecesoffruit
+535,sausages,sausages
+536,cooked ham cut,cookedhamcut
+537,"beefsteak, raw",beefsteakraw
+538,liver sausage,liversausage
+539,almonds,almonds
+540,"beefsteak, raw",beefsteakraw
+541,"chicken, raw",chickenraw
+542,avocado,avocado
+543,"grapes, white",grapeswhite
+544,"beefsteak, raw",beefsteakraw
+545,shrimp,shrimp
+546,"chicken, roasted",chickenroasted
+547,hot dog,hotdog
+548,cooked ham,cookedham
+549,bagel,bagel
+550,Brussels sprouts,brusselssprouts
+551,spaghetti with pesto,spaghettiwithpesto
+552,roast beef,roastbeef
+553,filled roulade,filledroulade
+554,roulade,roulade
+555,Viennese Schnitzel,vienneseschnitzel
+556,Viennese Schnitzel with potatoes,vienneseschnitzelwithpotatoes
+557,roast pork,roastpork
+558,asparagus with bechamel sauce,asparaguswithbechamelsauce
+559,smoked ham / bacon,smokedhambacon
+560,fried egg,friedegg
+561,cutlet,cutlet
+562,cutlet,cutlet
+563,steak,steak
+564,sushi rolls,sushirolls
+565,steak with backed potato and vegetables,steakwithbackedpotatoandvegetables
+566,tomato and mozzarella skewer,tomatoandmozzarellaskewer
+567,tomato and mozzarella,tomatoandmozzarella
+568,"salami, roasted ham and cheese",salamiroastedhamandcheese

@@ -34,7 +34,14 @@ def test_dois_are_wellformed_and_not_superseded(con):
     """
     dois = [r[0] for r in con.execute(
         "SELECT doi FROM studies WHERE doi IS NOT NULL AND doi != ''")]
-    assert len(dois) == 30
+    # Derived rather than hard-coded: every study that is not still in
+    # preparation must carry a DOI, so the count follows the data and a new
+    # dataset does not fail this test merely by existing. A study losing its
+    # DOI still trips it, which is what the check is for.
+    expected = con.execute(
+        "SELECT COUNT(*) FROM studies "
+        "WHERE COALESCE(journal, '') != 'In preparation'").fetchone()[0]
+    assert len(dois) == expected
     assert len(set(dois)) == len(dois), "duplicate DOIs"
     for doi in dois:
         assert doi.startswith("10."), f"not a DOI: {doi}"
