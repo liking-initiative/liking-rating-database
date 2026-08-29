@@ -7,6 +7,11 @@ services:
     startCommand: uvicorn backend.app:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
     envVars:
+      # Render ignores runtime.txt; without this it picks its current default
+      # (3.13), for which the pinned pandas has no wheel, so pip falls back to
+      # compiling it from source and the Cython build fails.
+      - key: PYTHON_VERSION
+        value: "3.11.9"
       - key: DATABASE_URL
         value: "sqlite+aiosqlite:///./data/liking_rating_db.db"
       - key: API_HOST
@@ -17,6 +22,10 @@ services:
         value: "https://liking-rating-frontend.onrender.com,http://localhost:3000"
       - key: TRUSTED_HOSTS
         value: "localhost,127.0.0.1,*.onrender.com"
+      # The database is a release asset on a private repo, so the build needs
+      # a token with read access. Set the value in the dashboard, not here.
+      - key: GITHUB_TOKEN
+        sync: false
 
   # Frontend Static Site
   - type: web
