@@ -59,8 +59,11 @@ files <- list.files(MATRIX_DIR, pattern = "csv$", full.names = TRUE)
 if (!length(files)) stop("no matrices in ", MATRIX_DIR)
 if (!is.na(ONLY)) files <- files[basename(files) == paste0(ONLY, ".csv")]
 
-write_skip <- function(code, reason, extra = list()) {
+# `reason` is shown to visitors, so it has to be a sentence rather than
+# whatever the solver threw; anything raw goes in technical_detail instead.
+write_skip <- function(code, reason, extra = list(), technical = NULL) {
   out <- c(list(dataset_code = code, estimated = FALSE, reason = reason), extra)
+  if (!is.null(technical)) out$technical_detail <- technical
   write_json(out, file.path(OUT_DIR, paste0(code, ".json")),
              auto_unbox = TRUE, digits = 6, na = "null")
   cat(sprintf("%-22s skipped  %s\n", code, reason))
@@ -142,8 +145,10 @@ for (f in files) {
   # --- step 1: bootEGA on everything estimable --------------------------
   first <- run_boot(d0)
   if (inherits(first, "try-error")) {
-    write_skip(code, paste("bootEGA failed:", substr(trimws(gsub("\\s+", " ",
-      as.character(first))), 1, 140)), list(n_subjects = nrow(d0), n_items_total = p_all))
+    write_skip(code,
+      "the network model did not converge on this dataset",
+      list(n_subjects = nrow(d0), n_items_total = p_all),
+      technical = substr(trimws(gsub("\\s+", " ", as.character(first))), 1, 300))
     return(FALSE)
   }
 
@@ -175,8 +180,12 @@ for (f in files) {
   # --- step 4: refit on the retained items ------------------------------
   final <- run_boot(d1)
   if (inherits(final, "try-error")) {
-    write_skip(code, paste("refit on stable items failed:", substr(trimws(gsub("\\s+", " ",
-      as.character(final))), 1, 120)), list(n_subjects = nrow(d1), n_items_total = p_all))
+    write_skip(code,
+      paste("the model fitted, but refitting it on the",
+            length(stable), "items whose grouping replicated did not converge"),
+      list(n_subjects = nrow(d1), n_items_total = p_all,
+           items_tested = ncol(d0), items_stable = length(stable)),
+      technical = substr(trimws(gsub("\\s+", " ", as.character(final))), 1, 300))
     return(FALSE)
   }
   is2 <- try(suppressWarnings(itemStability(final, plot.itemStability = FALSE)), silent = TRUE)
@@ -250,8 +259,8 @@ for (f in files) {
   TRUE
   }
   ok <- tryCatch(estimate_one(), error = function(e) {
-    write_skip(code, paste("estimation error:",
-      substr(trimws(gsub("\\s+", " ", conditionMessage(e))), 1, 140)))
+    write_skip(code, "the network could not be estimated for this dataset",
+      technical = substr(trimws(gsub("\\s+", " ", conditionMessage(e))), 1, 300))
     FALSE
   })
   if (isTRUE(ok)) n_ok <- n_ok + 1

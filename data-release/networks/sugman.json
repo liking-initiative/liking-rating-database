@@ -1,0 +1,1 @@
+{"dataset_code":"sugman","estimated":false,"reason":"the model fitted, but refitting it on the 13 items whose grouping replicated did not converge","n_subjects":31,"n_items_total":427,"items_tested":15,"items_stable":13,"technical_detail":"Error in seq_len(max(convert_keep)) : argument must be coercible to non-negative integer"}
