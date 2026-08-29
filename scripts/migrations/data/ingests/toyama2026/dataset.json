@@ -1,0 +1,22 @@
+{
+  "code": "toyama2026",
+  "study": {
+    "name": "Multivariate patterns of food image evaluations distinguish obesity: A key role of highly processed foods",
+    "authors": [
+      "Toyama, A.",
+      "Yamashita, Y.",
+      "Suzuki, S."
+    ],
+    "year": 2026,
+    "journal": "Appetite",
+    "doi": "10.1016/j.appet.2026.108712",
+    "citation": "Toyama, A., Yamashita, Y., & Suzuki, S. (2026). Multivariate patterns of food image evaluations distinguish obesity: A key role of highly processed foods. Appetite, 227, 108712. https://doi.org/10.1016/j.appet.2026.108712",
+    "description": "Preregistered study (OSF: https://osf.io/2hjte)."
+  },
+  "scale": {
+    "min": 1,
+    "max": 8,
+    "type": "likert"
+  },
+  "description": "Likability ratings for all 896 images of the food-pics_extended database, collected online in Japan (CrowdWorks) between January and March 2025. Participants answered \"Do you like the food?\" on an eight-point Likert scale (1 = strongly disagree, 8 = strongly agree). Each of three days covered one dimension -- likability, tastiness or healthiness -- with task order counterbalanced; only the likability ratings are held here. IMPORTANT: the sample is stratified by body mass index, not drawn from the general population. Participants were recruited into an obese group (BMI >= 30) and a lean group (BMI < 25), and the 200 analysed here are 107 lean and 93 obese. Treat marginal means accordingly. Item names come from the food-pics description of each image; the set gives several distinct images the same description, so the 896 images collapse to 592 named items and a subject's ratings of same-named images are averaged, as in toyam. This is a different sample from toyam, which the paper describes as its pilot study: no subject's ratings match between the two."
+}
