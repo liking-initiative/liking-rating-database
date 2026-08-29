@@ -1,0 +1,61 @@
+stimulus_image,product_read_from_image,item_name,resolved_via
+10.jpg,Snickers,snickers,exp1 image match
+11.jpg,Nestle Nuts,nestlenuts,exp1 image match
+12.jpg,Lion,lion,exp1 image match
+13.jpg,Cote d'Or BonBonBloc praline melk,cotedorpralinemilk,exp1 image match
+15.jpg,Mars,mars,exp1 image match
+16.jpg,Bounty,bounty,read directly
+19.jpg,Kinder Bueno,kinderbueno,exp1 image match
+2.jpg,Oreo,oreos,exp1 image match
+22.jpg,KitKat,kitkat,read directly
+23.jpg,M&M's Peanut,mmspeanuts,exp1 image match
+24.jpg,Maltesers,maltesers,exp1 image match
+26.jpg,Rolo,nestlerolo,exp1 image match
+27.jpg,Smarties,smarties,exp1 image match
+28.jpg,Twix,twix,exp1 image match
+29.jpg,Ritter Sport whole hazelnut,rittersportmilkhazelnut,exp1 image match
+3.jpg,Milka Daim,milkadaim,exp1 image match
+31.jpg,Kanjers stroopwafel,stroopwafel,exp1 image match
+32.jpg,Albert Heijn roomboter gevulde koek,almondfilledcake,read directly
+33.jpg,De Lekkerste appelkoek,applecake,exp1 image match
+37.jpg,Albert Heijn roze fondantkoek,pinkfondantbiscuit,exp1 image match
+4.jpg,Dove Caramel Liaison,dovecaramelmilkchocolate,exp1 image match
+40.jpg,Skittles Tropical,skittlestropical,exp1 image match
+49.jpg,De Lekkerste suikerwafel,sugarwaffle,exp1 image match
+5.jpg,Milky Way,milkyway,exp1 image match
+56.jpg,Lay's Naturel,laysclassic,exp1 image match
+57.jpg,Smiths Hamka's mini,hamkas,exp1 image match
+58.jpg,Smiths Bugles nacho cheese,buglesnachocheese,exp1 image match
+59.jpg,Smiths Nibb-it sticks,nibbitsticks,exp1 image match
+60.jpg,Smiths Wokkels paprika,wokkelspaprika,exp1 image match
+8.jpg,Nestle Bros,nestlebros,exp1 image match
+fruit_11.jpg,pomegranate,pomegranate,read directly
+fruit_12.jpg,green apple,greenapple,read directly
+fruit_13.jpg,plum,plum,read directly
+fruit_14.jpg,mandarin,mandarins,read directly
+fruit_15.jpg,red grapes,redgrapes,read directly
+fruit_16.jpg,orange,orange,read directly
+fruit_18.jpg,pear,pear,read directly
+fruit_19.jpg,kiwi,kiwi,read directly
+fruit_2.jpg,physalis,physalis,read directly
+fruit_22.jpg,mango,mango,read directly
+fruit_23.jpg,melon,melon,read directly
+fruit_25.jpg,nectarine,nectarine,read directly
+fruit_26.jpg,white grapes,greengrapes,read directly
+fruit_28.jpg,banana,banana,read directly
+fruit_29.jpg,persimmon,persimmon,read directly
+fruit_3.jpg,blackberries,blackberries,read directly
+fruit_4.jpg,raspberries,raspberries,read directly
+fruit_5.jpg,strawberries,strawberries,read directly
+fruit_6.jpg,blueberries,blueberries,read directly
+fruit_7.jpg,avocado,avocado,read directly
+fruit_8.jpg,apple,apple,read directly
+vegetable_1.jpg,green bell pepper,greenbellpepper,read directly
+vegetable_10.jpg,tomato,tomato,read directly
+vegetable_12.jpg,rocket,arugula,read directly
+vegetable_17.jpg,corn on the cob,corncob,read directly
+vegetable_20.jpg,radishes,radishes,read directly
+vegetable_27.jpg,red bell pepper,redbellpepper,read directly
+vegetable_29.jpg,cucumber,cucumber,read directly
+vegetable_6.jpg,baby carrots,babycarrots,read directly
+vegetable_7.jpg,cherry tomatoes,cherrytomato,read directly

@@ -1,0 +1,28 @@
+{
+  "code": "chenhol7",
+  "study": {
+    "name": "When mere action versus inaction leads to robust preference change",
+    "authors": [
+      "Chen, Z.",
+      "Holland, R. W.",
+      "Quandt, J.",
+      "Dijksterhuis, A.",
+      "Veling, H."
+    ],
+    "year": 2019,
+    "journal": "Journal of Personality and Social Psychology",
+    "doi": "10.1037/pspa0000158",
+    "citation": "Chen, Z., Holland, R. W., Quandt, J., Dijksterhuis, A., & Veling, H. (2019). When mere action versus inaction leads to robust preference change. Journal of Personality and Social Psychology, 117(4), 721-740. https://doi.org/10.1037/pspa0000158",
+    "description": "Preregistered, seven experiments; materials and data at https://osf.io/zy9w3/."
+  },
+  "scale": {
+    "min": 0,
+    "max": 2,
+    "type": "wtp"
+  },
+  "description": "Willingness-to-pay for 60 foods, elicited in a Becker-DeGroot-Marschak auction with a EUR 0-2 analog scale, before go/no-go training. Unlike the other experiments in this paper the stimulus set is deliberately split: 30 high-calorie packaged snacks and 30 fruits and vegetables, so that training pits a healthy option against an unhealthy one. Only the pre-training auction is held here, at timepoint 1. The source files identify stimuli only by image number. Names were resolved from the stimulus photographs published with the experiment programs: 27 of them are byte-identical to images in Exp1 and inherit its reading, and the remaining 33 were read directly. Note that the numbering is not shared between experiments -- this experiment's 15.jpg is Exp1's 18.jpg, both Mars -- so the key was built from image content rather than filename. It ships beside this ingest.",
+  "item_categories": {
+    "physalis": "fruits",
+    "persimmon": "fruits"
+  }
+}
