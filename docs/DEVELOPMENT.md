@@ -135,6 +135,23 @@ After cutting a release, bump `RELEASE_TAG` in `scripts/setup_database.py`.
 deployment needs `GITHUB_TOKEN` (or `GH_TOKEN`) with read access set in its
 environment. Without one the setup script says so explicitly.
 
+### Also rebuild after any migration
+
+```bash
+python scripts/export_ega_matrices.py
+Rscript scripts/estimate_networks.R --out data-release/networks \
+  --matrices build/ega-matrices          # only datasets whose ratings changed
+python scripts/build_item_networks.py    # the Network page's three settings
+```
+
+The item networks are precomputed because the layout is a spring embedding
+over ~1,600 nodes: fast enough locally, minutes on a small instance, and it
+was timing the request out. Each file records the migration, rating and item
+counts it was built from, and the API checks them — so a stale file is never
+served, but it is silently ignored, and the endpoint falls back to computing
+per request and becomes slow again. If the big network suddenly takes seconds
+instead of milliseconds, this is why.
+
 ## Source data
 
 The authoritative sources live in `Liking Rating Database/` (RA compilation:
