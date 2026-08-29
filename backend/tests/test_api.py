@@ -398,3 +398,22 @@ async def test_aggregate_statistics_are_coherent(client):
     # most-rated first, item id breaking ties, so pages stay stable
     keys = [(-r["n_ratings"], r["item_id"]) for r in rows]
     assert keys == sorted(keys)
+
+
+async def test_item_network_survives_the_sparse_solver_threshold(client):
+    """networkx switches to a scipy-backed sparse solver above 500 nodes.
+
+    Without scipy installed that raises ModuleNotFoundError inside the request
+    and the endpoint 500s — which is exactly what production did, at every
+    setting whose graph exceeded the threshold, while the smaller ones passed.
+    Importing it here fails the suite if it ever leaves requirements.txt.
+    """
+    import scipy  # noqa: F401
+
+    r = await client.get(f"{V}/analytics/item-network", params={"min_shared": 1})
+    assert r.status_code == 200
+    body = r.json()
+    assert {"nodes", "edges", "meta"} <= set(body)
+    for n in body["nodes"]:
+        assert {"id", "label", "x", "y"} <= set(n)
+        assert isinstance(n["x"], (int, float)) and isinstance(n["y"], (int, float))

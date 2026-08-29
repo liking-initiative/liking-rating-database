@@ -2,6 +2,7 @@
 Data service for the Liking Rating Database
 Handles data processing and aggregation operations
 """
+import asyncio
 from typing import List, Optional, Dict, Any, Tuple
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, and_, or_, desc
@@ -394,6 +395,58 @@ class DataService:
     _NETWORK_CACHE_MAX = 32
     _NETWORK_MAX_EDGES = 20_000
 
+    # Distinct (item-group, dataset) pairs, self-joined to count how many
+    # datasets each pair of groups shares. The group key mirrors the Python
+    # grouping exactly: standardized_name when it holds a value, otherwise
+    # name -- an empty string counts as absent, which COALESCE alone would not
+    # do. The frequency filter is applied before pairing so the join sees the
+    # same node set the caller does.
+    _COOCCURRENCE_SQL = """
+        WITH nd AS (
+            SELECT DISTINCT
+                   CASE WHEN i.standardized_name IS NULL OR i.standardized_name = ''
+                        THEN i.name ELSE i.standardized_name END AS k,
+                   r.dataset_id AS d
+              FROM ratings r
+              JOIN items i ON i.id = r.item_id{category_filter}
+        ),
+        freq AS (
+            SELECT k FROM nd GROUP BY k HAVING COUNT(*) >= ?
+        )
+        SELECT a.k, b.k, COUNT(*) AS w
+          FROM nd a
+          JOIN nd b ON a.d = b.d AND a.k < b.k
+         WHERE a.k IN (SELECT k FROM freq)
+           AND b.k IN (SELECT k FROM freq)
+         GROUP BY a.k, b.k
+        HAVING COUNT(*) >= ?
+    """
+
+    async def _fetch_cooccurrence(
+        self,
+        min_shared: int,
+        min_frequency: int,
+        categories: Optional[List[str]],
+        db: AsyncSession,
+    ):
+        """Return (group_a, group_b, datasets_shared) for pairs over the threshold."""
+        params: List[Any] = []
+        category_filter = ""
+        if categories:
+            category_filter = f"\n             WHERE i.category IN ({','.join('?' * len(categories))})"
+            params.extend(categories)
+        sql = self._COOCCURRENCE_SQL.format(category_filter=category_filter)
+        params.extend([min_frequency, min_shared])
+
+        connection = await db.connection()
+        raw_connection = await connection.get_raw_connection()
+        driver = getattr(raw_connection, "driver_connection", None)
+        if driver is not None and hasattr(driver, "execute_fetchall"):
+            rows = await driver.execute_fetchall(sql, params)
+        else:
+            rows = (await connection.exec_driver_sql(sql, tuple(params))).fetchall()
+        return [(a, b, int(w)) for a, b, w in rows]
+
     async def get_item_network(
         self,
         min_shared: int = 12,
@@ -435,16 +488,16 @@ class DataService:
         # Node filter: appears in >= min_frequency datasets
         nodes = {k: g for k, g in groups.items() if len(g["datasets"]) >= min_frequency}
 
-        # Edges: pairs of groups sharing >= min_shared datasets
-        by_dataset = defaultdict(list)
-        for k, g in nodes.items():
-            for d in g["datasets"]:
-                by_dataset[d].append(k)
-        weights = defaultdict(int)
-        for members in by_dataset.values():
-            for a, b in combinations(sorted(members), 2):
-                weights[(a, b)] += 1
-        edges = [(a, b, w) for (a, b), w in weights.items() if w >= min_shared]
+        # Edges: pairs of groups sharing >= min_shared datasets.
+        #
+        # Counted by the database rather than in Python. Enumerating every
+        # within-dataset pair here means about a million increments into a dict
+        # keyed by pairs of names, and all of it is built before min_shared
+        # filters any of it away -- so the cost is the same whatever threshold
+        # is asked for, and only the pre-warmed default escaped it. A self-join
+        # aggregates the same pairs in the engine and returns only those that
+        # clear the threshold, which is a few thousand rows.
+        edges = await self._fetch_cooccurrence(min_shared, min_frequency, categories, db)
 
         # Backbone extraction: keep each node's strongest K edges. A dense
         # co-occurrence graph is a near-clique among popular items — rendered
@@ -473,11 +526,24 @@ class DataService:
         graph = nx.Graph()
         graph.add_nodes_from(nodes)
         graph.add_weighted_edges_from(edges)
+
         # Unweighted spring with stronger repulsion — weighted attraction pulls
-        # the popular hub items into one clump
-        pos = (nx.spring_layout(graph, seed=42, weight=None,
-                                k=3.2 / max(1, len(nodes)) ** 0.5, iterations=400)
-               if nodes else {})
+        # the popular hub items into one clump.
+        #
+        # Two things about the cost. Above 500 nodes networkx uses a
+        # scipy-backed sparse solver, which is why scipy is a dependency rather
+        # than an optional extra. And the layout is seconds of straight CPU on
+        # the wider settings, so it runs in a thread: left on the event loop it
+        # stalls every other request for its whole duration, which looks from
+        # outside exactly like the service being down.
+        iterations = 400 if len(nodes) < 500 else 200
+
+        def _layout():
+            return nx.spring_layout(graph, seed=42, weight=None,
+                                    k=3.2 / max(1, len(nodes)) ** 0.5,
+                                    iterations=iterations)
+
+        pos = await asyncio.to_thread(_layout) if nodes else {}
 
         result = {
             "nodes": [

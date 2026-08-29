@@ -12,3 +12,7 @@ asyncpg==0.29.0
 openpyxl==3.1.5
 pyreadstat==1.2.5
 networkx==3.1
+# networkx switches to a scipy-backed sparse solver above 500 nodes, so
+# spring_layout raises ModuleNotFoundError on larger graphs without it. The
+# item network crosses that threshold at its wider settings.
+scipy==1.11.4
