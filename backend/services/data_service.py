@@ -33,11 +33,19 @@ class DataService:
         """
         Get aggregated rating statistics for items.
 
-        Replaces the previous per-item N+1 (one query per item for std/median)
-        with a single scan over the ratings table: all statistics are computed
-        in one pass in Python from one fetch, plus one small item-name lookup.
-        The median is the midpoint element (0-based index n // 2) of each
-        item's ordered ratings, matching the previous implementation.
+        The statistics are computed by the database rather than in Python.
+        That is a memory decision, not a speed one: grouping every rating into
+        per-item Python lists costs roughly 240 MB of float objects at the
+        current corpus size, which is most of a small deployment's memory
+        budget and was enough to have the API killed on startup traffic. SQL
+        returns one row per item instead, so the footprint no longer grows
+        with the number of ratings.
+
+        Variance is taken as the sum of squared deviations from each item's
+        own mean, in a second pass, rather than from a sum of squares -- the
+        same expression the Python version used, so the numbers do not shift
+        beyond float noise. The median remains the midpoint element (0-based
+        index n // 2) of each item's ordered ratings.
         """
         cache_key = (
             tuple(sorted(item_ids)) if item_ids else None,
@@ -49,57 +57,24 @@ class DataService:
             sliced = cached[offset:] if offset else cached
             return sliced[:limit] if limit is not None else sliced
 
-        rows = await self._fetch_filtered_ratings(item_ids, dataset_ids, db)
+        rows = await self._fetch_aggregated_ratings(item_ids, dataset_ids, min_ratings, db)
 
-        # Group the single scan by item: (list of ratings, set of dataset ids)
-        groups: Dict[str, Tuple[List[float], set]] = {}
-        for item_id, dataset_id, value in rows:
-            entry = groups.get(item_id)
-            if entry is None:
-                entry = groups[item_id] = ([], set())
-            entry[0].append(value)
-            entry[1].add(dataset_id)
-
-        if not groups:
-            return []
-
-        # One small lookup for item names/categories (inner-join semantics:
-        # items missing from the items table are skipped, as before)
-        name_result = await db.execute(
-            select(Item.id, Item.name, Item.category).where(Item.id.in_(list(groups.keys())))
-        )
-        item_names = {row.id: (row.name, row.category) for row in name_result.fetchall()}
-
-        aggregations = []
-        for item_id, (values, datasets_seen) in groups.items():
-            n = len(values)
-            if n < min_ratings or item_id not in item_names:
-                continue
-
-            values.sort()
-            mean_rating = sum(values) / n
-            if n > 1:
-                variance = sum((x - mean_rating) ** 2 for x in values) / (n - 1)
-                std_rating = variance ** 0.5
-            else:
-                std_rating = 0.0
-
-            aggregations.append(RatingAggregation(
+        aggregations = [
+            RatingAggregation(
                 item_id=item_id,
-                item_name=item_names[item_id][0],
-                category=item_names[item_id][1],
-                mean_rating=float(mean_rating),
-                std_rating=std_rating,
-                median_rating=float(values[n // 2]),
-                n_ratings=n,
-                datasets_count=len(datasets_seen),
-                min_rating=float(values[0]),
-                max_rating=float(values[-1])
-            ))
-
-        # Order by number of ratings (most rated first), then item id for a
-        # stable order across limit/offset pages
-        aggregations.sort(key=lambda a: (-a.n_ratings, a.item_id))
+                item_name=name,
+                category=category,
+                mean_rating=float(mean),
+                # sample standard deviation; a single rating has no spread
+                std_rating=float((ss / (n - 1)) ** 0.5) if n > 1 else 0.0,
+                median_rating=float(median),
+                n_ratings=int(n),
+                datasets_count=int(n_datasets),
+                min_rating=float(mn),
+                max_rating=float(mx),
+            )
+            for item_id, name, category, n, mean, ss, median, n_datasets, mn, mx in rows
+        ]
 
         if len(self._agg_cache) >= self._AGG_CACHE_MAX_ENTRIES:
             self._agg_cache.clear()
@@ -112,50 +87,80 @@ class DataService:
 
         return aggregations
 
-    async def _fetch_filtered_ratings(
+    # One row per item: count, mean, summed squared deviation, median, dataset
+    # count, min and max. Items absent from the items table are dropped by the
+    # join, matching the inner-join semantics this endpoint has always had,
+    # and the ordering (most-rated first, item id to break ties) is applied
+    # here so limit/offset pages stay stable.
+    _AGG_SQL = """
+        WITH f AS (
+            SELECT item_id, dataset_id, normalized_rating AS v
+              FROM ratings{where}
+        ),
+        s AS (
+            SELECT item_id,
+                   COUNT(*) AS n,
+                   AVG(v) AS mean,
+                   MIN(v) AS mn,
+                   MAX(v) AS mx,
+                   COUNT(DISTINCT dataset_id) AS n_datasets
+              FROM f
+             GROUP BY item_id
+            HAVING COUNT(*) >= ?
+        ),
+        d AS (
+            SELECT f.item_id, SUM((f.v - s.mean) * (f.v - s.mean)) AS ss
+              FROM f JOIN s ON s.item_id = f.item_id
+             GROUP BY f.item_id
+        ),
+        m AS (
+            SELECT item_id, v AS median FROM (
+                SELECT item_id, v,
+                       ROW_NUMBER() OVER (PARTITION BY item_id ORDER BY v) AS rn,
+                       COUNT(*) OVER (PARTITION BY item_id) AS cnt
+                  FROM f
+            ) WHERE rn = cnt / 2 + 1
+        )
+        SELECT s.item_id, i.name, i.category, s.n, s.mean, d.ss, m.median,
+               s.n_datasets, s.mn, s.mx
+          FROM s
+          JOIN d ON d.item_id = s.item_id
+          JOIN m ON m.item_id = s.item_id
+          JOIN items i ON i.id = s.item_id
+         ORDER BY s.n DESC, s.item_id
+    """
+
+    async def _fetch_aggregated_ratings(
         self,
         item_ids: Optional[List[str]],
         dataset_ids: Optional[List[str]],
+        min_ratings: int,
         db: AsyncSession
     ):
-        """
-        Fetch (item_id, dataset_id, normalized_rating) tuples in one query.
+        """Run the aggregate query, one row per item."""
+        conditions: List[str] = []
+        params: List[Any] = []
+        if item_ids:
+            conditions.append(f"item_id IN ({','.join('?' * len(item_ids))})")
+            params.extend(item_ids)
+        if dataset_ids:
+            conditions.append(f"dataset_id IN ({','.join('?' * len(dataset_ids))})")
+            params.extend(dataset_ids)
+        where = (" WHERE " + " AND ".join(conditions)) if conditions else ""
+        sql = self._AGG_SQL.format(where=where)
+        params.append(min_ratings)
 
-        When running on aiosqlite, go through the raw driver connection so the
-        ~590k-row transfer happens entirely inside the driver thread — about
-        3x faster than materializing SQLAlchemy Row objects. Falls back to a
-        regular SQLAlchemy query on other drivers.
-        """
         connection = await db.connection()
         raw_connection = await connection.get_raw_connection()
         driver = getattr(raw_connection, 'driver_connection', None)
-
         if driver is not None and hasattr(driver, 'execute_fetchall'):
-            conditions = []
-            params: List[Any] = []
-            if item_ids:
-                placeholders = ','.join('?' * len(item_ids))
-                conditions.append(f"item_id IN ({placeholders})")
-                params.extend(item_ids)
-            if dataset_ids:
-                placeholders = ','.join('?' * len(dataset_ids))
-                conditions.append(f"dataset_id IN ({placeholders})")
-                params.extend(dataset_ids)
-
-            sql = "SELECT item_id, dataset_id, normalized_rating FROM ratings"
-            if conditions:
-                sql += " WHERE " + " AND ".join(conditions)
-
+            # aiosqlite: keep the round trip inside the driver thread
             return await driver.execute_fetchall(sql, params)
 
-        query = select(Rating.item_id, Rating.dataset_id, Rating.normalized_rating)
-        if item_ids:
-            query = query.where(Rating.item_id.in_(item_ids))
-        if dataset_ids:
-            query = query.where(Rating.dataset_id.in_(dataset_ids))
-        result = await db.execute(query)
+        # Any other DBAPI: same statement, same positional parameters.
+        result = await connection.exec_driver_sql(sql, tuple(params))
         return result.fetchall()
-    
+
     async def get_item_ratings_by_dataset(
         self,
         item_id: str,

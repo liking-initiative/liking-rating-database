@@ -375,3 +375,26 @@ async def test_ratings_include_normalized(client):
     rows = (await client.get(f"{V}/ratings", params={"page_size": 5})).json()["items"]
     assert all(r["normalized_rating"] is not None for r in rows)
     assert all(0 <= r["normalized_rating"] <= 1 for r in rows)
+
+
+async def test_aggregate_statistics_are_coherent(client):
+    """The aggregate is computed in SQL; check it still describes the ratings.
+
+    A broken rewrite of that query would most likely show up as a median
+    outside the range, a negative spread, or a dataset count that exceeds the
+    number of ratings — none of which the shape assertions above would catch.
+    """
+    rows = (await client.get(f"{V}/ratings/aggregate", params={"min_ratings": 1})).json()
+    assert rows, "expected at least one aggregated item"
+    for r in rows:
+        assert r["n_ratings"] >= 1
+        assert r["min_rating"] <= r["median_rating"] <= r["max_rating"], r["item_id"]
+        assert r["min_rating"] <= r["mean_rating"] <= r["max_rating"], r["item_id"]
+        assert r["std_rating"] >= 0.0, r["item_id"]
+        # a single rating has no spread, and every rating belongs to a dataset
+        if r["n_ratings"] == 1:
+            assert r["std_rating"] == 0.0, r["item_id"]
+        assert 1 <= r["datasets_count"] <= r["n_ratings"], r["item_id"]
+    # most-rated first, item id breaking ties, so pages stay stable
+    keys = [(-r["n_ratings"], r["item_id"]) for r in rows]
+    assert keys == sorted(keys)
