@@ -225,16 +225,16 @@ def test_quality_flags_are_known_and_explained(con):
     # which is worse than not flagging at all.
     assert one(con, """SELECT COUNT(*) FROM datasets
         WHERE quality_flag IS NOT NULL
-          AND quality_flag NOT IN ('placeholder_items', 'coded_items')""") == 0
+          AND quality_flag NOT IN ('coded_items', 'subject_count_unexplained')""") == 0
     assert one(con, """SELECT COUNT(*) FROM datasets
         WHERE quality_flag IS NOT NULL
           AND (quality_note IS NULL OR TRIM(quality_note) = '')""") == 0
 
 
-def test_datasets_with_placeholder_items_are_flagged(con):
-    # 'nouniqueitem' is the source compilation's marker for "this file had no
-    # item labels". Any dataset still carrying it must say so.
-    assert one(con, """SELECT COUNT(*) FROM datasets d
-        WHERE EXISTS (SELECT 1 FROM ratings r JOIN items i ON i.id = r.item_id
-                      WHERE r.dataset_id = d.id AND i.name = 'nouniqueitem')
-          AND COALESCE(d.quality_flag, '') != 'placeholder_items'""") == 0
+def test_no_placeholder_item_survives(con):
+    # 'nouniqueitem' was the source compilation's marker for "this file had no
+    # item labels". brusaeb was nothing but it and was removed in migration
+    # 016; romfred's single one went with it. Nothing may reintroduce it.
+    assert one(con, "SELECT COUNT(*) FROM items WHERE name = 'nouniqueitem'") == 0
+    assert one(con, """SELECT COUNT(*) FROM items
+        WHERE name IN ('noitem', 'na', 'none', 'unknown', 'n/a', '')""") == 0
