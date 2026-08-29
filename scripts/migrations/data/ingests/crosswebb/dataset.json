@@ -35,7 +35,6 @@
     "blueberrycrispclifbars": "snacks",
     "abriefhistoryoftime": "consumer_product",
     "freakonomics": "consumer_product",
-    "1984": "consumer_product",
     "wirelessmouse": "consumer_product",
     "yogamat": "consumer_product",
     "hitchhikersguide": "consumer_product",
@@ -61,6 +60,7 @@
     "plates": "consumer_product",
     "portablespeaker": "consumer_product",
     "screwdrivers": "consumer_product",
-    "sunglasses": "consumer_product"
+    "sunglasses": "consumer_product",
+    "1984book": "consumer_product"
   }
 }

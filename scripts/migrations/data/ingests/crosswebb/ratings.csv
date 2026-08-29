@@ -29,7 +29,7 @@ subject_id,item_name,rating,timepoint
 101,gnocchi,1.0,1
 101,yogurtpretzels,9.0,1
 101,chocolatepretzels,3.0,1
-101,1984,2.0,1
+101,1984book,2.0,1
 101,waterbottle,1.0,1
 101,yogamat,5.0,1
 101,lordoftherings,0.0,1
@@ -150,7 +150,7 @@ subject_id,item_name,rating,timepoint
 103,margheritapizza,1.0,1
 103,chocolatepretzels,2.0,1
 103,freakonomics,3.0,1
-103,1984,3.0,1
+103,1984book,3.0,1
 103,waterbottle,4.0,1
 103,hitchhikersguide,4.0,1
 103,caltechbanner,3.0,1
@@ -209,9 +209,9 @@ subject_id,item_name,rating,timepoint
 104,blueberrycrispclifbars,8.0,1
 104,yogurtpretzels,3.0,1
 104,chocolatepretzels,4.0,1
-104,1984,0.0,1
-104,1984,0.0,2
-104,1984,0.0,3
+104,1984book,0.0,1
+104,1984book,0.0,2
+104,1984book,0.0,3
 104,waterbottle,0.0,1
 104,wirelessmouse,0.0,1
 104,yogamat,0.0,1
@@ -390,7 +390,7 @@ subject_id,item_name,rating,timepoint
 107,yogurtpretzels,5.0,1
 107,chocolatepretzels,5.0,1
 107,freakonomics,4.0,1
-107,1984,6.0,1
+107,1984book,6.0,1
 107,caltechbanner,9.0,1
 107,caltechkeychain,2.0,1
 107,caltechkeychain,3.0,2
@@ -450,9 +450,9 @@ subject_id,item_name,rating,timepoint
 108,margheritapizza,3.0,3
 108,chocolatepretzels,1.0,1
 108,abriefhistoryoftime,2.0,1
-108,1984,0.0,1
-108,1984,0.0,2
-108,1984,0.0,3
+108,1984book,0.0,1
+108,1984book,0.0,2
+108,1984book,0.0,3
 108,waterbottle,0.0,1
 108,hitchhikersguide,0.0,1
 108,caltechhat,3.0,1
@@ -512,7 +512,7 @@ subject_id,item_name,rating,timepoint
 109,abriefhistoryoftime,2.0,1
 109,abriefhistoryoftime,1.0,2
 109,abriefhistoryoftime,2.0,3
-109,1984,1.0,1
+109,1984book,1.0,1
 109,waterbottle,10.0,1
 109,wirelessmouse,2.0,1
 109,yogamat,2.0,1
@@ -631,9 +631,9 @@ subject_id,item_name,rating,timepoint
 111,chocolatepretzels,1.0,3
 111,abriefhistoryoftime,0.0,1
 111,freakonomics,0.0,1
-111,1984,0.0,1
-111,1984,0.0,2
-111,1984,0.0,3
+111,1984book,0.0,1
+111,1984book,0.0,2
+111,1984book,0.0,3
 111,waterbottle,5.0,1
 111,waterbottle,4.0,2
 111,waterbottle,2.0,3
@@ -690,7 +690,7 @@ subject_id,item_name,rating,timepoint
 112,gnocchi,9.0,1
 112,blueberrycrispclifbars,5.0,1
 112,freakonomics,4.0,1
-112,1984,8.0,1
+112,1984book,8.0,1
 112,hitchhikersguide,5.0,1
 112,lordoftherings,6.0,1
 112,lordoftherings,5.0,2
@@ -751,7 +751,7 @@ subject_id,item_name,rating,timepoint
 113,chocolatepretzels,5.0,1
 113,abriefhistoryoftime,2.0,1
 113,freakonomics,0.0,1
-113,1984,3.0,1
+113,1984book,3.0,1
 113,waterbottle,10.0,1
 113,waterbottle,9.0,2
 113,waterbottle,8.0,3

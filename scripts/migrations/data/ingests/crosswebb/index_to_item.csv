@@ -71,7 +71,7 @@ stimulus_index,source_table_name,item_name,category,resolved_via
 70,Chocolate Pretzels,chocolatepretzels,food,new
 101,A Brief History of Time (book),abriefhistoryoftime,consumer_product,norm
 102,Freakonomics (book),freakonomics,consumer_product,norm
-103,1984 (book),1984,consumer_product,norm
+103,1984 (book),1984book,consumer_product,norm
 104,Water bottle,waterbottle,consumer_product,norm
 105,Wireless mouse,wirelessmouse,consumer_product,norm
 106,Yoga mat,yogamat,consumer_product,norm

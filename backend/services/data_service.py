@@ -3,10 +3,14 @@ Data service for the Liking Rating Database
 Handles data processing and aggregation operations
 """
 import asyncio
+import json
+import os
+from pathlib import Path
 from typing import List, Optional, Dict, Any, Tuple
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func, and_, or_, desc
+from sqlalchemy import select, func, and_, or_, desc, text
 from sqlalchemy.orm import selectinload
+from sqlalchemy.exc import SQLAlchemyError
 import statistics
 
 from backend.models.database import Study, Dataset, Item, Rating
@@ -447,6 +451,51 @@ class DataService:
             rows = (await connection.exec_driver_sql(sql, tuple(params))).fetchall()
         return [(a, b, int(w)) for a, b, w in rows]
 
+    # Where scripts/build_item_networks.py writes its output.
+    _PREBUILT_NETWORK_DIR = Path(
+        os.environ.get("LIKING_ITEM_NETWORK_DIR",
+                       Path(__file__).resolve().parents[2] / "data-release" / "item-networks")
+    )
+    # The parameters those files were built with; anything else must be computed.
+    _PREBUILT_MIN_FREQUENCY = 2
+    _PREBUILT_MAX_EDGES_PER_NODE = 4
+
+    def _load_prebuilt_network(self, min_shared, categories, min_frequency,
+                               max_edges_per_node):
+        """A shipped network for this exact request, or None to compute one."""
+        if (categories
+                or min_frequency != self._PREBUILT_MIN_FREQUENCY
+                or max_edges_per_node != self._PREBUILT_MAX_EDGES_PER_NODE):
+            return None
+        path = self._PREBUILT_NETWORK_DIR / f"min_shared_{int(min_shared)}.json"
+        try:
+            return json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            return None
+
+    async def _prebuilt_matches(self, prebuilt: Dict[str, Any], db: AsyncSession) -> bool:
+        """Is this shipped network still describing the database in front of us?
+
+        Without this the file would be served whatever database is loaded --
+        stale after any migration that has not been followed by a rebuild, and
+        wrong under the test fixtures, which is how it was caught.
+        """
+        source = prebuilt.get("source")
+        if not source:
+            return False
+        try:
+            for key, table in (("migrations", "schema_migrations"),
+                               ("ratings", "ratings"), ("items", "items")):
+                actual = (await db.execute(text(f"SELECT COUNT(*) FROM {table}"))).scalar()
+                if source.get(key) != actual:
+                    return False
+        except SQLAlchemyError:
+            # A database without these tables is not the one this was built
+            # from -- the test fixtures, for instance, carry no migration
+            # table. If it cannot be verified it is not used.
+            return False
+        return True
+
     async def get_item_network(
         self,
         min_shared: int = 12,
@@ -464,6 +513,20 @@ class DataService:
         cached = self._network_cache.get(cache_key)
         if cached is not None:
             return cached
+
+        # The settings the Network page offers are precomputed by
+        # scripts/build_item_networks.py and shipped. The layout is a spring
+        # embedding over ~1,600 nodes: seconds here, minutes on a small shared
+        # instance, which is long enough that the request times out and the
+        # page reports the network could not be loaded. It is the same result
+        # every time, because the data only changes through migrations.
+        prebuilt = self._load_prebuilt_network(
+            min_shared, categories, min_frequency, max_edges_per_node)
+        if prebuilt is not None and not await self._prebuilt_matches(prebuilt, db):
+            prebuilt = None
+        if prebuilt is not None:
+            self._network_cache[cache_key] = prebuilt
+            return prebuilt
 
         query = select(
             Item.standardized_name, Item.id, Item.name, Item.category,
