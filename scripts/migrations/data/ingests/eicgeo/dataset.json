@@ -1,0 +1,25 @@
+{
+  "code": "eicgeo",
+  "study": {
+    "name": "(Mouse cursor)-Tracking food decisions in binge eating disorder reveals preference for high-energy foods and a role of BMI",
+    "authors": [
+      "Eichin, K. N.",
+      "Georgii, C.",
+      "Arend, A. K.",
+      "Van Dyck, Z.",
+      "Blechert, J."
+    ],
+    "year": 2022,
+    "journal": "Appetite",
+    "doi": "10.1016/j.appet.2021.105890",
+    "citation": "Eichin, K. N., Georgii, C., Arend, A. K., Van Dyck, Z., & Blechert, J. (2022). (Mouse cursor)-Tracking food decisions in binge eating disorder reveals preference for high-energy foods and a role of BMI. Appetite, 170, 105890. https://doi.org/10.1016/j.appet.2021.105890",
+    "description": "Data and codebooks at PsychArchives, doi:10.23668/psycharchives.5153."
+  },
+  "scale": {
+    "min": 0,
+    "max": 100,
+    "type": "vas"
+  },
+  "description": "Liking for 18 foods, rated by placing each image along a 0-100 visual analogue scale. Stimuli come from the food-pics database, which toyam, sugman and toyama2026 also draw on, so this dataset shares its entire item set with them and adds no new items. IMPORTANT: this is a clinical comparison sample rather than a general-population one. Participants were recruited into a binge eating disorder group and a non-BED comparison group, and the 83 held here are 22 BED and 61 non-BED, so a marginal mean over this dataset is not an estimate of population liking. The published file names stimuli in German. Names were resolved through the food-pics database rather than translated freely: each German name was matched to its food-pics entry and that entry's English description used, which is how the other food-pics datasets here are spelled. The paper's own codebook gives an English gloss for all 18 and agrees with every one.",
+  "item_categories": {}
+}

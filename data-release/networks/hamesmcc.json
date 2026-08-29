@@ -1,0 +1,1 @@
+{"dataset_code":"hamesmcc","estimated":false,"reason":"the network model did not converge on this dataset","n_subjects":59,"n_items_total":8,"technical_detail":"Error in seq_len(max(convert_keep)) : argument must be coercible to non-negative integer"}
