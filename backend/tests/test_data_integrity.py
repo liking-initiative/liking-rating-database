@@ -225,7 +225,7 @@ def test_quality_flags_are_known_and_explained(con):
     # which is worse than not flagging at all.
     assert one(con, """SELECT COUNT(*) FROM datasets
         WHERE quality_flag IS NOT NULL
-          AND quality_flag NOT IN ('coded_items', 'subject_count_unexplained')""") == 0
+          AND quality_flag != 'coded_items'""") == 0
     assert one(con, """SELECT COUNT(*) FROM datasets
         WHERE quality_flag IS NOT NULL
           AND (quality_note IS NULL OR TRIM(quality_note) = '')""") == 0

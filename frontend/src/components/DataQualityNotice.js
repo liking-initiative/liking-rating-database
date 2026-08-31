@@ -14,10 +14,6 @@ const FLAGS = {
     type: 'info',
     message: 'Some items in this dataset have no readable name',
   },
-  subject_count_unexplained: {
-    type: 'warning',
-    message: 'This dataset holds more subjects than its paper reports',
-  },
 };
 
 const DataQualityNotice = ({ dataset }) => {
