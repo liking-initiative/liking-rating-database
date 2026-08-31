@@ -131,6 +131,37 @@ large enough to fail deployments before any build command ran.
 
 After cutting a release, bump `RELEASE_TAG` in `scripts/setup_database.py`.
 
+### The client packages read a different set of files
+
+`scripts/setup_database.py` wants the gzipped SQLite database; the R and
+Python packages want the TSV release that `scripts/build_release.py` produces
+(`catalog.json`, `studies.tsv`, `datasets/<code>.tsv.gz`). Both belong on the
+release. GitHub release assets are flat, and the client flattens nested paths
+to `datasets__<code>.tsv.gz`, so upload them under those names:
+
+```bash
+python scripts/build_release.py --version X.Y.Z
+# flatten, then: gh release upload vX.Y.Z <flattened files> --clobber
+```
+
+### Zenodo
+
+The clients fetch over plain HTTP with no credentials, which cannot work
+against a private repository — GitHub answers an unauthenticated request for
+its releases with 404, so `list_datasets()` fails for everyone. Zenodo is
+public, needs no token to read, and gives the database a citable DOI:
+
+```bash
+export ZENODO_TOKEN=...        # deposit:write + deposit:actions
+python scripts/publish_to_zenodo.py --version X.Y.Z
+```
+
+It creates a **draft** and stops. Publishing is irreversible — the DOI is
+permanent and files cannot be withdrawn — so that stays a deliberate step.
+For later releases pass `--parent <record id>` so Zenodo versions the existing
+record instead of creating an unrelated one, which keeps a concept DOI that
+always resolves to the newest version.
+
 **Private repository.** Release assets are not publicly readable, so a
 deployment needs `GITHUB_TOKEN` (or `GH_TOKEN`) with read access set in its
 environment. Without one the setup script says so explicitly.

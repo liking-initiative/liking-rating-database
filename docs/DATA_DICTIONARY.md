@@ -54,7 +54,7 @@ Special case: `foljac2`'s source values arrived already normalized to 0–1;
 the original elicitation was WTP 0–3 (Folke et al. 2016). Its scale is
 recorded as 0–1 with a note in the dataset description.
 
-## items — one row per stimulus (2,297 rows)
+## items — one row per stimulus
 
 | Field | Type | Description |
 |-------|------|-------------|

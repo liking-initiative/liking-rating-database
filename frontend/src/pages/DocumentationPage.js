@@ -248,7 +248,7 @@ const DocumentationPage = () => {
             Two consequences worth knowing. Centring makes each subject&apos;s
             row sum to zero, which biases correlations down by roughly{' '}
             <Text code>−1/(k − 1)</Text> for <Text code>k</Text> items — under
-            −0.02 at the 60–144 items typical here, but exactly −1 at{' '}
+            −0.02 at the item counts typical here, but exactly −1 at{' '}
             <Text code>k = 2</Text>, so datasets with fewer than 20 items are
             skipped. And a pair needs at least 10 shared raters within a
             dataset to contribute at all, so a high{' '}
@@ -291,14 +291,15 @@ const DocumentationPage = () => {
           </Paragraph>
           <p className="page-note">
             <strong>Why most datasets are capped first.</strong> A graphical
-            model over items needs more subjects than items, and 41 of the 55
-            datasets here have the opposite. Where that holds, the first fit is
+            model over items needs more subjects than items, and most datasets
+            here have the opposite. Where that holds, the first fit is
             restricted to the most completely observed items — enough to make
             an estimate possible at all. That cap is a feasibility limit, and it
             is recorded separately from the stability selection so the two are
-            never read as the same thing. It applies to 43 of the 45 datasets
-            that yield a network; the remaining 10 cannot clear even this bar,
-            get no network, and say why.
+            never read as the same thing. It applies to almost every dataset
+            that yields a network; the rest cannot clear even this bar, get no
+            network, and say why. Each dataset&apos;s own figure states which
+            case it is.
           </p>
           <Paragraph style={{ marginBottom: 0 }}>
             Each network also reports{' '}

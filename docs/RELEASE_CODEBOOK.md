@@ -72,7 +72,7 @@ willingness-to-pay, £0–3. Within-subject spread there is very small (about
 mostly records who the rater was rather than which foods they preferred. Treat
 it with care in any within-person analysis.
 
-**168 items** carry opaque source codes as names (`0488`, `mh0021`) because
+**Some items** carry opaque source codes as names (`0488`, `mh0021`) because
 their source files did not include readable item labels. The datasets holding
 them are marked in `catalog.json` with `quality_flag = "coded_items"`:
 `larlua` (all 86 items) and eight `shenhav*` datasets (3–76 items each).

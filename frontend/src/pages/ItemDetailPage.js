@@ -133,7 +133,7 @@ const ItemDetailPage = () => {
 
       <Row gutter={[24, 24]}>
         {/* Only `name` and `standardized_name` hold real values; every other
-            item column is empty for all 2,297 rows. */}
+            item column is empty for every row. */}
         <Col xs={24} lg={16}>
           <Card title="Item">
             <Descriptions column={1} bordered>
