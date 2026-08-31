@@ -28,11 +28,38 @@ import os
 import sys
 from pathlib import Path
 
+import time
+
 import requests
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 LIVE = "https://zenodo.org/api"
 SANDBOX = "https://sandbox.zenodo.org/api"
+
+
+def _request(method, url, tries: int = 5, **kw):
+    """A Zenodo call, retried through the gateway errors it hands out.
+
+    Zenodo intermittently answers 502/504 under load, and an upload of seventy
+    files hits that often enough that a single failure would otherwise leave a
+    half-filled draft behind.
+    """
+    delay = 3.0
+    last = None
+    for attempt in range(tries):
+        try:
+            r = requests.request(method, url, **kw)
+        except requests.RequestException as exc:
+            last = exc
+        else:
+            if r.status_code not in (500, 502, 503, 504):
+                return r
+            last = f"HTTP {r.status_code}"
+        if attempt < tries - 1:
+            print(f"    {last} — retrying in {delay:.0f}s")
+            time.sleep(delay)
+            delay = min(delay * 2, 30)
+    raise SystemExit(f"Zenodo kept failing on {method} {url.split('?')[0]}: {last}")
 
 
 def metadata(version: str) -> dict:
@@ -83,6 +110,7 @@ def main() -> None:
                     help="directory built by scripts/build_release.py")
     ap.add_argument("--sandbox", action="store_true", help="use sandbox.zenodo.org")
     ap.add_argument("--parent", help="existing Zenodo record id to add a version to")
+    ap.add_argument("--deposition", help="resume uploading into an existing draft id")
     ap.add_argument("--publish", action="store_true",
                     help="publish immediately — irreversible, mints a permanent DOI")
     args = ap.parse_args()
@@ -103,8 +131,15 @@ def main() -> None:
 
     auth = {"params": {"access_token": token}}
 
-    if args.parent:
-        r = requests.post(f"{base}/deposit/depositions/{args.parent}/actions/newversion", **auth)
+    if args.deposition:
+        # Resume: a large upload can be interrupted, and re-uploading 26 MB of
+        # files that already landed is pure waste.
+        r = _request("GET", f"{base}/deposit/depositions/{args.deposition}", **auth)
+        if not r.ok:
+            sys.exit(f"could not read draft {args.deposition}: {r.status_code}")
+        dep = r.json()
+    elif args.parent:
+        r = _request("POST", f"{base}/deposit/depositions/{args.parent}/actions/newversion", **auth)
         if not r.ok:
             sys.exit(f"could not draft a new version of {args.parent}: {r.status_code} {r.text[:200]}")
         dep = requests.get(r.json()["links"]["latest_draft"], **auth).json()
@@ -112,7 +147,7 @@ def main() -> None:
         for f in requests.get(f"{base}/deposit/depositions/{dep['id']}/files", **auth).json():
             requests.delete(f"{base}/deposit/depositions/{dep['id']}/files/{f['id']}", **auth)
     else:
-        r = requests.post(f"{base}/deposit/depositions", json={}, **auth)
+        r = _request("POST", f"{base}/deposit/depositions", json={}, **auth)
         if not r.ok:
             sys.exit(f"could not create a deposition: {r.status_code} {r.text[:200]}")
         dep = r.json()
@@ -121,16 +156,26 @@ def main() -> None:
     bucket = dep["links"]["bucket"]
     print(f"  draft deposition {dep_id}")
 
-    r = requests.put(f"{base}/deposit/depositions/{dep_id}",
-                     json=metadata(args.version),
-                     headers={"Content-Type": "application/json"}, **auth)
+    r = _request("PUT", f"{base}/deposit/depositions/{dep_id}",
+                 json=metadata(args.version),
+                 headers={"Content-Type": "application/json"}, **auth)
     if not r.ok:
         sys.exit(f"metadata rejected: {r.status_code} {r.text[:300]}")
 
+    already = {f["filename"] for f in _request(
+        "GET", f"{base}/deposit/depositions/{dep_id}/files", **auth).json()}
+    if already:
+        print(f"  {len(already)} file(s) already uploaded, skipping those")
+
     for i, path in enumerate(files, 1):
-        name = str(path.relative_to(src))          # Zenodo keeps the nested path
+        # Zenodo's file store is flat and reads a slash in the bucket URL as a
+        # path, so nested names 404. Flatten with the same separator the client
+        # already uses for GitHub, so one naming works against either host.
+        name = str(path.relative_to(src)).replace(os.sep, "__")
+        if name in already:
+            continue
         with open(path, "rb") as fh:
-            u = requests.put(f"{bucket}/{name}", data=fh, **auth)
+            u = _request("PUT", f"{bucket}/{name}", data=fh, **auth)
         if not u.ok:
             sys.exit(f"upload failed for {name}: {u.status_code} {u.text[:200]}")
         if i % 10 == 0 or i == len(files):
@@ -138,7 +183,7 @@ def main() -> None:
 
     link = dep["links"].get("html", f"{base}/deposit/depositions/{dep_id}")
     if args.publish:
-        r = requests.post(f"{base}/deposit/depositions/{dep_id}/actions/publish", **auth)
+        r = _request("POST", f"{base}/deposit/depositions/{dep_id}/actions/publish", **auth)
         if not r.ok:
             sys.exit(f"publish failed: {r.status_code} {r.text[:300]}")
         published = r.json()
