@@ -2,7 +2,6 @@ import React from 'react';
 import { Layout, Menu } from 'antd';
 import { 
   SearchOutlined, 
-  ShareAltOutlined,
   ExperimentOutlined, 
   AppleOutlined, 
   LineChartOutlined,
@@ -40,12 +39,6 @@ const AppSidebar = () => {
       icon: <LineChartOutlined />,
       label: 'Descriptives',
       onClick: () => navigate('/descriptives')
-    },
-    {
-      key: '/network',
-      icon: <ShareAltOutlined />,
-      label: 'Item Network',
-      onClick: () => navigate('/network')
     },
     {
       key: '/docs',

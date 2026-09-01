@@ -17,13 +17,17 @@ const DatasetDetailPage = lazy(() => import('./pages/DatasetDetailPage'));
 const DatasetVisualizationPage = lazy(() => import('./pages/DatasetVisualizationPage'));
 const ItemsPage = lazy(() => import('./pages/ItemsPage'));
 const ItemDetailPage = lazy(() => import('./pages/ItemDetailPage'));
-const NetworkPage = lazy(() => import('./pages/NetworkPage'));
 const DescriptivesPage = lazy(() => import('./pages/DescriptivesPage'));
 const DocumentationPage = lazy(() => import('./pages/DocumentationPage'));
 const DownloadsPage = lazy(() => import('./pages/DownloadsPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 const { Content } = Layout;
+
+// The Item Network page was retired into the home page: it was the single
+// view that shows what the database is for, and a visitor had to know to go
+// looking for it. Existing links keep working.
+const NetworkRedirect = () => <Navigate to="/" replace />;
 
 // The item Analysis page was retired: Descriptives showed everything it did
 // and more, was timepoint-aware where Analysis silently pooled repeated
@@ -67,7 +71,7 @@ function App() {
                 <Route path="/items" element={<ItemsPage />} />
                 <Route path="/items/:itemId" element={<ItemDetailPage />} />
                 <Route path="/items/:itemId/analyze" element={<AnalyzeRedirect />} />
-                <Route path="/network" element={<NetworkPage />} />
+                <Route path="/network" element={<NetworkRedirect />} />
                 <Route path="/descriptives" element={<DescriptivesPage />} />
                 <Route path="/docs" element={<DocumentationPage />} />
                 <Route path="/downloads" element={<DownloadsPage />} />

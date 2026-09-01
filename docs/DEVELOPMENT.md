@@ -172,7 +172,7 @@ environment. Without one the setup script says so explicitly.
 python scripts/export_ega_matrices.py
 Rscript scripts/estimate_networks.R --out data-release/networks \
   --matrices build/ega-matrices          # only datasets whose ratings changed
-python scripts/build_item_networks.py    # the Network page's three settings
+python scripts/build_item_networks.py    # the home page network's three settings
 ```
 
 The item networks are precomputed because the layout is a spring embedding

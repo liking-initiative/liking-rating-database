@@ -12,6 +12,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { getStatistics } from '../services/api';
+import ItemNetworkExplorer from '../components/ItemNetworkExplorer';
 
 const { Title, Paragraph } = Typography;
 
@@ -119,6 +120,22 @@ const HomePage = () => {
           </Card>
         </Col>
       </Row>
+
+      {/* The network. It lives here rather than on its own page because it is
+          the one view that shows what the database is for -- the same stimuli
+          recurring across studies that never cite each other -- and behind a
+          navigation click most visitors never reached it. */}
+      <div style={{ marginBottom: '48px' }}>
+        <Title level={3} style={{ marginBottom: 4 }}>Item Network</Title>
+        <Paragraph type="secondary" style={{ marginBottom: 16 }}>
+          Items that get rated in the same studies. Nodes are stimuli, sized by
+          how many datasets they appear in and shaded by mean liking; a link
+          means two items were rated together often enough to compare. Drag a
+          node, scroll to zoom, and hover or click to lift out one item&apos;s
+          neighbourhood.
+        </Paragraph>
+        <ItemNetworkExplorer height={560} />
+      </div>
 
       {/* Features */}
       <Row gutter={[24, 24]}>
