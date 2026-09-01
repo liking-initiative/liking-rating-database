@@ -49,15 +49,24 @@ is strong. It is weaker on *wording*, which is why it is tracked separately.
 | `richkap` | A | 1..5 | "rated 65 food images … using a **Likert scale** … one food item from each rating category: **strongly dislike, dislike, like, and strongly like**" |
 | `foljac2` | A | 0..3 (£) | "on a scale ranging from **£0-£3**, in a **BDM** procedure" |
 | `marglu` | A* | 0..100 | "**How much would you like to eat this item at the end of the experiment? Not at all – very much**" — but see caveat below |
-| `sucro` | A | 0..3 | "a participant was **endowed with $3** and made a **bid ($0, $1, $2 or $3)** for one of the 56 items" |
+| `sucro` | A | 0..3 | "a participant was **endowed with $3** and made a bid, **$0, $1, $2 or $3** for one of the **56 items**" — verified in the paper itself, not only the RA's transcription |
+| `eicgeo` | A | 0..100 | "rate every food on the dimensions '**Energy content**', '**Liking**', '**Desire to Eat**' and '**Health**', by placing the images along a **visual analogue scale (VAS) ranging from 0 to 100**" — we took **Liking** |
 | `balim` | B | 1..5 | Source file `AttributeRawScores_OpenSource.csv` column **`LikingF`**, values 1..5, 12,120 rows and 202 subjects matching exactly. Food and Activity items are separate columns; only food was taken. |
 | `gwikrab` | C | 1..10 | "rating from **1 to 10** how much they would **like to eat** the displayed food item (1 = 'not at all', 10 = 'would love to')" — data is exactly 10 integers, 1..10, no negatives. |
 | `gwileb` | C | −10..10 | "a rating scale from **−10 to +10 in increments of one** … '−10' very disliked, '+10' very liked" — data is exactly 21 integers spanning −10..10. |
-| `smikrab2018` | C | −10..10 | "rated their **desire to eat** each of 147 snack food items on a discrete scale from −10 to 10" — data is exactly 21 integers spanning −10..10. |
+| `smikrab2018` | A | −10..10 | "rated their **desire to eat** each of 147 snack food items (chocolate, candy, chips, etc.) on a **discrete scale from −10 to 10** … −10 … extreme dislike … 10 … extreme liking … 0 … neither" |
 | `smikrab` | C | −870..870 | Paper describes four ratings per item on a **1,740-pixel** scale; −870..870 is that scale centred. Construct confirmed empirically: item means correlate r = +0.82 with `deskrab1` and +0.67 with `hasdes` across 98 shared items, which the non-preference categories (image size, weight) could not produce. |
-| `deskrab2` | C | −10..10 | "rated 145 food items on a scale of −10 to 10 using a **slider bar**" — data is continuous, 10,997 distinct values. |
-| `deskrab1`, `deskrab4` | C | −10..10 | **The RA's transcription is wrong here** and the declared scale is right. Its text ("scale of 0 to 10 … also had the option to indicate that they disliked the food") is near-identical to `hasdes`'s and was evidently copied. The data is 21 integers spanning −10..10 with 39–48% of ratings negative, which a 0..10 scale cannot produce, and `deskrab2` from the same paper is −10..10. |
+| `deskrab1`, `deskrab2`, `deskrab4` | A | −10..10 | "**rated 145 food items on a scale of −10 to 10 using a slider bar**. They were told that −10 corresponded to really not wanting to eat the food at the end of the study, 10 corresponded to really wanting to eat the food … and 0 corresponded to being indifferent" — see note below |
 | `larlua` | C | 0..100 | "rated them (in the same order) for **healthiness and tastiness** using a **VAS scale from 0 to 100**". The RA's notebook takes `tastiness.left.image` / `tastiness.right.image`, so this is **tastiness**. Paper abstract confirms both constructs and n≈910. |
+
+**`deskrab` note — the RA was right, but attached the wrong experiment.** Its
+transcription for `deskrab1`/`deskrab4` quotes a *0 to 10* scale with a
+separate "disliked the food" option. That text is genuine, but it is the
+method for the paper's **Experiment 1**, which rated **101** foods. All three
+of our deskrab datasets hold **144** items and −10..10 integers, matching
+**Experiment 2** (145 items, −10..10 slider). Experiment 1 is not in this
+database. The declared scale was always correct; an earlier version of this
+file wrongly called the transcription a copy-paste error from `hasdes`.
 
 `*` **`marglu` caveat.** The verbal anchors are verbatim and the construct is
 certain — the paper's own wording is "wanting", and the RA's notebook takes the
@@ -73,7 +82,7 @@ These were built by reading the study's own data files and paper at ingest
 time, and their stored descriptions record the scale, but no verbatim
 quotation was kept:
 
-`eicgeo`, `hamesmcc`, `crosswebb`, `leeholyoak2021`, `toyama2026`,
+`hamesmcc`, `crosswebb`, `leeholyoak2021`, `toyama2026`,
 `smithspiller1`, `smithspiller2`, `fernandezchoosek1`, `fernandezchoosek2`,
 `fernandezeeg`, `fernandezmanyattr`.
 
