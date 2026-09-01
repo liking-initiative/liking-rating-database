@@ -31,6 +31,7 @@ Usage:
 import argparse
 import csv
 import gzip
+import io
 import hashlib
 import json
 import os
@@ -60,7 +61,14 @@ def write_tsv(path: Path, header, rows, compress: bool = False) -> int:
     """Write a TSV, optionally gzipped. Returns the row count (excl. header)."""
     path.parent.mkdir(parents=True, exist_ok=True)
     n = 0
-    opener = (lambda: gzip.open(path, "wt", newline="", encoding="utf-8")) if compress \
+    # mtime=0: gzip stamps the current time into its header by default, so an
+    # unchanged dataset produced a different checksum on every rebuild. That
+    # makes a release irreproducible -- a user cannot confirm their copy
+    # matches by hashing it -- and forces a full re-upload of files whose
+    # contents never moved.
+    opener = (lambda: io.TextIOWrapper(
+        gzip.GzipFile(path, "wb", compresslevel=9, mtime=0),
+        newline="", encoding="utf-8")) if compress \
         else (lambda: open(path, "w", newline="", encoding="utf-8"))
     with opener() as fh:
         w = csv.writer(fh, delimiter="\t", lineterminator="\n")
@@ -187,7 +195,8 @@ def main() -> None:
     # -- the whole corpus, for load_database() ----------------------------
     ratings_path = out / "ratings.tsv.gz"
     n_all = 0
-    with gzip.open(ratings_path, "wt", newline="", encoding="utf-8") as fh:
+    with io.TextIOWrapper(gzip.GzipFile(ratings_path, "wb", compresslevel=9, mtime=0),
+                          newline="", encoding="utf-8") as fh:
         w = csv.writer(fh, delimiter="\t", lineterminator="\n")
         w.writerow(["dataset_code", "study_id", "subject_id", "item_id",
                     "item_name", "timepoint", "rating", "normalized_rating"])
