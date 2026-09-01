@@ -367,6 +367,53 @@ const ItemNetworkCanvas = ({
     });
 
     ctx.restore();
+
+    // Tooltip at the cursor, drawn last so nothing overlaps it, and in screen
+    // space so it keeps its size at any zoom. The detail used to sit in a
+    // strip beneath the canvas, which meant reading it required looking away
+    // from the node being pointed at.
+    const tip = st.hover;
+    if (tip) {
+      const sub =
+        `${tip.frequency} ${tip.frequency === 1 ? 'study' : 'studies'}` +
+        (Number.isFinite(tip.mean_rating)
+          ? `  \u00b7  mean liking ${tip.mean_rating.toFixed(2)}`
+          : '');
+      ctx.save();
+      ctx.font = '500 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+      const wide = Math.max(ctx.measureText(tip.label).width, ctx.measureText(sub).width);
+      const boxW = wide + 20;
+      const boxH = 40;
+      // World to screen, matching the transform used above.
+      const nx = width / 2 + tx + tip.x * scale;
+      const ny = h / 2 + ty + tip.y * scale;
+      // Flip before running off an edge rather than clipping.
+      const x = Math.max(4, nx + boxW + 18 > width ? nx - boxW - 16 : nx + 16);
+      const y = Math.max(4, ny + boxH + 18 > h ? ny - boxH - 16 : ny + 16);
+
+      ctx.beginPath();
+      const r = 6;
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + boxW, y, x + boxW, y + boxH, r);
+      ctx.arcTo(x + boxW, y + boxH, x, y + boxH, r);
+      ctx.arcTo(x, y + boxH, x, y, r);
+      ctx.arcTo(x, y, x + boxW, y, r);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(255,255,255,0.97)';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(0,0,0,0.10)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'top';
+      ctx.fillStyle = '#1f1f1f';
+      ctx.fillText(tip.label, x + 10, y + 9);
+      ctx.font = '400 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+      ctx.fillStyle = '#5a5a5a';
+      ctx.fillText(sub, x + 10, y + 24);
+      ctx.restore();
+    }
   }, []);
 
   // --- animation loop --------------------------------------------------

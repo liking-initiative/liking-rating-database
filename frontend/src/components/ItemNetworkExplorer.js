@@ -30,7 +30,6 @@ const ItemNetworkExplorer = ({ height = 640 }) => {
   const navigate = useNavigate();
   const [minShared, setMinShared] = useState(12);
   const [selected, setSelected] = useState(null);
-  const [hovered, setHovered] = useState(null);
   const [search, setSearch] = useState('');
 
   const { data: net, isLoading, error } = useQuery(
@@ -58,7 +57,10 @@ const ItemNetworkExplorer = ({ height = 640 }) => {
     setSearch(node.label);
   }, []);
 
-  const detail = hovered || selected;
+  // Selection only. Hover detail now belongs to the tooltip on the canvas;
+  // driving this strip from hover as well made it flicker through every node
+  // the pointer crossed, which is the opposite of calm.
+  const detail = selected;
 
   return (
     <Card
@@ -118,7 +120,6 @@ const ItemNetworkExplorer = ({ height = 640 }) => {
           height={height}
           focusId={focusId}
           onSelect={onSelect}
-          onHoverChange={setHovered}
         />
       )}
 
