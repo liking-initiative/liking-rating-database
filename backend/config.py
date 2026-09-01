@@ -62,6 +62,14 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
         case_sensitive = True
+        # Ignore, rather than reject, variables this class does not declare.
+        # A .env is a shared operator file: it carries deploy and tooling
+        # secrets (GITHUB_TOKEN for the release download, ZENODO_TOKEN for
+        # publishing) that the application itself never reads. Under
+        # pydantic-settings' default of extra="forbid", adding any one of
+        # those raises at import and takes down every route -- a failure with
+        # no connection to its cause. Unknown keys belong to other tools.
+        extra = "ignore"
 
 
 # Create settings instance
