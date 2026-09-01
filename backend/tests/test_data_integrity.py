@@ -5,6 +5,7 @@ These pin the guarantees established by scripts/migrations/001 — if a future
 import or fix script violates them, this fails loudly. Skipped automatically
 when the production DB isn't present (e.g. in CI).
 """
+import json
 import sqlite3
 from pathlib import Path
 
@@ -238,3 +239,49 @@ def test_no_placeholder_item_survives(con):
     assert one(con, "SELECT COUNT(*) FROM items WHERE name = 'nouniqueitem'") == 0
     assert one(con, """SELECT COUNT(*) FROM items
         WHERE name IN ('noitem', 'na', 'none', 'unknown', 'n/a', '')""") == 0
+
+
+def test_prebuilt_networks_match_this_database(con):
+    """The shipped item networks must belong to the database being served.
+
+    data_service serves data-release/item-networks/*.json when their recorded
+    fingerprint matches the live database, and computes the graph from scratch
+    when it does not. That guard is right -- a stale file must never be served
+    as current -- but the fallback is not a graceful one. At the widest setting
+    the live computation walks every co-occurring pair and takes long enough to
+    exceed a request timeout, so a mismatch does not degrade the network page,
+    it removes it.
+
+    That is not hypothetical. Migration 026 took the migration count from 47 to
+    48 after the networks had been built, and the home page's "Everything"
+    setting went from 0.3 seconds to a 90-second timeout in production, while
+    every test here still passed.
+
+    Nothing ties scripts/build_item_networks.py to applying a migration, so
+    this asserts the link instead: rebuild the networks after a migration, or
+    this fails.
+    """
+    net_dir = DB.parents[1] / "data-release" / "item-networks"
+    if not net_dir.exists():
+        pytest.skip("no shipped networks in this checkout")
+
+    files = sorted(net_dir.glob("*.json"))
+    assert files, f"{net_dir} exists but holds no networks"
+
+    current = {
+        "migrations": one(con, "SELECT COUNT(*) FROM schema_migrations"),
+        "ratings": one(con, "SELECT COUNT(*) FROM ratings"),
+        "items": one(con, "SELECT COUNT(*) FROM items"),
+    }
+
+    stale = {}
+    for path in files:
+        source = json.loads(path.read_text(encoding="utf-8")).get("source")
+        if source != current:
+            stale[path.name] = source
+
+    assert not stale, (
+        "these prebuilt networks were built from a different database and will "
+        f"be recomputed on every request: {stale}. Current database is "
+        f"{current}. Re-run: python scripts/build_item_networks.py"
+    )
