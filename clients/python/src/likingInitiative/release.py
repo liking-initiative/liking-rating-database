@@ -5,24 +5,53 @@ The client reads versioned release files, never the live API. That keeps an
 analysis reproducible — a pinned version returns the same bytes in three
 years — and keeps the package working when the web service is not.
 
-Assets come from GitHub Releases. Set ``LIKING_INITIATIVE_RELEASE_DIR`` to a local
-directory built by ``scripts/build_release.py`` to work against an unreleased
-build; that is also what the test suite uses, so tests never touch the
-network.
+Assets come from Zenodo, which needs no credentials and keeps a permanent DOI
+per version. The package resolves the *concept* DOI -- the one Zenodo calls
+"all versions" -- so ``latest`` follows new releases without the package
+needing an update.
+
+Set ``LIKING_INITIATIVE_RELEASE_DIR`` to a local directory built by
+``scripts/build_release.py`` to work against an unreleased build; that is also
+what the test suite uses, so tests never touch the network.
 """
 from __future__ import annotations
 
 import json
 import os
 import shutil
+import time
 from pathlib import Path
 from typing import Any, Dict, Optional
 
 import requests
 from platformdirs import user_cache_dir
 
-REPO = os.environ.get("LIKING_INITIATIVE_REPO", "kiante-fernandez/liking-rating-database")
-GITHUB_API = "https://api.github.com"
+# Zenodo intermittently answers 502/504 under load, often enough that a single
+# attempt strands a user with an error that has nothing to do with their
+# request. Retry the transient statuses before giving up.
+TRANSIENT = frozenset({429, 500, 502, 503, 504})
+MAX_TRIES = 5
+
+
+def _get(url: str, **kwargs: Any) -> requests.Response:
+    """GET with backoff on the statuses Zenodo returns when it is struggling."""
+    delay = 1.0
+    last: Optional[requests.Response] = None
+    for attempt in range(MAX_TRIES):
+        response = requests.get(url, timeout=TIMEOUT, **kwargs)
+        if response.status_code not in TRANSIENT:
+            return response
+        last = response
+        if attempt < MAX_TRIES - 1:
+            time.sleep(delay)
+            delay *= 2
+    return last if last is not None else response
+
+# Zenodo's concept record: it always resolves to the newest published version.
+# Overridable so a fork or a sandbox deposit can be pointed at instead.
+ZENODO_API = os.environ.get("LIKING_INITIATIVE_ZENODO_API", "https://zenodo.org/api")
+CONCEPT_REC = os.environ.get("LIKING_INITIATIVE_CONCEPT_REC", "22216442")
+CONCEPT_DOI = "10.5281/zenodo.22216442"
 TIMEOUT = 120
 
 CATALOG = "catalog.json"
@@ -97,8 +126,8 @@ def local_release_dir() -> Optional[Path]:
 def resolve_version(version: str = "latest") -> str:
     """Turn 'latest' into a concrete version string.
 
-    A locally built release answers from its own catalog; otherwise the
-    GitHub Releases API decides.
+    A locally built release answers from its own catalog; otherwise Zenodo's
+    concept record does, which always points at the newest version.
     """
     local = local_release_dir()
     if local is not None:
@@ -109,26 +138,35 @@ def resolve_version(version: str = "latest") -> str:
     if "latest" in _resolved:
         return _resolved["latest"]
 
-    url = f"{GITHUB_API}/repos/{REPO}/releases/latest"
+    record = _fetch_record()
+    resolved = (record.get("metadata") or {}).get("version")
+    if not resolved:
+        raise LikingInitiativeError("the Zenodo record carries no version")
+    _resolved["latest"] = resolved
+    return resolved
+
+
+def _fetch_record() -> Dict[str, Any]:
+    """The newest published version's Zenodo record, fetched once per session."""
+    if "record" in _resolved:
+        return _resolved["record"]
+    url = f"{ZENODO_API}/records/{CONCEPT_REC}"
     try:
-        response = requests.get(url, timeout=TIMEOUT)
+        response = _get(url)
     except requests.RequestException as exc:  # pragma: no cover - network
-        raise LikingInitiativeError(f"could not reach GitHub to resolve a release: {exc}") from exc
+        raise LikingInitiativeError(f"could not reach Zenodo: {exc}") from exc
     if response.status_code == 404:
         raise LikingInitiativeError(
-            f"{REPO} has no published release yet. Build one locally with "
+            f"Zenodo has no record {CONCEPT_REC}. Build a release locally with "
             "scripts/build_release.py and set LIKING_INITIATIVE_RELEASE_DIR to it."
         )
     if not response.ok:
         raise LikingInitiativeError(
-            f"GitHub returned {response.status_code} resolving the latest release"
+            f"Zenodo returned {response.status_code} resolving the latest version"
         )
-    tag = response.json().get("tag_name", "")
-    resolved = tag[1:] if tag.startswith("v") else tag
-    if not resolved:
-        raise LikingInitiativeError("latest release has no tag name")
-    _resolved["latest"] = resolved
-    return resolved
+    record = response.json()
+    _resolved["record"] = record
+    return record
 
 
 def asset_path(name: str, version: str = "latest", force: bool = False) -> Path:
@@ -149,17 +187,18 @@ def asset_path(name: str, version: str = "latest", force: bool = False) -> Path:
     if cached.exists() and not force:
         return cached
 
-    # Release assets are flat, so a nested path becomes a flattened name.
+    # Zenodo's file store is flat, so a nested path becomes a flattened name.
     asset_name = name.replace("/", "__")
-    url = (f"https://github.com/{REPO}/releases/download/"
-           f"v{resolved}/{asset_name}")
+    record = _fetch_record()
+    url = f"{ZENODO_API}/records/{record['id']}/files/{asset_name}/content"
     try:
-        response = requests.get(url, timeout=TIMEOUT, stream=True)
+        response = _get(url, stream=True)
     except requests.RequestException as exc:  # pragma: no cover - network
         raise LikingInitiativeError(f"could not download {name}: {exc}") from exc
     if not response.ok:
         raise LikingInitiativeError(
-            f"{name} is not in release v{resolved} (HTTP {response.status_code})"
+            f"{name} is not in release v{resolved} on Zenodo "
+            f"(HTTP {response.status_code})"
         )
 
     cached.parent.mkdir(parents=True, exist_ok=True)

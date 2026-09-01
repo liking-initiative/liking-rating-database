@@ -4,6 +4,11 @@
 #' pinned version returns the same rows however long from now, and analyses
 #' keep working when the web service does not.
 #'
+#' Assets come from Zenodo, which needs no credentials and mints a permanent
+#' DOI per version. The package resolves the *concept* record -- what Zenodo
+#' calls "all versions" -- so `latest` follows new releases without the
+#' package itself needing an update.
+#'
 #' Set the `likingInitiative.release_dir` option (or the `LIKING_INITIATIVE_RELEASE_DIR`
 #' environment variable) to a directory built by `scripts/build_release.py` to
 #' work against an unreleased build. The test suite uses this, so tests never
@@ -13,8 +18,48 @@
 #' @name release
 NULL
 
-.repo <- function() {
-  Sys.getenv("LIKING_INITIATIVE_REPO", "kiante-fernandez/liking-rating-database")
+.zenodo_api <- function() {
+  Sys.getenv("LIKING_INITIATIVE_ZENODO_API", "https://zenodo.org/api")
+}
+
+# Zenodo's concept record always resolves to the newest published version.
+.concept_rec <- function() {
+  Sys.getenv("LIKING_INITIATIVE_CONCEPT_REC", "22216442")
+}
+
+.record_cache <- new.env(parent = emptyenv())
+
+# The newest published version's Zenodo record, fetched once per session.
+.fetch_record <- function() {
+  if (!is.null(.record_cache$record)) return(.record_cache$record)
+  url <- sprintf("%s/records/%s", .zenodo_api(), .concept_rec())
+  # Zenodo intermittently answers 502/504 under load, often enough that a
+  # single attempt strands a user with an error that has nothing to do with
+  # their request. Retry the transient statuses before giving up.
+  response <- tryCatch(
+    httr2::req_perform(
+      httr2::req_retry(
+        httr2::req_error(httr2::req_timeout(httr2::request(url), 60),
+                         is_error = function(...) FALSE),
+        max_tries = 5,
+        is_transient = function(resp) httr2::resp_status(resp) %in% c(429, 500, 502, 503, 504)
+      )
+    ),
+    error = function(e) cli::cli_abort("Could not reach Zenodo: {conditionMessage(e)}")
+  )
+  status <- httr2::resp_status(response)
+  if (status == 404) {
+    cli::cli_abort(c(
+      "Zenodo has no record {.val {.concept_rec()}}.",
+      i = "Build a release with {.code scripts/build_release.py} and set {.envvar LIKING_INITIATIVE_RELEASE_DIR}."
+    ))
+  }
+  if (status != 200) {
+    cli::cli_abort("Zenodo returned {status} resolving the latest version.")
+  }
+  record <- httr2::resp_body_json(response)
+  .record_cache$record <- record
+  record
 }
 
 .catalog_file <- "catalog.json"
@@ -111,22 +156,12 @@ resolve_version <- function(version = "latest") {
   }
   if (!identical(version, "latest")) return(version)
 
-  url <- sprintf("https://api.github.com/repos/%s/releases/latest", .repo())
-  response <- tryCatch(
-    httr2::req_perform(httr2::req_error(httr2::req_timeout(httr2::request(url), 60),
-                                        is_error = function(...) FALSE)),
-    error = function(e) cli::cli_abort("Could not reach GitHub: {conditionMessage(e)}")
-  )
-  status <- httr2::resp_status(response)
-  if (status == 404) {
-    cli::cli_abort(c(
-      "{.val {.repo()}} has no published release yet.",
-      i = "Build one with {.code scripts/build_release.py} and set {.envvar LIKING_INITIATIVE_RELEASE_DIR}."
-    ))
+  record <- .fetch_record()
+  resolved <- record$metadata$version
+  if (is.null(resolved) || !nzchar(resolved)) {
+    cli::cli_abort("The Zenodo record carries no version.")
   }
-  if (status != 200) cli::cli_abort("GitHub returned {status} resolving the latest release.")
-  tag <- httr2::resp_body_json(response)$tag_name
-  sub("^v", "", tag)
+  resolved
 }
 
 #' Local path to one release asset, downloading and caching if needed
@@ -144,21 +179,26 @@ asset_path <- function(name, version = "latest", force = FALSE) {
   cached <- fs::path(get_cache_dir(resolved), name)
   if (fs::file_exists(cached) && !force) return(cached)
 
-  # Release assets are flat, so a nested path is flattened in the asset name.
+  # Zenodo's file store is flat, so a nested path is flattened in the name.
   asset <- gsub("/", "__", name, fixed = TRUE)
-  url <- sprintf("https://github.com/%s/releases/download/v%s/%s", .repo(), resolved, asset)
+  record <- .fetch_record()
+  url <- sprintf("%s/records/%s/files/%s/content", .zenodo_api(), record$id, asset)
 
   if (!fs::dir_exists(fs::path_dir(cached))) {
     fs::dir_create(fs::path_dir(cached), recurse = TRUE)
   }
   response <- httr2::req_perform(
-    httr2::req_error(httr2::req_timeout(httr2::request(url), 300),
-                     is_error = function(...) FALSE),
+    httr2::req_retry(
+      httr2::req_error(httr2::req_timeout(httr2::request(url), 300),
+                       is_error = function(...) FALSE),
+      max_tries = 5,
+      is_transient = function(resp) httr2::resp_status(resp) %in% c(429, 500, 502, 503, 504)
+    ),
     path = cached
   )
   if (httr2::resp_status(response) != 200) {
     fs::file_delete(cached)
-    cli::cli_abort("{.file {name}} is not in release v{resolved}.")
+    cli::cli_abort("{.file {name}} is not in release v{resolved} on Zenodo.")
   }
   cached
 }
