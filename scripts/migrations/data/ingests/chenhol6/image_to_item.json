@@ -1,0 +1,302 @@
+{
+ "1.jpg": {
+  "reading": "sour apple rings",
+  "item_name": "sourapplerings",
+  "confidence": "clear"
+ },
+ "2.jpg": {
+  "reading": "salt liquorice pretzels (zoute drop krakelingen)",
+  "item_name": "saltliquoricepretzels",
+  "confidence": "clear"
+ },
+ "3.jpg": {
+  "reading": "Nerds (brand printed on the candy)",
+  "item_name": "nerds",
+  "confidence": "clear"
+ },
+ "4.jpg": {
+  "reading": "gummy twin cherries (brand not asserted; cf. haribocherries in chenhol1/2)",
+  "item_name": "gummycherries",
+  "confidence": "clear"
+ },
+ "5.jpg": {
+  "reading": "cinnamon sticks (kaneelstokjes)",
+  "item_name": "cinnamonsticks",
+  "confidence": "medium"
+ },
+ "6.jpg": {
+  "reading": "liquorice wheel",
+  "item_name": "blacklicoricewheels",
+  "confidence": "clear"
+ },
+ "7.jpg": {
+  "reading": "fruit-filled liquorice tubes",
+  "item_name": "filledliquorice",
+  "confidence": "medium"
+ },
+ "8.jpg": {
+  "reading": "Red Band Dropfruit Duo (black/red, black/yellow)",
+  "item_name": "redbanddropfruitduo",
+  "confidence": "medium"
+ },
+ "9.jpg": {
+  "reading": "beige cylinders with red stripes",
+  "item_name": null,
+  "confidence": "uncertain"
+ },
+ "10.jpg": {
+  "reading": "pink solid rolls",
+  "item_name": null,
+  "confidence": "uncertain"
+ },
+ "11.jpg": {
+  "reading": "yellow faces with black liquorice hair",
+  "item_name": null,
+  "confidence": "uncertain"
+ },
+ "12.jpg": {
+  "reading": "foam bananas",
+  "item_name": "foambananas",
+  "confidence": "clear"
+ },
+ "13.jpg": {
+  "reading": "gummy raspberries and blackberries",
+  "item_name": "gummyberries",
+  "confidence": "clear"
+ },
+ "14.jpg": {
+  "reading": "pink foam pigs",
+  "item_name": "foampigs",
+  "confidence": "clear"
+ },
+ "15.jpg": {
+  "reading": "blue gummy sharks",
+  "item_name": "gummysharks",
+  "confidence": "clear"
+ },
+ "16.jpg": {
+  "reading": "sprinkle-coated ovals",
+  "item_name": null,
+  "confidence": "uncertain"
+ },
+ "17.jpg": {
+  "reading": "pink and white sugar hearts",
+  "item_name": "sugarhearts",
+  "confidence": "clear"
+ },
+ "18.jpg": {
+  "reading": "winegums",
+  "item_name": "winegum",
+  "confidence": "clear"
+ },
+ "19.jpg": {
+  "reading": "sour strawberry belts",
+  "item_name": "sourstrawberrybelts",
+  "confidence": "clear"
+ },
+ "20.jpg": {
+  "reading": "single red jelly disc",
+  "item_name": null,
+  "confidence": "uncertain"
+ },
+ "21.jpg": {
+  "reading": "yoghurt-coated raisins (confirmed by Kiante)",
+  "item_name": "yogurtraisins",
+  "confidence": "clear"
+ },
+ "22.jpg": {
+  "reading": "Smarties",
+  "item_name": "smarties",
+  "confidence": "clear"
+ },
+ "23.jpg": {
+  "reading": "sour strawberry sticks",
+  "item_name": "sourstrawberrysticks",
+  "confidence": "clear"
+ },
+ "24.jpg": {
+  "reading": "red-and-white marbled fondant pieces",
+  "item_name": null,
+  "confidence": "uncertain"
+ },
+ "25.jpg": {
+  "reading": "red and black liquorice twists",
+  "item_name": "liquoricetwists",
+  "confidence": "clear"
+ },
+ "26.jpg": {
+  "reading": "coloured capsule pastilles",
+  "item_name": null,
+  "confidence": "uncertain"
+ },
+ "27.jpg": {
+  "reading": "gummy Smurfs",
+  "item_name": "gummysmurfs",
+  "confidence": "clear"
+ },
+ "28.jpg": {
+  "reading": "dark red gummy fish",
+  "item_name": "redgummyfish",
+  "confidence": "clear"
+ },
+ "29.jpg": {
+  "reading": "candy necklace",
+  "item_name": "candynecklace",
+  "confidence": "clear"
+ },
+ "30.jpg": {
+  "reading": "gummy cola bottles (brand not asserted; cf. redbandcolabottles in chenhol1/2)",
+  "item_name": "colabottles",
+  "confidence": "clear"
+ },
+ "31.jpg": {
+  "reading": "wrapped fruit chews ('with Fruit Juice')",
+  "item_name": "fruitchews",
+  "confidence": "medium"
+ },
+ "32.jpg": {
+  "reading": "chocolate coins",
+  "item_name": "chocolatecoins",
+  "confidence": "clear"
+ },
+ "33.jpg": {
+  "reading": "gummy sea shells",
+  "item_name": "gummyseashells",
+  "confidence": "clear"
+ },
+ "34.jpg": {
+  "reading": "marshmallow twists",
+  "item_name": "marshmallows",
+  "confidence": "clear"
+ },
+ "35.jpg": {
+  "reading": "gummy bears",
+  "item_name": "gummibears",
+  "confidence": "clear"
+ },
+ "36.jpg": {
+  "reading": "gummy strawberries",
+  "item_name": "gummystrawberries",
+  "confidence": "clear"
+ },
+ "37.jpg": {
+  "reading": "coconut bars on chocolate base",
+  "item_name": "coconutbars",
+  "confidence": "medium"
+ },
+ "38.jpg": {
+  "reading": "red gummy lips",
+  "item_name": "gummylips",
+  "confidence": "clear"
+ },
+ "39.jpg": {
+  "reading": "salted liquorice (ribbed domes)",
+  "item_name": "saltedliquorice",
+  "confidence": "medium"
+ },
+ "40.jpg": {
+  "reading": "opaque coloured hearts (foam)",
+  "item_name": "foamhearts",
+  "confidence": "medium"
+ },
+ "41.jpg": {
+  "reading": "Chokotoff (wrapper readable)",
+  "item_name": "chokotoff",
+  "confidence": "clear"
+ },
+ "42.jpg": {
+  "reading": "Werther's Original (wrapper readable)",
+  "item_name": "werthersoriginal",
+  "confidence": "clear"
+ },
+ "43.jpg": {
+  "reading": "sour watermelon slices",
+  "item_name": "sourwatermelonslices",
+  "confidence": "clear"
+ },
+ "44.jpg": {
+  "reading": "yellow embossed slabs",
+  "item_name": null,
+  "confidence": "uncertain"
+ },
+ "45.jpg": {
+  "reading": "Napoleon hard candies (wrapper readable)",
+  "item_name": "napoleon",
+  "confidence": "clear"
+ },
+ "46.jpg": {
+  "reading": "Lonka Soft Nougat (wrapper readable)",
+  "item_name": "lonkasoftnougat",
+  "confidence": "clear"
+ },
+ "47.jpg": {
+  "reading": "Lonka caramel toffees (wrapper readable)",
+  "item_name": "lonkacaramel",
+  "confidence": "medium"
+ },
+ "48.jpg": {
+  "reading": "green watermelon gumballs",
+  "item_name": "watermelongumballs",
+  "confidence": "clear"
+ },
+ "49.jpg": {
+  "reading": "white capsules (gum? mints?)",
+  "item_name": null,
+  "confidence": "uncertain"
+ },
+ "50.jpg": {
+  "reading": "jelly beans (confirmed by Kiante)",
+  "item_name": "jellybeans",
+  "confidence": "clear"
+ },
+ "51.jpg": {
+  "reading": "M&M's, peanut (m printed)",
+  "item_name": "peanutmms",
+  "confidence": "clear"
+ },
+ "52.jpg": {
+  "reading": "translucent red gummy hearts",
+  "item_name": "gummyhearts",
+  "confidence": "clear"
+ },
+ "53.jpg": {
+  "reading": "chocolate peanut clusters",
+  "item_name": "chocolatepeanutclusters",
+  "confidence": "clear"
+ },
+ "54.jpg": {
+  "reading": "sugar-coated red foam strawberries (Tagada-style)",
+  "item_name": "sugaredfoamstrawberries",
+  "confidence": "medium"
+ },
+ "55.jpg": {
+  "reading": "chocolate-coated nuts, assorted",
+  "item_name": "nutscoveredinchocolate",
+  "confidence": "clear"
+ },
+ "56.jpg": {
+  "reading": "sugared gummy peaches",
+  "item_name": "gummypeaches",
+  "confidence": "clear"
+ },
+ "57.jpg": {
+  "reading": "gummy fried eggs",
+  "item_name": "gummyfriedeggs",
+  "confidence": "clear"
+ },
+ "58.jpg": {
+  "reading": "sugared fruit jellies",
+  "item_name": "jellycandies",
+  "confidence": "clear"
+ },
+ "59.jpg": {
+  "reading": "liquorice allsorts",
+  "item_name": "liquoriceallsorts",
+  "confidence": "clear"
+ },
+ "60.jpg": {
+  "reading": "rainbow sour belt",
+  "item_name": "rainbowsourbelts",
+  "confidence": "clear"
+ }
+}

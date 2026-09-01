@@ -36,7 +36,7 @@ Rule applied: no name mapping is used unless the key is proven from source data.
 
 | Dataset | Ratings | Verdict | Evidence |
 |---|---|---|---|
-| `tanhar` | 7,674 | **Mappable 99.2%, needs sign-off** | Uses the F4H collection. The F4H overview PDF is an explicit Number→Name key (n=377) and is the *same key the RA already used to name marglu's items* (see notebook cell 17: `result.csv` has `317.jpg`-style ids mapped via this PDF). 295 of tanhar's 309 stimulus ids map exactly; 14 ids (0, 380–410; 64 rating rows = 0.8%) lie outside the key. Options: import the 295 with the established F4H provenance and exclude the 14, or request the full ≤414-item key from Tanajewski. |
+| `tanhar` | 7,674 | **Not importable — the assumed key is wrong (2026-09-01)** | The F4H overview PDF is a valid Number→Name key (it reproduces 64/66 of `marglu`'s names), but tanhar's `Stimuli_1` ids are **not** F4H catalogue numbers: under that mapping *Strawberries* rate −4.1 on healthiness and *Bilar/foam candy* +4.6, and same-name id pairs agree within-subject at r ≈ 0.00. The earlier "295 of 309 map exactly" meant only that the integers fall in 1..377. The ratings themselves reconstruct losslessly from the choice file (7,624, zero conflicting cells; construct is tastiness, from `Stimuli_*_Taste`). The Elsevier supplement, the RA bundle, and the Zotero snapshot hold no stimulus list or images; the paper sits behind a bot wall. Only the authors' own id→image key resolves it. |
 | `shenhav1a` | 6,103 | **Not recoverable locally** | `Study1a_2.csv` has integer `prodIDs` 1..359 only. The `shenhav_item_list.csv` key covers the online experiments (210 items, EC_xxxx codes) — the RA's own note says "not in shenhav". `r_unique_foods.txt` has 359 lines but they are Rangel *food* names while 1a used products; a count coincidence is not a key. The in-person product array may exist in Leng et al.'s OSF/GitHub materials. |
 | `kramits` | 3,880 | **Not recoverable locally** | `kramits.csv` has item indices 1..148 with no key. The OneDrive choice batches carry idx→filename pairs but belong to a *different* experiment (subjects 201–335, 60 items; zero subject overlap). This is a Krajbich-lab study (eLife 2021) — the stimulus list should be obtainable in-house. |
 | `desself` | 4,031 | **Not recoverable locally** | Per-subject CSVs use numeric `PicID`; the MATLAB script reads images from `UnhealthyImages/`/`HealthyImages/` folders that were not shared, and `data (1).zip` contains no images or key files. Dissertation data — ask Desai for the image folders or a PicID key. |
@@ -44,6 +44,10 @@ Rule applied: no name mapping is used unless the key is proven from source data.
 | `kraeglu` | 6,079 | **Not recoverable — and source column suspect** | `dataDecision_itemlevel.csv` has numeric `snackID` 1..50 with no key. Separately: the RA's build used the `money` column as the preference value, which in an item-level *decision* file likely holds trial money offers, not liking ratings — verify the correct source column with the authors before any import. |
 | `sebmar` | 2,025 | **Not recoverable locally** | `Behavior_unzipped/ID*/bdm_run` holds numeric item ids 1..45; `choice_set_information.mat` is numeric only. Gluth-lab BDM study — ask for the snack list. |
 | `ostroglu` | 4,368 | **Not recoverable locally** | `osfstorage-archive.zip` contains only per-subject numeric `.mat` matrices; no item list anywhere in the archive. |
+
+### Chen Exp3–6 imported as chenhol3–chenhol6 (2026-09-01)
+
+42 of the 60 candies, named from the stimulus photographs with certainty (the method already used for chenhol7). 18 are withheld rather than given descriptive placeholders — 9 where only a sub-type or brand is uncertain (#5, #7, #8, #31, #37, #39, #40, #47, #54) and 9 unnamed (#9, #10, #11, #16, #20, #24, #26, #44, #49); their ratings ship beside each ingest as `heldout_unnamed.csv` and `image_to_item.json` carries every reading. Harmonization candidates for a later pass: `gummycherries`→`haribocherries` and `colabottles`→`redbandcolabottles` (same lab's packaged stimuli in chenhol1/2), and pre-existing splits `nerds`/`nerds2`, `liquoriceallsorts`/`bassettslicoriceallsorts`/`engelsedrop`, `gummibears`/`haribogoldbears`/`gummicandygoldbears`.
 
 ### New-dataset queue (from SetFitNetworks sweep, 2026-07-11)
 
@@ -167,7 +171,7 @@ Found while checking the site for non-functional features before sharing it.
   exposed, so it could never populate. Removed.
 - [x] **Every public-facing count was stale.** README, CLAUDE.md, and
   DATA_DICTIONARY said 654,917 ratings / 27 studies / 46 datasets / 2,279
-  stimuli; the database holds 749,193 / 33 / 55 / 2,230. The dictionary's own
+  stimuli; the database holds 759,399 / 33 / 55 / 2,230. The dictionary's own
   section headers were stale too (studies 24, datasets 42). All corrected.
 - [x] **README overclaimed DOIs** ("Every study links to its source
   publication") — 29 of 33; the other 4 are in preparation. Reworded.
@@ -178,7 +182,7 @@ Found while checking the site for non-functional features before sharing it.
   statistics as raincloud figures (KDE + median rule + the underlying
   observations as jittered dots). The unit had to be chosen to fit the data:
   summarising each participant first and plotting the spread of those
-  per-person numbers is undefined here, because 53 of 55 datasets hold one
+  per-person numbers is undefined here, because 53 of 59 datasets hold one
   rating per (subject, item). Two levels instead — dataset x item shows the
   distribution **across subjects** (~90 per item on average), and item across
   datasets shows five panels (Mean, SD, Skewness, Prop. Floor, Prop. Ceiling)
@@ -192,7 +196,7 @@ Found while checking the site for non-functional features before sharing it.
   stall the API. Surfaced on the Downloads page.
 - [x] **Python client** — `clients/python` (`likingInitiative`) wraps the API and
   returns DataFrames; `load_database()` pulls the whole corpus in one request
-  (749,193 rows in ~1s locally).
+  (759,399 rows in ~1s locally).
 - [x] **Generated R/Python snippets** on dataset pages and the Downloads page.
   Both were executed against the live API before shipping — the Python path
   through the client, the R path through `Rscript` + `jsonlite` — so neither
@@ -257,7 +261,7 @@ renders, looking for anything presented as data that was not measured.
   `studies.osf_project_id`, `datasets.file_size_mb`, `osf_file_id`, and
   `ratings.response_time` / `session_id` / `order_presented` /
   `demographic_data`. Several were rendered anyway: an "Image" column reading
-  "No" for all 2,230 items implies it was checked, and a "With Images" stat
+  "No" for all 2,259 items implies it was checked, and a "With Images" stat
   read 0 of N. All removed from the interface; the columns stay in the schema.
 - [x] **Two invented metrics on the item analysis page.** "Consistency Score"
   was `100 − SD×200`, a rescaled standard deviation dressed as a quality

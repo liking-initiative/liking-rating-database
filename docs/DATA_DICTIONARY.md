@@ -77,7 +77,7 @@ consumer goods). `unknown` (178 items with opaque source codes like `0488`).
 Categories were assigned by a curated name-based classifier (migration 002);
 see `scripts/migrations/data/item_categories.json` for the full mapping.
 
-## ratings — one row per (dataset, subject, item, timepoint) (749,193 rows)
+## ratings — one row per (dataset, subject, item, timepoint) (759,399 rows)
 
 | Field | Type | Description |
 |-------|------|-------------|

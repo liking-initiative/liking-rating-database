@@ -15,9 +15,9 @@ devtools::install_github("kiante-fernandez/liking-rating-database", subdir = "cl
 ```r
 library(likingInitiative)
 
-list_datasets()          # 55 datasets
+list_datasets()          # 59 datasets
 list_studies()           # 33 publications
-list_items()             # 2,230 stimuli
+list_items()             # 2,259 stimuli
 
 d <- get_dataset("leeholyoak2021")
 d                        # scale, size, phases, release version
@@ -39,7 +39,7 @@ aggregate(normalized_rating ~ dataset_code, k$data, mean)
 
 ```r
 db <- load_database()
-nrow(db$ratings)          # 749193
+nrow(db$ratings)          # 759399
 ```
 
 ## Two things to get right

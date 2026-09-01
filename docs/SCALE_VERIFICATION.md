@@ -20,9 +20,10 @@ $0–3 auction (migration 024).
 | **C** | RA transcription corroborated by the data's structure. **No dataset is left at this tier** — every one was replaced by a paper quote. |
 | **D** | Ingested from primary sources; the scale was read from the paper at ingest but no quotation was retained. |
 
-**50 of 55 datasets carry a verbatim quotation** from their paper; one is
-verified against the study's own raw data file; the remaining four are this
-lab's own unpublished work. Nothing rests on the RA's transcription.
+**54 of 59 datasets carry a verbatim quotation** from their paper or its
+published experiment program; one is verified against the study's own raw
+data file; the remaining four are this lab's own unpublished work. Nothing
+rests on the RA's transcription.
 
 ## Verified quotations
 
@@ -55,6 +56,7 @@ lab's own unpublished work. Nothing rests on the RA's transcription.
 | `hamesmcc` | A | 0..100 | "participants rated each presented food on their **liking (0 - 'Dislike extremely' to 100 - 'Like extremely')**" |
 | `crosswebb` | A | 0..20 | "Participants were **endowed with a $20 budget** in cash … asked to type in how much they would be **WTP from $0 to $20** for that item/bundle" |
 | `smithspiller1`, `smithspiller2` | A | 0..4 | "indicate how much they would be **willing to pay** for each of 144 food items on a **continuous scale from $0.01 to $4.00**. There was also an opt-out button labeled '**Would Not Eat**'" — see deviation below |
+| `chenhol3`, `chenhol4`, `chenhol5`, `chenhol6` | A | 0..2 | From the experiment program itself (`candyChoice.py`, shipped on the paper's OSF): `visual.RatingScale(win, low = 0, high = 2, ... labels = ('Not al all', ' ', 'Very much'))` under the prompt **"How much do you want to eat this candy?"** — wanting, on a continuous 0–2 slider. Pre-training ratings only; no retest re-rated. Numbering verified consistent across the four experiments: item-mean wanting correlates r = 0.85–0.93 between independent samples. 42 of 60 candies held; 18 withheld pending certain names. |
 | `balim` | B | 1..5 | Source file `AttributeRawScores_OpenSource.csv` column **`LikingF`**, values 1..5, 12,120 rows and 202 subjects matching exactly. Food and Activity items are separate columns; only food was taken. |
 | `gwikrab` | A | 1..10 | "a rating task, rating from **1 to 10** how much they would **like to eat** the displayed food item (1 being 'not at all' and 10 being 'would love to')" |
 | `gwileb` | A | −10..10 | "a rating scale from **−10 to +10 in increments of one** … A rating of '−10' indicated that the item was **very disliked**, '+10' … **very liked**, and '0' … neither liked nor disliked". Our 147 items identify this as Experiment 2, where "we expanded the number of food items to 147"; Experiment 1 used 91. |
