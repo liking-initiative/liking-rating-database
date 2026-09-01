@@ -9,6 +9,11 @@ pinned version returns the same rows however long from now, and analyses
 keep working when the web service does not.
 }
 \details{
+Assets come from Zenodo, which needs no credentials and mints a permanent
+DOI per version. The package resolves the \emph{concept} record -- what Zenodo
+calls "all versions" -- so \code{latest} follows new releases without the
+package itself needing an update.
+
 Set the \code{likingInitiative.release_dir} option (or the \code{LIKING_INITIATIVE_RELEASE_DIR}
 environment variable) to a directory built by \code{scripts/build_release.py} to
 work against an unreleased build. The test suite uses this, so tests never
