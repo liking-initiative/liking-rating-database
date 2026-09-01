@@ -20,9 +20,9 @@ $0–3 auction (migration 024).
 | **C** | RA transcription corroborated by the data's structure. **No dataset is left at this tier** — every one was replaced by a paper quote. |
 | **D** | Ingested from primary sources; the scale was read from the paper at ingest but no quotation was retained. |
 
-**44 of 55 datasets carry a verbatim quotation** (72% of ratings); one is
-verified against the study's own raw data file; the remaining ten are tier D.
-Nothing rests on the RA's transcription alone any more.
+**50 of 55 datasets carry a verbatim quotation** from their paper; one is
+verified against the study's own raw data file; the remaining four are this
+lab's own unpublished work. Nothing rests on the RA's transcription.
 
 ## Verified quotations
 
@@ -50,6 +50,11 @@ Nothing rests on the RA's transcription alone any more.
 | `marglu` | A* | 0..100 | "**How much would you like to eat this item at the end of the experiment? Not at all – very much**" — but see caveat below |
 | `sucro` | A | 0..3 | "a participant was **endowed with $3** and made a bid, **$0, $1, $2 or $3** for one of the **56 items**" — verified in the paper itself, not only the RA's transcription |
 | `eicgeo` | A | 0..100 | "rate every food on the dimensions '**Energy content**', '**Liking**', '**Desire to Eat**' and '**Health**', by placing the images along a **visual analogue scale (VAS) ranging from 0 to 100**" — we took **Liking** |
+| `leeholyoak2021` | A | 1..100 | "'**How much would you like this as a daily snack?**' using a horizontal slider scale … leftmost … 'Not at all,' … rightmost … 'Very much!' … **captured in increments of 1 (ranging from 1 to 100)**" |
+| `toyama2026` | A | 1..8 | "rated each of the 896 food images on one of the three dimensions, i.e., **likability ('Do you like the food?')**, tastiness, or healthiness, via the use of an **8-point Likert scale ranging from 1 (strongly disagree) to 8 (strongly agree)**" — we hold likability |
+| `hamesmcc` | A | 0..100 | "participants rated each presented food on their **liking (0 - 'Dislike extremely' to 100 - 'Like extremely')**" |
+| `crosswebb` | A | 0..20 | "Participants were **endowed with a $20 budget** in cash … asked to type in how much they would be **WTP from $0 to $20** for that item/bundle" |
+| `smithspiller1`, `smithspiller2` | A | 0..4 | "indicate how much they would be **willing to pay** for each of 144 food items on a **continuous scale from $0.01 to $4.00**. There was also an opt-out button labeled '**Would Not Eat**'" — see deviation below |
 | `balim` | B | 1..5 | Source file `AttributeRawScores_OpenSource.csv` column **`LikingF`**, values 1..5, 12,120 rows and 202 subjects matching exactly. Food and Activity items are separate columns; only food was taken. |
 | `gwikrab` | A | 1..10 | "a rating task, rating from **1 to 10** how much they would **like to eat** the displayed food item (1 being 'not at all' and 10 being 'would love to')" |
 | `gwileb` | A | −10..10 | "a rating scale from **−10 to +10 in increments of one** … A rating of '−10' indicated that the item was **very disliked**, '+10' … **very liked**, and '0' … neither liked nor disliked". Our 147 items identify this as Experiment 2, where "we expanded the number of food items to 147"; Experiment 1 used 91. |
@@ -81,12 +86,11 @@ These were built by reading the study's own data files and paper at ingest
 time, and their stored descriptions record the scale, but no verbatim
 quotation was kept:
 
-`hamesmcc`, `crosswebb`, `leeholyoak2021`, `toyama2026`,
-`smithspiller1`, `smithspiller2`, `fernandezchoosek1`, `fernandezchoosek2`,
-`fernandezeeg`, `fernandezmanyattr`.
+`fernandezchoosek1`, `fernandezchoosek2`, `fernandezeeg`, `fernandezmanyattr`.
 
-Four of these are in-preparation work from this lab, where the scale is known
-directly rather than from a publication.
+All four are in-preparation work from this lab, where the scale is known
+directly rather than from a publication. **Every dataset with a published
+paper now carries a verbatim quotation from it.**
 
 ## Constructs
 
@@ -141,8 +145,18 @@ $3, but the data holds seven values at half-dollar steps. Integers account for
 82% and halves for 18% — the signature of averaging two integer bids that
 usually agree.
 
+**`smithspiller1`/`smithspiller2` were mislabelled as liking.** The paper
+elicits *willingness-to-pay* on a $0.01–$4.00 scale. The bounds were right and
+the data matches the paper exactly, so the scale-vs-data sweep could not catch
+it — only the labels were wrong. Corrected in migration 025, which also retyped
+them `wtp`; anyone filtering `rating_scale_type='wtp'` for incentive-compatible
+valuations had been missing them. The same paragraph explains their missing
+data: **43.0%** of study 1's and **30.3%** of study 2's subject-by-item cells
+are absent because of the "Would Not Eat" opt-out, so the gaps are
+systematically each participant's most-disliked foods and any per-item mean
+from these datasets is biased upward.
+
 **`eumdol` is typed `likert` but is a slider.** The paper describes 0.25
-intervals and the data confirms them. The bounds are right; the
-`rating_scale_type` is not.
+intervals and the data confirms them. Retyped `slider` in migration 025.
 
 **`foljac2` arrived pre-normalized** to 0..1 from its original £0–3 elicitation.
