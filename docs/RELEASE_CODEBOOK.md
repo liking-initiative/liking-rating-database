@@ -49,20 +49,25 @@ dataset and subject `"12"` in another are different people. Always key on
 ## Repeated rating phases
 
 Most datasets hold one rating per (subject, item), all at `timepoint = 1`.
-Two repeat the whole rating phase — the same subjects rate the same items
+**Six** repeat the whole rating phase — the same subjects rate the same items
 more than once:
 
-| Dataset | Phases |
-|---------|--------|
-| `leeholyoak2021` | 1, 2, 3 |
-| `leehare2023exp2` | 1, 2 |
+| Dataset | Phases | What the phases are |
+|---------|--------|---------------------|
+| `leeholyoak2021` | 1, 2, 3 | successive rating rounds in the coherence-shift paradigm |
+| `crosswebb` | 1, 2, 3 | the three scanning days; only items carried across all three have all three |
+| `leehare2023exp2` | 1, 2 | the study's two rating phases |
+| `chenhol1` | 1, 2 | before and after go/no-go training |
+| `chenhol2` | 1, 2 | before and after go/no-go training |
+| `hamesmcc` | 1, 2 | the hungry session and the sated session |
 
 For those, `(subject_id, item_id)` alone is **not** unique — include
 `timepoint` in your key, or take one phase.
 
-Three further datasets (`toyam`, `romfred`, `brusaeb`) had unstructured
-repeats in their source files and store the per-subject **mean** at
-`timepoint = 1`.
+Three further datasets (`toyam`, `romfred`, `sucro`) hold a per-subject
+**mean** at `timepoint = 1`, because their source files carried unstructured
+repeats. For `sucro` this is visible in the values: the paper allows only
+whole-dollar bids, so its half-dollar steps are averages of two.
 
 ## Known caveats
 
@@ -77,11 +82,26 @@ their source files did not include readable item labels. The datasets holding
 them are marked in `catalog.json` with `quality_flag = "coded_items"`:
 `larlua` (all 86 items) and eight `shenhav*` datasets (3–76 items each).
 
-**Two datasets carry a placeholder item name**, marked
-`quality_flag = "placeholder_items"`. `brusaeb` consists entirely of it — the
-source file had no item labels at all, so its 33 ratings are per-subject means
-over stimuli that cannot be identified, and it supports no item-level
-analysis. `romfred` has one such value out of 27,108.
+**Not every dataset measures liking.** Each dataset's construct was checked
+against its source paper, and two measure **tastiness** rather than liking:
+`larlua` ("rated them … for healthiness and tastiness using a VAS scale from 0
+to 100" — tastiness is the column held here) and `xuefoe` (whose participants
+were "instructed to rate the food items only on taste"). Eleven datasets are
+**willingness-to-pay** rather than a rating at all; they carry
+`rating_scale_type = "wtp"`. Filter on that column if you need one kind.
+
+Eight datasets measuring food *healthiness* were **removed** before this
+release rather than shipped alongside liking data, because nothing in the file
+format would have stopped an item mean from averaging the two.
+
+**Three datasets are missing ratings non-randomly.** `smithspiller1` (43.0% of
+subject-by-item cells), `smithspiller2` (30.3%) and `shevsmith1` (16%) all
+offered a "Would Not Eat" opt-out whose responses are absent from the data.
+The gaps are therefore each participant's most-disliked foods, and a per-item
+mean computed from these datasets is biased upward. `hasdes` had the same
+opt-out but **encodes** it, as `-1` on an otherwise 0–4 scale (586 of 3,168
+ratings); the ordering is right but the spacing between "would not eat" and 0
+is an editorial choice, not something the study defined.
 
 **Item categories are not included in this release.** The database holds a
 `category` column, but it was derived from item names by a curated lexicon
@@ -89,6 +109,10 @@ rather than supplied by the source studies, so it is not published as though
 the authors had asserted it.
 
 ## Provenance
+
+Every dataset's declared scale and construct is recorded against a source in
+`docs/SCALE_VERIFICATION.md` in the project repository, with a verbatim
+quotation from the paper for 50 of the 55.
 
 `catalog.json` lists `schema_migrations` — every data correction applied to
 this release, in order. The scripts that produced them live in

@@ -20,7 +20,9 @@ test_that("exactly the two repeated-phase datasets report multiple phases", {
   skip_without_release()
   ds <- list_datasets()
   repeated <- sort(ds$dataset_code[ds$n_timepoints > 1])
-  expect_equal(repeated, c("leehare2023exp2", "leeholyoak2021"))
+  # Keep in step with the repeats table in docs/RELEASE_CODEBOOK.md: for
+  # these, (subject_id, item_id) is not a unique key.
+  expect_equal(repeated, c("chenhol1", "chenhol2", "crosswebb", "hamesmcc", "leehare2023exp2", "leeholyoak2021"))
 })
 
 test_that("get_dataset returns data with its metadata", {

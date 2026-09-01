@@ -56,9 +56,12 @@ def test_dataset_listing_exposes_scale_and_phases(L):
     for col in ("dataset_code", "rating_scale_min", "rating_scale_max",
                 "rating_scale_type", "timepoints", "n_timepoints"):
         assert col in ds.columns
-    # exactly the two repeated-phase datasets carry more than one
+    # Exactly the repeated-phase datasets carry more than one. Keep this in
+    # step with the table in docs/RELEASE_CODEBOOK.md: for these,
+    # (subject_id, item_id) is not a unique key, and a user who assumes it is
+    # gets silent duplicates.
     repeated = set(ds.filter(pl.col("n_timepoints") > 1)["dataset_code"])
-    assert repeated == {"leeholyoak2021", "leehare2023exp2"}
+    assert repeated == {"chenhol1", "chenhol2", "crosswebb", "hamesmcc", "leehare2023exp2", "leeholyoak2021"}
 
 
 # -- get_dataset -----------------------------------------------------------
