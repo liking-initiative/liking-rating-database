@@ -44,7 +44,7 @@ CHECKSUM_FILE = REPO_ROOT / "data-release" / "liking_rating_db.db.gz.sha256"
 TARGET = REPO_ROOT / "data" / "liking_rating_db.db"
 
 GH_REPO = os.environ.get("LIKING_DB_REPO", "kiante-fernandez/liking-rating-database")
-RELEASE_TAG = os.environ.get("LIKING_DB_RELEASE", "v2.0.0")
+RELEASE_TAG = os.environ.get("LIKING_DB_RELEASE", "v1.5.0")
 ASSET_NAME = "liking_rating_db.db.gz"
 
 EXPECTED_TABLES = {"studies", "datasets", "items", "ratings", "schema_migrations"}

@@ -96,13 +96,26 @@ Two things that bite:
 
 ## Versioning
 
-Semantic, on the data:
+Semantic, on the data, with one deliberate departure:
 
 * **patch** — a correction that leaves the shape alone (a fixed DOI, a
   cleared placeholder)
-* **minor** — datasets or columns added
-* **major** — anything that would break existing code (a renamed column, a
-  changed scale)
+* **minor** — datasets or columns added, **and corrections that remove or
+  rescale data**
+* **major** — reserved for a substantial new milestone: a large body of new
+  data, or a change to what the database is. Not for corrections.
+
+The departure is the third bullet, and it is intentional. Strict semver would
+make any removed dataset or changed scale a major bump — v1.5.0 dropped eight
+datasets and rescaled one, and by that rule would have been 2.0.0. Two reasons
+not to. Nothing consumed the previous release, so there was no downstream
+contract to break; and a major number that arrives through a correction spends
+a signal that should mean "there is substantially more here now". Version
+numbers are read by people deciding whether to look again.
+
+Corrections are still announced loudly in the release notes and recorded in
+`schema_migrations`, which is where a user checks what their copy includes.
+The number is not carrying that information on its own.
 
 `catalog.json` carries `schema_migrations`, so a user can tell exactly which
 corrections their copy includes.
