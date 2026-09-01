@@ -17,13 +17,12 @@ $0–3 auction (migration 024).
 |------|---------|
 | **A** | Verbatim quote located in the source paper or its preprint. |
 | **B** | Verified against the study's own raw data file, where that file names the construct. |
-| **C** | RA transcription of the paper, independently corroborated by the data's own structure (range, granularity, sign). |
+| **C** | RA transcription corroborated by the data's structure. **No dataset is left at this tier** — every one was replaced by a paper quote. |
 | **D** | Ingested from primary sources; the scale was read from the paper at ingest but no quotation was retained. |
-| **E** | Unresolved. |
 
-Tier C is not weaker than A on the numbers — a claim of "−10 to +10 in
-increments of one" against data that is exactly 21 integers spanning −10..10
-is strong. It is weaker on *wording*, which is why it is tracked separately.
+**44 of 55 datasets carry a verbatim quotation** (72% of ratings); one is
+verified against the study's own raw data file; the remaining ten are tier D.
+Nothing rests on the RA's transcription alone any more.
 
 ## Verified quotations
 
@@ -52,12 +51,12 @@ is strong. It is weaker on *wording*, which is why it is tracked separately.
 | `sucro` | A | 0..3 | "a participant was **endowed with $3** and made a bid, **$0, $1, $2 or $3** for one of the **56 items**" — verified in the paper itself, not only the RA's transcription |
 | `eicgeo` | A | 0..100 | "rate every food on the dimensions '**Energy content**', '**Liking**', '**Desire to Eat**' and '**Health**', by placing the images along a **visual analogue scale (VAS) ranging from 0 to 100**" — we took **Liking** |
 | `balim` | B | 1..5 | Source file `AttributeRawScores_OpenSource.csv` column **`LikingF`**, values 1..5, 12,120 rows and 202 subjects matching exactly. Food and Activity items are separate columns; only food was taken. |
-| `gwikrab` | C | 1..10 | "rating from **1 to 10** how much they would **like to eat** the displayed food item (1 = 'not at all', 10 = 'would love to')" — data is exactly 10 integers, 1..10, no negatives. |
-| `gwileb` | C | −10..10 | "a rating scale from **−10 to +10 in increments of one** … '−10' very disliked, '+10' very liked" — data is exactly 21 integers spanning −10..10. |
+| `gwikrab` | A | 1..10 | "a rating task, rating from **1 to 10** how much they would **like to eat** the displayed food item (1 being 'not at all' and 10 being 'would love to')" |
+| `gwileb` | A | −10..10 | "a rating scale from **−10 to +10 in increments of one** … A rating of '−10' indicated that the item was **very disliked**, '+10' … **very liked**, and '0' … neither liked nor disliked". Our 147 items identify this as Experiment 2, where "we expanded the number of food items to 147"; Experiment 1 used 91. |
 | `smikrab2018` | A | −10..10 | "rated their **desire to eat** each of 147 snack food items (chocolate, candy, chips, etc.) on a **discrete scale from −10 to 10** … −10 … extreme dislike … 10 … extreme liking … 0 … neither" |
-| `smikrab` | C | −870..870 | Paper describes four ratings per item on a **1,740-pixel** scale; −870..870 is that scale centred. Construct confirmed empirically: item means correlate r = +0.82 with `deskrab1` and +0.67 with `hasdes` across 98 shared items, which the non-preference categories (image size, weight) could not produce. |
+| `smikrab` | A | −870..870 | "four incentivized ratings per item, for each of **100 food images** … **food-liking** (how much they wanted to eat the food; preference-representation, PR), image size …, weight …, and package … Participants used the mouse to click on a **rating scale (1,740 pixels long)**" — −870..870 is that scale centred. We hold food-liking; corroborated empirically, since item means correlate r = +0.82 with `deskrab1` across 98 shared items, which image-size or weight ratings could not produce. |
 | `deskrab1`, `deskrab2`, `deskrab4` | A | −10..10 | "**rated 145 food items on a scale of −10 to 10 using a slider bar**. They were told that −10 corresponded to really not wanting to eat the food at the end of the study, 10 corresponded to really wanting to eat the food … and 0 corresponded to being indifferent" — see note below |
-| `larlua` | C | 0..100 | "rated them (in the same order) for **healthiness and tastiness** using a **VAS scale from 0 to 100**". The RA's notebook takes `tastiness.left.image` / `tastiness.right.image`, so this is **tastiness**. Paper abstract confirms both constructs and n≈910. |
+| `larlua` | A | 0..100 | "participants answered whether they recognized **86 food images** … and then rated them (in the same order) for **healthiness and tastiness** using a **VAS scale from 0 to 100**". The RA's notebook takes `tastiness.left.image` / `tastiness.right.image`, so we hold **tastiness**. |
 
 **`deskrab` note — the RA was right, but attached the wrong experiment.** Its
 transcription for `deskrab1`/`deskrab4` quotes a *0 to 10* scale with a
