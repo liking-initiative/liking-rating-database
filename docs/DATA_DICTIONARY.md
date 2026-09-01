@@ -45,10 +45,10 @@ Understanding Food Judgment" (2022) contribute eight each.
 | Type | Meaning | Examples |
 |------|---------|----------|
 | `likert` | Discrete steps (2–21 points) | `balim` 1–5, `toyam` 1–8, `deskrab1` −10..10 |
-| `continuous` | Continuous responses | `romfred` −10..10, `shenhav*` 0–10, `smikrab` −870..870 |
-| `vas` | Visual-analog scale | `larlua` 0–100, `marglu` 0–100, `shevsmith1` 0–10 |
-| `slider` | Fine-grained discrete slider | `ganzou_*` −100..100 (201 pts), `libain1/2` 0–100 (101 pts) |
-| `wtp` | Willingness-to-pay / auction | `bakbot_BM2` 0–3, `sucro` 0–3, `sepush` 0–3 |
+| `continuous` | Continuous responses | `romfred` 0–10, `shenhav*` 0–10, `smikrab` −870..870 |
+| `vas` | Visual-analog scale | `marglu` 0–100, `shevsmith1` 0–10, `hamesmcc` 0–100 |
+| `slider` | Fine-grained discrete slider | `leeholyoak2021` 1–100, `libain1/2` 0–10, `eumdol` 1–5 (0.25 steps) |
+| `wtp` | Willingness-to-pay / auction | `bakbot_BM2` 0–3, `sucro` 0–3, `smithspiller1/2` 0–4 |
 
 Special case: `foljac2`'s source values arrived already normalized to 0–1;
 the original elicitation was WTP 0–3 (Folke et al. 2016). Its scale is
