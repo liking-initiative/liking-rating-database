@@ -50,6 +50,24 @@ const rampColor = (t) => {
   return `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
 };
 
+// A stable per-node phase offset. Math.random() would reshuffle the whole
+// field on every re-mount, which reads as a glitch rather than as motion.
+const hashPhase = (label) => {
+  let h = 0;
+  for (let i = 0; i < label.length; i += 1) h = (h * 31 + label.charCodeAt(i)) | 0;
+  return ((h >>> 0) % 6283) / 1000; // 0..2pi
+};
+
+// Ambient drift: slow enough to read as breathing rather than as jitter.
+const AMBIENT_SPEED = 0.00042;
+
+// Someone who has asked their system for less motion should not be given a
+// perpetually moving graph; the layout still settles, it just stops there.
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  typeof window.matchMedia === 'function' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 const ItemNetworkCanvas = ({
   data,
   height = 640,
@@ -91,6 +109,14 @@ const ItemNetworkCanvas = ({
         vx: 0,
         vy: 0,
         r: (4 + Math.sqrt(Math.max(1, n.frequency)) * 2.6) * sizeScale,
+        // Ambient drift, seeded from the label so a node keeps its phase
+        // across re-mounts instead of the field reshuffling on every render.
+        phase: hashPhase(n.label),
+        // Parallax: items in many datasets read as far away and barely move;
+        // the long tail drifts more. Depth without a third dimension.
+        drift: 2.8 / Math.sqrt(Math.max(1, n.frequency)),
+        bx: 0,
+        by: 0,
       };
       byLabel.set(n.label, body);
       return body;
@@ -253,7 +279,36 @@ const ItemNetworkCanvas = ({
     });
 
     st.alpha *= 0.985;
-    if (st.alpha < 0.004) st.alpha = 0;
+    if (st.alpha < 0.004) {
+      st.alpha = 0;
+      // Capture where the layout came to rest. Ambient drift oscillates
+      // around these rather than integrating into position, so the graph
+      // breathes in place instead of slowly wandering off its own layout.
+      st.nodes.forEach((n) => { n.bx = n.x; n.by = n.y; });
+    }
+  }, []);
+
+  /**
+   * The graph after it has settled.
+   *
+   * The simulation used to stop dead here and the canvas froze, which is what
+   * made a graph of 1,489 items feel like a diagram rather than something
+   * alive. This does not resume the physics -- re-running forces would let
+   * labels jitter and the fit drift -- it displaces each node around the
+   * position it already holds, on its own phase and amplitude.
+   */
+  const ambientStep = useCallback((now) => {
+    const st = stateRef.current;
+    const t = now * AMBIENT_SPEED;
+    st.nodes.forEach((n) => {
+      // st.drag is {node, x, y}, not a node. In practice a drag also kicks
+      // alpha, so the settled branch is not running while one is in progress
+      // and the base positions are recaptured when it settles again -- but a
+      // dragged node must never be pulled off the cursor by the tide.
+      if (st.drag && st.drag.node === n) return;
+      n.x = n.bx + Math.sin(t + n.phase) * n.drift;
+      n.y = n.by + Math.cos(t * 0.83 + n.phase * 1.7) * n.drift;
+    });
   }, []);
 
   // --- drawing --------------------------------------------------------
@@ -311,6 +366,30 @@ const ItemNetworkCanvas = ({
 
     // Nodes, largest last so big items sit on top of the crowd.
     const ordered = [...st.nodes].sort((p, q) => p.r - q.r);
+
+    // A halo on the items that recur across many datasets. Without it every
+    // node is a flat disc of equal weight; with it a handful of hubs read as
+    // bright and the long tail as faint, which is the structure the data
+    // actually has -- a few stimuli carry most of the cross-study overlap.
+    // Additive blending so overlapping halos pool rather than occlude.
+    const maxFreq = st.nodes.reduce((m, n) => Math.max(m, n.frequency || 1), 1);
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ordered.forEach((n) => {
+      const share = (n.frequency || 1) / maxFreq;
+      if (share < 0.45) return; // only the hubs; a glow on everything is fog
+      const glow = n.r * 4.2;
+      const g = ctx.createRadialGradient(n.x, n.y, n.r * 0.5, n.x, n.y, glow);
+      const strength = (isLit(n) ? 0.20 : 0.05) * share;
+      g.addColorStop(0, `rgba(120, 170, 235, ${strength})`);
+      g.addColorStop(1, 'rgba(120, 170, 235, 0)');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, glow, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.restore();
+
     ordered.forEach((n) => {
       const lit = isLit(n);
       ctx.beginPath();
@@ -386,22 +465,42 @@ const ItemNetworkCanvas = ({
     st.userAdjusted = false;
 
     let running = true;
-    const loop = () => {
+    const reduced = prefersReducedMotion();
+    // A loop that never idles would otherwise spin a core for as long as the
+    // tab is open, so ambience runs only while the canvas is actually on
+    // screen and the tab is actually visible.
+    let onScreen = true;
+    const observer =
+      typeof IntersectionObserver === 'function'
+        ? new IntersectionObserver(
+            ([entry]) => { onScreen = entry.isIntersecting; },
+            { threshold: 0 }
+          )
+        : null;
+    if (observer && canvasRef.current) observer.observe(canvasRef.current);
+
+    const loop = (now) => {
       if (!running) return;
       if (st.alpha > 0 || st.dirty) {
         if (st.alpha > 0) step();
         fitToBounds();
         draw();
         st.dirty = false;
+      } else if (!reduced && onScreen && !document.hidden) {
+        // Deliberately no fitToBounds here: refitting to a breathing graph
+        // would pump the zoom a little every frame.
+        ambientStep(now);
+        draw();
       }
       st.raf = window.requestAnimationFrame(loop);
     };
     st.raf = window.requestAnimationFrame(loop);
     return () => {
       running = false;
+      if (observer) observer.disconnect();
       if (st.raf) window.cancelAnimationFrame(st.raf);
     };
-  }, [graph, step, draw, fitToBounds, signed]);
+  }, [graph, step, ambientStep, draw, fitToBounds, signed]);
 
   // Keep the backing store matched to the element and the pixel ratio.
   useEffect(() => {
