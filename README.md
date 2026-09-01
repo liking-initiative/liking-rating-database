@@ -1,8 +1,8 @@
 # Liking Rating Database
 
 A curated database of subjective liking ratings for decision-making research:
-**700,943 individual ratings** from **33 studies** (55 datasets),
-covering **2,297 stimuli** — food items and consumer products. Every published
+**749,193 individual ratings** from **38 studies** (55 datasets),
+covering **2,230 stimuli** — food items and consumer products. Every published
 study links to its source publication (DOI); 4 studies are still in preparation
 and carry a full citation instead. Ratings are provided both in their
 original scale units and normalized to 0–1 for cross-study comparison.
@@ -53,8 +53,8 @@ no duplicate studies, real completeness values).
 |---|---|
 | Studies (publications) | 33, years 2016–2026, 29 with DOIs (4 in preparation) |
 | Datasets | 55 (a study can contribute several experiments) |
-| Stimuli | 2,297 (food + consumer products, 17 categories) |
-| Ratings | 700,943 individual ratings (repeated phases kept as timepoints) |
+| Stimuli | 2,230 (food + consumer products, 17 categories) |
+| Ratings | 749,193 individual ratings (repeated phases kept as timepoints) |
 | Scale types | likert, continuous, visual-analog, slider, willingness-to-pay |
 
 Each rating stores the **original value** in the study's own scale plus a
@@ -92,7 +92,7 @@ Three ways, in rough order of convenience:
 ```python
 # 1. The Python client (clients/python)
 import likingInitiative
-db = likingInitiative.load_database()        # one request, 700,943 ratings
+db = likingInitiative.load_database()        # one request, 749,193 ratings
 db["ratings"].groupby("item_name").normalized_rating.mean().nlargest(10)
 ```
 

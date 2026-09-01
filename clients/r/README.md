@@ -17,7 +17,7 @@ library(likingInitiative)
 
 list_datasets()          # 55 datasets
 list_studies()           # 33 publications
-list_items()             # 2,297 stimuli
+list_items()             # 2,230 stimuli
 
 d <- get_dataset("leeholyoak2021")
 d                        # scale, size, phases, release version
@@ -39,7 +39,7 @@ aggregate(normalized_rating ~ dataset_code, k$data, mean)
 
 ```r
 db <- load_database()
-nrow(db$ratings)          # 700943
+nrow(db$ratings)          # 749193
 ```
 
 ## Two things to get right

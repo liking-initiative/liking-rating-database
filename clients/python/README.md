@@ -16,7 +16,7 @@ import likingInitiative
 
 likingInitiative.list_datasets()                      # 55 datasets
 likingInitiative.list_studies()                       # 33 publications
-likingInitiative.list_items()                         # 2,297 stimuli
+likingInitiative.list_items()                         # 2,230 stimuli
 
 d = likingInitiative.get_dataset("leeholyoak2021")
 d.data                                        # polars DataFrame
@@ -40,7 +40,7 @@ k.by_dataset()                      # mean / sd / median per study, 0-1 scale
 
 ```python
 db = likingInitiative.load_database()
-db["ratings"]        # 700,943 rows
+db["ratings"]        # 749,193 rows
 ```
 
 ## Two things to get right

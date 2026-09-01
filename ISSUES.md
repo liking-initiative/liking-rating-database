@@ -146,7 +146,7 @@ Found while checking the site for non-functional features before sharing it.
   exposed, so it could never populate. Removed.
 - [x] **Every public-facing count was stale.** README, CLAUDE.md, and
   DATA_DICTIONARY said 654,917 ratings / 27 studies / 46 datasets / 2,279
-  stimuli; the database holds 700,943 / 33 / 55 / 2,297. The dictionary's own
+  stimuli; the database holds 749,193 / 33 / 55 / 2,230. The dictionary's own
   section headers were stale too (studies 24, datasets 42). All corrected.
 - [x] **README overclaimed DOIs** ("Every study links to its source
   publication") — 29 of 33; the other 4 are in preparation. Reworded.
@@ -171,7 +171,7 @@ Found while checking the site for non-functional features before sharing it.
   stall the API. Surfaced on the Downloads page.
 - [x] **Python client** — `clients/python` (`likingInitiative`) wraps the API and
   returns DataFrames; `load_database()` pulls the whole corpus in one request
-  (700,943 rows in ~1s locally).
+  (749,193 rows in ~1s locally).
 - [x] **Generated R/Python snippets** on dataset pages and the Downloads page.
   Both were executed against the live API before shipping — the Python path
   through the client, the R path through `Rscript` + `jsonlite` — so neither
@@ -236,7 +236,7 @@ renders, looking for anything presented as data that was not measured.
   `studies.osf_project_id`, `datasets.file_size_mb`, `osf_file_id`, and
   `ratings.response_time` / `session_id` / `order_presented` /
   `demographic_data`. Several were rendered anyway: an "Image" column reading
-  "No" for all 2,297 items implies it was checked, and a "With Images" stat
+  "No" for all 2,230 items implies it was checked, and a "With Images" stat
   read 0 of N. All removed from the interface; the columns stay in the schema.
 - [x] **Two invented metrics on the item analysis page.** "Consistency Score"
   was `100 − SD×200`, a rescaled standard deviation dressed as a quality
