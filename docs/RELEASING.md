@@ -27,6 +27,7 @@ datasets/<code>.tsv.gz    one file per dataset
 studies.tsv  items.tsv
 ratings.tsv.gz            the whole corpus
 codebook.md               generated from docs/RELEASE_CODEBOOK.md
+scale_verification.md     copied from docs/SCALE_VERIFICATION.md
 manifest.json             size + SHA-256 of every file
 ```
 

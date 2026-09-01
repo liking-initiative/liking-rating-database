@@ -11,12 +11,18 @@ also use them without either package — they are ordinary TSVs.
 
 | File | Contents |
 |------|----------|
-| `catalog.json` | Every study and dataset, with scales, sizes, DOIs, and the release header |
+| `catalog.json` | Every study and dataset, with scales, sizes, DOIs, the release header — and **a description of each dataset carrying its caveats** |
 | `datasets/<code>.tsv.gz` | One file per dataset — the usual starting point |
 | `studies.tsv` | One row per publication |
 | `items.tsv` | One row per stimulus |
 | `ratings.tsv.gz` | Every rating in the database, in one file |
+| `scale_verification.md` | Per-dataset evidence for every declared scale and construct, with a quotation from the source paper |
 | `manifest.json` | Size and SHA-256 of every file above |
+
+**Read `catalog.json`'s `description` before using a dataset.** The per-dataset
+TSVs carry data only, so that field is where a dataset's caveats live — which
+construct it measures, whether its values are means, whether ratings are
+missing and why.
 
 Row-heavy files are gzipped. R (`readr`) and Python (`polars`, `pandas`) all
 read `.gz` transparently.
