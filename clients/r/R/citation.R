@@ -1,6 +1,12 @@
-DATABASE_CITATION <- paste(
-  "Fernandez, K., Goyal, S., & Krajbich, I. A database of subjective",
-  "evaluation ratings for decision-making research. (In preparation.)"
+# The concept DOI, which Zenodo resolves to the newest version. Cite this to
+# mean "the database"; cite the version DOI that release_info() reports when an
+# analysis needs to name the exact bytes it ran on.
+DATABASE_DOI <- "10.5281/zenodo.22216442"
+
+DATABASE_CITATION <- paste0(
+  "Fernandez, K., Goyal, S., & Krajbich, I. (2026). The Liking Initiative: a ",
+  "database of subjective evaluation ratings for decision-making research ",
+  "[Data set]. Zenodo. https://doi.org/", DATABASE_DOI
 )
 
 #' Citation text

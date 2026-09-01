@@ -131,8 +131,14 @@ Please cite both the database and the studies whose data you use.
 `studies.tsv` and `catalog.json` carry each study's citation and DOI; the
 packages provide `cite()` and `bibtex()`.
 
-> Fernandez, K., Goyal, S., & Krajbich, I. A database of subjective
-> evaluation ratings for decision-making research. (In preparation.)
+> Fernandez, K., Goyal, S., & Krajbich, I. (2026). The Liking Initiative: a
+> database of subjective evaluation ratings for decision-making research
+> [Data set]. Zenodo. https://doi.org/10.5281/zenodo.22216442
+
+The DOI above is the *concept* DOI: it always resolves to the newest version.
+To name the exact bytes an analysis ran on, cite the version DOI instead —
+`release_info()` reports the version, and v1.5.0 is
+[10.5281/zenodo.22216443](https://doi.org/10.5281/zenodo.22216443).
 
 ## License
 

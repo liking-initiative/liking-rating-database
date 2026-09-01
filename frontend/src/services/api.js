@@ -249,12 +249,14 @@ export const generateBibtex = (study) => {
  * work, and the collection that made it reusable. Shipping both together
  * means crediting both takes no extra effort.
  */
-export const DATABASE_BIBTEX = `@misc{likinginitiative,
-  author = {Fernandez, Kianté and Goyal, Sumedha and Krajbich, Ian},
-  title = {The Liking Initiative: a database of subjective evaluation ratings
-           for decision-making research},
-  note = {In preparation},
-  url = {https://github.com/kiante-fernandez/liking-rating-database}
+export const DATABASE_BIBTEX = `@dataset{likinginitiative,
+  author    = {Fernandez, Kianté and Goyal, Sumedha and Krajbich, Ian},
+  title     = {The Liking Initiative: a database of subjective evaluation
+               ratings for decision-making research},
+  year      = {2026},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.22216442},
+  url       = {https://doi.org/10.5281/zenodo.22216442}
 }`;
 
 /**

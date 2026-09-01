@@ -322,8 +322,8 @@ const DocumentationPage = () => {
             margin: 0, padding: '12px 14px', background: '#f5f5f5',
             borderRadius: 6, fontSize: 13.5, whiteSpace: 'pre-wrap',
           }}>
-{`Fernandez, K., Goyal, S., & Krajbich, I. A database of subjective
-evaluation ratings for decision-making research. (In preparation.)`}
+{`Fernandez, K., Goyal, S., & Krajbich, I. (2026). The Liking Initiative: a database of subjective
+evaluation ratings for decision-making research [Data set]. Zenodo. https://doi.org/10.5281/zenodo.22216442`}
           </pre>
         </Card>
 
