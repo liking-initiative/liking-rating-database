@@ -8,7 +8,7 @@ history of this file.
 
 ## Released
 
-### v2.0.0 (2026-08-31) — scale and construct verification
+### v1.5.0 (2026-08-31) — scale and construct verification
 
 Every dataset's declared scale and the construct it measures is now recorded
 against a source in `docs/SCALE_VERIFICATION.md`; 50 of 55 carry a verbatim
