@@ -102,3 +102,83 @@ Peanut M&Ms are three items — `peanutmms` (14 datasets), `mmspeanuts` (13) and
 above because those names are not spelling variants of each other; they need a
 decision rather than a rule.
 
+## Pass 2 — migration 028 (2026-09-01)
+
+Candidates came from three searches over the 2,259 names: trailing digits and
+pack sizes, near-identical spellings (edit distance ≤ 2), and singular/plural
+pairs — plus a curated list of the same product under a brand name in one study
+and a generic name in another, which the first pass did not look for. The
+co-occurrence guard was applied to every candidate: names that share a dataset
+are distinct stimuli and were never merged. 102 candidates, 43 blocked by the
+guard, 42 merged, 17 kept apart on judgement.
+
+### D. Merged — 42 names into 37 (8,332 ratings)
+
+| survives | absorbed |
+|---|---|
+| `blueberries` | `blueberry` |
+| `chickennuggets` | `chickennuggets2` |
+| `chocolatedonuts` | `chocolatdonuts`, `donutchocolate` |
+| `chocolatepretzels` | `chocolatecoveredpretzels` |
+| `colabottles` | `gummicandycola`, `redbandcolabottles` |
+| `craisins` | `craisinsoceanspray` |
+| `diffuser` | `diffusers` |
+| `egg` | `eggs` |
+| `friedeggs` | `friedegg` |
+| `ghirardellichocolates` | `ghiradellichocolate` |
+| `ghirardellimilk` | `ghiradellimilk` |
+| `giantsweetarts` | `giantsweettarts` |
+| `gummibears` | `haribogoldbears` |
+| `gummycherries` | `haribocherries` |
+| `icecreamsundae` | `icecreamsundae002` |
+| `kitkatwhitechocolate` | `whitechocolatekitkatbars` |
+| `lifesaversgummiessours` | `lifesaversourgummies` |
+| `liquoriceallsorts` | `bassettslicoriceallsorts`, `engelsedrop` |
+| `marshmallows` | `marshmallowsflat` |
+| `mmsmilkchocolate` | `chocolatemm` |
+| `mmsmint` | `mnmmint` |
+| `nerds` | `nerds2` |
+| `popsicles` | `popsicle` |
+| `poptartsstrawberry` | `poptartstrawberryfrosted` |
+| `raisinbranwithmilk` | `raisinbranwithwholemilk`, `raisinbranwmilk` |
+| `raspberries` | `raspberry` |
+| `reesespieces` | `reesepieces` |
+| `resistancebands` | `resistanceband` |
+| `ritzcracker` | `ritzcrackers` |
+| `roastedpotatoes` | `roastedpotato` |
+| `saltinecracker` | `saltinecrackers` |
+| `sourpatchkids` | `sourpatch`, `sourpatchkidscandy` |
+| `springonions` | `springonion` |
+| `strawberries` | `strawberry` |
+| `tacos` | `taco` |
+| `triscuits` | `triscuit` |
+| `winegum` | `maynardswinegums` |
+
+Rules: the correct spelling survives (`ghirardelli`, `raspberries`); otherwise
+the form used in more datasets; where a brand name met a generic, the generic
+survives, because the brand was verified only for the study that printed it and
+the generic is what every dataset shares. `engelsedrop` is the Dutch name for
+liquorice allsorts. `haribogoldbears` came from one dataset (marglu); the
+Food-pics photograph `gummicandygoldbears` stayed apart because it co-occurs
+with `gummibears` in two datasets — it is a second gummy-bear image, not the
+same one.
+
+### E. Kept apart — with reasons
+
+| pair | why |
+|---|---|
+| `rasberry`, `rasberries` / `raspberries` | all three co-occur in Food-pics datasets: three raspberry photographs, two of them misspelled. The misspellings are labels for distinct stimuli and stay. |
+| `swedishfish` / `swedishfishassorted` | side by side in 12 datasets |
+| `gummibears` / `gummicandygoldbears` | co-occur in 2 datasets (see above) |
+| every plural pair the guard blocked — `apple`/`apples`, `banana`/`bananas`, `grape`/`grapes`, `carrot`/`carrots`, … (31 pairs) | Food-pics photographs one fruit and several as separate images; they sit in the same datasets |
+| `altoids12pk`, `gum10pk`, `gum24pk`, `gummibears5lb`, `chocolatepretzels1lb`, `coconutwater12pk`, `cookies12`, `curvedglasses16`, `energybars24`, `mugs8`, `pens12`, `popcorn20`, `wineglasses6` | pack sizes from the romfred product set, per the `champagneflutes12`/`champagneflutes6` rule in section B — a quantity is part of the product there |
+| `jellybabiesberrymix` / `jellybeans` | jelly babies are a different sweet |
+| `chocolatebar` / `chocolatebark` | recorded in section B |
+| `chocolatedonuts` / `chocolatenuts` | different foods; spelling coincidence |
+| `nerds2`, `chickennuggets2`, `icecreamsundae002` | **merged** — bare trailing digits from studies that numbered their stimuli (Krajbich lab, xuefoe), the artefact 014 and 018 removed |
+
+After the merge the per-dataset networks were relabelled rather than
+re-estimated (`scripts/relabel_network_items.py`): the guard guarantees no
+dataset held two names for one item, so each dataset's network is
+structurally unchanged and only the node id, label and corpus-level fields
+moved.

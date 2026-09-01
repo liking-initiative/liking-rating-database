@@ -17,7 +17,7 @@ library(likingInitiative)
 
 list_datasets()          # 59 datasets
 list_studies()           # 33 publications
-list_items()             # 2,259 stimuli
+list_items()             # 2,217 stimuli
 
 d <- get_dataset("leeholyoak2021")
 d                        # scale, size, phases, release version

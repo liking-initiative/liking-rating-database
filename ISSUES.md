@@ -47,7 +47,7 @@ Rule applied: no name mapping is used unless the key is proven from source data.
 
 ### Chen Exp3–6 imported as chenhol3–chenhol6 (2026-09-01)
 
-42 of the 60 candies, named from the stimulus photographs with certainty (the method already used for chenhol7). 18 are withheld rather than given descriptive placeholders — 9 where only a sub-type or brand is uncertain (#5, #7, #8, #31, #37, #39, #40, #47, #54) and 9 unnamed (#9, #10, #11, #16, #20, #24, #26, #44, #49); their ratings ship beside each ingest as `heldout_unnamed.csv` and `image_to_item.json` carries every reading. Harmonization candidates for a later pass: `gummycherries`→`haribocherries` and `colabottles`→`redbandcolabottles` (same lab's packaged stimuli in chenhol1/2), and pre-existing splits `nerds`/`nerds2`, `liquoriceallsorts`/`bassettslicoriceallsorts`/`engelsedrop`, `gummibears`/`haribogoldbears`/`gummicandygoldbears`.
+42 of the 60 candies, named from the stimulus photographs with certainty (the method already used for chenhol7). 18 are withheld rather than given descriptive placeholders — 9 where only a sub-type or brand is uncertain (#5, #7, #8, #31, #37, #39, #40, #47, #54) and 9 unnamed (#9, #10, #11, #16, #20, #24, #26, #44, #49); their ratings ship beside each ingest as `heldout_unnamed.csv` and `image_to_item.json` carries every reading. The harmonization candidates this surfaced were merged in migration 028 (see docs/NAME_HARMONIZATION.md, pass 2); `gummicandygoldbears` stays apart because it co-occurs with `gummibears`.
 
 ### New-dataset queue (from SetFitNetworks sweep, 2026-07-11)
 
@@ -261,7 +261,7 @@ renders, looking for anything presented as data that was not measured.
   `studies.osf_project_id`, `datasets.file_size_mb`, `osf_file_id`, and
   `ratings.response_time` / `session_id` / `order_presented` /
   `demographic_data`. Several were rendered anyway: an "Image" column reading
-  "No" for all 2,259 items implies it was checked, and a "With Images" stat
+  "No" for all 2,217 items implies it was checked, and a "With Images" stat
   read 0 of N. All removed from the interface; the columns stay in the schema.
 - [x] **Two invented metrics on the item analysis page.** "Consistency Score"
   was `100 − SD×200`, a rescaled standard deviation dressed as a quality

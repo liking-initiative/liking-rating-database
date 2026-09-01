@@ -16,7 +16,7 @@ import likingInitiative
 
 likingInitiative.list_datasets()                      # 59 datasets
 likingInitiative.list_studies()                       # 33 publications
-likingInitiative.list_items()                         # 2,259 stimuli
+likingInitiative.list_items()                         # 2,217 stimuli
 
 d = likingInitiative.get_dataset("leeholyoak2021")
 d.data                                        # polars DataFrame

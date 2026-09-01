@@ -2,7 +2,7 @@
 
 A curated database of subjective liking ratings for decision-making research:
 **759,399 individual ratings** from **38 studies** (59 datasets),
-covering **2,259 stimuli** — food items and consumer products. Every published
+covering **2,217 stimuli** — food items and consumer products. Every published
 study links to its source publication (DOI); 4 studies are still in preparation
 and carry a full citation instead. Ratings are provided both in their
 original scale units and normalized to 0–1 for cross-study comparison.
