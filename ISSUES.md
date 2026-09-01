@@ -6,6 +6,27 @@ Full audit ran 2026-07-09; the fix pass ran the same day. Everything in
 against the migrated database). Details of each original defect are in git
 history of this file.
 
+## Released
+
+### v2.0.0 (2026-08-31) — scale and construct verification
+
+Every dataset's declared scale and the construct it measures is now recorded
+against a source in `docs/SCALE_VERIFICATION.md`; 50 of 55 carry a verbatim
+quotation from the paper. Three findings came out of it and are applied:
+
+- **Eight `ganzou` datasets removed** (migration 023). They measure food
+  healthiness, not liking, and nothing in the schema would have stopped an
+  item mean from averaging the two. 123,627 ratings.
+- **`bakbot_spacing_rep` rescaled** to the $0–3 its paper reports (024);
+  `normalized_rating` provably unchanged.
+- **`smithspiller1`/`smithspiller2` are willingness-to-pay**, not liking, and
+  are retyped `wtp`; `eumdol` retyped `slider` (025).
+
+Also corrected: the codebook listed two datasets with repeated rating phases
+when six have them, which would have caused silent duplicates for anyone
+keying on `(subject_id, item_id)`; and three datasets are now documented as
+missing ratings non-randomly through an unrecorded "Would Not Eat" opt-out.
+
 ## Open
 
 ### Pending datasets — item-name forensics (2026-07-10)
@@ -54,7 +75,7 @@ perceptual judgments, out of scope.
   original scale was WTP £0–3 (Folke et al. 2016). Currently stored as-is with
   scale 0–1 + provenance note (normalized values are identical either way).
   Multiplying by 3 would restore original units — needs Kianté's call.
-- [ ] **178 items have opaque source codes as names** (`0488`, `mh0021`, …) and
+- [ ] **172 items have opaque source codes as names** (`0488`, `mh0021`, …) and
   category `unknown`. (The `mh*`/numeric codes come from imported datasets whose
   sources also used codes; same ask-the-authors path as above.)
 - [ ] **Item categories are name-derived** (migrations 002; curated lexicon +
