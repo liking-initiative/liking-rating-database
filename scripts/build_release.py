@@ -16,6 +16,7 @@ SQLite file rather than 60-odd independently licensed records:
     items.tsv                    stimuli
     ratings.tsv.gz               every rating, for load_database()
     codebook.md                  what the columns mean
+    scale_verification.md        per-dataset scale + construct evidence
 
 Everything row-heavy is gzipped: both readr and polars read .gz transparently,
 and it takes the per-dataset assets from 51 MB to a few MB in total.
@@ -44,6 +45,10 @@ DEFAULT_DB = REPO_ROOT / "data" / "liking_rating_db.db"
 OUT_DIR = REPO_ROOT / "release"
 
 CODEBOOK = REPO_ROOT / "docs" / "RELEASE_CODEBOOK.md"
+# Ships alongside the codebook: the per-dataset evidence for every
+# declared scale and construct. A user checking whether a dataset
+# measures what they assume should not have to find the repository.
+VERIFICATION = REPO_ROOT / "docs" / "SCALE_VERIFICATION.md"
 
 
 def _dataset_code(name: str) -> str:
@@ -207,6 +212,8 @@ def main() -> None:
     # -- codebook ---------------------------------------------------------
     if CODEBOOK.exists():
         shutil.copy(CODEBOOK, out / "codebook.md")
+    if VERIFICATION.exists():
+        shutil.copy(VERIFICATION, out / "scale_verification.md")
 
     # -- catalog ----------------------------------------------------------
     migrations = [r[0] for r in cur.execute(
