@@ -126,3 +126,44 @@ reading code. After 013, `toyam` matched the Food-pics database exactly,
 equivalents) that restated the name column and labelled every consumer
 product in the database as food. An empty field is honest; generated filler
 was not. Descriptions are written by hand as datasets are curated.
+
+## G. Item names assigned from zip listing order — corrected (migration 029, 2026-09-01)
+
+Found while checking whether the kramits stimuli shared the lab's 147-item
+snack set. Six datasets had been named at import by mapping each study's
+numeric stimulus index to the *N*th filename of a zip archive **in the order
+the archive listed them** — the RA's notebook reads `z.namelist()` with the
+comment "optional: sort alphabetically, or use as-is", and used as-is. The
+experiments numbered their stimuli alphabetically: `gwikrab`'s raw file carries
+both `picNum` and `picName`, and agrees with alphabetical filename order at
+147 of 147 positions.
+
+| zip | listing = alphabetical | datasets | items misnamed |
+|---|---|---|---|
+| `FoodStimuli.zip` | 1 / 147 | `gwileb`, `smikrab2018` | 146 each |
+| `images.zip` | 133 / 144 | `deskrab1`, `deskrab2`, `deskrab4`, `hasdes` | 11 each — Doritos, Popcorners and Skittles clusters where the listing lagged by one (index 111, published as `skittles`, is `skittlewildberry`) |
+| `FoodFinal.zip` | 96 / 145 | `shevsmith1` | **not changed** — see below |
+
+The two FoodStimuli datasets agreed with each other at r = 0.90 (both wrong
+the same way) and with nothing else; `gwikrab`, named from real filenames, sat
+at +0.42–0.63 with the same comparators. The eleven images.zip errors were
+small enough to hide inside correlations of 0.8–0.9.
+
+**Validation.** The repair was built from the raw index files and verified
+against the database row for row before being applied: for all six datasets
+the (subject, index → published name, rating) reconstruction matched every
+stored rating. After remapping, agreement with independently named datasets:
+`smikrab2018` −0.07 → +0.82 (vs `deskrab1`), −0.01 → +0.88 (vs `smikrab`);
+`gwileb` likewise; `deskrab1` +0.82 → +0.88, `hasdes` +0.67 → +0.76. 31,883
+ratings moved to the correct item; no item was created or merged, because
+within each dataset the fix is a permutation of its own names.
+
+**`shevsmith1` was deliberately left alone.** Its zip also listed out of
+order, but the alphabetical remap *lowers* its agreement (+0.50 → +0.47 vs
+`smikrab`), so that experiment evidently used the listing order. Recorded
+rather than guessed.
+
+**Side finding, not acted on:** `deskrab2`'s stored values differ from its raw
+file on 970 of 16,992 rows by at most 0.10 on a −10..10 slider — rounding at
+import, 73 of them equal to the raw file's initial-rating column. Identity is
+unaffected.
