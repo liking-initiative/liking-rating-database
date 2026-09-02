@@ -1,0 +1,18 @@
+citHeader("To cite the database in publications, please use the entry below, and also cite the original studies whose data you use (see cite(get_dataset(...))).")
+
+bibentry(
+  bibtype  = "Misc",
+  title    = "The Liking Initiative: a database of subjective evaluation ratings for decision-making research",
+  author   = c(person("Kiant\u00e9", "Fernandez"),
+               person("Sumedha", "Goyal"),
+               person("Ian", "Krajbich")),
+  year     = "2026",
+  publisher = "Zenodo",
+  doi      = "10.5281/zenodo.22216442",
+  note     = "[Data set]",
+  textVersion = paste0(
+    "Fernandez, K., Goyal, S., & Krajbich, I. (2026). The Liking Initiative: a ",
+    "database of subjective evaluation ratings for decision-making research ",
+    "[Data set]. Zenodo. https://doi.org/10.5281/zenodo.22216442"
+  )
+)

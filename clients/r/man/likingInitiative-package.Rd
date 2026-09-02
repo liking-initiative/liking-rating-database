@@ -28,8 +28,9 @@ together.
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/kiante-fernandez/liking-rating-database}
-  \item Report bugs at \url{https://github.com/kiante-fernandez/liking-rating-database/issues}
+  \item \url{https://liking-initiative.github.io/likingInitiative-r/}
+  \item \url{https://github.com/liking-initiative/likingInitiative-r}
+  \item Report bugs at \url{https://github.com/liking-initiative/likingInitiative-r/issues}
 }
 
 }

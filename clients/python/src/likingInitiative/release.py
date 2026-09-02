@@ -107,6 +107,8 @@ def clear_cache(version: Optional[str] = None) -> Dict[str, Any]:
 
 _local_dir_cache: Optional[Path] = None
 _resolved: Dict[str, str] = {}
+# Zenodo record per version string, so a pinned version is looked up once.
+_records: Dict[str, Dict[str, Any]] = {}
 
 
 def local_release_dir() -> Optional[Path]:
@@ -143,7 +145,48 @@ def resolve_version(version: str = "latest") -> str:
     if not resolved:
         raise LikingInitiativeError("the Zenodo record carries no version")
     _resolved["latest"] = resolved
+    _records[resolved] = record
     return resolved
+
+
+def _record_for(version: str) -> Dict[str, Any]:
+    """The Zenodo record that holds one version's files.
+
+    The concept record only ever describes the newest version, so a pinned
+    version has to be found in the concept's version listing. Otherwise
+    ``version="1.6.1"`` would label the cache 1.6.1 but download whatever is
+    newest -- exactly the silent drift pinning exists to prevent.
+    """
+    if version in _records:
+        return _records[version]
+    url: Optional[str] = f"{ZENODO_API}/records"
+    params: Optional[Dict[str, Any]] = {
+        "q": f"conceptrecid:{CONCEPT_REC}", "all_versions": "true", "size": 25,
+    }
+    published = []
+    while url:
+        try:
+            response = _get(url, params=params)
+        except requests.RequestException as exc:  # pragma: no cover - network
+            raise LikingInitiativeError(f"could not reach Zenodo: {exc}") from exc
+        if not response.ok:
+            raise LikingInitiativeError(
+                f"Zenodo returned {response.status_code} listing release versions"
+            )
+        page = response.json()
+        for hit in page.get("hits", {}).get("hits", []):
+            found = (hit.get("metadata") or {}).get("version")
+            if found:
+                published.append(found)
+                _records[found] = hit
+            if found == version:
+                return hit
+        url = (page.get("links") or {}).get("next")
+        params = None  # the next link carries its own query
+    raise LikingInitiativeError(
+        f"release v{version} is not on Zenodo; published versions: "
+        + (", ".join(sorted(published)) or "none")
+    )
 
 
 def _fetch_record() -> Dict[str, Any]:
@@ -189,7 +232,7 @@ def asset_path(name: str, version: str = "latest", force: bool = False) -> Path:
 
     # Zenodo's file store is flat, so a nested path becomes a flattened name.
     asset_name = name.replace("/", "__")
-    record = _fetch_record()
+    record = _record_for(resolved)
     url = f"{ZENODO_API}/records/{record['id']}/files/{asset_name}/content"
     try:
         response = _get(url, stream=True)

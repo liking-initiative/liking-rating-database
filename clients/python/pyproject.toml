@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "likingInitiative"
-version = "0.2.0"
+version = "0.2.1"
 description = "The Liking Rating Database in Python"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -12,10 +12,18 @@ license = { text = "MIT" }
 authors = [{ name = "Kianté Fernandez" }]
 keywords = ["psychology", "decision-making", "open-data", "preference", "liking"]
 classifiers = [
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Science/Research",
     "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Scientific/Engineering",
+    "Typing :: Typed",
 ]
 dependencies = [
     "polars>=0.20",
@@ -24,14 +32,24 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=7"]
+dev = ["pytest>=7", "ruff>=0.5", "build", "twine"]
 
 [project.urls]
-Homepage = "https://github.com/kiante-fernandez/liking-rating-database"
-Source = "https://github.com/kiante-fernandez/liking-rating-database"
+Homepage = "https://github.com/liking-initiative/likingInitiative-py"
+Source = "https://github.com/liking-initiative/likingInitiative-py"
+Issues = "https://github.com/liking-initiative/likingInitiative-py/issues"
+Changelog = "https://github.com/liking-initiative/likingInitiative-py/blob/main/CHANGELOG.md"
+Data = "https://doi.org/10.5281/zenodo.22216442"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+likingInitiative = ["py.typed"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

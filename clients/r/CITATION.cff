@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: >-
+  If you use this package, please cite the database it gives access to (the
+  preferred citation below) and the original studies whose data you use; each
+  study's citation and DOI are provided in the database.
+type: software
+title: "likingInitiative: R client for the Liking Initiative database"
+version: 0.2.1
+date-released: "2026-09-01"
+license: MIT
+repository-code: "https://github.com/liking-initiative/likingInitiative-r"
+authors:
+  - family-names: Fernandez
+    given-names: Kianté
+    affiliation: "Department of Psychology, University of California, Los Angeles"
+preferred-citation:
+  type: data
+  title: "The Liking Initiative: a database of subjective evaluation ratings for decision-making research"
+  doi: 10.5281/zenodo.22216442
+  year: 2026
+  publisher:
+    name: Zenodo
+  authors:
+    - family-names: Fernandez
+      given-names: Kianté
+    - family-names: Goyal
+      given-names: Sumedha
+    - family-names: Krajbich
+      given-names: Ian

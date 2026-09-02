@@ -68,12 +68,17 @@ unset LIKING_INITIATIVE_RELEASE_DIR
 python -c "import likingInitiative; print(likingInitiative.release_info())"
 ```
 
-That resolves the newest release from the GitHub API and downloads through
-the real path, so it exercises what a user will hit.
+That resolves the newest version from Zenodo's concept record and downloads
+through the real path, so it exercises what a user will hit.
 
 ## Checking the packages before release
 
-Both must pass their own build checks, not just their test suites:
+The packages live in their own repositories,
+`liking-initiative/likingInitiative-py` and `liking-initiative/likingInitiative-r`,
+whose CI runs these checks on every push (plus a Zenodo mirror of the pinned
+release and the real download path). `clients/` here mirrors their sources;
+keep it in step by copying from those repositories, not by editing here. To
+run the checks locally:
 
 ```bash
 # R -- must report Status: OK, with no NOTEs

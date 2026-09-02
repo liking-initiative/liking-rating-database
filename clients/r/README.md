@@ -1,5 +1,8 @@
 # likingInitiative — R
 
+[![R-CMD-check](https://github.com/liking-initiative/likingInitiative-r/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/liking-initiative/likingInitiative-r/actions/workflows/R-CMD-check.yaml)
+[![DOI](https://img.shields.io/badge/data%20DOI-10.5281%2Fzenodo.22216442-blue)](https://doi.org/10.5281/zenodo.22216442)
+
 The Liking Rating Database in R: subjective liking ratings from published
 decision-making studies, as tibbles.
 
@@ -7,8 +10,11 @@ decision-making studies, as tibbles.
 
 ```r
 # install.packages("devtools")
-devtools::install_github("kiante-fernandez/liking-rating-database", subdir = "clients/r")
+devtools::install_github("liking-initiative/likingInitiative-r")
 ```
+
+Requires R 4.1 or newer. Data is downloaded from Zenodo on first use and
+cached locally; no account or token is needed.
 
 ## Use
 
@@ -16,7 +22,7 @@ devtools::install_github("kiante-fernandez/liking-rating-database", subdir = "cl
 library(likingInitiative)
 
 list_datasets()          # 59 datasets
-list_studies()           # 33 publications
+list_studies()           # 38 studies
 list_items()             # 2,217 stimuli
 
 d <- get_dataset("leeholyoak2021")
@@ -31,7 +37,7 @@ get_dataset(c("leeholyoak2021", "leehare2023exp2"))   # named list
 ### One item across every study that used it
 
 ```r
-k <- get_item("kitkat")   # 1,842 ratings across 28 datasets
+k <- get_item("kitkat")   # 1,626 ratings across 25 datasets
 aggregate(normalized_rating ~ dataset_code, k$data, mean)
 ```
 
@@ -55,8 +61,9 @@ together.
 
 ## Repeated rating phases
 
-Two datasets repeat the whole rating phase, so `subject_id` and `item_id`
-together are not unique for them:
+Six datasets repeat the whole rating phase (`chenhol1`, `chenhol2`,
+`crosswebb`, `hamesmcc`, `leehare2023exp2`, `leeholyoak2021`), so `subject_id`
+and `item_id` together are not unique for them:
 
 ```r
 d <- get_dataset("leeholyoak2021")            # phases 1, 2, 3
@@ -72,13 +79,27 @@ does not carry extra weight in a cross-study comparison.
 
 ```r
 release_info()                                    # version, counts, migrations
-get_dataset("leeholyoak2021", version = "1.0.0")  # pin for reproducibility
+get_dataset("leeholyoak2021", version = "1.6.2")  # pin for reproducibility
 cache_info(); clear_cache()
 ```
 
 Set `options(likingInitiative.release_dir = )` or `LIKING_INITIATIVE_RELEASE_DIR` to a
 directory built by `scripts/build_release.py` to work against an unreleased
 build.
+
+## Citation
+
+Please cite the database and the studies whose data you use. `cite()` with no
+argument returns the database citation, `cite(d)` a study's, and
+`citation("likingInitiative")` the same entry in R's own format.
+
+> Fernandez, K., Goyal, S., & Krajbich, I. (2026). The Liking Initiative: a
+> database of subjective evaluation ratings for decision-making research
+> [Data set]. Zenodo. https://doi.org/10.5281/zenodo.22216442
+
+That is the concept DOI, which always resolves to the newest version. To name
+the exact bytes an analysis ran on, cite the version DOI that Zenodo lists for
+the version `release_info()` reports.
 
 ## License
 

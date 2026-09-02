@@ -29,14 +29,11 @@ NULL
 
 .record_cache <- new.env(parent = emptyenv())
 
-# The newest published version's Zenodo record, fetched once per session.
-.fetch_record <- function() {
-  if (!is.null(.record_cache$record)) return(.record_cache$record)
-  url <- sprintf("%s/records/%s", .zenodo_api(), .concept_rec())
-  # Zenodo intermittently answers 502/504 under load, often enough that a
-  # single attempt strands a user with an error that has nothing to do with
-  # their request. Retry the transient statuses before giving up.
-  response <- tryCatch(
+# One GET against Zenodo's API, retried on the statuses it returns when it is
+# struggling (502/504 under load are common enough that a single attempt
+# strands a user with an error that has nothing to do with their request).
+.zenodo_get <- function(url) {
+  tryCatch(
     httr2::req_perform(
       httr2::req_retry(
         httr2::req_error(httr2::req_timeout(httr2::request(url), 60),
@@ -47,6 +44,12 @@ NULL
     ),
     error = function(e) cli::cli_abort("Could not reach Zenodo: {conditionMessage(e)}")
   )
+}
+
+# The newest published version's Zenodo record, fetched once per session.
+.fetch_record <- function() {
+  if (!is.null(.record_cache$record)) return(.record_cache$record)
+  response <- .zenodo_get(sprintf("%s/records/%s", .zenodo_api(), .concept_rec()))
   status <- httr2::resp_status(response)
   if (status == 404) {
     cli::cli_abort(c(
@@ -59,7 +62,40 @@ NULL
   }
   record <- httr2::resp_body_json(response)
   .record_cache$record <- record
+  .record_cache[[paste0("v", record$metadata$version)]] <- record
   record
+}
+
+# The Zenodo record that holds one version's files. The concept record only
+# ever describes the newest version, so a pinned version is found in the
+# concept's version listing; otherwise version = "1.6.1" would label the cache
+# 1.6.1 but download whatever is newest -- the drift pinning exists to prevent.
+.record_for <- function(version) {
+  key <- paste0("v", version)
+  if (!is.null(.record_cache[[key]])) return(.record_cache[[key]])
+  url <- sprintf("%s/records?q=conceptrecid:%s&all_versions=true&size=25",
+                 .zenodo_api(), .concept_rec())
+  published <- character()
+  while (!is.null(url)) {
+    response <- .zenodo_get(url)
+    if (httr2::resp_status(response) != 200) {
+      cli::cli_abort("Zenodo returned {httr2::resp_status(response)} listing release versions.")
+    }
+    page <- httr2::resp_body_json(response)
+    for (hit in page$hits$hits) {
+      found <- hit$metadata$version
+      if (!is.null(found)) {
+        published <- c(published, found)
+        .record_cache[[paste0("v", found)]] <- hit
+      }
+      if (identical(found, version)) return(hit)
+    }
+    url <- page$links[["next"]]
+  }
+  cli::cli_abort(c(
+    "Release v{version} is not on Zenodo.",
+    i = "Published versions: {.val {sort(published)}}."
+  ))
 }
 
 .catalog_file <- "catalog.json"
@@ -181,7 +217,7 @@ asset_path <- function(name, version = "latest", force = FALSE) {
 
   # Zenodo's file store is flat, so a nested path is flattened in the name.
   asset <- gsub("/", "__", name, fixed = TRUE)
-  record <- .fetch_record()
+  record <- .record_for(resolved)
   url <- sprintf("%s/records/%s/files/%s/content", .zenodo_api(), record$id, asset)
 
   if (!fs::dir_exists(fs::path_dir(cached))) {

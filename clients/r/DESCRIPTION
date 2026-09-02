@@ -1,6 +1,6 @@
 Package: likingInitiative
 Title: Access the Liking Rating Database
-Version: 0.2.0
+Version: 0.2.1
 Authors@R: 
     person("Kiant\u00e9", "Fernandez", email = "kiantefernan@gmail.com", role = c("aut", "cre"))
 Description: Download and work with the Liking Rating Database, a curated
@@ -25,5 +25,5 @@ Imports:
 Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
-URL: https://github.com/kiante-fernandez/liking-rating-database
-BugReports: https://github.com/kiante-fernandez/liking-rating-database/issues
+URL: https://liking-initiative.github.io/likingInitiative-r/, https://github.com/liking-initiative/likingInitiative-r
+BugReports: https://github.com/liking-initiative/likingInitiative-r/issues

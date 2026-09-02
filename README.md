@@ -87,27 +87,28 @@ List endpoints return `{"items": [...], "total", "page", "page_size", "pages"}`.
 
 ## Getting the data
 
-Three ways, in rough order of convenience:
+Three ways, in rough order of convenience. The packages download versioned
+release files from Zenodo and cache them locally; no account is needed.
 
 ```python
-# 1. The Python client (clients/python)
+# 1. The Python package  (github.com/liking-initiative/likingInitiative-py)
+#    pip install git+https://github.com/liking-initiative/likingInitiative-py
 import likingInitiative
-db = likingInitiative.load_database()        # one request, 759,399 ratings
-db["ratings"].groupby("item_name").normalized_rating.mean().nlargest(10)
+db = likingInitiative.load_database()        # 759,399 ratings, as polars frames
+likingInitiative.get_item("kitkat").by_dataset()
 ```
 
 ```r
-# 2. The whole-database archive, straight into R
-tmp <- tempfile(fileext = ".zip")
-download.file("https://liking-rating-api.onrender.com/api/v1/database/archive",
-              tmp, mode = "wb")
-dir <- tempfile(); dir.create(dir); unzip(tmp, exdir = dir)
-ratings <- read.csv(file.path(dir, "liking_rating_database", "ratings.csv"),
-                    colClasses = c(subject_id = "character"))
+# 2. The R package  (github.com/liking-initiative/likingInitiative-r)
+#    devtools::install_github("liking-initiative/likingInitiative-r")
+library(likingInitiative)
+db <- load_database()                         # tibbles
+get_item("kitkat")
 ```
 
 3. Per-dataset CSV / JSON / XLSX / SPSS exports from any dataset page in the
-   web app.
+   web app, or the whole-database archive at
+   `https://liking-rating-api.onrender.com/api/v1/database/archive`.
 
 **Two things to get right.** Cross-study comparisons must use
 `normalized_rating`, not `rating` — response scales differ across studies.
@@ -124,8 +125,11 @@ And subject IDs are unique only *within* a dataset, so always key on
 - **Frontend** — React 18 + Ant Design 5 + react-query v3 + Plotly, in
   [frontend/](frontend/). All network calls go through
   [frontend/src/services/api.js](frontend/src/services/api.js).
-- **Python client** — [clients/python/](clients/python/), a thin wrapper over
-  the API returning pandas DataFrames.
+- **Client packages** — developed in their own repositories,
+  [likingInitiative-py](https://github.com/liking-initiative/likingInitiative-py)
+  and [likingInitiative-r](https://github.com/liking-initiative/likingInitiative-r);
+  [clients/](clients/) mirrors their sources so the release scripts here can
+  test against them. They read release files, never the live API.
 - **Deployment** — [render.yaml](render.yaml) (backend web service + static
   frontend). See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 

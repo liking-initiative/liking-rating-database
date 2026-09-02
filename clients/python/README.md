@@ -1,13 +1,19 @@
 # likingInitiative — Python
 
+[![CI](https://github.com/liking-initiative/likingInitiative-py/actions/workflows/ci.yml/badge.svg)](https://github.com/liking-initiative/likingInitiative-py/actions/workflows/ci.yml)
+[![DOI](https://img.shields.io/badge/data%20DOI-10.5281%2Fzenodo.22216442-blue)](https://doi.org/10.5281/zenodo.22216442)
+
 The Liking Rating Database in Python: subjective liking ratings from
 published decision-making studies, as [polars](https://pola.rs) frames.
 
 ## Install
 
 ```bash
-pip install -e clients/python     # from a checkout
+pip install git+https://github.com/liking-initiative/likingInitiative-py
 ```
+
+Requires Python 3.9 or newer. Data is downloaded from Zenodo on first use and
+cached locally; no account or token is needed.
 
 ## Use
 
@@ -15,7 +21,7 @@ pip install -e clients/python     # from a checkout
 import likingInitiative
 
 likingInitiative.list_datasets()                      # 59 datasets
-likingInitiative.list_studies()                       # 33 publications
+likingInitiative.list_studies()                       # 38 studies
 likingInitiative.list_items()                         # 2,217 stimuli
 
 d = likingInitiative.get_dataset("leeholyoak2021")
@@ -32,7 +38,7 @@ likingInitiative.get_dataset(["leeholyoak2021", "leehare2023exp2"]).data   # sta
 The cross-study view — the thing this database is built for:
 
 ```python
-k = likingInitiative.get_item("kitkat")     # 1,842 ratings across 28 datasets
+k = likingInitiative.get_item("kitkat")     # 1,626 ratings across 25 datasets
 k.by_dataset()                      # mean / sd / median per study, 0-1 scale
 ```
 
@@ -55,8 +61,9 @@ datasets is two different people — key on `(dataset_code, subject_id)`.
 
 ## Repeated rating phases
 
-Two datasets repeat the whole rating phase, so `(subject_id, item_id)` alone
-is not unique for them:
+Six datasets repeat the whole rating phase (`chenhol1`, `chenhol2`,
+`crosswebb`, `hamesmcc`, `leehare2023exp2`, `leeholyoak2021`), so
+`(subject_id, item_id)` alone is not unique for them:
 
 ```python
 d = likingInitiative.get_dataset("leeholyoak2021")        # phases 1, 2, 3
@@ -75,7 +82,7 @@ version returns the same rows however long from now.
 
 ```python
 likingInitiative.release_info()          # version, date, counts, migrations applied
-likingInitiative.get_dataset("leeholyoak2021", version="1.0.0")
+likingInitiative.get_dataset("leeholyoak2021", version="1.6.2")   # pin it
 likingInitiative.cache_info();  likingInitiative.clear_cache()
 ```
 
@@ -92,6 +99,19 @@ Set `LIKING_INITIATIVE_RELEASE_DIR` to a directory built by
 | `load_database(version)` | dict of frames |
 | `cite(x)` / `bibtex(x)` | citation text |
 | `release_info()` / `cache_info()` / `clear_cache()` | housekeeping |
+
+## Citation
+
+Please cite the database and the studies whose data you use. `cite()` with no
+argument returns the database citation; `cite(d)` returns a study's.
+
+> Fernandez, K., Goyal, S., & Krajbich, I. (2026). The Liking Initiative: a
+> database of subjective evaluation ratings for decision-making research
+> [Data set]. Zenodo. https://doi.org/10.5281/zenodo.22216442
+
+That is the concept DOI, which always resolves to the newest version. To name
+the exact bytes an analysis ran on, cite the version DOI that Zenodo lists for
+the version `release_info()` reports.
 
 ## License
 
