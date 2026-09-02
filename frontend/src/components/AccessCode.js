@@ -59,8 +59,9 @@ const AccessCode = ({ dataset, title = 'Get this data in R or Python' }) => {
   const code = dataset ? String(dataset.name).replace(/\s+Dataset$/i, '') : null;
 
   const python = dataset
-    ? `# pip install likingInitiative
+    ? `# pip install git+https://github.com/liking-initiative/likingInitiative-py
 import likingInitiative as lk
+import polars as pl
 
 d = lk.get_dataset("${code}")
 d.data                     # polars DataFrame
@@ -72,8 +73,9 @@ d.data.group_by("item_name").agg(
 ).sort("normalized_rating", descending=True).head(10)
 
 print(d.cite())`
-    : `# pip install likingInitiative
+    : `# pip install git+https://github.com/liking-initiative/likingInitiative-py
 import likingInitiative as lk
+import polars as pl
 
 db = lk.load_database()    # the whole corpus, one download
 db["ratings"]              # 759,399 rows
@@ -84,8 +86,7 @@ lk.get_item("kitkat").by_dataset()
 # Cross-study comparisons must use normalized_rating, not rating`;
 
   const r = dataset
-    ? `# devtools::install_github(
-#   "kiante-fernandez/liking-rating-database", subdir = "clients/r")
+    ? `# devtools::install_github("liking-initiative/likingInitiative-r")
 library(likingInitiative)
 
 d <- get_dataset("${code}")
@@ -96,8 +97,7 @@ d$metadata$rating_scale_max
 aggregate(normalized_rating ~ item_name, d$data, mean)
 
 cite(d)`
-    : `# devtools::install_github(
-#   "kiante-fernandez/liking-rating-database", subdir = "clients/r")
+    : `# devtools::install_github("liking-initiative/likingInitiative-r")
 library(likingInitiative)
 
 db <- load_database()      # the whole corpus, one download
