@@ -8,7 +8,7 @@ title: "The Liking Initiative: a database of subjective evaluation ratings for d
 type: dataset
 doi: 10.5281/zenodo.22216442
 license: MIT
-repository-code: "https://github.com/kiante-fernandez/liking-rating-database"
+repository-code: "https://github.com/liking-initiative/liking-rating-database"
 authors:
   - family-names: Fernandez
     given-names: Kianté

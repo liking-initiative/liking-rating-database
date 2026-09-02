@@ -96,7 +96,7 @@ def metadata(version: str) -> dict:
             "license": "mit",
             "access_right": "open",
             "related_identifiers": [
-                {"identifier": "https://github.com/kiante-fernandez/liking-rating-database",
+                {"identifier": "https://github.com/liking-initiative/liking-rating-database",
                  "relation": "isSupplementTo", "scheme": "url"},
             ],
         }
