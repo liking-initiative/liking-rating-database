@@ -12,7 +12,10 @@ import polars as pl
 import pytest
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
-RELEASE = REPO_ROOT / "release"
+# A release to test against. LIKING_INITIATIVE_RELEASE_DIR wins, which is how
+# docs/RELEASING.md says to run these; the relative path is the monorepo layout,
+# kept so a checkout inside liking-rating-database still finds its own build.
+RELEASE = Path(os.environ.get("LIKING_INITIATIVE_RELEASE_DIR") or (REPO_ROOT / "release"))
 
 pytestmark = pytest.mark.skipif(
     not (RELEASE / "catalog.json").exists(),
