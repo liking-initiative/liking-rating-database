@@ -92,7 +92,7 @@ release files from Zenodo and cache them locally; no account is needed.
 
 ```python
 # 1. The Python package  (github.com/liking-initiative/likingInitiative-py)
-#    pip install git+https://github.com/liking-initiative/likingInitiative-py
+#    pip install likingInitiative
 import likingInitiative
 db = likingInitiative.load_database()        # 759,399 ratings, as polars frames
 likingInitiative.get_item("kitkat").by_dataset()

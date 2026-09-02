@@ -233,7 +233,8 @@ const DocumentationPage = () => {
         <Card id="packages" title="The R and Python packages" style={{ marginBottom: 24 }}>
           <Paragraph>
             Two packages give the same access to the database from R and from
-            Python. They do not call this website. They download versioned
+            Python. The Python package is on PyPI; the R package installs from
+            GitHub until it is accepted on CRAN. They do not call this website. They download versioned
             release files from Zenodo, cache them locally, and read from the
             cache, so an analysis that pins a version returns the same rows
             whenever it is run, and keeps working if this site is down.
@@ -253,7 +254,7 @@ cite(d); cite()`}</pre>
             </Col>
             <Col xs={24} md={12}>
               <Title level={5} style={{ marginTop: 0 }}>Python</Title>
-              <pre style={pre}>{`pip install git+https://github.com/liking-initiative/likingInitiative-py
+              <pre style={pre}>{`pip install likingInitiative
 
 import likingInitiative as lk
 lk.list_datasets()

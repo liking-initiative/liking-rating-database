@@ -59,7 +59,7 @@ const AccessCode = ({ dataset, title = 'Get this data in R or Python' }) => {
   const code = dataset ? String(dataset.name).replace(/\s+Dataset$/i, '') : null;
 
   const python = dataset
-    ? `# pip install git+https://github.com/liking-initiative/likingInitiative-py
+    ? `# pip install likingInitiative
 import likingInitiative as lk
 import polars as pl
 
@@ -73,7 +73,7 @@ d.data.group_by("item_name").agg(
 ).sort("normalized_rating", descending=True).head(10)
 
 print(d.cite())`
-    : `# pip install git+https://github.com/liking-initiative/likingInitiative-py
+    : `# pip install likingInitiative
 import likingInitiative as lk
 import polars as pl
 
