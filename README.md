@@ -1,6 +1,6 @@
 # Liking Rating Database
 
-A curated database of subjective liking ratings for decision-making research:
+A curated database of subjective liking ratings for value-based decision-making research:
 **759,399 individual ratings** from **38 studies** (59 datasets),
 covering **2,217 stimuli** — food items and consumer products. Every published
 study links to its source publication (DOI); 4 studies are still in preparation

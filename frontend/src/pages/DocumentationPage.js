@@ -82,7 +82,7 @@ const DocumentationPage = () => {
         <Card id="overview" title="What the Liking Initiative is" style={{ marginBottom: 24 }}>
           <Paragraph>
             The Liking Initiative is a database of subjective value ratings
-            collected from published decision-making studies. Each study asked
+            collected from value-based decision-making studies. Each study asked
             participants how much they liked, wanted, or would pay for
             individual items, on the scale that suited that study. The database
             keeps the ratings in their original units, records how each was
@@ -128,10 +128,7 @@ const DocumentationPage = () => {
             each item. Willingness-to-pay datasets recorded a bid in currency
             instead, and their ratings are in dollars or pounds. Two datasets,{' '}
             <Text code>larlua</Text> and <Text code>xuefoe</Text>, asked about
-            tastiness rather than liking. The four Chen datasets{' '}
-            (<Text code>chenhol3</Text> to <Text code>chenhol6</Text>) asked how
-            much participants wanted to eat each candy. Datasets that measured
-            healthiness were removed, because that is a different construct.
+            tastiness rather than liking.
           </Paragraph>
           <Paragraph style={{ marginBottom: 0 }}>
             The exact question and scale for every dataset, with the sentence
@@ -160,7 +157,7 @@ const DocumentationPage = () => {
           <Title level={5} style={{ marginTop: 24 }}>Repeated rating phases</Title>
           <Paragraph>
             Most datasets hold one rating per participant and item, and every
-            row has <Text code>timepoint = 1</Text>. Six datasets repeat the
+            row has <Text code>timepoint = 1</Text>. Some datasets repeat the
             whole rating phase, so the same participants rated the same items
             more than once:
           </Paragraph>
@@ -217,23 +214,10 @@ const DocumentationPage = () => {
             downloaded copy states which corrections it includes.
           </Paragraph>
           <Paragraph>
-            Item names were harmonized in two passes, so that the same food
+            Item names were harmonized, so that the same food
             under different spellings is one item. Names that appear together
             in the same dataset are kept distinct, because a study that rated
-            both meant two things by them. One family of datasets had item
-            labels attached in the wrong order by an earlier processing step;
-            that was traced to the source files and repaired, and the repair is
-            documented.
-          </Paragraph>
-          <Paragraph>
-            Some source files carried codes instead of item names. Nine
-            datasets carry the flag <Text code>coded_items</Text>. In{' '}
-            <Text code>larlua</Text> all 86 items are bare source codes with no
-            key, so its ratings are usable within the dataset but its items
-            cannot be matched to items elsewhere. In the eight{' '}
-            <Text code>shenhav</Text> datasets a few items among hundreds carry
-            such codes and the rest are named normally. Each dataset page shows
-            the flag and its note.
+            both meant two things by them.
           </Paragraph>
           <Paragraph style={{ marginBottom: 0 }}>
             The per-dataset audit is{' '}
@@ -252,8 +236,7 @@ const DocumentationPage = () => {
             Python. They do not call this website. They download versioned
             release files from Zenodo, cache them locally, and read from the
             cache, so an analysis that pins a version returns the same rows
-            whenever it is run, and keeps working if this site is down. No
-            account or token is needed.
+            whenever it is run, and keeps working if this site is down.
           </Paragraph>
           <Row gutter={16}>
             <Col xs={24} md={12}>
@@ -335,7 +318,7 @@ d.cite(); lk.cite()`}</pre>
             paper reported.
           </Paragraph>
           <Paragraph>
-            <strong>Repeated phases.</strong> For the six datasets with more
+            <strong>Repeated phases.</strong> For the datasets with more
             than one rating phase, only the first phase counts unless you
             select another, so a participant who rated an item three times is
             one observation rather than three.
@@ -366,25 +349,6 @@ d.cite(); lk.cite()`}</pre>
             who rated both items. Per-dataset correlations are combined with
             Fisher&apos;s <Text code>z</Text>, weighted by{' '}
             <Text code>n - 3</Text>.
-          </Paragraph>
-          <p className="page-note">
-            <strong>Why person-centring is required.</strong> Without it, two
-            items correlate because some people rate everything highly and
-            others rate everything low. That is a response-style effect, not
-            shared preference. In <Text code>foljac2</Text> the artifact is
-            total: each participant&apos;s ratings span about 0.006 while
-            participant means span about 0.6, so without centring every pair of
-            items in that dataset correlates at r = 1.00.
-          </p>
-          <Paragraph style={{ marginBottom: 0 }}>
-            Two consequences. Centring makes each participant&apos;s row sum to
-            zero, which biases correlations down by about{' '}
-            <Text code>-1/(k - 1)</Text> for <Text code>k</Text> items. That is
-            under 0.02 at the item counts typical here, but exactly 1 at{' '}
-            <Text code>k = 2</Text>, so datasets with fewer than 20 items are
-            skipped. A pair also needs at least 10 shared raters within a
-            dataset to contribute at all, so a high <Text code>r</Text> on few
-            raters never outranks a solid one on many.
           </Paragraph>
         </Card>
 
@@ -422,23 +386,6 @@ d.cite(); lk.cite()`}</pre>
             cutoff for this method is nearer 0.70. The looser 0.45 was chosen so
             that most datasets yield a network at all, which is why these
             figures are illustrative rather than confirmatory.
-          </Paragraph>
-          <p className="page-note">
-            <strong>Why most datasets are capped first.</strong> A graphical
-            model over items needs more participants than items, and most
-            datasets here have the opposite. Where that holds, the first fit is
-            restricted to the most completely observed items, enough to make an
-            estimate possible. That cap is a feasibility limit and is recorded
-            separately from the stability selection. It applies to almost every
-            dataset that yields a network; the rest cannot clear even this bar,
-            get no network, and say why. Each dataset&apos;s figure states
-            which case applies.
-          </p>
-          <Paragraph style={{ marginBottom: 0 }}>
-            Each network also reports structural consistency per dimension: how
-            often that dimension reappears intact across bootstraps. Low values
-            mean the grouping is unstable and should be read as a suggestion,
-            not a finding.
           </Paragraph>
         </Card>
 
