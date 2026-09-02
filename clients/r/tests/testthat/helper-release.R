@@ -13,7 +13,7 @@ release_dir <- function() {
 
 skip_without_release <- function() {
   dir <- release_dir()
-  if (!file.exists(file.path(dir, "catalog.json"))) {
+  if (is.null(dir) || !file.exists(file.path(dir, "catalog.json"))) {
     testthat::skip("no local release; build one with scripts/build_release.py")
   }
   options(likingInitiative.release_dir = dir)
