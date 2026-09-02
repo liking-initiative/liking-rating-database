@@ -125,11 +125,10 @@ And subject IDs are unique only *within* a dataset, so always key on
 - **Frontend** — React 18 + Ant Design 5 + react-query v3 + Plotly, in
   [frontend/](frontend/). All network calls go through
   [frontend/src/services/api.js](frontend/src/services/api.js).
-- **Client packages** — developed in their own repositories,
+- **Client packages** — separate repositories:
   [likingInitiative-py](https://github.com/liking-initiative/likingInitiative-py)
-  and [likingInitiative-r](https://github.com/liking-initiative/likingInitiative-r);
-  [clients/](clients/) mirrors their sources so the release scripts here can
-  test against them. They read release files, never the live API.
+  and [likingInitiative-r](https://github.com/liking-initiative/likingInitiative-r).
+  They read the release files this repository publishes, never the live API.
 - **Deployment** — [render.yaml](render.yaml) (backend web service + static
   frontend). See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 

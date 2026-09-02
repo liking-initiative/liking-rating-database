@@ -33,15 +33,20 @@ manifest.json             size + SHA-256 of every file
 
 About 18 MB in total.
 
-## 3. Check the clients against it before publishing
+## 3. Check the packages against it before publishing
 
-Both test suites run against a local build, so nothing has to be published to
-verify it:
+The R and Python packages live in their own repositories
+(`liking-initiative/likingInitiative-r`, `liking-initiative/likingInitiative-py`).
+Point a checkout of each at the new build; both suites skip when no release is
+present, so the summary line must say passed, not skipped:
 
 ```bash
-LIKING_INITIATIVE_RELEASE_DIR=$PWD/release python -m pytest clients/python/tests -q
-LIKING_INITIATIVE_RELEASE_DIR=$PWD/release Rscript -e 'devtools::test("clients/r")'
+LIKING_INITIATIVE_RELEASE_DIR=$PWD/release python -m pytest -q          # in likingInitiative-py
+LIKING_INITIATIVE_RELEASE_DIR=$PWD/release Rscript -e 'devtools::test()' # in likingInitiative-r
 ```
+
+If the release changes the catalog shape or the repeated-phase datasets,
+update the package tests in those repositories in the same change.
 
 ## 4. Publish
 
@@ -73,32 +78,12 @@ through the real path, so it exercises what a user will hit.
 
 ## Checking the packages before release
 
-The packages live in their own repositories,
-`liking-initiative/likingInitiative-py` and `liking-initiative/likingInitiative-r`,
-whose CI runs these checks on every push (plus a Zenodo mirror of the pinned
-release and the real download path). `clients/` here mirrors their sources;
-keep it in step by copying from those repositories, not by editing here. To
-run the checks locally:
-
-```bash
-# R -- must report Status: OK, with no NOTEs
-Rscript -e 'roxygen2::roxygenise("clients/r")'
-R CMD build clients/r
-R CMD check --no-manual likingInitiative_*.tar.gz
-
-# Python -- twine check is what PyPI validates on upload
-cd clients/python && python -m build && python -m twine check dist/*
-```
-
-Two things that bite:
-
-* **CRAN requires ASCII in R code.** Em dashes and accented characters in
-  strings must be `\uXXXX` escapes; only comments may hold them literally.
-  `tools::showNonASCIIfile()` finds them.
-* **PyPI normalises the distribution name to lowercase.** The project installs
-  as `likinginitiative` and imports as `likingInitiative`. That is normal — pip
-  is case-insensitive on the install name — but it looks inconsistent if you
-  are not expecting it.
+That happens in the package repositories, not here. Each one's CI runs the
+distribution checks (`R CMD check --as-cran`, `twine check`), the suite against
+a checksummed Zenodo mirror of the pinned release, and the real download path;
+each `CONTRIBUTING.md` documents the release steps (CRAN, PyPI trusted
+publishing). After publishing a new data version, bump the pinned
+`RELEASE_VERSION` in each repository's workflow so CI tests against it.
 
 ## Versioning
 
