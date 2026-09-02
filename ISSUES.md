@@ -29,7 +29,24 @@ missing ratings non-randomly through an unrecorded "Would Not Eat" opt-out.
 
 ## Open
 
-### Pending datasets — item-name forensics (2026-07-10)
+### Datasets to be added in the future
+
+Held out until their stimuli can be named. Each is in the RA's source CSV with
+ratings intact; what is missing in every case is the key from the study's
+numeric stimulus ids to food names. Verdicts and the evidence behind them are
+in the table below.
+
+| dataset | ratings | what would unblock it |
+|---|---|---|
+| `tanhar` | 7,674 | the authors' id→image key (the F4H catalogue numbering does not apply) |
+| `kramits` | 3,880 | the Zurich experiment's stimulus folder — not available |
+| `desself` | 4,031 | the PicID key or image folders from the dissertation |
+| `kraeglu` | 6,079 | a snack key, and confirmation of which source column holds the rating |
+| `sebmar` | 2,025 | the snack list for the BDM ids |
+| `foljac1` | 448 | a key for item indices 1..16 |
+| `shenhav1a` | 6,103 | the in-person product array (only the online key survives) |
+
+#### Evidence per dataset (item-name forensics, 2026-07-10, updated 2026-09-01)
 
 All raw files in `Liking Rating Database Files.zip` were examined per dataset.
 Rule applied: no name mapping is used unless the key is proven from source data.
