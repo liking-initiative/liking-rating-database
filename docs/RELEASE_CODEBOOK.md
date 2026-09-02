@@ -137,10 +137,11 @@ packages provide `cite()` and `bibtex()`.
 
 The DOI above is the *concept* DOI: it always resolves to the newest version.
 To name the exact bytes an analysis ran on, cite the version DOI instead —
-`release_info()` reports the version. v1.6.1 is
-[10.5281/zenodo.22239351](https://doi.org/10.5281/zenodo.22239351); v1.5.0 is
-[10.5281/zenodo.22216443](https://doi.org/10.5281/zenodo.22216443). Every
-published version keeps its DOI.
+`release_info()` reports the version. v1.6.2 is
+[10.5281/zenodo.22239889](https://doi.org/10.5281/zenodo.22239889); earlier
+versions keep their own DOIs (v1.6.1: 10.5281/zenodo.22239351; v1.5.0:
+10.5281/zenodo.22216443). Prefer 1.6.2 or later: the two before it carry the
+item-name error corrected in migration 029.
 
 ## License
 
