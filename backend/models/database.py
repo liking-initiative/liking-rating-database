@@ -12,7 +12,7 @@ from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 import uuid
 
-from backend.config import DATABASE_CONFIG
+from backend.config import settings
 
 # Create declarative base
 Base = declarative_base()
@@ -154,8 +154,6 @@ class DownloadLog(Base):
     file_size_mb = Column(Float)
     download_url = Column(String(500))
     expires_at = Column(DateTime)
-    user_ip = Column(String(45))
-    user_agent = Column(Text)
     created_at = Column(DateTime, default=datetime.utcnow)
     
     # Indexes
@@ -165,56 +163,29 @@ class DownloadLog(Base):
     )
 
 
-class SearchLog(Base):
-    """Search log model - tracks search queries for analytics"""
-    __tablename__ = "search_logs"
-    
-    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
-    query = Column(String(500), nullable=False)
-    filters = Column(Text)  # JSON string with applied filters
-    results_count = Column(Integer)
-    user_ip = Column(String(45))
-    created_at = Column(DateTime, default=datetime.utcnow)
-    
-    # Indexes
-    __table_args__ = (
-        Index("idx_search_query", "query"),
-        Index("idx_search_created", "created_at"),
-    )
-
-
 # Database initialization functions
 async def init_db():
     """Initialize database connection and create tables"""
     global engine, async_session
     
-    if "sqlite" in DATABASE_CONFIG["url"]:
-        engine = create_async_engine(
-            DATABASE_CONFIG["url"].replace("postgresql://", "sqlite+aiosqlite:///"),
-            echo=DATABASE_CONFIG["echo"],
-            connect_args={"timeout": 30},
-        )
+    engine = create_async_engine(
+        settings.DATABASE_URL,
+        echo=settings.LOG_LEVEL == "DEBUG",
+        connect_args={"timeout": 30},
+    )
 
-        # WAL lets the long analytics reads coexist with search/download log
-        # writes ("database is locked" otherwise). Anyone snapshotting the DB
-        # must checkpoint the WAL first — procedure in docs/DEVELOPMENT.md.
-        from sqlalchemy import event
+    # WAL lets the long analytics reads coexist with download log writes
+    # ("database is locked" otherwise). Anyone snapshotting the DB must
+    # checkpoint the WAL first — procedure in docs/DEVELOPMENT.md.
+    from sqlalchemy import event
 
-        @event.listens_for(engine.sync_engine, "connect")
-        def _sqlite_pragmas(dbapi_conn, _record):
-            cur = dbapi_conn.cursor()
-            cur.execute("PRAGMA journal_mode=WAL")
-            cur.execute("PRAGMA busy_timeout=30000")
-            cur.close()
-    else:
-        # Use asyncpg for PostgreSQL
-        engine = create_async_engine(
-            DATABASE_CONFIG["url"].replace("postgresql://", "postgresql+asyncpg://"),
-            echo=DATABASE_CONFIG["echo"],
-            pool_pre_ping=DATABASE_CONFIG["pool_pre_ping"],
-            pool_recycle=DATABASE_CONFIG["pool_recycle"]
-        )
-    
+    @event.listens_for(engine.sync_engine, "connect")
+    def _sqlite_pragmas(dbapi_conn, _record):
+        cur = dbapi_conn.cursor()
+        cur.execute("PRAGMA journal_mode=WAL")
+        cur.execute("PRAGMA busy_timeout=30000")
+        cur.close()
+
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     
     # Create all tables

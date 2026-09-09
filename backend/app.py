@@ -9,11 +9,10 @@ from collections import deque
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator, Deque, Dict
 
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
-import uvicorn
 
 from backend.config import settings
 from backend.api.routes import api_router, download_service
@@ -49,13 +48,11 @@ async def _cleanup_downloads_periodically() -> None:
 
 
 async def _prewarm_caches() -> None:
-    """Warm the expensive cached analytics once, so no visitor pays the
-    cold-compute cost (default item network takes ~10s on 588k ratings)"""
+    """Warm the cached statistics once, so no visitor pays the cold cost"""
     from backend.api.routes import data_service
     try:
         async with database.async_session() as session:
             await data_service.get_statistics(db=session)
-            await data_service.get_item_network(db=session)
         logger.info("Analytics caches pre-warmed")
     except asyncio.CancelledError:
         raise
@@ -89,7 +86,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
 # Create FastAPI application
 app = FastAPI(
-    title=settings.PROJECT_NAME,
+    title="Liking Rating Database",
     description="A comprehensive database system for food liking ratings from multiple studies",
     version="1.0.0",
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
@@ -166,7 +163,7 @@ app.include_router(api_router, prefix=settings.API_V1_STR)
 async def root():
     """Root endpoint"""
     return {
-        "message": f"Welcome to {settings.PROJECT_NAME} API",
+        "message": "Welcome to the Liking Rating Database API",
         "version": "1.0.1",
         "docs": f"{settings.API_V1_STR}/docs",
         "database": "v1.0.0"
@@ -176,17 +173,7 @@ async def root():
 @app.get("/health")
 async def health_check():
     """Health check endpoint"""
-    return {"status": "healthy", "service": settings.PROJECT_NAME}
-
-
-@app.exception_handler(404)
-async def not_found_handler(request, exc):
-    """Custom 404 handler — preserve route-level detail when present"""
-    detail = getattr(exc, "detail", None) or "Resource not found"
-    return JSONResponse(
-        status_code=404,
-        content={"detail": detail}
-    )
+    return {"status": "healthy", "service": "Liking Rating Database"}
 
 
 @app.exception_handler(500)
@@ -198,17 +185,3 @@ async def internal_error_handler(request, exc):
         content={"detail": "Internal server error"}
     )
 
-
-def main():
-    """Run the application"""
-    uvicorn.run(
-        "backend.app:app",
-        host=settings.API_HOST,
-        port=settings.API_PORT,
-        reload=True,
-        log_level=settings.LOG_LEVEL.lower()
-    )
-
-
-if __name__ == "__main__":
-    main()

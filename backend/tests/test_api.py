@@ -7,6 +7,8 @@ import zipfile
 
 import pytest
 
+from backend.models import database
+
 pytestmark = pytest.mark.asyncio
 
 V = "/api/v1"
@@ -335,9 +337,14 @@ async def test_metadata_endpoints(client):
 
 # --- item network -------------------------------------------------------------
 
+async def _network(**kw):
+    from scripts.build_item_networks import compute_item_network
+    async with database.async_session() as session:
+        return await compute_item_network(session, **kw)
+
+
 async def test_item_network_triangle(client):
-    net = (await client.get(f"{V}/analytics/item-network",
-                            params={"min_shared": 1, "min_frequency": 2})).json()
+    net = await _network(min_shared=1, min_frequency=2)
     labels = {n["label"] for n in net["nodes"]}
     assert labels == {"chocolate", "apple", "kale"}  # tortillachips: 1 dataset only
     assert net["meta"]["edge_count"] == 3            # triangle via shared datasets
@@ -347,28 +354,24 @@ async def test_item_network_triangle(client):
 
 
 async def test_item_network_threshold_empties(client):
-    net = (await client.get(f"{V}/analytics/item-network",
-                            params={"min_shared": 2, "min_frequency": 2})).json()
+    net = await _network(min_shared=2, min_frequency=2)
     assert net["meta"]["edge_count"] == 0 and net["meta"]["node_count"] == 0
-
-
-async def test_item_network_category_filter(client):
-    net = (await client.get(f"{V}/analytics/item-network",
-                            params={"min_shared": 1, "min_frequency": 2,
-                                    "categories": ["fruits", "vegetables"]})).json()
-    assert {n["label"] for n in net["nodes"]} == {"apple", "kale"}
-    assert net["meta"]["edge_count"] == 1
 
 
 async def test_item_network_backbone(client):
     # top-1 edge per node over the equal-weight triangle -> a 2-edge path,
     # still one component (backbone must not disconnect the graph here)
-    net = (await client.get(f"{V}/analytics/item-network",
-                            params={"min_shared": 1, "min_frequency": 2,
-                                    "max_edges_per_node": 1})).json()
+    net = await _network(min_shared=1, min_frequency=2, max_edges_per_node=1)
     assert net["meta"]["edge_count"] == 2
     assert net["meta"]["components"] == 1
     assert net["meta"]["node_count"] == 3
+
+
+async def test_item_network_endpoint_refuses_a_network_built_elsewhere(client):
+    # the shipped files carry a fingerprint of the production database; the
+    # fixture database is not it, so nothing may be served
+    r = await client.get(f"{V}/analytics/item-network", params={"min_shared": 12})
+    assert r.status_code == 404
 
 
 async def test_ratings_include_normalized(client):
@@ -398,22 +401,3 @@ async def test_aggregate_statistics_are_coherent(client):
     # most-rated first, item id breaking ties, so pages stay stable
     keys = [(-r["n_ratings"], r["item_id"]) for r in rows]
     assert keys == sorted(keys)
-
-
-async def test_item_network_survives_the_sparse_solver_threshold(client):
-    """networkx switches to a scipy-backed sparse solver above 500 nodes.
-
-    Without scipy installed that raises ModuleNotFoundError inside the request
-    and the endpoint 500s — which is exactly what production did, at every
-    setting whose graph exceeded the threshold, while the smaller ones passed.
-    Importing it here fails the suite if it ever leaves requirements.txt.
-    """
-    import scipy  # noqa: F401
-
-    r = await client.get(f"{V}/analytics/item-network", params={"min_shared": 1})
-    assert r.status_code == 200
-    body = r.json()
-    assert {"nodes", "edges", "meta"} <= set(body)
-    for n in body["nodes"]:
-        assert {"id", "label", "x", "y"} <= set(n)
-        assert isinstance(n["x"], (int, float)) and isinstance(n["y"], (int, float))

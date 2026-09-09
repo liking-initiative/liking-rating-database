@@ -24,7 +24,6 @@ Extract the database: `python scripts/setup_database.py` unpacks the shipped
 ```bash
 # backend — must run from the repo root so the `backend` package resolves
 uvicorn backend.app:app --reload --port 8000
-# equivalently: python -m backend.app        (NOT `python backend/app.py`)
 
 # frontend
 cd frontend && npm start

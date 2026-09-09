@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, and_, or_, text
 from sqlalchemy.orm import selectinload
 
-from backend.models.database import Study, Dataset, Item, Rating, SearchLog
+from backend.models.database import Study, Dataset, Item, Rating
 from backend.models.schemas import SearchRequest, SearchResponse, SearchFilters
 from backend.config import settings
 
@@ -66,9 +66,6 @@ class SearchService:
         # Execute query
         result = await db.execute(query)
         datasets = result.scalars().all()
-        
-        # Log search for analytics
-        await self._log_search(search_request, total, db)
         
         # Calculate pagination info
         pages = (total + search_request.page_size - 1) // search_request.page_size
@@ -153,24 +150,15 @@ class SearchService:
         if filters.data_completeness_min:
             query = query.where(Dataset.data_completeness >= filters.data_completeness_min)
         
-        # Food-related filters (requires join with ratings and items)
-        if filters.food_category or filters.food_name:
-            query = query.join(Rating).join(Item)
-            
-            if filters.food_category:
-                query = query.where(Item.category == filters.food_category)
-            
-            if filters.food_name:
-                query = query.where(
-                    or_(
-                        Item.name.ilike(f"%{filters.food_name}%"),
-                        Item.standardized_name.ilike(f"%{filters.food_name}%"),
-                        func.json_extract(Item.aliases, '$').like(f'%"{filters.food_name}"%')
-                    )
+        # Item name filter (requires join with ratings and items)
+        if filters.food_name:
+            query = query.join(Rating).join(Item).where(
+                or_(
+                    Item.name.ilike(f"%{filters.food_name}%"),
+                    Item.standardized_name.ilike(f"%{filters.food_name}%"),
+                    func.json_extract(Item.aliases, '$').like(f'%"{filters.food_name}"%')
                 )
-            
-            # Ensure we don't get duplicate datasets
-            query = query.distinct()
+            ).distinct()  # one row per dataset, not per matching rating
         
         return query
     
@@ -194,25 +182,6 @@ class SearchService:
         
         return query.order_by(sort_column)
     
-    async def _log_search(
-        self, 
-        search_request: SearchRequest, 
-        results_count: int, 
-        db: AsyncSession
-    ):
-        """Log search query for analytics"""
-        try:
-            search_log = SearchLog(
-                query=search_request.query or "",
-                filters=search_request.filters.json() if search_request.filters else None,
-                results_count=results_count
-            )
-            db.add(search_log)
-            await db.commit()
-        except Exception as e:
-            # Don't fail the search if logging fails
-            print(f"Failed to log search: {e}")
-    
     async def get_search_suggestions(
         self, 
         query: str, 
@@ -224,7 +193,6 @@ class SearchService:
             "studies": [],
             "authors": [],
             "items": [],
-            "categories": []
         }
         
         # Study name suggestions
@@ -261,12 +229,5 @@ class SearchService:
         ).limit(limit)
         item_result = await db.execute(item_query)
         suggestions["items"] = [row[0] for row in item_result.fetchall()]
-        
-        # Category suggestions
-        category_query = select(Item.category).where(
-            Item.category.ilike(f"%{query}%")
-        ).distinct().limit(limit)
-        category_result = await db.execute(category_query)
-        suggestions["categories"] = [row[0] for row in category_result.fetchall() if row[0]]
         
         return suggestions

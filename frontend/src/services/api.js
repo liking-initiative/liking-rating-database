@@ -215,7 +215,7 @@ export const downloadFile = (blob, filename) => {
   window.URL.revokeObjectURL(url);
 };
 
-export const generateBibtex = (study) => {
+const generateBibtex = (study) => {
   const authors = Array.isArray(study.authors) ? study.authors : [];
   const firstAuthor = authors[0] || 'unknown';
   // "Lastname, F." puts the last name first; "First Lastname" puts it last
@@ -249,7 +249,7 @@ export const generateBibtex = (study) => {
  * work, and the collection that made it reusable. Shipping both together
  * means crediting both takes no extra effort.
  */
-export const DATABASE_BIBTEX = `@dataset{likinginitiative,
+const DATABASE_BIBTEX = `@dataset{likinginitiative,
   author    = {Fernandez, Kianté and Goyal, Sumedha and Krajbich, Ian},
   title     = {The Liking Initiative: a database of subjective evaluation
                ratings for decision-making research},

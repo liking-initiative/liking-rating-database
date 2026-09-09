@@ -24,6 +24,7 @@ from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 import numpy as np
 import pandas as pd
+from scipy import stats
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -58,14 +59,9 @@ _MIN_ITEMS_PER_DATASET = 20
 
 def _skewness(values: np.ndarray) -> Optional[float]:
     """Adjusted Fisher-Pearson standardised moment coefficient (G1)."""
-    n = values.size
-    if n < 3:
+    if values.size < 3 or values.std(ddof=1) == 0:
         return None
-    sd = values.std(ddof=1)
-    if not np.isfinite(sd) or sd == 0:
-        return None
-    m3 = (((values - values.mean()) / sd) ** 3).sum()
-    return float(n / ((n - 1) * (n - 2)) * m3)
+    return float(stats.skew(values, bias=False))
 
 
 def _gaussian_kde(values: np.ndarray, grid_points: int = _KDE_GRID) -> List[Dict[str, float]]:
@@ -77,32 +73,16 @@ def _gaussian_kde(values: np.ndarray, grid_points: int = _KDE_GRID) -> List[Dict
     n = values.size
     if n < _MIN_N_FOR_KDE:
         return []
-
     sd = values.std(ddof=1)
     q75, q25 = np.percentile(values, [75, 25])
-    iqr = q75 - q25
-    spread = min(sd, iqr / 1.34) if iqr > 0 else sd
+    spread = min(sd, (q75 - q25) / 1.34) if q75 > q25 else sd
     if not np.isfinite(spread) or spread <= 0:
         return []
-
     bandwidth = 0.9 * spread * n ** (-0.2)
-    if not np.isfinite(bandwidth) or bandwidth <= 0:
-        return []
-
-    lo = float(values.min() - 3 * bandwidth)
-    hi = float(values.max() + 3 * bandwidth)
-    if not np.isfinite(lo) or not np.isfinite(hi) or hi <= lo:
-        return []
-
-    grid = np.linspace(lo, hi, grid_points)
-    # (grid_points, n) kernel matrix; both dimensions stay small here.
-    z = (grid[:, None] - values[None, :]) / bandwidth
-    density = np.exp(-0.5 * z * z).sum(axis=1) / (n * bandwidth * np.sqrt(2 * np.pi))
-    return [
-        {"x": float(x), "y": float(y)}
-        for x, y in zip(grid, density)
-        if np.isfinite(x) and np.isfinite(y)
-    ]
+    grid = np.linspace(values.min() - 3 * bandwidth, values.max() + 3 * bandwidth, grid_points)
+    # scipy scales its kernel by the sample sd; pass the ratio to get this bandwidth.
+    density = stats.gaussian_kde(values, bw_method=bandwidth / sd)(grid)
+    return [{"x": float(x), "y": float(y)} for x, y in zip(grid, density)]
 
 
 def _summarise(

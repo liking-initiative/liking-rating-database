@@ -147,7 +147,7 @@ const HomePage = () => {
             style={{ cursor: 'pointer' }}
           >
             <Paragraph>
-              Filter datasets by study, category, rating scale, and year.
+              Filter datasets by study, item, rating scale, and year.
             </Paragraph>
             <Button type="link" icon={<SearchOutlined />}>
               Explore Search →

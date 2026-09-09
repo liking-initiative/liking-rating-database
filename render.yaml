@@ -14,8 +14,6 @@ services:
         value: "3.11.9"
       - key: DATABASE_URL
         value: "sqlite+aiosqlite:///./data/liking_rating_db.db"
-      - key: API_HOST
-        value: "0.0.0.0"
       - key: LOG_LEVEL
         value: "INFO"
       - key: BACKEND_CORS_ORIGINS

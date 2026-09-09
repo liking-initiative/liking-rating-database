@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, and_, or_
 from sqlalchemy.orm import selectinload
 
-from backend.models.database import get_db, Study, Dataset, Item, Rating, DownloadLog
+from backend.models.database import get_db, Study, Dataset, Item, Rating
 from backend.models.schemas import (
     StudyWithDatasets,
     DatasetWithStudy,
@@ -159,7 +159,6 @@ async def get_items(
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
     search: Optional[str] = Query(None),
-    category: Optional[str] = Query(None),
     min_frequency: Optional[int] = Query(None),
     db: AsyncSession = Depends(get_db)
 ):
@@ -174,9 +173,6 @@ async def get_items(
             func.json_extract(Item.aliases, '$').like(f'%"{search}"%')
         )
         query = query.where(search_filter)
-    
-    if category:
-        query = query.where(Item.category == category)
     
     if min_frequency:
         query = query.where(Item.frequency >= min_frequency)
@@ -373,15 +369,6 @@ async def get_statistics(db: AsyncSession = Depends(get_db)):
 
 
 # Metadata endpoints
-@api_router.get("/metadata/categories")
-async def get_categories(db: AsyncSession = Depends(get_db)):
-    """Get all food categories"""
-    query = select(Item.category).distinct().where(Item.category.isnot(None))
-    result = await db.execute(query)
-    categories = [row[0] for row in result.fetchall()]
-    return {"categories": sorted(categories)}
-
-
 @api_router.get("/metadata/scale-types")
 async def get_scale_types(db: AsyncSession = Depends(get_db)):
     """Get all rating scale types"""
@@ -403,20 +390,15 @@ async def get_year_range(db: AsyncSession = Depends(get_db)):
 @api_router.get("/analytics/item-network")
 async def get_item_network(
     min_shared: int = Query(12, ge=1, description="min datasets two items must share for an edge"),
-    categories: Optional[List[str]] = Query(None),
-    min_frequency: int = Query(2, ge=1, description="min datasets an item must appear in"),
-    max_edges_per_node: int = Query(4, ge=0, le=20, description="backbone: keep each node's strongest K edges (0 = keep all)"),
     db: AsyncSession = Depends(get_db)
 ):
-    """Item co-occurrence network (nodes grouped by standardized name),
-    with a precomputed layout for rendering"""
-    return await data_service.get_item_network(
-        min_shared=min_shared,
-        categories=categories,
-        min_frequency=min_frequency,
-        max_edges_per_node=max_edges_per_node,
-        db=db,
-    )
+    """Item co-occurrence network (nodes grouped by standardized name), with a
+    precomputed layout. Built by scripts/build_item_networks.py for a fixed set
+    of thresholds; other values have no network."""
+    net = await data_service.get_item_network(min_shared, db)
+    if net is None:
+        raise HTTPException(status_code=404, detail=f"No prebuilt network for min_shared={min_shared}")
+    return net
 
 
 # Descriptives endpoints

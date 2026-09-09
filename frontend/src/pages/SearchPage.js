@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Card,
@@ -20,7 +20,6 @@ import {
   message
 } from 'antd';
 import { SearchOutlined, FilterOutlined, DownloadOutlined } from '@ant-design/icons';
-import debounce from 'lodash/debounce';
 import { useQuery } from 'react-query';
 import { searchDatasets, getScaleTypes, getYearRange, getSearchSuggestions, requestDownload, getDownload, downloadFile } from '../services/api';
 
@@ -81,21 +80,25 @@ const SearchPage = () => {
   );
 
   // Typeahead over studies / authors / item names
-  const fetchSuggestions = useMemo(() => debounce(async (text) => {
+  const suggestTimer = useRef();
+  const fetchSuggestions = (text) => {
+    clearTimeout(suggestTimer.current);
     if (!text || text.length < 2) {
       setSuggestionOptions([]);
       return;
     }
-    try {
-      const s = await getSearchSuggestions(text);
-      const opts = [...(s.items || []), ...(s.studies || []), ...(s.authors || [])]
-        .slice(0, 10)
-        .map(v => ({ value: v }));
-      setSuggestionOptions(opts);
-    } catch {
-      setSuggestionOptions([]);
-    }
-  }, 300), []);
+    suggestTimer.current = setTimeout(async () => {
+      try {
+        const s = await getSearchSuggestions(text);
+        const opts = [...(s.items || []), ...(s.studies || []), ...(s.authors || [])]
+          .slice(0, 10)
+          .map(v => ({ value: v }));
+        setSuggestionOptions(opts);
+      } catch {
+        setSuggestionOptions([]);
+      }
+    }, 300);
+  };
 
   const handleSearch = (values) => {
     // The API expects year_min/year_max, not the form's year_range slider value

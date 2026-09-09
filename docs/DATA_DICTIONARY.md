@@ -2,7 +2,7 @@
 
 Field-level documentation for the SQLite database. All primary keys are UUID
 strings. Six tables: `studies`, `datasets`, `items`, `ratings`, plus
-`download_logs` / `search_logs` (analytics) and `schema_migrations`
+`download_logs` (download bookkeeping) and `schema_migrations`
 (data-versioning record).
 
 ---

@@ -3,7 +3,7 @@ Pydantic schemas for API request/response models
 """
 from datetime import datetime
 from typing import List, Optional, Dict, Any
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field
 
 
 # Base schemas
@@ -17,8 +17,9 @@ class BaseSchema(BaseModel):
 
 
 # Study schemas
-class StudyBase(BaseSchema):
-    """Base study schema"""
+class StudyResponse(BaseSchema):
+    """Schema for study response"""
+    id: str
     name: str = Field(..., max_length=1000)  # Increased for full academic citations
     authors: List[str]
     year: int = Field(..., ge=1900, le=2030)
@@ -27,11 +28,6 @@ class StudyBase(BaseSchema):
     publication_title: Optional[str] = Field(None, max_length=500)
     journal: Optional[str] = Field(None, max_length=255)
     osf_project_id: Optional[str] = Field(None, max_length=50)
-
-
-class StudyResponse(StudyBase):
-    """Schema for study response"""
-    id: str
     created_at: datetime
     updated_at: datetime
 
@@ -42,8 +38,10 @@ class StudyWithDatasets(StudyResponse):
 
 
 # Dataset schemas
-class DatasetBase(BaseSchema):
-    """Base dataset schema"""
+class DatasetResponse(BaseSchema):
+    """Schema for dataset response"""
+    id: str
+    study_id: str
     name: str = Field(..., max_length=255)
     description: Optional[str] = None
     n_subjects: int = Field(..., ge=1)
@@ -57,12 +55,6 @@ class DatasetBase(BaseSchema):
     file_format: Optional[str] = Field(None, max_length=20)
     file_size_mb: Optional[float] = Field(None, ge=0)
     osf_file_id: Optional[str] = Field(None, max_length=50)
-
-
-class DatasetResponse(DatasetBase):
-    """Schema for dataset response"""
-    id: str
-    study_id: str
     created_at: datetime
     updated_at: datetime
 
@@ -74,8 +66,10 @@ class DatasetWithStudy(DatasetResponse):
 
 
 # Item schemas
-class ItemBase(BaseSchema):
-    """Base item schema"""
+class ItemResponse(BaseSchema):
+    """Schema for item response"""
+    id: str
+    frequency: int
     name: str = Field(..., max_length=255)
     standardized_name: Optional[str] = Field(None, max_length=255)
     category: Optional[str] = Field(None, max_length=100)
@@ -85,50 +79,8 @@ class ItemBase(BaseSchema):
     image_url: Optional[str] = Field(None, max_length=500)
     aliases: Optional[List[str]] = []
     nutritional_info: Optional[str] = None
-
-
-class ItemCreate(ItemBase):
-    """Schema for creating an item"""
-    pass
-
-
-class ItemUpdate(BaseSchema):
-    """Schema for updating an item"""
-    name: Optional[str] = Field(None, max_length=255)
-    standardized_name: Optional[str] = Field(None, max_length=255)
-    category: Optional[str] = Field(None, max_length=100)
-    subcategory: Optional[str] = Field(None, max_length=100)
-    description: Optional[str] = None
-    image_available: Optional[bool] = None
-    image_url: Optional[str] = Field(None, max_length=500)
-    aliases: Optional[List[str]] = None
-    nutritional_info: Optional[str] = None
-
-
-class ItemResponse(ItemBase):
-    """Schema for item response"""
-    id: str
-    frequency: int
     created_at: datetime
     updated_at: datetime
-
-
-# Rating schemas
-class RatingBase(BaseSchema):
-    """Base rating schema"""
-    subject_id: str
-    rating: float
-    normalized_rating: float
-    response_time: Optional[float] = Field(None, ge=0)
-    session_id: Optional[str] = Field(None, max_length=100)
-    order_presented: Optional[int] = Field(None, ge=1)
-    demographic_data: Optional[str] = None
-
-
-class RatingCreate(RatingBase):
-    """Schema for creating a rating"""
-    dataset_id: str
-    item_id: str
 
 
 # Search and filter schemas
@@ -143,7 +95,6 @@ class SearchFilters(BaseSchema):
     n_subjects_max: Optional[int] = None
     n_items_min: Optional[int] = Field(None, ge=1)
     n_items_max: Optional[int] = None
-    food_category: Optional[str] = None
     food_name: Optional[str] = None
     data_completeness_min: Optional[float] = Field(None, ge=0, le=100)
 
@@ -230,14 +181,6 @@ class StudyStatistics(BaseSchema):
     total_items: int
     year_range: tuple[int, int]
     most_common_scale_types: List[tuple[str, int]]
-
-
-# Error schemas
-class ErrorResponse(BaseSchema):
-    """Schema for error responses"""
-    detail: str
-    error_code: Optional[str] = None
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
 
 
 class PaginatedItemsResponse(BaseSchema):
