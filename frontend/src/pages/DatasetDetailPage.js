@@ -334,8 +334,6 @@ const DatasetDetailPage = () => {
             >
               <Option value="csv">CSV</Option>
               <Option value="json">JSON</Option>
-              <Option value="xlsx">Excel</Option>
-              <Option value="spss">SPSS</Option>
             </Select>
           </div>
           <div style={{ color: '#4a4a4a', fontSize: '13.5px' }}>

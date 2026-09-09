@@ -109,19 +109,10 @@ async def test_unknown_dataset_id_is_404(client):
     assert r.status_code == 404
 
 
-async def test_xlsx_download(client):
-    r = await client.post(f"{V}/download", json={"dataset_ids": ["ds-veg"], "format": "xlsx"})
-    assert r.status_code == 200
-    blob = await client.get(f"{V}/download/{r.json()['download_id']}")
-    assert blob.content[:2] == b"PK"  # xlsx is a zip container
-
-
-async def test_spss_download(client):
-    pytest.importorskip("pyreadstat")
-    r = await client.post(f"{V}/download", json={"dataset_ids": ["ds-choc2"], "format": "spss"})
-    assert r.status_code == 200
-    blob = await client.get(f"{V}/download/{r.json()['download_id']}")
-    assert blob.content[:4] == b"$FL2"  # SAV magic
+async def test_download_rejects_dropped_formats(client):
+    for fmt in ("xlsx", "spss"):
+        r = await client.post(f"{V}/download", json={"dataset_ids": ["ds-veg"], "format": fmt})
+        assert r.status_code == 422, fmt
 
 
 # --- repeated phases must survive export --------------------------------------
@@ -145,7 +136,7 @@ async def test_csv_export_carries_timepoint(client):
     assert not [k for k, n in keys.items() if n > 1]
 
 
-async def test_json_and_xlsx_exports_carry_timepoint(client):
+async def test_json_export_carries_timepoint(client):
     import json as _json
     r = await client.post(f"{V}/download",
                           json={"dataset_ids": ["ds-repeat"], "format": "json"})
@@ -154,15 +145,6 @@ async def test_json_and_xlsx_exports_carry_timepoint(client):
     ratings = payload["datasets"][0]["ratings"]
     assert all("timepoint" in row for row in ratings)
     assert {row["timepoint"] for row in ratings} == {1, 2}
-
-    pd = pytest.importorskip("pandas")
-    pytest.importorskip("openpyxl")
-    r = await client.post(f"{V}/download",
-                          json={"dataset_ids": ["ds-repeat"], "format": "xlsx"})
-    blob = await client.get(f"{V}/download/{r.json()['download_id']}")
-    df = pd.read_excel(io.BytesIO(blob.content))
-    assert "timepoint" in df.columns
-    assert set(df["timepoint"]) == {1, 2}
 
 
 async def test_ratings_expose_subject_id(client):

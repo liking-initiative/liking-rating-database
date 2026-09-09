@@ -135,7 +135,7 @@ for the consumer-product studies. The substantive study metadata lives in
 
 ## Download exports
 
-Every export format (csv, json, xlsx, spss) carries the observation key in
+Every export format (csv, json) carries the observation key in
 full: `subject_id`, `item_id`, `item_name`, `timepoint`, `rating`,
 `normalized_rating`. **`timepoint` is required to disambiguate repeated
 phases** — without it, `leeholyoak2021` and `leehare2023exp2` return several

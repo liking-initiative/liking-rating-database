@@ -122,7 +122,7 @@ class SearchResponse(BaseSchema):
 class DownloadRequest(BaseSchema):
     """Schema for download requests"""
     dataset_ids: List[str] = Field(..., min_items=1)
-    format: str = Field(..., pattern="^(csv|json|xlsx|spss)$")
+    format: str = Field(..., pattern="^(csv|json)$")
     include_metadata: bool = True
     include_demographics: bool = False
 

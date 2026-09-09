@@ -16,7 +16,6 @@ from typing import List, Dict, Any, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
-import pandas as pd
 
 from backend.models.database import Dataset, Study, Item, Rating, DownloadLog
 from backend.models.schemas import DownloadRequest, DownloadResponse
@@ -84,10 +83,6 @@ class DownloadService:
             file_path = await self._create_csv_download(datasets, download_path, download_request)
         elif download_request.format == "json":
             file_path = await self._create_json_download(datasets, download_path, download_request)
-        elif download_request.format == "xlsx":
-            file_path = await self._create_xlsx_download(datasets, download_path, download_request)
-        elif download_request.format == "spss":
-            file_path = await self._create_spss_download(datasets, download_path, download_request)
         else:
             raise ValueError(f"Unsupported format: {download_request.format}")
         
@@ -141,8 +136,6 @@ class DownloadService:
         format_extensions = {
             "csv": (".csv", ".zip"),
             "json": (".json",),
-            "xlsx": (".xlsx",),
-            "spss": (".sav",),
         }
         expected = format_extensions.get(download_log.download_format, ())
         files = sorted(os.listdir(download_path))
@@ -326,125 +319,6 @@ class DownloadService:
             json.dump(data, jsonfile, indent=2, default=str)
         
         return file_path
-    
-    async def _create_xlsx_download(
-        self, 
-        datasets: List[Dataset], 
-        download_path: str, 
-        request: DownloadRequest
-    ) -> str:
-        """Create Excel format download"""
-        filename = "datasets.xlsx"
-        file_path = os.path.join(download_path, filename)
-        
-        with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
-            for i, dataset in enumerate(datasets):
-                # Prepare data
-                data = []
-                for rating in dataset.ratings:
-                    row = {
-                        'subject_id': rating.subject_id,
-                        'item_id': rating.item_id,
-                        'item_name': rating.item.name,
-                        'timepoint': rating.timepoint,
-                        'rating': rating.rating,
-                        'normalized_rating': rating.normalized_rating
-                    }
-                    
-                    if request.include_demographics:
-                        row.update({
-                            'response_time': rating.response_time,
-                            'session_id': rating.session_id,
-                            'order_presented': rating.order_presented,
-                            'demographic_data': rating.demographic_data
-                        })
-                    
-                    if request.include_metadata:
-                        row.update({
-                            'study_name': dataset.study.name,
-                            'study_authors': "; ".join(dataset.study.authors),
-                            'study_year': dataset.study.year,
-                            'dataset_name': dataset.name
-                        })
-                    
-                    data.append(row)
-                
-                # Create DataFrame and write to Excel
-                df = pd.DataFrame(data)
-                sheet_name = f"Dataset_{i+1}"[:31]  # Excel sheet name limit
-                df.to_excel(writer, sheet_name=sheet_name, index=False)
-            
-            # Add metadata sheet if requested
-            if request.include_metadata:
-                metadata = []
-                for dataset in datasets:
-                    metadata.append({
-                        'dataset_id': dataset.id,
-                        'dataset_name': dataset.name,
-                        'study_name': dataset.study.name,
-                        'authors': "; ".join(dataset.study.authors),
-                        'year': dataset.study.year,
-                        'n_subjects': dataset.n_subjects,
-                        'n_items': dataset.n_items,
-                        'rating_scale_min': dataset.rating_scale_min,
-                        'rating_scale_max': dataset.rating_scale_max,
-                        'rating_scale_type': dataset.rating_scale_type
-                    })
-                
-                metadata_df = pd.DataFrame(metadata)
-                metadata_df.to_excel(writer, sheet_name="Metadata", index=False)
-        
-        return file_path
-    
-    async def _create_spss_download(
-        self, 
-        datasets: List[Dataset], 
-        download_path: str, 
-        request: DownloadRequest
-    ) -> str:
-        """Create SPSS format download (SAV file)"""
-        # For SPSS, we'll create a CSV first then convert using pyreadstat
-        csv_path = await self._create_csv_download(datasets, download_path, request)
-        
-        # Read CSV and convert to SPSS
-        df = pd.read_csv(csv_path)
-        
-        # Define variable labels for SPSS
-        variable_labels = {
-            'subject_id': 'Subject identifier',
-            'item_id': 'Item identifier',
-            'item_name': 'Food item name',
-            'timepoint': 'Repeated-rating phase (1 = first/only)',
-            'rating': 'Original rating value',
-            'normalized_rating': 'Normalized rating (0-1 scale)'
-        }
-        
-        if request.include_demographics:
-            variable_labels.update({
-                'response_time': 'Response time in seconds',
-                'session_id': 'Testing session identifier',
-                'order_presented': 'Order item was presented',
-                'demographic_data': 'Demographic information (JSON)'
-            })
-        
-        spss_path = os.path.join(download_path, "datasets.sav")
-
-        try:
-            import pyreadstat
-        except ImportError as exc:
-            # Clean up the intermediate CSV so the download dir isn't left
-            # with a deliverable the user did not ask for
-            os.remove(csv_path)
-            raise NotImplementedError(
-                "SPSS export is not available: the 'pyreadstat' package is not installed"
-            ) from exc
-
-        pyreadstat.write_sav(df, spss_path, column_labels=variable_labels)
-
-        # Clean up CSV file
-        os.remove(csv_path)
-
-        return spss_path
     
     async def _create_metadata_file(self, datasets: List[Dataset], download_path: str) -> str:
         """Create metadata file for the download"""

@@ -56,7 +56,7 @@ backend/
 ├── services/           # business logic
 │   ├── search_service.py     # dataset search (matches item names too), suggestions
 │   ├── data_service.py       # aggregations + statistics (cached in-process)
-│   └── download_service.py   # csv/json/xlsx/spss exports in temp dir
+│   └── download_service.py   # csv/json exports in temp dir
 └── models/
     ├── database.py     # SQLAlchemy async models; init_db() in lifespan
     └── schemas.py      # pydantic response/request models

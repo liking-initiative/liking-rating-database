@@ -57,7 +57,7 @@ const endpoints = [
   { key: 17, ep: 'GET /descriptives/items/{id}/similar', ret: 'Items rated similarly by the same people' },
   { key: 18, ep: 'GET /analytics/item-network', ret: 'The item co-occurrence network with a layout' },
   { key: 19, ep: 'GET /analytics/dataset-network/{id}', ret: "One dataset's preference network" },
-  { key: 20, ep: 'POST /download', ret: 'Build a csv, json, xlsx or spss export' },
+  { key: 20, ep: 'POST /download', ret: 'Build a csv or json export' },
   { key: 21, ep: 'GET /database/archive', ret: 'The whole database as one zip with a codebook' },
 ];
 

@@ -80,7 +80,7 @@ Read-only REST API under `/api/v1` (interactive docs at `/api/v1/docs`):
 - `GET /descriptives/dataset-item`, `GET /descriptives/items/{id}` —
   distributional statistics within a dataset and across studies
 - `GET /analytics/item-network` — item co-occurrence network with a layout
-- `POST /download` → `GET /download/{id}` — export as CSV, JSON, XLSX, or SPSS
+- `POST /download` → `GET /download/{id}` — export as CSV or JSON
 - `GET /database/archive` — the whole database as one ZIP with a codebook
 
 List endpoints return `{"items": [...], "total", "page", "page_size", "pages"}`.
@@ -106,7 +106,7 @@ db <- load_database()                         # tibbles
 get_item("kitkat")
 ```
 
-3. Per-dataset CSV / JSON / XLSX / SPSS exports from any dataset page in the
+3. Per-dataset CSV / JSON exports from any dataset page in the
    web app, or the whole-database archive at
    `https://liking-rating-api.onrender.com/api/v1/database/archive`.
 

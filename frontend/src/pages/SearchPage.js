@@ -453,8 +453,6 @@ const SearchPage = () => {
             >
               <Select.Option value="csv">CSV</Select.Option>
               <Select.Option value="json">JSON</Select.Option>
-              <Select.Option value="xlsx">Excel (XLSX)</Select.Option>
-              <Select.Option value="spss">SPSS (SAV)</Select.Option>
             </Select>
           </Form.Item>
           
