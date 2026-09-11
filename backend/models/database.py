@@ -150,7 +150,7 @@ class DownloadLog(Base):
     
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
     dataset_ids = Column(JSON, nullable=False)  # List of downloaded datasets
-    download_format = Column(String(20), nullable=False)  # csv, json, spss, etc.
+    download_format = Column(String(20), nullable=False)  # csv or json
     file_size_mb = Column(Float)
     download_url = Column(String(500))
     expires_at = Column(DateTime)

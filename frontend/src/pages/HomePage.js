@@ -157,14 +157,14 @@ const HomePage = () => {
         
         <Col xs={24} md={8}>
           <Card 
-            title="Multiple Export Formats" 
+            title="Export Formats"
             hoverable
             onClick={() => navigate('/downloads')}
             style={{ cursor: 'pointer' }}
           >
             <Paragraph>
-              The whole database as one archive, or any dataset as CSV, Excel,
-              JSON, or SPSS.
+              The whole database as one archive, or any dataset as CSV or
+              JSON.
             </Paragraph>
             <Button type="link" icon={<DownloadOutlined />}>
               View Downloads →
