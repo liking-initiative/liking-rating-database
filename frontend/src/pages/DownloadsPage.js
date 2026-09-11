@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, Typography, Button, Space, Row, Col, Divider, Statistic, Spin } from 'antd';
-import { DownloadOutlined, FileTextOutlined, SearchOutlined, DatabaseOutlined } from '@ant-design/icons';
+import { DownloadOutlined, SearchOutlined, DatabaseOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import AccessCode from '../components/AccessCode';
@@ -137,33 +137,6 @@ const DownloadsPage = () => {
           </Card>
         </Col>
       </Row>
-
-      <Divider />
-
-      <Card title={<><FileTextOutlined /> Download Formats</>} style={{ marginBottom: 24 }}>
-        <Row gutter={[16, 16]}>
-          <Col xs={24} sm={12}>
-            <Card size="small">
-              <div style={{ textAlign: 'center' }}>
-                <Title level={4} style={{ color: '#085AB3', margin: '8px 0' }}>CSV</Title>
-                <Paragraph style={{ fontSize: '13.5px', margin: 0 }}>
-                  Comma-separated values format, compatible with Excel, R, Python, and most data analysis tools.
-                </Paragraph>
-              </div>
-            </Card>
-          </Col>
-          <Col xs={24} sm={12}>
-            <Card size="small">
-              <div style={{ textAlign: 'center' }}>
-                <Title level={4} style={{ color: '#52c41a', margin: '8px 0' }}>JSON</Title>
-                <Paragraph style={{ fontSize: '13.5px', margin: 0 }}>
-                  JavaScript Object Notation, ideal for web applications and API integration.
-                </Paragraph>
-              </div>
-            </Card>
-          </Col>
-        </Row>
-      </Card>
     </div>
   );
 };
