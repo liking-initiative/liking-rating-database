@@ -5,11 +5,11 @@ Every dataset was audited against three sources: the RA source CSV
 sheet *final datasets*), and the published papers. This file records what the
 audit found and how each finding was resolved.
 
-**Status: all findings resolved.** The database now holds 39 studies, 63
-datasets, 2,324 items, 872,820 ratings. Two checks run over the whole corpus
+**Status: all findings resolved.** The database now holds 38 studies, 59
+datasets, 2,217 items, 759,399 ratings. Two checks run over the whole corpus
 and both are clean:
 
-- **Scale vs. data** — for all 63 datasets, observed ratings fall inside the
+- **Scale vs. data** — for all 59 datasets, observed ratings fall inside the
   declared `[min, max]` and reach both ends of it. This is the check that
   catches a wrong scale (see C1); nothing else trips it.
 - **Normalization** — every `normalized_rating` lies in 0..1.
@@ -121,11 +121,12 @@ reading code. After 013, `toyam` matched the Food-pics database exactly,
 
 ## Dataset descriptions
 
-39 of 63 datasets have no description. This is deliberate: migrations 006,
-008, and 010 removed auto-generated text (`"Food item: <name>"` and
-equivalents) that restated the name column and labelled every consumer
-product in the database as food. An empty field is honest; generated filler
-was not. Descriptions are written by hand as datasets are curated.
+Every dataset now carries a hand-written description (migration 026).
+Migrations 006, 008, and 010 had first removed auto-generated text
+(`"Food item: <name>"` and equivalents) that restated the name column and
+labelled every consumer product in the database as food. An empty field was
+honest where generated filler was not, and the empties were then written by
+hand rather than regenerated.
 
 ## G. Item names assigned from zip listing order — corrected (migration 029, 2026-09-01)
 

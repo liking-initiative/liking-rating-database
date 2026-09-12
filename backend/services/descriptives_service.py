@@ -4,7 +4,7 @@ Item-level distributional statistics.
 The unit a distribution is taken over has to match the data. Designs built for
 intensive longitudinal data summarise each *participant* first — mean, spread,
 skew of their own time series — then plot the spread of those per-person
-numbers. That is undefined here: 53 of 55 datasets hold a single rating per
+numbers. That is undefined here: 53 of 59 datasets hold a single rating per
 (subject, item), so a participant has no within-person spread to summarise.
 
 The two units that do carry information in this corpus are:

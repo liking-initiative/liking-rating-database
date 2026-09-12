@@ -121,7 +121,7 @@ from the RA's processing notebook:
 
 ## Corpus-wide checks
 
-Both run over all 55 datasets and are enforced by
+Both run over all 59 datasets and are enforced by
 `backend/tests/test_data_integrity.py`:
 
 - **Scale vs. data** — observed ratings fall inside the declared `[min, max]`

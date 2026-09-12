@@ -51,10 +51,10 @@ no duplicate studies, real completeness values).
 
 | | |
 |---|---|
-| Studies (publications) | 33, years 2016–2026, 29 with DOIs (4 in preparation) |
-| Datasets | 55 (a study can contribute several experiments) |
-| Stimuli | 2,230 (food + consumer products, 17 categories) |
-| Ratings | 759,399 individual ratings (repeated phases kept as timepoints) |
+| Studies (publications) | 38, years 2016–2026, 34 with DOIs (4 in preparation) |
+| Datasets | 59 (a study can contribute several experiments) |
+| Stimuli | 2,217 (food items and consumer products) |
+| Ratings | 759,399 from 5,377 participants (repeated phases kept as timepoints) |
 | Scale types | likert, continuous, visual-analog, slider, willingness-to-pay |
 
 Each rating stores the **original value** in the study's own scale plus a
@@ -74,7 +74,7 @@ Read-only REST API under `/api/v1` (interactive docs at `/api/v1/docs`):
 
 - `GET /studies`, `GET /studies/{id}` — publications with citation + DOI
 - `GET /datasets`, `GET /datasets/{id}` — experiments with scale metadata
-- `GET /items`, `GET /items/{id}` — stimuli with categories
+- `GET /items`, `GET /items/{id}` — stimuli
 - `POST /search`, `GET /search/suggestions` — full-text search incl. item names
 - `GET /ratings`, `GET /ratings/aggregate` — individual and per-item statistics
 - `GET /descriptives/dataset-item`, `GET /descriptives/items/{id}` —
