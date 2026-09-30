@@ -260,6 +260,10 @@ reference-papers/
 # Built release assets — regenerate with scripts/build_release.py
 /release/
 
+# Paper figures and tables — regenerate with analysis/make_figures.R
+/analysis/figures/
+/analysis/tables/
+
 # R and Python package build artifacts
 /likingInitiative_*.tar.gz
 /likingInitiative.Rcheck/
