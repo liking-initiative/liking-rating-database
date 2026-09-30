@@ -7,7 +7,7 @@ message: >-
 title: "The Liking Initiative: a database of subjective evaluation ratings for decision-making research"
 type: dataset
 doi: 10.5281/zenodo.22216442
-license: MIT
+license: CC-BY-4.0
 repository-code: "https://github.com/liking-initiative/liking-rating-database"
 authors:
   - family-names: Fernandez

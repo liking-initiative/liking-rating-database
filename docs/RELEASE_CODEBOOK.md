@@ -145,5 +145,5 @@ item-name error corrected in migration 029.
 
 ## License
 
-MIT for the database and code. The underlying data remain subject to the
+CC BY 4.0 for the database; MIT for the code. The underlying data remain subject to the
 terms of the original publications.

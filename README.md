@@ -153,5 +153,5 @@ provides its citation and DOI, and the frontend can generate BibTeX.
 
 ## License
 
-MIT — see [LICENSE](LICENSE). The underlying data remain subject to the
+Database: CC BY 4.0. Code: MIT — see [LICENSE](LICENSE). The underlying data remain subject to the
 original studies' terms; original authors are credited on every study page.

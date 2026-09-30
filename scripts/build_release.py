@@ -236,8 +236,8 @@ def main() -> None:
             "n_items": len(items),
             "n_ratings": n_all,
             "schema_migrations": migrations,
-            "license": "MIT (database and code); source data remain subject to "
-                       "the terms of the original publications",
+            "license": "CC BY 4.0 (database); MIT (code); source data remain subject "
+                       "to the terms of the original publications",
         },
         "studies": [
             {

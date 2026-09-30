@@ -93,7 +93,7 @@ def metadata(version: str) -> dict:
             ],
             "keywords": ["food preference", "liking ratings", "value-based decision making",
                          "subjective value", "open data", "psychology"],
-            "license": "mit",
+            "license": "cc-by-4.0",
             "access_right": "open",
             "related_identifiers": [
                 {"identifier": "https://github.com/liking-initiative/liking-rating-database",

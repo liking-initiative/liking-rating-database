@@ -212,6 +212,12 @@ def test_no_rating_falls_outside_its_declared_scale(con):
         WHERE r.rating < d.rating_scale_min OR r.rating > d.rating_scale_max""") == 0
 
 
+def test_folke_2016_lists_all_four_authors(con):
+    # Migration 030: Folke, Jacobsen, Fleming & De Martino (2016), not "Folke & Jacobsen"
+    authors = one(con, "SELECT authors FROM studies WHERE doi = '10.1038/s41562-016-0002'")
+    assert json.loads(authors) == ["Folke, T.", "Jacobsen, C.", "Fleming, S. M.", "De Martino, B."]
+
+
 def test_romfred_scale_is_zero_to_ten(con):
     # Frömer et al. (2025), Open Mind 9:791-813: ratings were made "on a scale
     # from 0 (not at all) to 10 (a great deal)".
