@@ -7,6 +7,7 @@ import {
   AppleOutlined,
   SearchOutlined,
   DownloadOutlined,
+  FileTextOutlined,
   BarChartOutlined 
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
@@ -45,7 +46,7 @@ const HomePage = () => {
           </a>
           .
         </Paragraph>
-        <Space size="large" style={{ marginTop: '24px' }}>
+        <Space size="large" wrap style={{ marginTop: '24px' }}>
           <Button 
             type="primary" 
             size="large" 
@@ -60,6 +61,15 @@ const HomePage = () => {
             onClick={() => navigate('/downloads')}
           >
             Download Data
+          </Button>
+          <Button
+            size="large"
+            icon={<FileTextOutlined />}
+            href="https://osf.io/preprints/psyarxiv/af2nr_v1"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Read the Paper
           </Button>
         </Space>
       </div>
