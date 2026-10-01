@@ -98,6 +98,8 @@ def metadata(version: str) -> dict:
             "related_identifiers": [
                 {"identifier": "https://github.com/liking-initiative/liking-rating-database",
                  "relation": "isSupplementTo", "scheme": "url"},
+                {"identifier": "https://osf.io/preprints/psyarxiv/af2nr_v1",
+                 "relation": "isDescribedBy", "scheme": "url"},
             ],
         }
     }

@@ -249,7 +249,16 @@ const generateBibtex = (study) => {
  * work, and the collection that made it reusable. Shipping both together
  * means crediting both takes no extra effort.
  */
-const DATABASE_BIBTEX = `@dataset{likinginitiative,
+const DATABASE_BIBTEX = `@misc{fernandez2026database,
+  author    = {Fernandez, Kianté and Goyal, Sumedha and Krajbich, Ian},
+  title     = {A database of subjective evaluation ratings for decision-making
+               research},
+  year      = {2026},
+  howpublished = {PsyArXiv preprint},
+  url       = {https://osf.io/preprints/psyarxiv/af2nr_v1}
+}
+
+@dataset{likinginitiative,
   author    = {Fernandez, Kianté and Goyal, Sumedha and Krajbich, Ian},
   title     = {The Liking Initiative: a database of subjective evaluation
                ratings for decision-making research},

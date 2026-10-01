@@ -392,12 +392,19 @@ d.cite(); lk.cite()`}</pre>
 
         <Card id="citing" title="Citing" style={{ marginBottom: 24 }}>
           <Paragraph>
-            Please cite both the database and the original studies whose data
-            you use. Every study page carries its citation, DOI, and a BibTeX
+            Please cite the paper describing the database and the original
+            studies whose data you use. Every study page carries its citation, DOI, and a BibTeX
             generator, and <Text code>studies.csv</Text> in the archive carries
             them for every study at once. In the packages,{' '}
             <Text code>cite()</Text> returns the database citation and{' '}
             <Text code>cite(d)</Text> a dataset&apos;s.
+          </Paragraph>
+          <pre style={pre}>
+{`Fernandez, K., Goyal, S., & Krajbich, I. (2026). A database of subjective evaluation ratings for
+decision-making research. Retrieved from https://osf.io/preprints/psyarxiv/af2nr_v1`}
+          </pre>
+          <Paragraph style={{ marginTop: 12 }}>
+            To cite the data themselves, cite the Zenodo record:
           </Paragraph>
           <pre style={pre}>
 {`Fernandez, K., Goyal, S., & Krajbich, I. (2026). The Liking Initiative: a database of subjective

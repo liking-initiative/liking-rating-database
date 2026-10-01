@@ -1,9 +1,9 @@
 cff-version: 1.2.0
 message: >-
-  If you use this database, please cite it as below, and also cite the
-  original studies whose data you use (each study's citation and DOI are
-  provided in the database). A paper describing the database is in
-  preparation; this file will be updated with its DOI on publication.
+  If you use this database, please cite the paper that describes it
+  (preferred citation below), and also cite the original studies whose data
+  you use (each study's citation and DOI are provided in the database). The
+  Zenodo DOI is the dataset itself; cite it to name an exact version.
 title: "The Liking Initiative: a database of subjective evaluation ratings for decision-making research"
 type: dataset
 doi: 10.5281/zenodo.22216442
@@ -19,3 +19,17 @@ authors:
   - family-names: Krajbich
     given-names: Ian
     affiliation: "Department of Psychology, University of California, Los Angeles"
+preferred-citation:
+  type: article
+  status: preprint
+  title: "A database of subjective evaluation ratings for decision-making research"
+  year: 2026
+  url: "https://osf.io/preprints/psyarxiv/af2nr_v1"
+  repository: "PsyArXiv"
+  authors:
+    - family-names: Fernandez
+      given-names: Kianté
+    - family-names: Goyal
+      given-names: Sumedha
+    - family-names: Krajbich
+      given-names: Ian

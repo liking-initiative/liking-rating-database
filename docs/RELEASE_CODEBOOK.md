@@ -127,9 +127,15 @@ traced back to the source file it came from.
 
 ## Citation
 
-Please cite both the database and the studies whose data you use.
+Please cite the paper describing the database and the studies whose data you use.
 `studies.tsv` and `catalog.json` carry each study's citation and DOI; the
 packages provide `cite()` and `bibtex()`.
+
+> Fernandez, K., Goyal, S., & Krajbich, I. (2026). A database of subjective
+> evaluation ratings for decision-making research. Retrieved from
+> https://osf.io/preprints/psyarxiv/af2nr_v1
+
+To cite the data themselves, cite the Zenodo record:
 
 > Fernandez, K., Goyal, S., & Krajbich, I. (2026). The Liking Initiative: a
 > database of subjective evaluation ratings for decision-making research

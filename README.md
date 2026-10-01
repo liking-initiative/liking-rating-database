@@ -134,7 +134,13 @@ And subject IDs are unique only *within* a dataset, so always key on
 
 ## Citation
 
-If you use this database, please cite it (see [CITATION.cff](CITATION.cff)):
+If you use this database, please cite the paper that describes it (see [CITATION.cff](CITATION.cff)):
+
+> Fernandez, K., Goyal, S., & Krajbich, I. (2026). A database of subjective
+> evaluation ratings for decision-making research. Retrieved from
+> https://osf.io/preprints/psyarxiv/af2nr_v1
+
+To cite the data themselves, cite the Zenodo record:
 
 > Fernandez, K., Goyal, S., & Krajbich, I. (2026). The Liking Initiative: a
 > database of subjective evaluation ratings for decision-making research
