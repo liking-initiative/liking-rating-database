@@ -1,4 +1,4 @@
-# Liking Rating Database
+# The Liking Initiative
 
 A curated database of subjective liking ratings for value-based decision-making research:
 **759,399 individual ratings** from **38 studies** (59 datasets),
