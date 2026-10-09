@@ -242,8 +242,7 @@ const DocumentationPage = () => {
           <Row gutter={16}>
             <Col xs={24} md={12}>
               <Title level={5} style={{ marginTop: 0 }}>R</Title>
-              <pre style={pre}>{`# install.packages("devtools")
-devtools::install_github("liking-initiative/likingInitiative-r")
+              <pre style={pre}>{`install.packages("likingInitiative")
 library(likingInitiative)
 
 list_datasets()

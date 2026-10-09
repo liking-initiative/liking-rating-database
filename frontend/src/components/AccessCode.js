@@ -86,7 +86,7 @@ lk.get_item("kitkat").by_dataset()
 # Cross-study comparisons must use normalized_rating, not rating`;
 
   const r = dataset
-    ? `# devtools::install_github("liking-initiative/likingInitiative-r")
+    ? `# install.packages("likingInitiative")
 library(likingInitiative)
 
 d <- get_dataset("${code}")
@@ -97,7 +97,7 @@ d$metadata$rating_scale_max
 aggregate(normalized_rating ~ item_name, d$data, mean)
 
 cite(d)`
-    : `# devtools::install_github("liking-initiative/likingInitiative-r")
+    : `# install.packages("likingInitiative")
 library(likingInitiative)
 
 db <- load_database()      # the whole corpus, one download

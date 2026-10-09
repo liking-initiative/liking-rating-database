@@ -88,10 +88,10 @@ List endpoints return `{"items": [...], "total", "page", "page_size", "pages"}`.
 ## Getting the data
 
 Three ways, in rough order of convenience. The packages download versioned
-release files from Zenodo and cache them locally; no account is needed.
+release files from Zenodo and cache them for the session; no account is needed.
 
 ```python
-# 1. The Python package  (github.com/liking-initiative/likingInitiative-py)
+# 1. The Python package  (PyPI: likingInitiative)
 #    pip install likingInitiative
 import likingInitiative
 db = likingInitiative.load_database()        # 759,399 ratings, as polars frames
@@ -99,8 +99,8 @@ likingInitiative.get_item("kitkat").by_dataset()
 ```
 
 ```r
-# 2. The R package  (github.com/liking-initiative/likingInitiative-r)
-#    devtools::install_github("liking-initiative/likingInitiative-r")
+# 2. The R package  (CRAN: likingInitiative)
+#    install.packages("likingInitiative")
 library(likingInitiative)
 db <- load_database()                         # tibbles
 get_item("kitkat")
