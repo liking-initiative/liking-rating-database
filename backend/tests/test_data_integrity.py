@@ -247,6 +247,14 @@ def test_no_placeholder_item_survives(con):
         WHERE name IN ('noitem', 'na', 'none', 'unknown', 'n/a', '')""") == 0
 
 
+def test_no_prolific_ids_in_subject_ids(con):
+    # Migration 031 replaced raw Prolific IDs (24 hex characters) with
+    # per-dataset numbers; a new ingest must not bring platform IDs back.
+    ids = [r[0] for r in con.execute("SELECT DISTINCT subject_id FROM ratings")]
+    leaked = [s for s in ids if len(s) == 24 and all(c in "0123456789abcdef" for c in s)]
+    assert not leaked, f"{len(leaked)} subject_ids look like Prolific IDs"
+
+
 def test_prebuilt_networks_match_this_database(con):
     """The shipped item networks must belong to the database being served.
 
