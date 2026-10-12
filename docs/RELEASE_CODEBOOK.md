@@ -143,11 +143,13 @@ To cite the data themselves, cite the Zenodo record:
 
 The DOI above is the *concept* DOI: it always resolves to the newest version.
 To name the exact bytes an analysis ran on, cite the version DOI instead —
-`release_info()` reports the version. v1.6.2 is
-[10.5281/zenodo.22239889](https://doi.org/10.5281/zenodo.22239889); earlier
-versions keep their own DOIs (v1.6.1: 10.5281/zenodo.22239351; v1.5.0:
-10.5281/zenodo.22216443). Prefer 1.6.2 or later: the two before it carry the
-item-name error corrected in migration 029.
+`release_info()` reports the version. v1.6.4 is
+[10.5281/zenodo.23322726](https://doi.org/10.5281/zenodo.23322726); earlier
+versions keep their own DOIs (v1.6.3: 10.5281/zenodo.23057243; v1.6.2:
+10.5281/zenodo.22239889; v1.6.1: 10.5281/zenodo.22239351; v1.5.0:
+10.5281/zenodo.22216443). Prefer 1.6.4 or later: it replaces recruitment-platform
+participant IDs in nine datasets with sequential numbers (migration 031), and
+versions before 1.6.2 also carry the item-name error corrected in migration 029.
 
 ## License
 
