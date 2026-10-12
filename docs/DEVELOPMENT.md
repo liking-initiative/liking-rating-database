@@ -10,9 +10,9 @@ cd frontend && npm install && cd ..
 cp .env.example .env        # defaults work for local development
 ```
 
-Extract the database: `python scripts/setup_database.py` unpacks the shipped
-`data-release/liking_rating_db.db.gz` (86 MB in git) to
-`./data/liking_rating_db.db` — the canonical location that `.env`,
+Provision the database: `python scripts/setup_database.py` downloads
+`liking_rating_db.db.gz` (72 MB) from the GitHub release, verifies it against
+the committed `.sha256`, and unpacks it to `./data/liking_rating_db.db` — the canonical location that `.env`,
 `config.py`, and `render.yaml` all point to.
 
 > Pointing `DATABASE_URL` at a path with no database **silently creates an
@@ -145,10 +145,7 @@ python scripts/build_release.py --version X.Y.Z
 
 ### Zenodo
 
-The clients fetch over plain HTTP with no credentials, which cannot work
-against a private repository — GitHub answers an unauthenticated request for
-its releases with 404, so `list_datasets()` fails for everyone. Zenodo is
-public, needs no token to read, and gives the database a citable DOI:
+Zenodo archives each release and gives it a citable DOI:
 
 ```bash
 export ZENODO_TOKEN=...        # deposit:write + deposit:actions
@@ -161,9 +158,9 @@ For later releases pass `--parent <record id>` so Zenodo versions the existing
 record instead of creating an unrelated one, which keeps a concept DOI that
 always resolves to the newest version.
 
-**Private repository.** Release assets are not publicly readable, so a
-deployment needs `GITHUB_TOKEN` (or `GH_TOKEN`) with read access set in its
-environment. Without one the setup script says so explicitly.
+The repository is public, so the setup script needs no token. If
+`GITHUB_TOKEN` (or `GH_TOKEN`) is set it is sent, which lifts GitHub's
+anonymous rate limit.
 
 ### Also rebuild after any migration
 

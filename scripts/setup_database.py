@@ -23,9 +23,8 @@ corrupted, or substituted asset fails the check and the script exits non-zero.
 An empty database silently serving zeros is worse than a failed deploy, so
 every failure here is loud.
 
-PRIVATE REPOSITORY. Release assets are not publicly readable, so the download
-needs a token with read access in GITHUB_TOKEN or GH_TOKEN. Without one the
-script says so explicitly rather than failing with an opaque 404.
+The repository is public, so the download needs no token. GITHUB_TOKEN or
+GH_TOKEN is sent if set, which lifts GitHub's anonymous rate limit.
 """
 import gzip
 import hashlib
@@ -87,10 +86,11 @@ def validate(db_path: Path) -> dict:
         con.close()
 
 
-def _api(url: str, token: str, accept: str) -> urllib.request.Request:
+def _api(url: str, token: str | None, accept: str) -> urllib.request.Request:
     req = urllib.request.Request(url)
     req.add_header("Accept", accept)
-    req.add_header("Authorization", f"Bearer {token}")
+    if token:
+        req.add_header("Authorization", f"Bearer {token}")
     req.add_header("X-GitHub-Api-Version", "2022-11-28")
     return req
 
@@ -98,13 +98,6 @@ def _api(url: str, token: str, accept: str) -> urllib.request.Request:
 def download_asset(dest: Path) -> None:
     """Fetch the release asset, resolving it by name so ids need no upkeep."""
     token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
-    if not token:
-        sys.exit(
-            "❌ No local gzip and no GITHUB_TOKEN/GH_TOKEN to fetch one.\n"
-            f"   {SHIPPED_GZ} is absent, and {GH_REPO} is a private repository,\n"
-            "   so its release assets need a token with read access.\n"
-            "   On Render: add GITHUB_TOKEN as an environment variable."
-        )
 
     meta_url = f"https://api.github.com/repos/{GH_REPO}/releases/tags/{RELEASE_TAG}"
     try:
@@ -113,7 +106,7 @@ def download_asset(dest: Path) -> None:
             release = json.load(r)
     except urllib.error.HTTPError as e:
         sys.exit(f"❌ Could not read release {RELEASE_TAG} of {GH_REPO}: HTTP {e.code}. "
-                 "Check the tag exists and the token can read this repository.")
+                 "Check the tag exists.")
 
     asset = next((a for a in release.get("assets", []) if a["name"] == ASSET_NAME), None)
     if asset is None:

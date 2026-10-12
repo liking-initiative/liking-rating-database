@@ -8,6 +8,22 @@ history of this file.
 
 ## Released
 
+Per-release notes are on each GitHub release; one line each here.
+
+- **v1.6.4 (2026-10-12)** — raw Prolific IDs in nine datasets (688
+  participants) replaced with per-dataset numbers (migration 031); Rich et al.
+  (2026) cited as published, *Communications Psychology* 4, 132, instead of its
+  Research Square preprint (032). No ratings, items or scales changed.
+- **v1.6.3 (2026-09-30)** — Folke et al. (2016) lists all four authors (030);
+  database licensed CC BY 4.0, code MIT.
+- **v1.6.2 (2026-09-02)** — 31,883 ratings in six datasets re-pointed to the
+  items they rated; stimulus indices had been mapped to archive listing order
+  (029; `docs/DATASET_AUDIT.md` section G).
+- **v1.6.1 (2026-09-01)** — 42 duplicate item names merged into 37 (028;
+  `docs/NAME_HARMONIZATION.md` pass 2).
+- **v1.6.0 (2026-09-01)** — `chenhol3`–`chenhol6` added (Chen et al., 2019,
+  wanting ratings of 42 identifiable candies).
+
 ### v1.5.0 (2026-08-31) — scale and construct verification
 
 Every dataset's declared scale and the construct it measures is now recorded
