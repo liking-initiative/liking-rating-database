@@ -50,14 +50,10 @@ def test_dois_are_wellformed_and_not_superseded(con):
 
     # These specific values pointed at preprints or superseded versions.
     superseded = {"10.31234/osf.io/xqhk8", "10.7554/eLife.103736.2",
-                  "10.31234/osf.io/2sqyt_v1", "10.31234/osf.io/2sqyt"}
+                  "10.31234/osf.io/2sqyt_v1", "10.31234/osf.io/2sqyt",
+                  "10.21203/rs.3.rs-8651706/v1"}
     assert not (set(dois) & superseded), "a superseded DOI is back"
-
-    # Not every version suffix is a mistake. Migration 007 removed them where
-    # an unversioned DOI was the canonical one; Research Square mints only
-    # versioned DOIs, and 10.21203/rs.3.rs-8651706 without the suffix returns
-    # 404 with no CrossRef record, so richkap's must keep its /v1.
-    assert "10.21203/rs.3.rs-8651706/v1" in dois
+    assert "10.1038/s44271-026-00533-5" in dois  # richkap, published (032)
 
 
 def test_study_year_matches_its_own_citation(con):
