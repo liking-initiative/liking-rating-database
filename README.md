@@ -148,9 +148,9 @@ To cite the data themselves, cite the Zenodo record:
 
 The DOI above is the *concept* DOI: it always resolves to the newest version.
 To name the exact bytes an analysis ran on, cite the version DOI instead —
-`release_info()` reports the version. v1.6.4 is
-[10.5281/zenodo.23322726](https://doi.org/10.5281/zenodo.23322726); earlier
-versions keep their own DOIs (v1.6.3: 10.5281/zenodo.23057243; v1.6.2:
+`release_info()` reports the version. v1.7.0 is
+[10.5281/zenodo.23407218](https://doi.org/10.5281/zenodo.23407218); earlier
+versions keep their own DOIs (v1.6.4: 10.5281/zenodo.23322726; v1.6.3: 10.5281/zenodo.23057243; v1.6.2:
 10.5281/zenodo.22239889; v1.6.1: 10.5281/zenodo.22239351; v1.5.0:
 10.5281/zenodo.22216443). Prefer 1.7.0 or later: it extends the verified item
 mappings across sixteen datasets and adds two (see the release codebook); 1.6.4
