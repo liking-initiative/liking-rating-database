@@ -1,0 +1,9 @@
+{
+ "sources": {
+  "exp2_main_data.csv": {
+   "path": "Liking Rating Database Files.zip (Folke et al. 2016, exp. 2 trial file)",
+   "sha256": "32c729ba6e6f1edaa29338000a243cfcdff7a32071b70af943781b2249f90f94"
+  },
+  "derivation": "one BDM bid (GBP) per (Participant, item) from the UL/UR/LL/LR _Item/_Value columns, empty quadrant (value -1) excluded; every cell single-valued across its 4-6 appearances; reproduces the authors' High_Val, Med_Val and Low_Val columns in every trial"
+ }
+}

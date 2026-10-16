@@ -1,9 +1,9 @@
 # The Liking Initiative
 
 A curated database of subjective liking ratings for value-based decision-making research:
-**759,399 individual ratings** from **38 studies** (59 datasets),
-covering **2,217 stimuli** — food items and consumer products. Every published
-study links to its source publication (DOI); 4 studies are still in preparation
+**777,116 individual ratings** from **40 studies** (61 datasets),
+covering **2,205 stimuli** — food items and consumer products. Every published
+study links to its source publication (DOI); 5 studies are still in preparation
 and carry a full citation instead. Ratings are provided both in their
 original scale units and normalized to 0–1 for cross-study comparison.
 
@@ -51,10 +51,10 @@ no duplicate studies, real completeness values).
 
 | | |
 |---|---|
-| Studies (publications) | 38, years 2016–2026, 34 with DOIs (4 in preparation) |
-| Datasets | 59 (a study can contribute several experiments) |
-| Stimuli | 2,217 (food items and consumer products) |
-| Ratings | 759,399 from 5,377 participants (repeated phases kept as timepoints) |
+| Studies (publications) | 40, years 2016–2026, 35 with DOIs (5 in preparation) |
+| Datasets | 61 (a study can contribute several experiments) |
+| Stimuli | 2,205 (food items and consumer products; 116 still carry source codes), plus 134 participant-specific picture codes for three `smithspiller1` participants |
+| Ratings | 777,116 from 5,497 participants (repeated phases kept as timepoints) |
 | Scale types | likert, continuous, visual-analog, slider, willingness-to-pay |
 
 Each rating stores the **original value** in the study's own scale plus a
@@ -94,7 +94,7 @@ release files from Zenodo and cache them for the session; no account is needed.
 # 1. The Python package  (PyPI: likingInitiative)
 #    pip install likingInitiative
 import likingInitiative
-db = likingInitiative.load_database()        # 759,399 ratings, as polars frames
+db = likingInitiative.load_database()        # 777,116 ratings, as polars frames
 likingInitiative.get_item("kitkat").by_dataset()
 ```
 
@@ -152,9 +152,11 @@ To name the exact bytes an analysis ran on, cite the version DOI instead —
 [10.5281/zenodo.23322726](https://doi.org/10.5281/zenodo.23322726); earlier
 versions keep their own DOIs (v1.6.3: 10.5281/zenodo.23057243; v1.6.2:
 10.5281/zenodo.22239889; v1.6.1: 10.5281/zenodo.22239351; v1.5.0:
-10.5281/zenodo.22216443). Prefer 1.6.4 or later: it replaces recruitment-platform
-participant IDs in nine datasets with sequential numbers (migration 031), and
-versions before 1.6.2 also carry the item-name error corrected in migration 029.
+10.5281/zenodo.22216443). Prefer 1.7.0 or later: it extends the verified item
+mappings across sixteen datasets and adds two (see the release codebook); 1.6.4
+replaced recruitment-platform participant IDs in nine datasets with sequential
+numbers (migration 031), and 1.6.2 updated the item mapping of six datasets
+(migration 029).
 
 Please also cite the original studies whose data you use — every study page
 provides its citation and DOI, and the frontend can generate BibTeX.

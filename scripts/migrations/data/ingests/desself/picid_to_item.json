@@ -1,0 +1,836 @@
+{
+ "1": {
+  "filename": "Bagel Asiago_DSC_0332_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "bagelasiago",
+  "in_db": false
+ },
+ "2": {
+  "filename": "Bagel Blueberry_DSC_0354_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "bagelblueberry",
+  "in_db": false
+ },
+ "3": {
+  "filename": "Bagel Chocolate Chip_DSC_0148_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "bagelchocolatechip",
+  "in_db": false
+ },
+ "4": {
+  "filename": "Bagel Cinnamon Crunch_DSC_0154_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "bagelcinnamoncrunch",
+  "in_db": false
+ },
+ "5": {
+  "filename": "Bagel Cinnamon_DSC_0365_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "bagelcinnamon",
+  "in_db": false
+ },
+ "6": {
+  "filename": "Bagel Everything Bagel_DSC_0314_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "bageleverything",
+  "in_db": false
+ },
+ "7": {
+  "filename": "Bagel French Toast Bagel_DSC_0158_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "bagelfrenchtoast",
+  "in_db": false
+ },
+ "8": {
+  "filename": "Bagel Plain_DSC_0341_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "bagelplain",
+  "in_db": true
+ },
+ "9": {
+  "filename": "Bagel Pumpernickle_DSC_0319_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "bagelpumpernickel",
+  "in_db": false
+ },
+ "10": {
+  "filename": "Bagel Rasin_DSC_0349_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "bagelraisin",
+  "in_db": false
+ },
+ "11": {
+  "filename": "Bagel Sesame_DSC_0325_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "bagelsesame",
+  "in_db": false
+ },
+ "12": {
+  "filename": "Bagel Sprouted Grain_DSC_0344_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "bagelsproutedgrain",
+  "in_db": false
+ },
+ "13": {
+  "filename": "Bread Baguette_DSC_0356_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "baguette",
+  "in_db": true
+ },
+ "14": {
+  "filename": "Bread Lavash Flatbread_DSC_0379.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "lavashflatbread",
+  "in_db": false
+ },
+ "15": {
+  "filename": "Bread Sprouted Grain Bagle Flat_DSC_0144_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "sproutedgrainbagelflat",
+  "in_db": false
+ },
+ "16": {
+  "filename": "Bread White Bread_DSC_0650_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "whitebread",
+  "in_db": true
+ },
+ "17": {
+  "filename": "Cake Carrot_DSC_0861_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "carrotcake",
+  "in_db": false
+ },
+ "18": {
+  "filename": "Cake Chocolate Cupcake_DSC_0044_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "chocolatecupcake",
+  "in_db": false
+ },
+ "19": {
+  "filename": "Cake Chocolate Glaze_DSC_0845_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "chocolateglazecake",
+  "in_db": false
+ },
+ "20": {
+  "filename": "Cake Cookie Cake_DSC_0667_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "cookiecake",
+  "in_db": false
+ },
+ "21": {
+  "filename": "Cake Double Chocolate_DSC_0851_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "doublechocolatecake",
+  "in_db": false
+ },
+ "22": {
+  "filename": "Cake Hazelnut_DSC_0855_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "hazelnutcake",
+  "in_db": false
+ },
+ "23": {
+  "filename": "Cake Strawberry_DSC_0833_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "strawberrycake",
+  "in_db": true
+ },
+ "24": {
+  "filename": "Cake Tiramisu_DSC_0840_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "tiramisu",
+  "in_db": false
+ },
+ "25": {
+  "filename": "Chips Baked Lay's Sour Cream_DSC_0097_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "bakedlayssourcreamandonion",
+  "in_db": false
+ },
+ "26": {
+  "filename": "Chips Cape Cod Mediterranean_DSC_0123_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "capecodmediterranean",
+  "in_db": false
+ },
+ "27": {
+  "filename": "Chips Cheeto's Puffs_DSC_0062_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "cheetospuffs",
+  "in_db": true
+ },
+ "28": {
+  "filename": "Chips Dorito's Nacho_DSC_0070_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "doritosnachocheese",
+  "in_db": true
+ },
+ "29": {
+  "filename": "Chips Lay's Original_DSC_0055_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "laysclassic",
+  "in_db": true
+ },
+ "30": {
+  "filename": "Chips Lay's Sour Cream_DSC_0060_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "layssourcreamandonion",
+  "in_db": true
+ },
+ "31": {
+  "filename": "Chips Pretzel Thins_DSC_0128_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "pretzelthins",
+  "in_db": false
+ },
+ "32": {
+  "filename": "Chips Pringle_DSC_0137_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "pringles",
+  "in_db": true
+ },
+ "33": {
+  "filename": "Chips Sunchip Original_DSC_0132_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "sunchipsoriginal",
+  "in_db": true
+ },
+ "34": {
+  "filename": "Chocolate Candy Bar Babyruth_DSC_0185.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "babyruth",
+  "in_db": true
+ },
+ "35": {
+  "filename": "Chocolate Candy Bar Hershey's_DSC_0152.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "hersheys",
+  "in_db": true
+ },
+ "36": {
+  "filename": "Chocolate Candy Bar KitKat_DSC_0178.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "kitkat",
+  "in_db": true
+ },
+ "37": {
+  "filename": "Chocolate Candy Bar Milkyway_DSC_0170.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "milkyway",
+  "in_db": true
+ },
+ "38": {
+  "filename": "Chocolate Candy Bar Reeses_DSC_0160.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "reeses",
+  "in_db": true
+ },
+ "39": {
+  "filename": "Chocolate Candy Bar Snickers and Hazelnut_DSC_0173.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "snickershazelnut",
+  "in_db": false
+ },
+ "40": {
+  "filename": "Cookie Cheryl's Oatmeal Rasin_DSC_0390.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "cherylsoatmealraisincookie",
+  "in_db": false
+ },
+ "41": {
+  "filename": "Cookie Chip's Ahoy Soft Baked_DSC_0175_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "chipsahoysoftbaked",
+  "in_db": false
+ },
+ "42": {
+  "filename": "Cookie Keebler Chocolate Covered Gram_DSC_0187_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "keeblerchocolatecoveredgrahams",
+  "in_db": false
+ },
+ "43": {
+  "filename": "Cookie Montauk_DSC_0215_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "montaukcookie",
+  "in_db": false
+ },
+ "44": {
+  "filename": "Cookie Oreo_DSC_0205_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "oreos",
+  "in_db": true
+ },
+ "45": {
+  "filename": "Cookie Panera Chocolate Chip_DSC_0412_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "panerachocolatechipcookie",
+  "in_db": false
+ },
+ "46": {
+  "filename": "Cookie Shortbread_DSC_0193_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "shortbread",
+  "in_db": true
+ },
+ "47": {
+  "filename": "Crackers Club_DSC_0642.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "clubcrackers",
+  "in_db": false
+ },
+ "48": {
+  "filename": "Crackers Saltines_DSC_0037_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "saltines",
+  "in_db": true
+ },
+ "49": {
+  "filename": "Crackers Town House Original_DSC_0014_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "townhouseoriginal",
+  "in_db": false
+ },
+ "50": {
+  "filename": "Granola Bars Fiber One_DSC_1243.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "fiberonebar",
+  "in_db": false
+ },
+ "51": {
+  "filename": "Granola Bars NutriGrain_DSC_1246.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "nutrigrainbar",
+  "in_db": true
+ },
+ "52": {
+  "filename": "Granola Bars Trader Joe's_DSC_1219.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "traderjoesgranolabar",
+  "in_db": false
+ },
+ "53": {
+  "filename": "Hard Candy Banana_DSC_0824_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "hardcandybanana",
+  "in_db": false
+ },
+ "54": {
+  "filename": "Hard Candy Butter Cream_DSC_0806_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "hardcandybuttercream",
+  "in_db": false
+ },
+ "55": {
+  "filename": "Hard Candy Butter Scotch_DSC_0814_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "hardcandybutterscotch",
+  "in_db": false
+ },
+ "56": {
+  "filename": "Hard Candy Cinnamon_DSC_0809_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "hardcandycinnamon",
+  "in_db": false
+ },
+ "57": {
+  "filename": "Hard Candy Grape_DSC_0827_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "hardcandygrape",
+  "in_db": false
+ },
+ "58": {
+  "filename": "Hard Candy Green Peppermint_DSC_0817_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "hardcandygreenpeppermint",
+  "in_db": false
+ },
+ "59": {
+  "filename": "Hard Candy Red Peppermint_DSC_0821_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "hardcandyredpeppermint",
+  "in_db": false
+ },
+ "60": {
+  "filename": "Hard Candy Strawberry_DSC_0802_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "hardcandystrawberry",
+  "in_db": false
+ },
+ "61": {
+  "filename": "Hard Cookies Bordeaux_DSC_1048_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "bordeauxcookies",
+  "in_db": false
+ },
+ "62": {
+  "filename": "Hard Cookies Brussles_DSC_1067_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "brusselscookies",
+  "in_db": false
+ },
+ "63": {
+  "filename": "Hard Cookies Chessmen_DSC_1089_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "chessmencookies",
+  "in_db": false
+ },
+ "64": {
+  "filename": "Hard Cookies Geneva_DSC_1051_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "genevacookies",
+  "in_db": false
+ },
+ "65": {
+  "filename": "Hard Cookies Ginger Snaps_DSC_1003_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "gingersnaps",
+  "in_db": false
+ },
+ "66": {
+  "filename": "Hard Cookies Lido_DSC_1085_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "lidocookies",
+  "in_db": false
+ },
+ "67": {
+  "filename": "Hard Cookies Lisbon_DSC_1062_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "lisboncookies",
+  "in_db": false
+ },
+ "68": {
+  "filename": "Hard Cookies Milano_DSC_1058_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "milanocookies",
+  "in_db": true
+ },
+ "69": {
+  "filename": "Hard Cookies Orleans_DSC_1045_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "orleanscookies",
+  "in_db": false
+ },
+ "70": {
+  "filename": "Hard Cookies Piroette_DSC_1071_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "pirouettecookies",
+  "in_db": false
+ },
+ "71": {
+  "filename": "Hard Cookies Snack Factory Brownie Thins_DSC_1078_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "browniethins",
+  "in_db": false
+ },
+ "72": {
+  "filename": "Hard Cookies Snack Factory Lemon Tart Thins_DSC_1081_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "lemontartthins",
+  "in_db": false
+ },
+ "73": {
+  "filename": "Puffed Corn Conn's Cheddar Cheese_DSC_0774_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "connscheddarpuffedcorn",
+  "in_db": false
+ },
+ "74": {
+  "filename": "Puffed Corn Mikellis Caramel_DSC_0762_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "caramelpuffedcorn",
+  "in_db": false
+ },
+ "75": {
+  "filename": "Puffed Corn Mikellis Cheddar_DSC_0756_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "cheddarpuffedcorn",
+  "in_db": false
+ },
+ "76": {
+  "filename": "Puffed Corn Smart Food Parmasian Garlic_DSC_0766_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "smartfoodparmesangarlic",
+  "in_db": false
+ },
+ "77": {
+  "filename": "Puffed Corn Smartfood White Cheddar_DSC_0770_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "smartfoodwhitecheddar",
+  "in_db": false
+ },
+ "78": {
+  "filename": "Rice Cakes Quaker BBQ_DSC_0991_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "quakerricecakesbbq",
+  "in_db": false
+ },
+ "79": {
+  "filename": "Rice Cakes Quaker Choloate_DSC_0998_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "quakerricecakeschocolate",
+  "in_db": false
+ },
+ "80": {
+  "filename": "Rice Cakes Simple Truth Ranch_DSC_0984_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "ricecakesranch",
+  "in_db": false
+ },
+ "81": {
+  "filename": "Rice Cakes Simple Truth White Cheddar_DSC_0978_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "ricecakeswhitecheddar",
+  "in_db": false
+ },
+ "82": {
+  "filename": "Snack Cake Chocolate Swiss Roll_DSC_0271_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "swissrolls",
+  "in_db": false
+ },
+ "83": {
+  "filename": "Snack Cake Chocolate_DSC_0292_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "chocolatesnackcake",
+  "in_db": false
+ },
+ "84": {
+  "filename": "Snack Cake Cosmic Brownies_DSC_0266_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "cosmicbrownies",
+  "in_db": false
+ },
+ "85": {
+  "filename": "Snack Cake Oatmeal Cream Pie_DSC_0281_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "oatmealcreampie",
+  "in_db": false
+ },
+ "86": {
+  "filename": "Snack Cake Strawberry Roll_DSC_0308_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "strawberryroll",
+  "in_db": false
+ },
+ "87": {
+  "filename": "Snack Cake Twinkie_DSC_0302_2.JPG",
+  "folder": "UnhealthyImages",
+  "item_name": "twinkie",
+  "in_db": true
+ },
+ "88": {
+  "filename": "Apple Gala_DSC_0518.JPG",
+  "folder": "HealthyImages",
+  "item_name": "galaapple",
+  "in_db": false
+ },
+ "89": {
+  "filename": "Apple Granny Smith_DSC_0546.JPG",
+  "folder": "HealthyImages",
+  "item_name": "grannysmithapple",
+  "in_db": true
+ },
+ "90": {
+  "filename": "Apple Honey Crisp_DSC_0540.JPG",
+  "folder": "HealthyImages",
+  "item_name": "honeycrispapple",
+  "in_db": false
+ },
+ "91": {
+  "filename": "Apple Jazz_DSC_0018.JPG",
+  "folder": "HealthyImages",
+  "item_name": "jazzapple",
+  "in_db": false
+ },
+ "92": {
+  "filename": "Apple Koru_DSC_0525.JPG",
+  "folder": "HealthyImages",
+  "item_name": "koruapple",
+  "in_db": false
+ },
+ "93": {
+  "filename": "Apple Red Delicious_DSC_0554.JPG",
+  "folder": "HealthyImages",
+  "item_name": "reddeliciousapple",
+  "in_db": false
+ },
+ "94": {
+  "filename": "Berries Blackberries_DSC_0415_2.JPG",
+  "folder": "HealthyImages",
+  "item_name": "blackberries",
+  "in_db": true
+ },
+ "95": {
+  "filename": "Berries Blueberries_DSC_0419.JPG",
+  "folder": "HealthyImages",
+  "item_name": "blueberries",
+  "in_db": true
+ },
+ "96": {
+  "filename": "Berries Cherries_DSC_0355.JPG",
+  "folder": "HealthyImages",
+  "item_name": "cherries",
+  "in_db": true
+ },
+ "97": {
+  "filename": "Berries Raspberries_DSC_0418_2.JPG",
+  "folder": "HealthyImages",
+  "item_name": "raspberries",
+  "in_db": true
+ },
+ "98": {
+  "filename": "Berries Strawberries_DSC_0438_2.JPG",
+  "folder": "HealthyImages",
+  "item_name": "strawberries",
+  "in_db": true
+ },
+ "99": {
+  "filename": "Bread Wheat Bread_DSC_1180.JPG",
+  "folder": "HealthyImages",
+  "item_name": "wheatbread",
+  "in_db": true
+ },
+ "100": {
+  "filename": "Carrots_DSC_0350.JPG",
+  "folder": "HealthyImages",
+  "item_name": "carrots",
+  "in_db": true
+ },
+ "101": {
+  "filename": "Crackers Triscut_DSC_0039_2.JPG",
+  "folder": "HealthyImages",
+  "item_name": "triscuits",
+  "in_db": true
+ },
+ "102": {
+  "filename": "Crackers Wheat Thins Original_DSC_0021_2.JPG",
+  "folder": "HealthyImages",
+  "item_name": "wheatthins",
+  "in_db": true
+ },
+ "103": {
+  "filename": "Granola Bars Kind Bar_DSC_0645_2.JPG",
+  "folder": "HealthyImages",
+  "item_name": "kindbars",
+  "in_db": true
+ },
+ "104": {
+  "filename": "Granola Bars Nature Valley_DSC_1226.JPG",
+  "folder": "HealthyImages",
+  "item_name": "naturevalleygranolabar",
+  "in_db": false
+ },
+ "105": {
+  "filename": "Granola Bars Special K_DSC_1222.JPG",
+  "folder": "HealthyImages",
+  "item_name": "specialkbar",
+  "in_db": false
+ },
+ "106": {
+  "filename": "Grapes Black_DSC_0374.JPG",
+  "folder": "HealthyImages",
+  "item_name": "blackgrapes",
+  "in_db": false
+ },
+ "107": {
+  "filename": "Grapes Champaign_DSC_0423_2.JPG",
+  "folder": "HealthyImages",
+  "item_name": "champagnegrapes",
+  "in_db": false
+ },
+ "108": {
+  "filename": "Grapes Green_DSC_0327.JPG",
+  "folder": "HealthyImages",
+  "item_name": "greengrapes",
+  "in_db": true
+ },
+ "109": {
+  "filename": "Grapes Red_DSC_0412.JPG",
+  "folder": "HealthyImages",
+  "item_name": "redgrapes",
+  "in_db": true
+ },
+ "110": {
+  "filename": "Nuts Almonds_DSC_0488_2.JPG",
+  "folder": "HealthyImages",
+  "item_name": "almonds",
+  "in_db": true
+ },
+ "111": {
+  "filename": "Nuts Cashews_DSC_0547_2.JPG",
+  "folder": "HealthyImages",
+  "item_name": "cashews",
+  "in_db": true
+ },
+ "112": {
+  "filename": "Nuts Peanuts_DSC_0778_2.JPG",
+  "folder": "HealthyImages",
+  "item_name": "peanuts",
+  "in_db": true
+ },
+ "113": {
+  "filename": "Nuts Pecans_DSC_0462_2.JPG",
+  "folder": "HealthyImages",
+  "item_name": "pecans",
+  "in_db": false
+ },
+ "114": {
+  "filename": "Nuts Pistashios_DSC_0470_2.JPG",
+  "folder": "HealthyImages",
+  "item_name": "pistachios",
+  "in_db": true
+ },
+ "115": {
+  "filename": "Nuts Pumpkin Seeds_DSC_0483_2.JPG",
+  "folder": "HealthyImages",
+  "item_name": "pumpkinseeds",
+  "in_db": true
+ },
+ "116": {
+  "filename": "Pepper Green_DSC_0276.JPG",
+  "folder": "HealthyImages",
+  "item_name": "greenbellpepper",
+  "in_db": true
+ },
+ "117": {
+  "filename": "Pepper Orange_DSC_0253.JPG",
+  "folder": "HealthyImages",
+  "item_name": "orangebellpepper",
+  "in_db": false
+ },
+ "118": {
+  "filename": "Pepper Red_DSC_0264.JPG",
+  "folder": "HealthyImages",
+  "item_name": "redbellpepper",
+  "in_db": true
+ },
+ "119": {
+  "filename": "Pepper Yellow_DSC_0338.JPG",
+  "folder": "HealthyImages",
+  "item_name": "yellowbellpepper",
+  "in_db": true
+ },
+ "120": {
+  "filename": "Rice Cakes Plain_DSC_1007_2.JPG",
+  "folder": "HealthyImages",
+  "item_name": "ricecakes",
+  "in_db": true
+ },
+ "121": {
+  "filename": "Salad Chicken Cobb_DSC_0938_2.JPG",
+  "folder": "HealthyImages",
+  "item_name": "chickencobbsalad",
+  "in_db": false
+ },
+ "122": {
+  "filename": "Salad Kale Ceasar Chicken_DSC_0940_2.JPG",
+  "folder": "HealthyImages",
+  "item_name": "kalecaesarchickensalad",
+  "in_db": false
+ },
+ "123": {
+  "filename": "Salad Mediterranean_DSC_0883_2.JPG",
+  "folder": "HealthyImages",
+  "item_name": "mediterraneansalad",
+  "in_db": false
+ },
+ "124": {
+  "filename": "Salad Sirracha Chicken_DSC_0877_2.JPG",
+  "folder": "HealthyImages",
+  "item_name": "srirachachickensalad",
+  "in_db": false
+ },
+ "125": {
+  "filename": "Salad Steak Bacon and Bleu Cheese_DSC_0946_2.JPG",
+  "folder": "HealthyImages",
+  "item_name": "steakbaconbleucheesesalad",
+  "in_db": false
+ },
+ "126": {
+  "filename": "Stone Fruit Apricot_DSC_0470.JPG",
+  "folder": "HealthyImages",
+  "item_name": "apricot",
+  "in_db": true
+ },
+ "127": {
+  "filename": "Stone Fruit Black Plum_DSC_0495.JPG",
+  "folder": "HealthyImages",
+  "item_name": "blackplum",
+  "in_db": false
+ },
+ "128": {
+  "filename": "Stone Fruit Mango_DSC_0501.JPG",
+  "folder": "HealthyImages",
+  "item_name": "mango",
+  "in_db": true
+ },
+ "129": {
+  "filename": "Stone Fruit Peach_DSC_0462.JPG",
+  "folder": "HealthyImages",
+  "item_name": "peach",
+  "in_db": true
+ },
+ "130": {
+  "filename": "Stone Fruit Red Plum_DSC_0508.JPG",
+  "folder": "HealthyImages",
+  "item_name": "redplum",
+  "in_db": false
+ },
+ "131": {
+  "filename": "Tomato Beefsteak_DSC_0301.JPG",
+  "folder": "HealthyImages",
+  "item_name": "beefsteaktomato",
+  "in_db": false
+ },
+ "132": {
+  "filename": "Tomato Grape_DSC_0294.JPG",
+  "folder": "HealthyImages",
+  "item_name": "grapetomatoes",
+  "in_db": false
+ },
+ "133": {
+  "filename": "Tomato Roma_DSC_0346.JPG",
+  "folder": "HealthyImages",
+  "item_name": "romatomato",
+  "in_db": false
+ },
+ "134": {
+  "filename": "Tomato Vine_DSC_0306.JPG",
+  "folder": "HealthyImages",
+  "item_name": "vinetomatoes",
+  "in_db": false
+ },
+ "135": {
+  "filename": "Trail Mix Delux_DSC_0523_2.JPG",
+  "folder": "HealthyImages",
+  "item_name": "trailmixdeluxe",
+  "in_db": false
+ },
+ "136": {
+  "filename": "Trail Mix Energy Power_DSC_0503_2.JPG",
+  "folder": "HealthyImages",
+  "item_name": "trailmixenergypower",
+  "in_db": false
+ },
+ "137": {
+  "filename": "Trail Mix Granola_DSC_0476_2.JPG",
+  "folder": "HealthyImages",
+  "item_name": "trailmixgranola",
+  "in_db": false
+ },
+ "138": {
+  "filename": "Trail Mix Sirracha_DSC_0508_2.JPG",
+  "folder": "HealthyImages",
+  "item_name": "trailmixsriracha",
+  "in_db": false
+ },
+ "139": {
+  "filename": "Trail Mix Wild Ginger_DSC_0515_2.JPG",
+  "folder": "HealthyImages",
+  "item_name": "trailmixwildginger",
+  "in_db": false
+ }
+}

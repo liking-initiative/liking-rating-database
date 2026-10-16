@@ -158,14 +158,18 @@ def ingest(db_path, csv_path, meta, apply=False):
     n_items = len(item_names)
     distinct_pairs = len({(s, i) for (s, i, _) in means})
     dataset_id = str(uuid.uuid4())
+    # a declared defect (e.g. some items still coded) travels with the data
+    flag, note = meta.get("quality_flag"), meta.get("quality_note")
+    if flag and not (note or "").strip():
+        raise SystemExit("quality_flag needs a quality_note saying what is wrong")
     cur.execute(
         """INSERT INTO datasets (id, study_id, name, description, n_subjects,
            n_items, rating_scale_min, rating_scale_max, rating_scale_type,
-           data_completeness, created_at, updated_at)
-           VALUES (?,?,?,?,?,?,?,?,?,?,?,?)""",
+           data_completeness, quality_flag, quality_note, created_at, updated_at)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
         (dataset_id, study_id, dataset_name, meta.get("description"),
          n_subjects, n_items, lo, hi, stype,
-         round(100.0 * distinct_pairs / (n_subjects * n_items), 2), ts, ts))
+         round(100.0 * distinct_pairs / (n_subjects * n_items), 2), flag, note, ts, ts))
 
     # --- ratings -------------------------------------------------------------------
     span = hi - lo

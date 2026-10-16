@@ -1,0 +1,2566 @@
+{
+ "datasets": [
+  "shenhav1b",
+  "shenhav2",
+  "shenhav3a",
+  "shenhav3b",
+  "shenhav4",
+  "shenhav5a",
+  "shenhav5b",
+  "shenhav6",
+  "romfred"
+ ],
+ "per_dataset_counts": {
+  "shenhav1b": {
+   "db_rows": 12880,
+   "rebuilt_rows": 14600,
+   "added_never_imported": 1169,
+   "added_by_splitting_collapsed_items": 551,
+   "db_items": 261,
+   "rebuilt_items": 299,
+   "subjects": 65
+  },
+  "shenhav2": {
+   "db_rows": 19788,
+   "rebuilt_rows": 21750,
+   "added_never_imported": 1532,
+   "added_by_splitting_collapsed_items": 430,
+   "db_items": 259,
+   "rebuilt_items": 292,
+   "subjects": 98
+  },
+  "shenhav3a": {
+   "db_rows": 11859,
+   "rebuilt_rows": 12390,
+   "added_never_imported": 0,
+   "added_by_splitting_collapsed_items": 531,
+   "db_items": 201,
+   "rebuilt_items": 210,
+   "subjects": 59
+  },
+  "shenhav3b": {
+   "db_rows": 12261,
+   "rebuilt_rows": 12810,
+   "added_never_imported": 0,
+   "added_by_splitting_collapsed_items": 549,
+   "db_items": 201,
+   "rebuilt_items": 210,
+   "subjects": 61
+  },
+  "shenhav4": {
+   "db_rows": 17286,
+   "rebuilt_rows": 18060,
+   "added_never_imported": 0,
+   "added_by_splitting_collapsed_items": 774,
+   "db_items": 201,
+   "rebuilt_items": 210,
+   "subjects": 86
+  },
+  "shenhav5a": {
+   "db_rows": 7839,
+   "rebuilt_rows": 8190,
+   "added_never_imported": 0,
+   "added_by_splitting_collapsed_items": 351,
+   "db_items": 201,
+   "rebuilt_items": 210,
+   "subjects": 39
+  },
+  "shenhav5b": {
+   "db_rows": 7144,
+   "rebuilt_rows": 7372,
+   "added_never_imported": 0,
+   "added_by_splitting_collapsed_items": 228,
+   "db_items": 188,
+   "rebuilt_items": 194,
+   "subjects": 38
+  },
+  "shenhav6": {
+   "db_rows": 20502,
+   "rebuilt_rows": 21420,
+   "added_never_imported": 0,
+   "added_by_splitting_collapsed_items": 918,
+   "db_items": 201,
+   "rebuilt_items": 210,
+   "subjects": 102
+  },
+  "romfred": {
+   "db_rows": 27107,
+   "rebuilt_rows": 30784,
+   "added_never_imported": 0,
+   "added_by_splitting_collapsed_items": 3677,
+   "db_items": 351,
+   "rebuilt_items": 395,
+   "subjects": 92
+  }
+ },
+ "db_row_verification": {
+  "romfred": {
+   "collapsed:equal_values": 97,
+   "collapsed:mean_of_rows": 2074,
+   "unchanged_renamed": 8910,
+   "unchanged_same_name": 16026
+  },
+  "shenhav1b": {
+   "collapsed:equal_values": 7,
+   "collapsed:first_row": 544,
+   "unchanged_renamed": 683,
+   "unchanged_same_name": 11646
+  },
+  "shenhav2": {
+   "collapsed:equal_values": 8,
+   "collapsed:first_row": 422,
+   "unchanged_renamed": 1200,
+   "unchanged_same_name": 18158
+  },
+  "shenhav3a": {
+   "collapsed:equal_values": 5,
+   "collapsed:first_row": 349,
+   "unchanged_renamed": 1003,
+   "unchanged_same_name": 10502
+  },
+  "shenhav3b": {
+   "collapsed:equal_values": 2,
+   "collapsed:first_row": 364,
+   "unchanged_renamed": 1037,
+   "unchanged_same_name": 10858
+  },
+  "shenhav4": {
+   "collapsed:equal_values": 4,
+   "collapsed:first_row": 512,
+   "unchanged_renamed": 1462,
+   "unchanged_same_name": 15308
+  },
+  "shenhav5a": {
+   "collapsed:equal_values": 5,
+   "collapsed:first_row": 229,
+   "unchanged_renamed": 663,
+   "unchanged_same_name": 6942
+  },
+  "shenhav5b": {
+   "collapsed:equal_values": 4,
+   "collapsed:first_row": 148,
+   "repeat:first_row": 37,
+   "unchanged_renamed": 456,
+   "unchanged_same_name": 6499
+  },
+  "shenhav6": {
+   "collapsed:equal_values": 7,
+   "collapsed:first_row": 605,
+   "unchanged_renamed": 1734,
+   "unchanged_same_name": 18156
+  }
+ },
+ "reliability": {
+  "shenhav1b": {
+   "split_half_after_on_unchanged_items": [
+    0.622,
+    241
+   ],
+   "split_half_after_new_items_only": [
+    0.637,
+    58
+   ],
+   "split_half_before": 0.632,
+   "split_half_after": 0.622,
+   "agreement_before": 0.753,
+   "agreement_after": 0.767,
+   "shared_items_before": 250,
+   "shared_items_after": 299
+  },
+  "shenhav2": {
+   "split_half_after_on_unchanged_items": [
+    0.726,
+    240
+   ],
+   "split_half_after_new_items_only": [
+    0.847,
+    52
+   ],
+   "split_half_before": 0.732,
+   "split_half_after": 0.751,
+   "agreement_before": 0.771,
+   "agreement_after": 0.771,
+   "shared_items_before": 251,
+   "shared_items_after": 290
+  },
+  "shenhav3a": {
+   "split_half_after_on_unchanged_items": [
+    0.848,
+    178
+   ],
+   "split_half_after_new_items_only": [
+    0.916,
+    32
+   ],
+   "split_half_before": 0.859,
+   "split_half_after": 0.86,
+   "agreement_before": 0.919,
+   "agreement_after": 0.918,
+   "shared_items_before": 201,
+   "shared_items_after": 210
+  },
+  "shenhav3b": {
+   "split_half_after_on_unchanged_items": [
+    0.852,
+    178
+   ],
+   "split_half_after_new_items_only": [
+    0.881,
+    32
+   ],
+   "split_half_before": 0.861,
+   "split_half_after": 0.858,
+   "agreement_before": 0.947,
+   "agreement_after": 0.945,
+   "shared_items_before": 201,
+   "shared_items_after": 210
+  },
+  "shenhav4": {
+   "split_half_after_on_unchanged_items": [
+    0.875,
+    178
+   ],
+   "split_half_after_new_items_only": [
+    0.934,
+    32
+   ],
+   "split_half_before": 0.886,
+   "split_half_after": 0.887,
+   "agreement_before": 0.944,
+   "agreement_after": 0.945,
+   "shared_items_before": 201,
+   "shared_items_after": 210
+  },
+  "shenhav5a": {
+   "split_half_after_on_unchanged_items": [
+    0.801,
+    178
+   ],
+   "split_half_after_new_items_only": [
+    0.79,
+    32
+   ],
+   "split_half_before": 0.801,
+   "split_half_after": 0.796,
+   "agreement_before": 0.919,
+   "agreement_after": 0.92,
+   "shared_items_before": 201,
+   "shared_items_after": 210
+  },
+  "shenhav5b": {
+   "split_half_after_on_unchanged_items": [
+    0.814,
+    172
+   ],
+   "split_half_after_new_items_only": [
+    0.853,
+    22
+   ],
+   "split_half_before": 0.816,
+   "split_half_after": 0.817,
+   "agreement_before": 0.695,
+   "agreement_after": 0.687,
+   "shared_items_before": 123,
+   "shared_items_after": 129
+  },
+  "shenhav6": {
+   "split_half_after_on_unchanged_items": [
+    0.911,
+    178
+   ],
+   "split_half_after_new_items_only": [
+    0.969,
+    32
+   ],
+   "split_half_before": 0.923,
+   "split_half_after": 0.924,
+   "agreement_before": 0.928,
+   "agreement_after": 0.926,
+   "shared_items_before": 201,
+   "shared_items_after": 210
+  },
+  "romfred": {
+   "split_half_after_on_unchanged_items": [
+    0.828,
+    234
+   ],
+   "split_half_after_new_items_only": [
+    0.861,
+    161
+   ],
+   "split_half_before": 0.843,
+   "split_half_after": 0.84,
+   "agreement_before": 0.556,
+   "agreement_after": 0.634,
+   "shared_items_before": 158,
+   "shared_items_after": 324
+  }
+ },
+ "other_datasets_agreement_moved": {
+  "crosswebb": {
+   "before": [
+    0.419,
+    0.368,
+    74
+   ],
+   "after": [
+    0.419,
+    0.389,
+    74
+   ]
+  }
+ },
+ "names_created": [
+  {
+   "item_name": "autobiography",
+   "image_codes": [
+    "EC_0124"
+   ],
+   "basis": "ec_key",
+   "note": ""
+  },
+  {
+   "item_name": "boardgameboggle",
+   "image_codes": [
+    "EC_0024"
+   ],
+   "basis": "split:visual",
+   "note": "key 'Board Game'; image: Boggle"
+  },
+  {
+   "item_name": "boardgameclue",
+   "image_codes": [
+    "EC_0028"
+   ],
+   "basis": "split:visual",
+   "note": "key 'Board Game'; image: Clue"
+  },
+  {
+   "item_name": "boardgamesorry",
+   "image_codes": [
+    "EC_0039"
+   ],
+   "basis": "split:visual",
+   "note": "key 'Board Game'; image: Sorry!"
+  },
+  {
+   "item_name": "boardgameuno",
+   "image_codes": [
+    "EC_0029"
+   ],
+   "basis": "split:visual",
+   "note": "key 'Board Game'; image: UNO"
+  },
+  {
+   "item_name": "boardgamewouldyourather",
+   "image_codes": [
+    "AS_0019"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'Zobmondo Would You Rather? Pocket Travel Version'"
+  },
+  {
+   "item_name": "bookanseladams",
+   "image_codes": [
+    "MM_0055"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'Ansel Adams: Our National Parks (photography book)'; was 'ansel'"
+  },
+  {
+   "item_name": "bookhumanbody",
+   "image_codes": [
+    "BB_0048"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'The Human Body Book'"
+  },
+  {
+   "item_name": "chocolatesferrero",
+   "image_codes": [
+    "EC_0057"
+   ],
+   "basis": "split:visual",
+   "note": "key 'Chocolates'; image: Ferrero Collection 24; 'chocolates' is EC_0073"
+  },
+  {
+   "item_name": "chocolateslindt",
+   "image_codes": [
+    "AT_0051"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'Lindt Chocolates'"
+  },
+  {
+   "item_name": "coffeetablebooklouvre",
+   "image_codes": [
+    "MM_0101"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'The Louvre: All the Paintings'"
+  },
+  {
+   "item_name": "coffeetablebookstreetart",
+   "image_codes": [
+    "MM_0100"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'The World Atlas of Street Art and Graffiti'"
+  },
+  {
+   "item_name": "dresssocksanneklein",
+   "image_codes": [
+    "MM_0067"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'Anne Klein Women's 3 Pack ... Trouser Sock'"
+  },
+  {
+   "item_name": "dresssockscalvinklein",
+   "image_codes": [
+    "BB_0147"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'Mens Calvin Klein 3 Pair ... Dress Socks'"
+  },
+  {
+   "item_name": "earringsgoldhoop",
+   "image_codes": [
+    "BB_0125"
+   ],
+   "basis": "split:doc",
+   "note": "PI '14k Yellow Gold 2mm Round Hoop Earrings'"
+  },
+  {
+   "item_name": "earringspearlstud",
+   "image_codes": [
+    "BB_0124"
+   ],
+   "basis": "split:doc",
+   "note": "PI '14k Yellow Gold ... Freshwater Cultured Pearl Stud Earrings'"
+  },
+  {
+   "item_name": "energybarsclif",
+   "image_codes": [
+    "MJK0042"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'Clif Bar Nutrition Bars ... (Pack of 24)'"
+  },
+  {
+   "item_name": "energybarspowerbar",
+   "image_codes": [
+    "MJK0135"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'PowerBar Performance ... (Pack of 24)'"
+  },
+  {
+   "item_name": "facewashboscia",
+   "image_codes": [
+    "EC_0022"
+   ],
+   "basis": "split:visual",
+   "note": "key 'Face Wash'; image: Boscia cleansing gel"
+  },
+  {
+   "item_name": "facewashcerave",
+   "image_codes": [
+    "EC_0108"
+   ],
+   "basis": "split:visual",
+   "note": "key 'Face Wash'; image: CeraVe hydrating cleanser"
+  },
+  {
+   "item_name": "flashlightkeychain",
+   "image_codes": [
+    "AT_0062"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'Key Chain Flashlight'"
+  },
+  {
+   "item_name": "flipflopsblack",
+   "image_codes": [
+    "EC_0113"
+   ],
+   "basis": "split:visual",
+   "note": "key 'Flip Flops'; image: plain black flip flops, brand not legible"
+  },
+  {
+   "item_name": "framegoldmetal",
+   "image_codes": [
+    "MM_0089"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'Timeless Frames Metal Wall Photo Frame, 11 by 14-Inch, Gold'"
+  },
+  {
+   "item_name": "gamecardsagainsthumanity",
+   "image_codes": [
+    "RA_0021"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'Cards Against Humanity: First Expansion'"
+  },
+  {
+   "item_name": "jeans",
+   "image_codes": [
+    "EC_0193"
+   ],
+   "basis": "ec_key",
+   "note": ""
+  },
+  {
+   "item_name": "laundryhamperrope",
+   "image_codes": [
+    "EC_0099"
+   ],
+   "basis": "split:visual",
+   "note": "key 'Laundry Hamper'; image: woven cotton-rope basket"
+  },
+  {
+   "item_name": "laundryhamperstriped",
+   "image_codes": [
+    "EC_0015"
+   ],
+   "basis": "split:visual",
+   "note": "key 'Laundry Hamper'; image: grey-striped fabric hamper with handles"
+  },
+  {
+   "item_name": "magicbullet17piece",
+   "image_codes": [
+    "BB_0001"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'Magic Bullet (17 piece)'"
+  },
+  {
+   "item_name": "magicbulletnutribullet",
+   "image_codes": [
+    "RA_0069"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'Magic Bullet NutriBullet 12-Piece'"
+  },
+  {
+   "item_name": "martiniglass",
+   "image_codes": [
+    "EC_0187"
+   ],
+   "basis": "ec_key",
+   "note": ""
+  },
+  {
+   "item_name": "memoryfoampillow",
+   "image_codes": [
+    "EC_0138"
+   ],
+   "basis": "ec_key",
+   "note": ""
+  },
+  {
+   "item_name": "microwave",
+   "image_codes": [
+    "EC_0168"
+   ],
+   "basis": "ec_key",
+   "note": ""
+  },
+  {
+   "item_name": "monetposterpalazzodamula",
+   "image_codes": [
+    "BB_0110"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'Venice Palazza Da Mula 1908 Claude Monet print POSTER'"
+  },
+  {
+   "item_name": "monetpostersunsetinvenice",
+   "image_codes": [
+    "BB_0108"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'Claude Monet (Sunset in Venice) Art Poster Print'"
+  },
+  {
+   "item_name": "novel",
+   "image_codes": [
+    "EC_0033"
+   ],
+   "basis": "ec_key",
+   "note": ""
+  },
+  {
+   "item_name": "picturebook",
+   "image_codes": [
+    "EC_0125"
+   ],
+   "basis": "ec_key",
+   "note": ""
+  },
+  {
+   "item_name": "pillowhusband",
+   "image_codes": [
+    "AT_0096"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'Husband Pillow'"
+  },
+  {
+   "item_name": "robekimono",
+   "image_codes": [
+    "MM_0059"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'Seven Apparel ... Kimono Knit Cotton Robe'"
+  },
+  {
+   "item_name": "robenautica",
+   "image_codes": [
+    "BB_0155"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'Nautica Men's ... Robe'"
+  },
+  {
+   "item_name": "shotglassbrown",
+   "image_codes": [
+    "RA_0085"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'Brown University -2 oz. Shot Glass'"
+  },
+  {
+   "item_name": "snackbasketcarepackage",
+   "image_codes": [
+    "AS_0012"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'Snack Care package'"
+  },
+  {
+   "item_name": "snackbasketsnackattack",
+   "image_codes": [
+    "AS_0011"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'Snack Attack Sampler'"
+  },
+  {
+   "item_name": "sneakersnewbalance",
+   "image_codes": [
+    "EC_0248"
+   ],
+   "basis": "split:visual",
+   "note": "key 'Sneakers'; image: black New Balance FuelCore"
+  },
+  {
+   "item_name": "sneakersreebok",
+   "image_codes": [
+    "EC_0180"
+   ],
+   "basis": "split:visual",
+   "note": "key 'Sneakers'; image: white Reebok Classic"
+  },
+  {
+   "item_name": "spagiftbasketlemongrass",
+   "image_codes": [
+    "SS_0030"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'Lemongrass Eucalyptus Bath Body Lotion Scrub Spa Set'"
+  },
+  {
+   "item_name": "spagiftbasketspainabasket",
+   "image_codes": [
+    "SS_0029"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'Spa-in-a-Basket #34187'"
+  },
+  {
+   "item_name": "sponge",
+   "image_codes": [
+    "EC_0169"
+   ],
+   "basis": "ec_key",
+   "note": ""
+  },
+  {
+   "item_name": "stringlightscopperwire",
+   "image_codes": [
+    "RA_0070"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'TaoTronics LED String Lights Copper Wire'"
+  },
+  {
+   "item_name": "stringlightsglobe",
+   "image_codes": [
+    "RA_0019"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'Innoo Tech 100 LED Globe String Lights'"
+  },
+  {
+   "item_name": "textbook",
+   "image_codes": [
+    "EC_0206"
+   ],
+   "basis": "ec_key",
+   "note": ""
+  },
+  {
+   "item_name": "thermosairpot",
+   "image_codes": [
+    "AT_0005"
+   ],
+   "basis": "split:visual",
+   "note": "PI 'Thermos'; image: pump airpot; 'thermos' is BB_0062 (Thermos foam travel mug)"
+  },
+  {
+   "item_name": "umbrellashedrain",
+   "image_codes": [
+    "MP_0093"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'ShedRain WindPro Mini Umbrella'"
+  },
+  {
+   "item_name": "usbhubkensington",
+   "image_codes": [
+    "MJK0089"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'Kensington DomeHub USB 2.0 (7 ports)'"
+  },
+  {
+   "item_name": "waterbottlegatorade",
+   "image_codes": [
+    "EC_0095"
+   ],
+   "basis": "split:visual",
+   "note": "key 'Water Bottle'; image: Gatorade squeeze bottle"
+  },
+  {
+   "item_name": "waterbottlehydroflask",
+   "image_codes": [
+    "EC_0050"
+   ],
+   "basis": "split:visual",
+   "note": "key 'Water Bottle'; image: Hydro Flask"
+  },
+  {
+   "item_name": "waterbottlenalgeneotg",
+   "image_codes": [
+    "AT_0019"
+   ],
+   "basis": "split:visual",
+   "note": "PI 'Nalgene Waterbottle'; image: Nalgene OTG loop-top, a different model from BB_0032"
+  },
+  {
+   "item_name": "waterfilterbrita",
+   "image_codes": [
+    "BB_0030"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'Brita water filter'"
+  },
+  {
+   "item_name": "waterfilterpur",
+   "image_codes": [
+    "MP_0025"
+   ],
+   "basis": "split:doc",
+   "note": "PI 'PUR 18 Cup Dispenser with One Pitcher Filter'"
+  }
+ ],
+ "renamed": {
+  "romfred": [
+   {
+    "from": "3ddoodler",
+    "to": "3ddoodlerpen",
+    "image_code": "RA_0054"
+   },
+   {
+    "from": "3dvrglasses",
+    "to": "3dglasses",
+    "image_code": "RA_0005"
+   },
+   {
+    "from": "3persontent",
+    "to": "colemantent",
+    "image_code": "MP_0044"
+   },
+   {
+    "from": "60hourcandle",
+    "to": "60hrcoilcandle",
+    "image_code": "AS_0016"
+   },
+   {
+    "from": "altoids12pk",
+    "to": "altoids",
+    "image_code": "MM_0072"
+   },
+   {
+    "from": "backupsmartphonebattery",
+    "to": "backupbatteryiphone",
+    "image_code": "AT_0143"
+   },
+   {
+    "from": "barset",
+    "to": "cocktailset",
+    "image_code": "BB_0065"
+   },
+   {
+    "from": "beanbagchair",
+    "to": "beanbag",
+    "image_code": "MM_0042"
+   },
+   {
+    "from": "bluetoothspeakers",
+    "to": "jblspeakers",
+    "image_code": "RA_0077"
+   },
+   {
+    "from": "bocceset",
+    "to": "bocce",
+    "image_code": "MM_0047"
+   },
+   {
+    "from": "bonsaitree",
+    "to": "bonsai",
+    "image_code": "MM_0025"
+   },
+   {
+    "from": "bookset",
+    "to": "harrypotter",
+    "image_code": "BB_0043"
+   },
+   {
+    "from": "camplantern",
+    "to": "lantern",
+    "image_code": "MM_0044"
+   },
+   {
+    "from": "carryonluggage",
+    "to": "luggage",
+    "image_code": "SS_0005"
+   },
+   {
+    "from": "chocolatepretzels1lb",
+    "to": "chocolatepretzels",
+    "image_code": "MJK0060"
+   },
+   {
+    "from": "coconutwater12pk",
+    "to": "coconutwater",
+    "image_code": "MM_0076"
+   },
+   {
+    "from": "coffeeteapress",
+    "to": "teamaker",
+    "image_code": "BB_0063"
+   },
+   {
+    "from": "colorimagescanner",
+    "to": "colorscanner",
+    "image_code": "SS_0018"
+   },
+   {
+    "from": "computercleaning",
+    "to": "computercleaner",
+    "image_code": "BB_0095"
+   },
+   {
+    "from": "cookies12",
+    "to": "cookies",
+    "image_code": "MJK0112"
+   },
+   {
+    "from": "coolingstand",
+    "to": "laptopcoolingstand",
+    "image_code": "AT_0155"
+   },
+   {
+    "from": "croquetset",
+    "to": "croquet",
+    "image_code": "MM_0048"
+   },
+   {
+    "from": "curvedglasses16",
+    "to": "curvedglasses",
+    "image_code": "MM_0094"
+   },
+   {
+    "from": "daypack",
+    "to": "kanken",
+    "image_code": "RA_0068"
+   },
+   {
+    "from": "digitalframe",
+    "to": "pictureframe",
+    "image_code": "BB_0138"
+   },
+   {
+    "from": "digitalvoicerecorder",
+    "to": "voicerecorder",
+    "image_code": "SS_0012"
+   },
+   {
+    "from": "dinnerfortwobasket",
+    "to": "italiandinner",
+    "image_code": "SS_0008"
+   },
+   {
+    "from": "duffelbag",
+    "to": "nikebag",
+    "image_code": "BB_0012"
+   },
+   {
+    "from": "echodot",
+    "to": "amazonechodot",
+    "image_code": "RA_0063"
+   },
+   {
+    "from": "exerciseball",
+    "to": "antiburstworkoutball",
+    "image_code": "AT_0173"
+   },
+   {
+    "from": "externaldvdbluraydrive",
+    "to": "bluray",
+    "image_code": "SS_0006"
+   },
+   {
+    "from": "externalharddrive1tb",
+    "to": "harddrive",
+    "image_code": "RA_0013"
+   },
+   {
+    "from": "fieldbag",
+    "to": "bag",
+    "image_code": "MJK0103"
+   },
+   {
+    "from": "flipflops",
+    "to": "havaianasflipflops",
+    "image_code": "BB_0022"
+   },
+   {
+    "from": "fonduepot",
+    "to": "fondue",
+    "image_code": "SS_0004"
+   },
+   {
+    "from": "foodstorage",
+    "to": "rubbermaid",
+    "image_code": "MM_0013"
+   },
+   {
+    "from": "fruitscheesenuts",
+    "to": "fruitcheesenutbasket",
+    "image_code": "SS_0031"
+   },
+   {
+    "from": "garmentbag",
+    "to": "gardembag",
+    "image_code": "BB_0117"
+   },
+   {
+    "from": "goprocamera",
+    "to": "gopro",
+    "image_code": "RA_0003"
+   },
+   {
+    "from": "hangingterrarium",
+    "to": "terrarium",
+    "image_code": "RA_0072"
+   },
+   {
+    "from": "herbgardenkit",
+    "to": "herbgarden",
+    "image_code": "MM_0024"
+   },
+   {
+    "from": "highlighters",
+    "to": "sharpie8pack",
+    "image_code": "BB_0080"
+   },
+   {
+    "from": "humidifer",
+    "to": "r2d2humidifier",
+    "image_code": "RA_0057"
+   },
+   {
+    "from": "icecubetray",
+    "to": "icetray",
+    "image_code": "MM_0026"
+   },
+   {
+    "from": "ipodshuffle",
+    "to": "shuffle",
+    "image_code": "BB_0070"
+   },
+   {
+    "from": "italianfoodbasket",
+    "to": "tasteofitaly",
+    "image_code": "SS_0033"
+   },
+   {
+    "from": "juiceextractor",
+    "to": "fruitjuicer",
+    "image_code": "MP_0024"
+   },
+   {
+    "from": "kettle",
+    "to": "electrickettle",
+    "image_code": "AT_0188"
+   },
+   {
+    "from": "keurigcoffemaker",
+    "to": "keurig",
+    "image_code": "RA_0007"
+   },
+   {
+    "from": "kindleereader",
+    "to": "kindle",
+    "image_code": "RA_0006"
+   },
+   {
+    "from": "laptopprotector",
+    "to": "keyboardcover",
+    "image_code": "BB_0094"
+   },
+   {
+    "from": "laptopsleeve",
+    "to": "laptopcase",
+    "image_code": "BB_0084"
+   },
+   {
+    "from": "ledlamp",
+    "to": "gorillaled",
+    "image_code": "AT_0163"
+   },
+   {
+    "from": "lightweightvacuum",
+    "to": "featherweightvacuum",
+    "image_code": "AT_0183"
+   },
+   {
+    "from": "magneticmeasuringspoons",
+    "to": "measuringspoons",
+    "image_code": "MM_0092"
+   },
+   {
+    "from": "maplesyrup",
+    "to": "syrup",
+    "image_code": "MM_0003"
+   },
+   {
+    "from": "martiniglasses4",
+    "to": "martini",
+    "image_code": "MM_0035"
+   },
+   {
+    "from": "massagingcushion",
+    "to": "cushion",
+    "image_code": "MM_0006"
+   },
+   {
+    "from": "messangerbag",
+    "to": "timbuk2",
+    "image_code": "RA_0083"
+   },
+   {
+    "from": "messengerbag",
+    "to": "timbuk2",
+    "image_code": "RA_0083"
+   },
+   {
+    "from": "mugs8",
+    "to": "setofeightmugs",
+    "image_code": "AT_0189"
+   },
+   {
+    "from": "naturallightalarm",
+    "to": "alarmclock",
+    "image_code": "MM_0080"
+   },
+   {
+    "from": "nocontactthermometer",
+    "to": "thermometer",
+    "image_code": "MJK0140"
+   },
+   {
+    "from": "nutellagiftpack",
+    "to": "nutella",
+    "image_code": "MM_0090"
+   },
+   {
+    "from": "paddleballset",
+    "to": "paddleball",
+    "image_code": "MM_0033"
+   },
+   {
+    "from": "peelstickchalkboard",
+    "to": "chalkboard",
+    "image_code": "MM_0056"
+   },
+   {
+    "from": "pens12",
+    "to": "pens",
+    "image_code": "MM_0103"
+   },
+   {
+    "from": "penset",
+    "to": "coloredpens",
+    "image_code": "BB_0152"
+   },
+   {
+    "from": "photobook",
+    "to": "nationalgeographic",
+    "image_code": "BB_0046"
+   },
+   {
+    "from": "picnickit",
+    "to": "picnic",
+    "image_code": "MM_0046"
+   },
+   {
+    "from": "plushthrow",
+    "to": "throw",
+    "image_code": "MM_0062"
+   },
+   {
+    "from": "quadcopterdrone",
+    "to": "quadcopter",
+    "image_code": "RA_0009"
+   },
+   {
+    "from": "quickdrytraveltowel",
+    "to": "traveltowel",
+    "image_code": "MM_0043"
+   },
+   {
+    "from": "rollingalarmclock",
+    "to": "tocky",
+    "image_code": "MM_0095"
+   },
+   {
+    "from": "rollupkeyboard",
+    "to": "rolluppiano",
+    "image_code": "BT_0029"
+   },
+   {
+    "from": "rxbarproteinbar",
+    "to": "rxbar",
+    "image_code": "RA_0052"
+   },
+   {
+    "from": "saltpeppershakers",
+    "to": "saltpepper",
+    "image_code": "MM_0091"
+   },
+   {
+    "from": "scale",
+    "to": "bodyscale",
+    "image_code": "BB_0103"
+   },
+   {
+    "from": "sdcard64gb",
+    "to": "sdcard",
+    "image_code": "RA_0012"
+   },
+   {
+    "from": "sharpies",
+    "to": "sharpie12pack",
+    "image_code": "BB_0081"
+   },
+   {
+    "from": "smartphonearmband",
+    "to": "armband",
+    "image_code": "MM_0020"
+   },
+   {
+    "from": "soundactivatedalarmclock",
+    "to": "cubeclock",
+    "image_code": "MM_0099"
+   },
+   {
+    "from": "speaker",
+    "to": "bosespeakers",
+    "image_code": "RA_0079"
+   },
+   {
+    "from": "sportsbluetoothheadphones",
+    "to": "sportsbluetoothheadset",
+    "image_code": "SS_0024"
+   },
+   {
+    "from": "streamingmediaplayer",
+    "to": "chromecast",
+    "image_code": "MM_0027"
+   },
+   {
+    "from": "sweatpants",
+    "to": "brownsweatpants",
+    "image_code": "RA_0010"
+   },
+   {
+    "from": "sweatshirt",
+    "to": "brownsweatshirt",
+    "image_code": "RA_0011"
+   },
+   {
+    "from": "swiffer",
+    "to": "swiffersweeper",
+    "image_code": "BB_0035"
+   },
+   {
+    "from": "teasampler",
+    "to": "teagiftset",
+    "image_code": "AT_0192"
+   },
+   {
+    "from": "toastereggpoacher",
+    "to": "toasterandeggpoacher",
+    "image_code": "AT_0147"
+   },
+   {
+    "from": "toothwhitening",
+    "to": "whitestrips",
+    "image_code": "BB_0034"
+   },
+   {
+    "from": "touchscreengloves",
+    "to": "gloves",
+    "image_code": "MM_0050"
+   },
+   {
+    "from": "towelset6",
+    "to": "sixpiecetowelset",
+    "image_code": "AT_0177"
+   },
+   {
+    "from": "travelbook",
+    "to": "lonelyplanetbook",
+    "image_code": "BB_0050"
+   },
+   {
+    "from": "travelcase",
+    "to": "gridit",
+    "image_code": "MM_0097"
+   },
+   {
+    "from": "travelpillow",
+    "to": "pillows",
+    "image_code": "MJK0120"
+   },
+   {
+    "from": "voicecontrolledspeaker",
+    "to": "echo",
+    "image_code": "RA_0081"
+   },
+   {
+    "from": "wallclock",
+    "to": "clock",
+    "image_code": "MM_0039"
+   },
+   {
+    "from": "wirelesspresenterlaser",
+    "to": "laserpointer",
+    "image_code": "BB_0089"
+   },
+   {
+    "from": "wirelessrouter",
+    "to": "router",
+    "image_code": "SS_0003"
+   },
+   {
+    "from": "workoutball",
+    "to": "absworkoutball",
+    "image_code": "MJK0058"
+   },
+   {
+    "from": "yogibobeanbag",
+    "to": "yogibo",
+    "image_code": "RA_0084"
+   }
+  ],
+  "shenhav1b": [
+   {
+    "from": "ansel",
+    "to": "bookanseladams",
+    "image_code": "MM_0055"
+   },
+   {
+    "from": "apple",
+    "to": "applecorerslicer",
+    "image_code": "MM_0038"
+   },
+   {
+    "from": "godivacholate",
+    "to": "chocolatebar",
+    "image_code": "BB_0076"
+   },
+   {
+    "from": "microportablespeakers",
+    "to": "portablespeaker",
+    "image_code": "AT_0152"
+   },
+   {
+    "from": "mjk0190",
+    "to": "yogakit",
+    "image_code": "MJK0190"
+   },
+   {
+    "from": "mjk0193",
+    "to": "multitoolknife",
+    "image_code": "MJK0193"
+   },
+   {
+    "from": "mjk0199",
+    "to": "backpackfoldupchair",
+    "image_code": "MJK0199"
+   },
+   {
+    "from": "panini",
+    "to": "paninipress",
+    "image_code": "MM_0037"
+   },
+   {
+    "from": "pasta",
+    "to": "pastamachine",
+    "image_code": "MM_0036"
+   },
+   {
+    "from": "pods",
+    "to": "laundrydetergentpods",
+    "image_code": "MM_0074"
+   },
+   {
+    "from": "portableusbpowersupply",
+    "to": "usbpowersupply",
+    "image_code": "AT_0164"
+   },
+   {
+    "from": "precisionscrewdriverset",
+    "to": "screwdrivers",
+    "image_code": "AT_0157"
+   }
+  ],
+  "shenhav2": [
+   {
+    "from": "ansel",
+    "to": "bookanseladams",
+    "image_code": "MM_0055"
+   },
+   {
+    "from": "apple",
+    "to": "applecorerslicer",
+    "image_code": "MM_0038"
+   },
+   {
+    "from": "godivacholate",
+    "to": "chocolatebar",
+    "image_code": "BB_0076"
+   },
+   {
+    "from": "mjk0190",
+    "to": "yogakit",
+    "image_code": "MJK0190"
+   },
+   {
+    "from": "mjk0193",
+    "to": "multitoolknife",
+    "image_code": "MJK0193"
+   },
+   {
+    "from": "mjk0198",
+    "to": "waterpoweredclock",
+    "image_code": "MJK0198"
+   },
+   {
+    "from": "mjk0199",
+    "to": "backpackfoldupchair",
+    "image_code": "MJK0199"
+   },
+   {
+    "from": "panini",
+    "to": "paninipress",
+    "image_code": "MM_0037"
+   },
+   {
+    "from": "pasta",
+    "to": "pastamachine",
+    "image_code": "MM_0036"
+   },
+   {
+    "from": "pods",
+    "to": "laundrydetergentpods",
+    "image_code": "MM_0074"
+   },
+   {
+    "from": "precisionscrewdriverset",
+    "to": "screwdrivers",
+    "image_code": "AT_0157"
+   }
+  ],
+  "shenhav3a": [
+   {
+    "from": "ec0033",
+    "to": "novel",
+    "image_code": "EC_0033"
+   },
+   {
+    "from": "ec0036",
+    "to": "cookbook",
+    "image_code": "EC_0036"
+   },
+   {
+    "from": "ec0057",
+    "to": "chocolatesferrero",
+    "image_code": "EC_0057"
+   },
+   {
+    "from": "ec0123",
+    "to": "bookset",
+    "image_code": "EC_0123"
+   },
+   {
+    "from": "ec0124",
+    "to": "autobiography",
+    "image_code": "EC_0124"
+   },
+   {
+    "from": "ec0125",
+    "to": "picturebook",
+    "image_code": "EC_0125"
+   },
+   {
+    "from": "ec0128",
+    "to": "travelbook",
+    "image_code": "EC_0128"
+   },
+   {
+    "from": "ec0129",
+    "to": "guidebook",
+    "image_code": "EC_0129"
+   },
+   {
+    "from": "ec0138",
+    "to": "memoryfoampillow",
+    "image_code": "EC_0138"
+   },
+   {
+    "from": "ec0139",
+    "to": "sleepingbag",
+    "image_code": "EC_0139"
+   },
+   {
+    "from": "ec0147",
+    "to": "alarmclock",
+    "image_code": "EC_0147"
+   },
+   {
+    "from": "ec0168",
+    "to": "microwave",
+    "image_code": "EC_0168"
+   },
+   {
+    "from": "ec0169",
+    "to": "sponge",
+    "image_code": "EC_0169"
+   },
+   {
+    "from": "ec0187",
+    "to": "martiniglass",
+    "image_code": "EC_0187"
+   },
+   {
+    "from": "ec0193",
+    "to": "jeans",
+    "image_code": "EC_0193"
+   },
+   {
+    "from": "ec0200",
+    "to": "thermometer",
+    "image_code": "EC_0200"
+   },
+   {
+    "from": "ec0206",
+    "to": "textbook",
+    "image_code": "EC_0206"
+   }
+  ],
+  "shenhav3b": [
+   {
+    "from": "ec0033",
+    "to": "novel",
+    "image_code": "EC_0033"
+   },
+   {
+    "from": "ec0036",
+    "to": "cookbook",
+    "image_code": "EC_0036"
+   },
+   {
+    "from": "ec0057",
+    "to": "chocolatesferrero",
+    "image_code": "EC_0057"
+   },
+   {
+    "from": "ec0123",
+    "to": "bookset",
+    "image_code": "EC_0123"
+   },
+   {
+    "from": "ec0124",
+    "to": "autobiography",
+    "image_code": "EC_0124"
+   },
+   {
+    "from": "ec0125",
+    "to": "picturebook",
+    "image_code": "EC_0125"
+   },
+   {
+    "from": "ec0128",
+    "to": "travelbook",
+    "image_code": "EC_0128"
+   },
+   {
+    "from": "ec0129",
+    "to": "guidebook",
+    "image_code": "EC_0129"
+   },
+   {
+    "from": "ec0138",
+    "to": "memoryfoampillow",
+    "image_code": "EC_0138"
+   },
+   {
+    "from": "ec0139",
+    "to": "sleepingbag",
+    "image_code": "EC_0139"
+   },
+   {
+    "from": "ec0147",
+    "to": "alarmclock",
+    "image_code": "EC_0147"
+   },
+   {
+    "from": "ec0168",
+    "to": "microwave",
+    "image_code": "EC_0168"
+   },
+   {
+    "from": "ec0169",
+    "to": "sponge",
+    "image_code": "EC_0169"
+   },
+   {
+    "from": "ec0187",
+    "to": "martiniglass",
+    "image_code": "EC_0187"
+   },
+   {
+    "from": "ec0193",
+    "to": "jeans",
+    "image_code": "EC_0193"
+   },
+   {
+    "from": "ec0200",
+    "to": "thermometer",
+    "image_code": "EC_0200"
+   },
+   {
+    "from": "ec0206",
+    "to": "textbook",
+    "image_code": "EC_0206"
+   }
+  ],
+  "shenhav4": [
+   {
+    "from": "ec0033",
+    "to": "novel",
+    "image_code": "EC_0033"
+   },
+   {
+    "from": "ec0036",
+    "to": "cookbook",
+    "image_code": "EC_0036"
+   },
+   {
+    "from": "ec0057",
+    "to": "chocolatesferrero",
+    "image_code": "EC_0057"
+   },
+   {
+    "from": "ec0123",
+    "to": "bookset",
+    "image_code": "EC_0123"
+   },
+   {
+    "from": "ec0124",
+    "to": "autobiography",
+    "image_code": "EC_0124"
+   },
+   {
+    "from": "ec0125",
+    "to": "picturebook",
+    "image_code": "EC_0125"
+   },
+   {
+    "from": "ec0128",
+    "to": "travelbook",
+    "image_code": "EC_0128"
+   },
+   {
+    "from": "ec0129",
+    "to": "guidebook",
+    "image_code": "EC_0129"
+   },
+   {
+    "from": "ec0138",
+    "to": "memoryfoampillow",
+    "image_code": "EC_0138"
+   },
+   {
+    "from": "ec0139",
+    "to": "sleepingbag",
+    "image_code": "EC_0139"
+   },
+   {
+    "from": "ec0147",
+    "to": "alarmclock",
+    "image_code": "EC_0147"
+   },
+   {
+    "from": "ec0168",
+    "to": "microwave",
+    "image_code": "EC_0168"
+   },
+   {
+    "from": "ec0169",
+    "to": "sponge",
+    "image_code": "EC_0169"
+   },
+   {
+    "from": "ec0187",
+    "to": "martiniglass",
+    "image_code": "EC_0187"
+   },
+   {
+    "from": "ec0193",
+    "to": "jeans",
+    "image_code": "EC_0193"
+   },
+   {
+    "from": "ec0200",
+    "to": "thermometer",
+    "image_code": "EC_0200"
+   },
+   {
+    "from": "ec0206",
+    "to": "textbook",
+    "image_code": "EC_0206"
+   }
+  ],
+  "shenhav5a": [
+   {
+    "from": "ec0033",
+    "to": "novel",
+    "image_code": "EC_0033"
+   },
+   {
+    "from": "ec0036",
+    "to": "cookbook",
+    "image_code": "EC_0036"
+   },
+   {
+    "from": "ec0057",
+    "to": "chocolatesferrero",
+    "image_code": "EC_0057"
+   },
+   {
+    "from": "ec0123",
+    "to": "bookset",
+    "image_code": "EC_0123"
+   },
+   {
+    "from": "ec0124",
+    "to": "autobiography",
+    "image_code": "EC_0124"
+   },
+   {
+    "from": "ec0125",
+    "to": "picturebook",
+    "image_code": "EC_0125"
+   },
+   {
+    "from": "ec0128",
+    "to": "travelbook",
+    "image_code": "EC_0128"
+   },
+   {
+    "from": "ec0129",
+    "to": "guidebook",
+    "image_code": "EC_0129"
+   },
+   {
+    "from": "ec0138",
+    "to": "memoryfoampillow",
+    "image_code": "EC_0138"
+   },
+   {
+    "from": "ec0139",
+    "to": "sleepingbag",
+    "image_code": "EC_0139"
+   },
+   {
+    "from": "ec0147",
+    "to": "alarmclock",
+    "image_code": "EC_0147"
+   },
+   {
+    "from": "ec0168",
+    "to": "microwave",
+    "image_code": "EC_0168"
+   },
+   {
+    "from": "ec0169",
+    "to": "sponge",
+    "image_code": "EC_0169"
+   },
+   {
+    "from": "ec0187",
+    "to": "martiniglass",
+    "image_code": "EC_0187"
+   },
+   {
+    "from": "ec0193",
+    "to": "jeans",
+    "image_code": "EC_0193"
+   },
+   {
+    "from": "ec0200",
+    "to": "thermometer",
+    "image_code": "EC_0200"
+   },
+   {
+    "from": "ec0206",
+    "to": "textbook",
+    "image_code": "EC_0206"
+   }
+  ],
+  "shenhav5b": [
+   {
+    "from": "ec0033",
+    "to": "novel",
+    "image_code": "EC_0033"
+   },
+   {
+    "from": "ec0036",
+    "to": "cookbook",
+    "image_code": "EC_0036"
+   },
+   {
+    "from": "ec0057",
+    "to": "chocolatesferrero",
+    "image_code": "EC_0057"
+   },
+   {
+    "from": "ec0124",
+    "to": "autobiography",
+    "image_code": "EC_0124"
+   },
+   {
+    "from": "ec0125",
+    "to": "picturebook",
+    "image_code": "EC_0125"
+   },
+   {
+    "from": "ec0129",
+    "to": "guidebook",
+    "image_code": "EC_0129"
+   },
+   {
+    "from": "ec0138",
+    "to": "memoryfoampillow",
+    "image_code": "EC_0138"
+   },
+   {
+    "from": "ec0139",
+    "to": "sleepingbag",
+    "image_code": "EC_0139"
+   },
+   {
+    "from": "ec0147",
+    "to": "alarmclock",
+    "image_code": "EC_0147"
+   },
+   {
+    "from": "ec0169",
+    "to": "sponge",
+    "image_code": "EC_0169"
+   },
+   {
+    "from": "ec0200",
+    "to": "thermometer",
+    "image_code": "EC_0200"
+   },
+   {
+    "from": "laundryhamper",
+    "to": "laundryhamperrope",
+    "image_code": "EC_0099"
+   }
+  ],
+  "shenhav6": [
+   {
+    "from": "ec0033",
+    "to": "novel",
+    "image_code": "EC_0033"
+   },
+   {
+    "from": "ec0036",
+    "to": "cookbook",
+    "image_code": "EC_0036"
+   },
+   {
+    "from": "ec0057",
+    "to": "chocolatesferrero",
+    "image_code": "EC_0057"
+   },
+   {
+    "from": "ec0123",
+    "to": "bookset",
+    "image_code": "EC_0123"
+   },
+   {
+    "from": "ec0124",
+    "to": "autobiography",
+    "image_code": "EC_0124"
+   },
+   {
+    "from": "ec0125",
+    "to": "picturebook",
+    "image_code": "EC_0125"
+   },
+   {
+    "from": "ec0128",
+    "to": "travelbook",
+    "image_code": "EC_0128"
+   },
+   {
+    "from": "ec0129",
+    "to": "guidebook",
+    "image_code": "EC_0129"
+   },
+   {
+    "from": "ec0138",
+    "to": "memoryfoampillow",
+    "image_code": "EC_0138"
+   },
+   {
+    "from": "ec0139",
+    "to": "sleepingbag",
+    "image_code": "EC_0139"
+   },
+   {
+    "from": "ec0147",
+    "to": "alarmclock",
+    "image_code": "EC_0147"
+   },
+   {
+    "from": "ec0168",
+    "to": "microwave",
+    "image_code": "EC_0168"
+   },
+   {
+    "from": "ec0169",
+    "to": "sponge",
+    "image_code": "EC_0169"
+   },
+   {
+    "from": "ec0187",
+    "to": "martiniglass",
+    "image_code": "EC_0187"
+   },
+   {
+    "from": "ec0193",
+    "to": "jeans",
+    "image_code": "EC_0193"
+   },
+   {
+    "from": "ec0200",
+    "to": "thermometer",
+    "image_code": "EC_0200"
+   },
+   {
+    "from": "ec0206",
+    "to": "textbook",
+    "image_code": "EC_0206"
+   }
+  ]
+ },
+ "split": {
+  "romfred": {
+   "blender": {
+    "BB_0001": "magicbullet17piece",
+    "RA_0069": "magicbulletnutribullet"
+   },
+   "boardgame": {
+    "AS_0019": "boardgamewouldyourather",
+    "MJK0049": "boardgame"
+   },
+   "book": {
+    "BB_0045": "postsecretbook",
+    "BB_0048": "bookhumanbody",
+    "BB_0049": "humanbrainbook",
+    "BB_0112": "survivalbook",
+    "BT_0060": "book",
+    "MM_0055": "bookanseladams"
+   },
+   "chair": {
+    "BB_0071": "deskchair",
+    "RA_0023": "chair"
+   },
+   "chocolate": {
+    "BB_0077": "godivagoldballotins",
+    "MM_0010": "candy"
+   },
+   "chocolates": {
+    "AT_0051": "chocolateslindt",
+    "MJK0064": "milkchocolate"
+   },
+   "coffeetablebook": {
+    "MM_0100": "coffeetablebookstreetart",
+    "MM_0101": "coffeetablebooklouvre"
+   },
+   "dresssocks3pair": {
+    "BB_0147": "dresssockscalvinklein",
+    "MM_0067": "dresssocksanneklein"
+   },
+   "earrings": {
+    "BB_0124": "earringspearlstud",
+    "BB_0125": "earringsgoldhoop"
+   },
+   "energybars24": {
+    "MJK0042": "energybarsclif",
+    "MJK0135": "energybarspowerbar"
+   },
+   "flashlight": {
+    "AT_0062": "flashlightkeychain",
+    "BB_0067": "flashlight"
+   },
+   "game": {
+    "BB_0018": "bananagrams",
+    "BB_0019": "applestoapples",
+    "BB_0020": "scattergories",
+    "BB_0026": "riskboardgame",
+    "BB_0027": "jengagame",
+    "BB_0074": "scrabble",
+    "BB_0097": "monopoly",
+    "BB_0104": "catchphrase",
+    "MM_0022": "catan",
+    "RA_0021": "gamecardsagainsthumanity",
+    "RA_0022": "game",
+    "RA_0065": "explodingkittens"
+   },
+   "minifridge": {
+    "BB_0139": "minifridge",
+    "RA_0035": "minifridge26cubicfeet"
+   },
+   "pictureframe": {
+    "AT_0180": "blackpictureframe",
+    "MM_0089": "framegoldmetal"
+   },
+   "pillows": {
+    "AT_0096": "pillowhusband",
+    "AT_0185": "cottonpillow",
+    "BB_0072": "foampillow"
+   },
+   "poster": {
+    "BB_0107": "starrynightposter",
+    "BB_0108": "monetpostersunsetinvenice",
+    "BB_0110": "monetposterpalazzodamula"
+   },
+   "robe": {
+    "BB_0155": "robenautica",
+    "MM_0059": "robekimono"
+   },
+   "shotglass": {
+    "RA_0018": "shotglass",
+    "RA_0085": "shotglassbrown"
+   },
+   "snackbasket": {
+    "AS_0011": "snackbasketsnackattack",
+    "AS_0012": "snackbasketcarepackage"
+   },
+   "spagiftbasket": {
+    "SS_0029": "spagiftbasketspainabasket",
+    "SS_0030": "spagiftbasketlemongrass"
+   },
+   "stringlights": {
+    "RA_0019": "stringlightsglobe",
+    "RA_0070": "stringlightscopperwire"
+   },
+   "thermos": {
+    "AT_0005": "thermosairpot",
+    "BB_0062": "thermos"
+   },
+   "toaster": {
+    "BB_0102": "toaster",
+    "MP_0012": "redsoxtoaster"
+   },
+   "umbrella": {
+    "MM_0102": "umbrella",
+    "MP_0093": "umbrellashedrain"
+   },
+   "usbhub": {
+    "AT_0167": "usbsquid",
+    "MJK0089": "usbhubkensington"
+   },
+   "vase": {
+    "MM_0098": "vase",
+    "MP_0091": "flowervase1"
+   },
+   "waterbottle": {
+    "AT_0019": "waterbottlenalgeneotg",
+    "AT_0182": "sportswaterbottle",
+    "BB_0032": "nalgenewaterbottle"
+   },
+   "waterfilter": {
+    "BB_0030": "waterfilterbrita",
+    "MP_0025": "waterfilterpur"
+   }
+  },
+  "shenhav1b": {
+   "batteries": {
+    "BT_0004": "batteries",
+    "MM_0070": "rechargeablebatteries"
+   },
+   "boardgame": {
+    "AS_0019": "boardgamewouldyourather",
+    "MJK0049": "boardgame"
+   },
+   "energybars": {
+    "MJK0042": "energybarsclif",
+    "MJK0135": "energybarspowerbar"
+   },
+   "frame": {
+    "MM_0040": "collagepictureframe",
+    "MM_0089": "framegoldmetal"
+   },
+   "game": {
+    "RA_0021": "gamecardsagainsthumanity",
+    "RA_0022": "game"
+   },
+   "lamp": {
+    "BB_0087": "lamp",
+    "MM_0086": "tablelamp"
+   },
+   "magicbullet": {
+    "BB_0001": "magicbullet17piece",
+    "RA_0069": "magicbulletnutribullet"
+   },
+   "monetposter": {
+    "BB_0108": "monetpostersunsetinvenice",
+    "BB_0110": "monetposterpalazzodamula"
+   },
+   "popcorn": {
+    "BB_0153": "caramelcorn",
+    "MJK0143": "popcorn20"
+   },
+   "snackbasket": {
+    "AS_0011": "snackbasketsnackattack",
+    "AS_0012": "snackbasketcarepackage"
+   },
+   "stringlights": {
+    "RA_0019": "stringlightsglobe",
+    "RA_0070": "stringlightscopperwire"
+   },
+   "umbrella": {
+    "MM_0102": "umbrella",
+    "MP_0093": "umbrellashedrain"
+   },
+   "waterfilter": {
+    "BB_0030": "waterfilterbrita",
+    "MP_0025": "waterfilterpur"
+   }
+  },
+  "shenhav2": {
+   "batteries": {
+    "BT_0004": "batteries",
+    "MM_0070": "rechargeablebatteries"
+   },
+   "energybars": {
+    "MJK0042": "energybarsclif",
+    "MJK0135": "energybarspowerbar"
+   },
+   "frame": {
+    "MM_0040": "collagepictureframe",
+    "MM_0089": "framegoldmetal"
+   },
+   "lamp": {
+    "BB_0087": "lamp",
+    "MM_0086": "tablelamp"
+   },
+   "magicbullet": {
+    "BB_0001": "magicbullet17piece",
+    "RA_0069": "magicbulletnutribullet"
+   },
+   "monetposter": {
+    "BB_0108": "monetpostersunsetinvenice",
+    "BB_0110": "monetposterpalazzodamula"
+   },
+   "popcorn": {
+    "BB_0153": "caramelcorn",
+    "MJK0143": "popcorn20"
+   },
+   "snackbasket": {
+    "AS_0011": "snackbasketsnackattack",
+    "AS_0012": "snackbasketcarepackage"
+   },
+   "stringlights": {
+    "RA_0019": "stringlightsglobe",
+    "RA_0070": "stringlightscopperwire"
+   },
+   "waterfilter": {
+    "BB_0030": "waterfilterbrita",
+    "MP_0025": "waterfilterpur"
+   }
+  },
+  "shenhav3a": {
+   "boardgame": {
+    "EC_0024": "boardgameboggle",
+    "EC_0028": "boardgameclue",
+    "EC_0029": "boardgameuno",
+    "EC_0039": "boardgamesorry"
+   },
+   "facewash": {
+    "EC_0022": "facewashboscia",
+    "EC_0108": "facewashcerave"
+   },
+   "flipflops": {
+    "EC_0027": "havaianasflipflops",
+    "EC_0113": "flipflopsblack"
+   },
+   "laundryhamper": {
+    "EC_0015": "laundryhamperstriped",
+    "EC_0099": "laundryhamperrope"
+   },
+   "sneakers": {
+    "EC_0180": "sneakersreebok",
+    "EC_0248": "sneakersnewbalance"
+   },
+   "waterbottle": {
+    "EC_0050": "waterbottlehydroflask",
+    "EC_0095": "waterbottlegatorade",
+    "EC_0119": "nalgenewaterbottle"
+   }
+  },
+  "shenhav3b": {
+   "boardgame": {
+    "EC_0024": "boardgameboggle",
+    "EC_0028": "boardgameclue",
+    "EC_0029": "boardgameuno",
+    "EC_0039": "boardgamesorry"
+   },
+   "facewash": {
+    "EC_0022": "facewashboscia",
+    "EC_0108": "facewashcerave"
+   },
+   "flipflops": {
+    "EC_0027": "havaianasflipflops",
+    "EC_0113": "flipflopsblack"
+   },
+   "laundryhamper": {
+    "EC_0015": "laundryhamperstriped",
+    "EC_0099": "laundryhamperrope"
+   },
+   "sneakers": {
+    "EC_0180": "sneakersreebok",
+    "EC_0248": "sneakersnewbalance"
+   },
+   "waterbottle": {
+    "EC_0050": "waterbottlehydroflask",
+    "EC_0095": "waterbottlegatorade",
+    "EC_0119": "nalgenewaterbottle"
+   }
+  },
+  "shenhav4": {
+   "boardgame": {
+    "EC_0024": "boardgameboggle",
+    "EC_0028": "boardgameclue",
+    "EC_0029": "boardgameuno",
+    "EC_0039": "boardgamesorry"
+   },
+   "facewash": {
+    "EC_0022": "facewashboscia",
+    "EC_0108": "facewashcerave"
+   },
+   "flipflops": {
+    "EC_0027": "havaianasflipflops",
+    "EC_0113": "flipflopsblack"
+   },
+   "laundryhamper": {
+    "EC_0015": "laundryhamperstriped",
+    "EC_0099": "laundryhamperrope"
+   },
+   "sneakers": {
+    "EC_0180": "sneakersreebok",
+    "EC_0248": "sneakersnewbalance"
+   },
+   "waterbottle": {
+    "EC_0050": "waterbottlehydroflask",
+    "EC_0095": "waterbottlegatorade",
+    "EC_0119": "nalgenewaterbottle"
+   }
+  },
+  "shenhav5a": {
+   "boardgame": {
+    "EC_0024": "boardgameboggle",
+    "EC_0028": "boardgameclue",
+    "EC_0029": "boardgameuno",
+    "EC_0039": "boardgamesorry"
+   },
+   "facewash": {
+    "EC_0022": "facewashboscia",
+    "EC_0108": "facewashcerave"
+   },
+   "flipflops": {
+    "EC_0027": "havaianasflipflops",
+    "EC_0113": "flipflopsblack"
+   },
+   "laundryhamper": {
+    "EC_0015": "laundryhamperstriped",
+    "EC_0099": "laundryhamperrope"
+   },
+   "sneakers": {
+    "EC_0180": "sneakersreebok",
+    "EC_0248": "sneakersnewbalance"
+   },
+   "waterbottle": {
+    "EC_0050": "waterbottlehydroflask",
+    "EC_0095": "waterbottlegatorade",
+    "EC_0119": "nalgenewaterbottle"
+   }
+  },
+  "shenhav5b": {
+   "boardgame": {
+    "EC_0024": "boardgameboggle",
+    "EC_0028": "boardgameclue",
+    "EC_0029": "boardgameuno",
+    "EC_0039": "boardgamesorry"
+   },
+   "facewash": {
+    "EC_0022": "facewashboscia",
+    "EC_0108": "facewashcerave"
+   },
+   "flipflops": {
+    "EC_0027": "havaianasflipflops",
+    "EC_0113": "flipflopsblack"
+   },
+   "waterbottle": {
+    "EC_0095": "waterbottlegatorade",
+    "EC_0119": "nalgenewaterbottle"
+   }
+  },
+  "shenhav6": {
+   "boardgame": {
+    "EC_0024": "boardgameboggle",
+    "EC_0028": "boardgameclue",
+    "EC_0029": "boardgameuno",
+    "EC_0039": "boardgamesorry"
+   },
+   "facewash": {
+    "EC_0022": "facewashboscia",
+    "EC_0108": "facewashcerave"
+   },
+   "flipflops": {
+    "EC_0027": "havaianasflipflops",
+    "EC_0113": "flipflopsblack"
+   },
+   "laundryhamper": {
+    "EC_0015": "laundryhamperstriped",
+    "EC_0099": "laundryhamperrope"
+   },
+   "sneakers": {
+    "EC_0180": "sneakersreebok",
+    "EC_0248": "sneakersnewbalance"
+   },
+   "waterbottle": {
+    "EC_0050": "waterbottlehydroflask",
+    "EC_0095": "waterbottlegatorade",
+    "EC_0119": "nalgenewaterbottle"
+   }
+  }
+ },
+ "merged": {
+  "romfred": [
+   {
+    "from": [
+     "messangerbag",
+     "messengerbag"
+    ],
+    "to": "timbuk2",
+    "image_code": "RA_0083",
+    "why": "same image stored under two spellings"
+   },
+   {
+    "image_codes": [
+     "AT_0005",
+     "AT_0016",
+     "AT_0058",
+     "AT_0064",
+     "AT_0067",
+     "AT_0097",
+     "AT_0106",
+     "AT_0130",
+     "AT_0155",
+     "AT_0157",
+     "AT_0179",
+     "AT_0182",
+     "AT_0190",
+     "AT_0192",
+     "BB_0022",
+     "BB_0027",
+     "BB_0043",
+     "BB_0046",
+     "BB_0050",
+     "BB_0054",
+     "BB_0070",
+     "BB_0076",
+     "BB_0087",
+     "BB_0089",
+     "BB_0110",
+     "BB_0111",
+     "BB_0120",
+     "BT_0006",
+     "BT_0008",
+     "MJK0055",
+     "MJK0116",
+     "MJK0135",
+     "MJK0143",
+     "MJK0190",
+     "MM_0016",
+     "MM_0020",
+     "MM_0022",
+     "MM_0038",
+     "MM_0047",
+     "MM_0048",
+     "MM_0055",
+     "MM_0056",
+     "MM_0062",
+     "MM_0070",
+     "MM_0077",
+     "MM_0078",
+     "MM_0080",
+     "MM_0099",
+     "MM_0101",
+     "MP_0012",
+     "MP_0091",
+     "RA_0001",
+     "RA_0002",
+     "RA_0004",
+     "RA_0012",
+     "RA_0013",
+     "RA_0015",
+     "RA_0023",
+     "RA_0028",
+     "RA_0065",
+     "RA_0070",
+     "RA_0080",
+     "RF_M_0345",
+     "RF_M_0352",
+     "SS_0010"
+    ],
+    "subjects": 1,
+    "rows_averaged": 130,
+    "values_differ_in": 0,
+    "why": "same image rated more than once by one participant: mean at timepoint 1"
+   }
+  ],
+  "shenhav5b": [
+   {
+    "image_codes": [
+     "EC_0071"
+    ],
+    "subjects": 38,
+    "rows_averaged": 76,
+    "values_differ_in": 37,
+    "why": "same image rated more than once by one participant: mean at timepoint 1"
+   }
+  ]
+ },
+ "never_imported_added": {
+  "shenhav1b": [
+   "AT_0005",
+   "AT_0018",
+   "AT_0019",
+   "AT_0021",
+   "AT_0046",
+   "AT_0047",
+   "AT_0048",
+   "AT_0049",
+   "AT_0051",
+   "AT_0052",
+   "AT_0057",
+   "AT_0058",
+   "AT_0062",
+   "AT_0067",
+   "AT_0091",
+   "AT_0096",
+   "AT_0097",
+   "AT_0106",
+   "AT_0116",
+   "AT_0117",
+   "AT_0121",
+   "AT_0122",
+   "AT_0123",
+   "AT_0130",
+   "AT_0135"
+  ],
+  "shenhav2": [
+   "AT_0005",
+   "AT_0018",
+   "AT_0019",
+   "AT_0021",
+   "AT_0040",
+   "AT_0046",
+   "AT_0047",
+   "AT_0052",
+   "AT_0057",
+   "AT_0058",
+   "AT_0062",
+   "AT_0064",
+   "AT_0067",
+   "AT_0091",
+   "AT_0096",
+   "AT_0100",
+   "AT_0116",
+   "AT_0117",
+   "AT_0121",
+   "AT_0122",
+   "AT_0123",
+   "AT_0130",
+   "AT_0135"
+  ]
+ },
+ "visual_identifications": {
+  "EC_0057": [
+   "chocolatesferrero",
+   "visual",
+   "key 'Chocolates'; image: Ferrero Collection 24; 'chocolates' is EC_0073"
+  ],
+  "EC_0024": [
+   "boardgameboggle",
+   "visual",
+   "key 'Board Game'; image: Boggle"
+  ],
+  "EC_0028": [
+   "boardgameclue",
+   "visual",
+   "key 'Board Game'; image: Clue"
+  ],
+  "EC_0029": [
+   "boardgameuno",
+   "visual",
+   "key 'Board Game'; image: UNO"
+  ],
+  "EC_0039": [
+   "boardgamesorry",
+   "visual",
+   "key 'Board Game'; image: Sorry!"
+  ],
+  "EC_0050": [
+   "waterbottlehydroflask",
+   "visual",
+   "key 'Water Bottle'; image: Hydro Flask"
+  ],
+  "EC_0095": [
+   "waterbottlegatorade",
+   "visual",
+   "key 'Water Bottle'; image: Gatorade squeeze bottle"
+  ],
+  "EC_0119": [
+   "nalgenewaterbottle",
+   "visual",
+   "key 'Water Bottle'; image: Nalgene wide-mouth, same model as BB_0032 'Nalgene water bottle' (grey vs blue)"
+  ],
+  "EC_0180": [
+   "sneakersreebok",
+   "visual",
+   "key 'Sneakers'; image: white Reebok Classic"
+  ],
+  "EC_0248": [
+   "sneakersnewbalance",
+   "visual",
+   "key 'Sneakers'; image: black New Balance FuelCore"
+  ],
+  "EC_0027": [
+   "havaianasflipflops",
+   "visual",
+   "key 'Flip Flops'; image: Havaianas (logo on strap), same model as BB_0022 'Havaianas Flip Flops' (blue vs black)"
+  ],
+  "EC_0113": [
+   "flipflopsblack",
+   "visual",
+   "key 'Flip Flops'; image: plain black flip flops, brand not legible"
+  ],
+  "EC_0022": [
+   "facewashboscia",
+   "visual",
+   "key 'Face Wash'; image: Boscia cleansing gel"
+  ],
+  "EC_0108": [
+   "facewashcerave",
+   "visual",
+   "key 'Face Wash'; image: CeraVe hydrating cleanser"
+  ],
+  "EC_0015": [
+   "laundryhamperstriped",
+   "visual",
+   "key 'Laundry Hamper'; image: grey-striped fabric hamper with handles"
+  ],
+  "EC_0099": [
+   "laundryhamperrope",
+   "visual",
+   "key 'Laundry Hamper'; image: woven cotton-rope basket"
+  ],
+  "AT_0005": [
+   "thermosairpot",
+   "visual",
+   "PI 'Thermos'; image: pump airpot; 'thermos' is BB_0062 (Thermos foam travel mug)"
+  ],
+  "AT_0019": [
+   "waterbottlenalgeneotg",
+   "visual",
+   "PI 'Nalgene Waterbottle'; image: Nalgene OTG loop-top, a different model from BB_0032"
+  ]
+ },
+ "products": 676,
+ "romfred_image_codes": {
+  "subject_lists": "64 participants on the female product list, 28 on the male list; every participant matches one list on 100% of ItemIDs (only spelling variant: Messanger/Messenger Bag)",
+  "assignment": {
+   "unique_ProductInformation_label": 556,
+   "ProductInformation_order_within_shared_label": 146,
+   "romfred_only_no_code": 16,
+   "total_list_itemids": 718
+  },
+  "evidence": "female list aligns to ProductInformation file order 359/359; OSF b24dv allSubDataTable.xls (https://osf.io/p7qyn, the lab ID->image-code file for version 501) is strictly increasing in ProductInformation order on both lists (362 and 338 IDs, 0 descents), so arrays are built in that order",
+  "rating_check": "58 order-assigned codes also rated online: r(romfred, shenhav1b/2) = .85 as assigned vs .68 with each shared-label group reversed; within most pairs of similar products ratings cannot discriminate (7 of 16 two-product groups favour the assignment)",
+  "not_included": "Rating2 (post-choice re-rating, version 504, 11,195 rows) was never imported; not added"
+ },
+ "notes": [
+  "shenhav subject_id = migration 031 numbering (first appearance in Study*_2.csv), verified by exact value match; shenhav5b keeps its source ids; romfred = SubNum",
+  "romfred ratings = Rating1, x10 for versions 502/503 (migration 040)",
+  "collapsed shenhav items: the DB holds the FIRST source row of the group (source-file order), not a mean; romfred collapsed items hold the mean (migration 001 policy)",
+  "shenhav5b EC_0071 (mop with bucket) was shown twice to all 38 participants; DB kept the first rating, rebuild stores the mean (repo rule) -> 37 values change",
+  "MH_/JL_ codes in shenhav5b stay as codes (65 items)"
+ ]
+}

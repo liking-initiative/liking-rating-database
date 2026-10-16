@@ -4,7 +4,7 @@ Item-level distributional statistics.
 The unit a distribution is taken over has to match the data. Designs built for
 intensive longitudinal data summarise each *participant* first — mean, spread,
 skew of their own time series — then plot the spread of those per-person
-numbers. That is undefined here: 53 of 59 datasets hold a single rating per
+numbers. That is undefined here: 55 of 61 datasets hold a single rating per
 (subject, item), so a participant has no within-person spread to summarise.
 
 The two units that do carry information in this corpus are:
@@ -480,9 +480,10 @@ class DescriptivesService:
         * Ratings are centred on each subject's own mean before correlating.
           Without that, two items correlate merely because some people rate
           everything highly and others rate everything low -- a response-style
-          effect, not shared preference. In ``foljac2`` that artifact is total:
-          each subject's ratings span ~0.006 while subject means span ~0.6, so
-          every pair of items correlates at r = 1.00 uncentred.
+          effect, not shared preference. ``foljac2`` before migration 037 was
+          the extreme case: each subject's ratings spanned ~0.006 while subject
+          means spanned ~0.6, so every pair of items correlated at r = 1.00
+          uncentred.
         * Per-dataset r is combined by Fisher's z weighted by (n - 3), so a
           study with more shared raters counts for more.
 

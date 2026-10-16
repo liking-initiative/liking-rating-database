@@ -1,0 +1,411 @@
+{
+ "1": {
+  "abbreviation": "sni",
+  "category_block": "bars",
+  "share_judged_sweet": 0.97,
+  "recall_modal_share": 0.76,
+  "item_name": "snickers",
+  "basis": "lab's own snack name 'snickers' (CDdata_*.mat G.id, OSF qrv2e)"
+ },
+ "2": {
+  "abbreviation": "mar",
+  "category_block": "bars",
+  "share_judged_sweet": 0.964,
+  "recall_modal_share": 0.803,
+  "item_name": "mars",
+  "basis": "lab's own snack name 'mars' (CDdata_*.mat G.id, OSF qrv2e)"
+ },
+ "3": {
+  "abbreviation": "kag",
+  "category_block": "bars",
+  "share_judged_sweet": 0.968,
+  "recall_modal_share": 0.79,
+  "item_name": "ostroglu-kag",
+  "basis": "dataset-scoped code",
+  "likely_reading": "Kaegi fret"
+ },
+ "4": {
+  "abbreviation": "twi",
+  "category_block": "bars",
+  "share_judged_sweet": 0.966,
+  "recall_modal_share": 0.793,
+  "item_name": "twix",
+  "basis": "lab's own snack name 'twix' (CDdata_*.mat G.id, OSF qrv2e)"
+ },
+ "5": {
+  "abbreviation": "kar",
+  "category_block": "bars",
+  "share_judged_sweet": 0.765,
+  "recall_modal_share": 0.612,
+  "item_name": "ostroglu-kar",
+  "basis": "dataset-scoped code",
+  "likely_reading": "unknown bar"
+ },
+ "6": {
+  "abbreviation": "cou",
+  "category_block": "bars",
+  "share_judged_sweet": 0.893,
+  "recall_modal_share": 0.71,
+  "item_name": "ostroglu-cou",
+  "basis": "dataset-scoped code",
+  "likely_reading": "possibly Kinder Country"
+ },
+ "7": {
+  "abbreviation": "bal",
+  "category_block": "bars",
+  "share_judged_sweet": 0.939,
+  "recall_modal_share": 0.772,
+  "item_name": "ostroglu-bal",
+  "basis": "dataset-scoped code",
+  "likely_reading": "Balisto"
+ },
+ "8": {
+  "abbreviation": "bou",
+  "category_block": "bars",
+  "share_judged_sweet": 0.953,
+  "recall_modal_share": 0.82,
+  "item_name": "bounty",
+  "basis": "lab's own snack name 'bounty' (CDdata_*.mat G.id, OSF qrv2e)"
+ },
+ "9": {
+  "abbreviation": "fru",
+  "category_block": "bonbons",
+  "share_judged_sweet": 0.941,
+  "recall_modal_share": 0.686,
+  "item_name": "ostroglu-fru",
+  "basis": "dataset-scoped code",
+  "likely_reading": "fruit drops?"
+ },
+ "10": {
+  "abbreviation": "sug",
+  "category_block": "bonbons",
+  "share_judged_sweet": 0.91,
+  "recall_modal_share": 0.753,
+  "item_name": "sugus",
+  "basis": "lab's own snack name 'sugus' (CDdata_*.mat G.id, OSF qrv2e)"
+ },
+ "11": {
+  "abbreviation": "car",
+  "category_block": "bonbons",
+  "share_judged_sweet": 0.914,
+  "recall_modal_share": 0.718,
+  "item_name": "ostroglu-car",
+  "basis": "dataset-scoped code",
+  "likely_reading": "caramels?"
+ },
+ "12": {
+  "abbreviation": "chu",
+  "category_block": "bonbons",
+  "share_judged_sweet": 0.908,
+  "recall_modal_share": 0.744,
+  "item_name": "ostroglu-chu",
+  "basis": "dataset-scoped code",
+  "likely_reading": "Chupa Chups"
+ },
+ "13": {
+  "abbreviation": "tic",
+  "category_block": "bonbons",
+  "share_judged_sweet": 0.768,
+  "recall_modal_share": 0.779,
+  "item_name": "tictac",
+  "basis": "lab's own snack name 'tictac' (CDdata_*.mat G.id, OSF qrv2e)"
+ },
+ "14": {
+  "abbreviation": "ric",
+  "category_block": "bonbons",
+  "share_judged_sweet": 0.812,
+  "recall_modal_share": 0.793,
+  "item_name": "ricola",
+  "basis": "lab's own snack name 'ricola' (CDdata_*.mat G.id, OSF qrv2e)"
+ },
+ "15": {
+  "abbreviation": "men",
+  "category_block": "bonbons",
+  "share_judged_sweet": 0.96,
+  "recall_modal_share": 0.724,
+  "item_name": "mentos",
+  "basis": "lab's own snack name 'mentos' (CDdata_*.mat G.id, OSF qrv2e)"
+ },
+ "16": {
+  "abbreviation": "fis",
+  "category_block": "bonbons",
+  "share_judged_sweet": 0.6,
+  "recall_modal_share": 0.832,
+  "item_name": "fishermansfriend",
+  "basis": "lab's own snack name 'fishermans' (CDdata_*.mat G.id, OSF qrv2e)"
+ },
+ "17": {
+  "abbreviation": "cor",
+  "category_block": "chocolate",
+  "share_judged_sweet": 0.946,
+  "recall_modal_share": 0.642,
+  "item_name": "ostroglu-cor",
+  "basis": "dataset-scoped code",
+  "likely_reading": "unknown chocolate"
+ },
+ "18": {
+  "abbreviation": "tru",
+  "category_block": "chocolate",
+  "share_judged_sweet": 0.982,
+  "recall_modal_share": 0.76,
+  "item_name": "ostroglu-tru",
+  "basis": "dataset-scoped code",
+  "likely_reading": "truffles?"
+ },
+ "19": {
+  "abbreviation": "tor",
+  "category_block": "chocolate",
+  "share_judged_sweet": 0.974,
+  "recall_modal_share": 0.815,
+  "item_name": "ostroglu-tor",
+  "basis": "dataset-scoped code",
+  "likely_reading": "probably Torino (Camille Bloch)"
+ },
+ "20": {
+  "abbreviation": "ovo",
+  "category_block": "chocolate",
+  "share_judged_sweet": 0.955,
+  "recall_modal_share": 0.822,
+  "item_name": "ovomaltine",
+  "basis": "lab's own snack name 'ovomaltine' (CDdata_*.mat G.id, OSF qrv2e)"
+ },
+ "21": {
+  "abbreviation": "cho",
+  "category_block": "chocolate",
+  "share_judged_sweet": 0.983,
+  "recall_modal_share": 0.621,
+  "item_name": "ostroglu-cho",
+  "basis": "dataset-scoped code",
+  "likely_reading": "a chocolate (typed \"lin\" 8 times: Lindt?)"
+ },
+ "22": {
+  "abbreviation": "tob",
+  "category_block": "chocolate",
+  "share_judged_sweet": 0.961,
+  "recall_modal_share": 0.794,
+  "item_name": "toblerone",
+  "basis": "lab's own snack name 'toblerone' (CDdata_*.mat G.id, OSF qrv2e)"
+ },
+ "23": {
+  "abbreviation": "cai",
+  "category_block": "chocolate",
+  "share_judged_sweet": 0.937,
+  "recall_modal_share": 0.791,
+  "item_name": "caillermilkchocolate",
+  "basis": "lab's own snack name 'caillermilch' (CDdata_*.mat G.id, OSF qrv2e)"
+ },
+ "24": {
+  "abbreviation": "exc",
+  "category_block": "chocolate",
+  "share_judged_sweet": 0.954,
+  "recall_modal_share": 0.763,
+  "item_name": "ostroglu-exc",
+  "basis": "dataset-scoped code",
+  "likely_reading": "Lindt Excellence"
+ },
+ "25": {
+  "abbreviation": "nim",
+  "category_block": "wine gums",
+  "share_judged_sweet": 0.943,
+  "recall_modal_share": 0.767,
+  "item_name": "nimm2",
+  "basis": "lab's own snack name 'nimmzwei' (CDdata_*.mat G.id, OSF qrv2e)"
+ },
+ "26": {
+  "abbreviation": "red",
+  "category_block": "wine gums",
+  "share_judged_sweet": 0.918,
+  "recall_modal_share": 0.765,
+  "item_name": "ostroglu-red",
+  "basis": "dataset-scoped code",
+  "likely_reading": "unknown wine gum"
+ },
+ "27": {
+  "abbreviation": "loo",
+  "category_block": "wine gums",
+  "share_judged_sweet": 0.917,
+  "recall_modal_share": 0.773,
+  "item_name": "ostroglu-loo",
+  "basis": "dataset-scoped code",
+  "likely_reading": "unknown wine gum"
+ },
+ "28": {
+  "abbreviation": "tro",
+  "category_block": "wine gums",
+  "share_judged_sweet": 0.93,
+  "recall_modal_share": 0.765,
+  "item_name": "trolli",
+  "basis": "lab's own snack name 'trolli' (CDdata_*.mat G.id, OSF qrv2e)"
+ },
+ "29": {
+  "abbreviation": "col",
+  "category_block": "wine gums",
+  "share_judged_sweet": 0.938,
+  "recall_modal_share": 0.753,
+  "item_name": "colabottles",
+  "basis": "lab's own snack name 'haribocola' (CDdata_*.mat G.id, OSF qrv2e)"
+ },
+ "30": {
+  "abbreviation": "gol",
+  "category_block": "wine gums",
+  "share_judged_sweet": 0.907,
+  "recall_modal_share": 0.72,
+  "item_name": "gummibears",
+  "basis": "lab's own snack name 'haribobaeren' (CDdata_*.mat G.id, OSF qrv2e)"
+ },
+ "31": {
+  "abbreviation": "him",
+  "category_block": "wine gums",
+  "share_judged_sweet": 0.947,
+  "recall_modal_share": 0.687,
+  "item_name": "ostroglu-him",
+  "basis": "dataset-scoped code",
+  "likely_reading": "probably Himbeeren (raspberry gums)"
+ },
+ "32": {
+  "abbreviation": "sou",
+  "category_block": "wine gums",
+  "share_judged_sweet": 0.899,
+  "recall_modal_share": 0.712,
+  "item_name": "sourpower",
+  "basis": "lab's own snack name 'sourpower' (CDdata_*.mat G.id, OSF qrv2e)"
+ },
+ "33": {
+  "abbreviation": "stu",
+  "category_block": "nuts",
+  "share_judged_sweet": 0.376,
+  "recall_modal_share": 0.777,
+  "item_name": "ostroglu-stu",
+  "basis": "dataset-scoped code",
+  "likely_reading": "Studentenfutter (trail mix)"
+ },
+ "34": {
+  "abbreviation": "erd",
+  "category_block": "nuts",
+  "share_judged_sweet": 0.058,
+  "recall_modal_share": 0.771,
+  "item_name": "ostroglu-erd",
+  "basis": "dataset-scoped code",
+  "likely_reading": "Erdnuesse (peanuts)"
+ },
+ "35": {
+  "abbreviation": "cas",
+  "category_block": "nuts",
+  "share_judged_sweet": 0.061,
+  "recall_modal_share": 0.839,
+  "item_name": "cashews",
+  "basis": "lab's own snack name 'cashews' (CDdata_*.mat G.id, OSF qrv2e)"
+ },
+ "36": {
+  "abbreviation": "was",
+  "category_block": "nuts",
+  "share_judged_sweet": 0.077,
+  "recall_modal_share": 0.819,
+  "item_name": "wasabinuts",
+  "basis": "lab's own snack name 'wasabinuts' (CDdata_*.mat G.id, OSF qrv2e)"
+ },
+ "37": {
+  "abbreviation": "nus",
+  "category_block": "nuts",
+  "share_judged_sweet": 0.251,
+  "recall_modal_share": 0.722,
+  "item_name": "ostroglu-nus",
+  "basis": "dataset-scoped code",
+  "likely_reading": "probably a nut mix"
+ },
+ "38": {
+  "abbreviation": "man",
+  "category_block": "nuts",
+  "share_judged_sweet": 0.242,
+  "recall_modal_share": 0.76,
+  "item_name": "ostroglu-man",
+  "basis": "dataset-scoped code",
+  "likely_reading": "Mandeln (almonds)"
+ },
+ "39": {
+  "abbreviation": "pis",
+  "category_block": "nuts",
+  "share_judged_sweet": 0.082,
+  "recall_modal_share": 0.751,
+  "item_name": "pistachios",
+  "basis": "lab's own snack name 'pistazien' (CDdata_*.mat G.id, OSF qrv2e)"
+ },
+ "40": {
+  "abbreviation": "mex",
+  "category_block": "nuts",
+  "share_judged_sweet": 0.082,
+  "recall_modal_share": 0.809,
+  "item_name": "ostroglu-mex",
+  "basis": "dataset-scoped code",
+  "likely_reading": "unknown nut snack"
+ },
+ "41": {
+  "abbreviation": "pom",
+  "category_block": "salty snacks",
+  "share_judged_sweet": 0.102,
+  "recall_modal_share": 0.868,
+  "item_name": "pombaer",
+  "basis": "lab's own snack name 'pombaer' (CDdata_*.mat G.id, OSF qrv2e)"
+ },
+ "42": {
+  "abbreviation": "chi",
+  "category_block": "salty snacks",
+  "share_judged_sweet": 0.077,
+  "recall_modal_share": 0.679,
+  "item_name": "ostroglu-chi",
+  "basis": "dataset-scoped code",
+  "likely_reading": "chips (typed \"tor\" 22 times: tortilla chips?)"
+ },
+ "43": {
+  "abbreviation": "pri",
+  "category_block": "salty snacks",
+  "share_judged_sweet": 0.07,
+  "recall_modal_share": 0.799,
+  "item_name": "pringles",
+  "basis": "lab's own snack name 'pringles' (CDdata_*.mat G.id, OSF qrv2e)"
+ },
+ "44": {
+  "abbreviation": "pap",
+  "category_block": "salty snacks",
+  "share_judged_sweet": 0.094,
+  "recall_modal_share": 0.844,
+  "item_name": "paprikachips",
+  "basis": "lab's own snack name 'paprikachips' (CDdata_*.mat G.id, OSF qrv2e)"
+ },
+ "45": {
+  "abbreviation": "fli",
+  "category_block": "salty snacks",
+  "share_judged_sweet": 0.086,
+  "recall_modal_share": 0.724,
+  "item_name": "ostroglu-fli",
+  "basis": "dataset-scoped code",
+  "likely_reading": "Flips (peanut puffs)"
+ },
+ "46": {
+  "abbreviation": "kam",
+  "category_block": "salty snacks",
+  "share_judged_sweet": 0.069,
+  "recall_modal_share": 0.556,
+  "item_name": "ostroglu-kam",
+  "basis": "dataset-scoped code",
+  "likely_reading": "Kambly (typed \"gol\" 26 times: Goldfischli crackers?)"
+ },
+ "47": {
+  "abbreviation": "pop",
+  "category_block": "salty snacks",
+  "share_judged_sweet": 0.156,
+  "recall_modal_share": 0.81,
+  "item_name": "ostroglu-pop",
+  "basis": "dataset-scoped code",
+  "likely_reading": "popcorn"
+ },
+ "48": {
+  "abbreviation": "rol",
+  "category_block": "salty snacks",
+  "share_judged_sweet": 0.098,
+  "recall_modal_share": 0.746,
+  "item_name": "ostroglu-rol",
+  "basis": "dataset-scoped code",
+  "likely_reading": "salty snack (typed \"sal\" 6 times)"
+ }
+}

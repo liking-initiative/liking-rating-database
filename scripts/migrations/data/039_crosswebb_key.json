@@ -1,0 +1,784 @@
+{
+ "rule": "stimulus index i (1-70 food, 101-140 goods) = the authors' stimulus file item_{i}.jpg (goods: item_{i-100}.jpg); its name is the caption printed on that image",
+ "sources": {
+  "stimulus_files": "github.com/locross93/Bundles_bdm_only, images/WithText/imgs_food/item_{i}.jpg (git tree 9c1e0a2e7831d605402421c0c9c2428df7ce5bf5); run_BDM_item.m loads item_{i}.jpg for index i",
+  "analysis_code": "Bundle_Value/mvpa/OpenfMRI_Format/rsa_pixels.py lines 82-87: index i<100 -> imgs_food/item_{i}.jpg, i>=100 -> imgs_trinkets/item_{i-100}.jpg",
+  "lab_inventory": {
+   "note": "live Google Sheet read by prep_pay_subj_fMRI.m (columns ITEM, ITEM #); snapshot fetched 2026-10-15",
+   "sha256": "13a298bec13dcc56ce2d569920bd9b80907d44932675139726499756a13d95a6"
+  },
+  "agreement": "caption, image content and inventory agree for all 70 foods and 40 goods"
+ },
+ "key": [
+  {
+   "index": 1,
+   "previous": "3musketeers",
+   "item": "3musketeers",
+   "caption": "3 Musketeers Bar",
+   "inventory": "3 Musketeers"
+  },
+  {
+   "index": 2,
+   "previous": "barnumsanimals",
+   "item": "doritos",
+   "caption": "Doritos",
+   "inventory": "Doritos"
+  },
+  {
+   "index": 3,
+   "previous": "doritos",
+   "item": "chipsahoy",
+   "caption": "Chips Ahoy Cookies",
+   "inventory": "Chips Ahoy"
+  },
+  {
+   "index": 4,
+   "previous": "chipsahoy",
+   "item": "kitkat",
+   "caption": "Kit Kat Bar",
+   "inventory": "Kit Kat"
+  },
+  {
+   "index": 5,
+   "previous": "kitkat",
+   "item": "twix",
+   "caption": "Twix Bar",
+   "inventory": "Twix"
+  },
+  {
+   "index": 6,
+   "previous": "poptarts",
+   "item": "chocolatemuffin",
+   "caption": "Chocolate Muffins",
+   "inventory": "Chocolate Muffins"
+  },
+  {
+   "index": 7,
+   "previous": "poptartsstrawberry",
+   "item": "milano",
+   "caption": "Milano Cookies",
+   "inventory": "Milano"
+  },
+  {
+   "index": 8,
+   "previous": "ghirardellichocolates",
+   "item": "starburst",
+   "caption": "Starbursts",
+   "inventory": "Starburst"
+  },
+  {
+   "index": 9,
+   "previous": "twix",
+   "item": "sunchips",
+   "caption": "Sun Chips",
+   "inventory": "Sun Chips"
+  },
+  {
+   "index": 10,
+   "previous": "whatchamacallit",
+   "item": "dolemixedfruit",
+   "caption": "Mixed Fruit",
+   "inventory": "Mixed Fruit"
+  },
+  {
+   "index": 11,
+   "previous": "applepie",
+   "item": "smokedturkey",
+   "caption": "Smoked Turkey",
+   "inventory": "Smoked Turkey"
+  },
+  {
+   "index": 12,
+   "previous": "avocado",
+   "item": "smokedsalmon",
+   "caption": "Smoked Salmon",
+   "inventory": "Smoked Salmon"
+  },
+  {
+   "index": 13,
+   "previous": "blackberries",
+   "item": "salame",
+   "caption": "Salami",
+   "inventory": "Salami"
+  },
+  {
+   "index": 14,
+   "previous": "cauliflower",
+   "item": "americancheese",
+   "caption": "American Cheese",
+   "inventory": "American Cheese"
+  },
+  {
+   "index": 15,
+   "previous": "ritz",
+   "item": "mozzarellacheese",
+   "caption": "Mozzarella Cheese",
+   "inventory": "Mozzarella Cheese"
+  },
+  {
+   "index": 16,
+   "previous": "cherrypie",
+   "item": "roastbeef",
+   "caption": "Roast Beef",
+   "inventory": "Roast Beef"
+  },
+  {
+   "index": 17,
+   "previous": "chocolatemuffin",
+   "item": "plainyogurt",
+   "caption": "Plain Yogurt",
+   "inventory": "Plain Yogurt"
+  },
+  {
+   "index": 18,
+   "previous": "powdereddonettes",
+   "item": "blueberryyogurt",
+   "caption": "Blueberry Yogurt",
+   "inventory": "Blueberry Yogurt"
+  },
+  {
+   "index": 19,
+   "previous": "grannysmithapple",
+   "item": "strawberryyogurt",
+   "caption": "Strawberry Yogurt",
+   "inventory": "Strawberry Yogurt"
+  },
+  {
+   "index": 20,
+   "previous": "greengrapes",
+   "item": "powdereddonettes",
+   "caption": "Powdered Donuts",
+   "inventory": "Powdered Donuts"
+  },
+  {
+   "index": 21,
+   "previous": "mango",
+   "item": "hostessdonettes",
+   "caption": "Crunchy Donuts",
+   "inventory": "Cruncy Donuts"
+  },
+  {
+   "index": 22,
+   "previous": "milano",
+   "item": "avocado",
+   "caption": "Avocado",
+   "inventory": "Avocado"
+  },
+  {
+   "index": 23,
+   "previous": "orange",
+   "item": "blackberries",
+   "caption": "Blackberries",
+   "inventory": "Blackberries"
+  },
+  {
+   "index": 24,
+   "previous": "raspberries",
+   "item": "cauliflower",
+   "caption": "Cauliflower",
+   "inventory": "Cauliflower"
+  },
+  {
+   "index": 25,
+   "previous": "redvelvetcake",
+   "item": "grannysmithapple",
+   "caption": "Apple",
+   "inventory": "Apple"
+  },
+  {
+   "index": 26,
+   "previous": "quakerchewybar",
+   "item": "greengrapes",
+   "caption": "Grapes",
+   "inventory": "Grapes"
+  },
+  {
+   "index": 27,
+   "previous": "starburst",
+   "item": "orange",
+   "caption": "Orange",
+   "inventory": "Orange"
+  },
+  {
+   "index": 28,
+   "previous": "strawberries",
+   "item": "mango",
+   "caption": "Mango",
+   "inventory": "Mango"
+  },
+  {
+   "index": 29,
+   "previous": "crunchydonuts",
+   "item": "raspberries",
+   "caption": "Raspberries",
+   "inventory": "Raspberries"
+  },
+  {
+   "index": 30,
+   "previous": "chickentikkamasala",
+   "item": "strawberries",
+   "caption": "Strawberries",
+   "inventory": "Strawberry"
+  },
+  {
+   "index": 31,
+   "previous": "lambvindaloo",
+   "item": "grapefruit",
+   "caption": "Grapefruit",
+   "inventory": "Grapefruit"
+  },
+  {
+   "index": 32,
+   "previous": "polloasadoburrito",
+   "item": "barnumsanimals",
+   "caption": "Animal Crackers",
+   "inventory": "Animal Cookies"
+  },
+  {
+   "index": 33,
+   "previous": "beanandcheeseburrito",
+   "item": "poptarts",
+   "caption": "Brown Sugar Poptart",
+   "inventory": "Brown Sugar Poptart"
+  },
+  {
+   "index": 34,
+   "previous": "chocolatechipclifbars",
+   "item": "poptartsstrawberry",
+   "caption": "Strawberry Poptart",
+   "inventory": "Strawberry Poptart"
+  },
+  {
+   "index": 35,
+   "previous": "ferrerochocolates",
+   "item": "whatchamacallit",
+   "caption": "Whatchamacallit Bar",
+   "inventory": "Whatchamacalit"
+  },
+  {
+   "index": 36,
+   "previous": "sunchips",
+   "item": "ritz",
+   "caption": "Ritz Cracker and Cheese Dip",
+   "inventory": "Ritz Crackers"
+  },
+  {
+   "index": 37,
+   "previous": "dolemixedfruit",
+   "item": "quakerchewybar",
+   "caption": "Smores Chewy Bar",
+   "inventory": "Smores Chewy Bars"
+  },
+  {
+   "index": 38,
+   "previous": "grapefruit",
+   "item": "bananachips",
+   "caption": "Banana Chips",
+   "inventory": "Banana Chips"
+  },
+  {
+   "index": 39,
+   "previous": "bananachips",
+   "item": "chocolatebananas",
+   "caption": "Chocolate Bananas",
+   "inventory": "Chocolate Bananas"
+  },
+  {
+   "index": 40,
+   "previous": "chocolatebananas",
+   "item": "crispyapple",
+   "caption": "Crispy Apple",
+   "inventory": "Crispy Apple"
+  },
+  {
+   "index": 41,
+   "previous": "crispyapple",
+   "item": "vegetablechips",
+   "caption": "Vegetable Chips",
+   "inventory": "Vegetable Chips"
+  },
+  {
+   "index": 42,
+   "previous": "vegetablechips",
+   "item": "sweetpotatochips",
+   "caption": "Sweet Potato Chips",
+   "inventory": "Sweet Potato Chips"
+  },
+  {
+   "index": 43,
+   "previous": "sweetpotatochips",
+   "item": "mexicalisalad",
+   "caption": "Mexicali Salad",
+   "inventory": "Mexicali Salad"
+  },
+  {
+   "index": 44,
+   "previous": "choppedsaladchicken",
+   "item": "choppedsaladchicken",
+   "caption": "Chopped Chicken Salad",
+   "inventory": "Chopped Salad Chicken"
+  },
+  {
+   "index": 45,
+   "previous": "mexicalisalad",
+   "item": "caesarsalad",
+   "caption": "Caesar Salad",
+   "inventory": "Caesar Salad"
+  },
+  {
+   "index": 46,
+   "previous": "caesarsalad",
+   "item": "veggiewrap",
+   "caption": "Veggie Wrap",
+   "inventory": "Veggie Wrap"
+  },
+  {
+   "index": 47,
+   "previous": "veggiewrap",
+   "item": "superburrito",
+   "caption": "Super Burrito",
+   "inventory": "Super Burrito"
+  },
+  {
+   "index": 48,
+   "previous": "superburrito",
+   "item": "chocolateberry",
+   "caption": "Chocolate Covered Berries",
+   "inventory": "Chocolate covered berries"
+  },
+  {
+   "index": 49,
+   "previous": "chocolateberry",
+   "item": "tunasaladwrap",
+   "caption": "Tuna Salad Wrap",
+   "inventory": "Tuna Salad Wrap"
+  },
+  {
+   "index": 50,
+   "previous": "greenbeanschips",
+   "item": "chickenroastedbeet",
+   "caption": "Chicken & Roasted Beet Salad",
+   "inventory": "Chicken & Roasted Beet Salad"
+  },
+  {
+   "index": 51,
+   "previous": "salame",
+   "item": "cherrypie",
+   "caption": "Cherry Pie",
+   "inventory": "Cherry Pie"
+  },
+  {
+   "index": 52,
+   "previous": "smokedturkey",
+   "item": "applepie",
+   "caption": "Apple Pie",
+   "inventory": "Apple Pie"
+  },
+  {
+   "index": 53,
+   "previous": "americancheese",
+   "item": "greenbeanschips",
+   "caption": "Green Bean Chips",
+   "inventory": "Green Beans Chips"
+  },
+  {
+   "index": 54,
+   "previous": "chickenroastedbeet",
+   "item": "deviledeggs",
+   "caption": "Deviled Eggs",
+   "inventory": "Deviled Eggs"
+  },
+  {
+   "index": 55,
+   "previous": "mozzarellacheese",
+   "item": "capresesandwich",
+   "caption": "Caprese Sandwich",
+   "inventory": "Caprese Sandwich"
+  },
+  {
+   "index": 56,
+   "previous": "roastbeef",
+   "item": "redvelvetcake",
+   "caption": "Red Velvet Cake",
+   "inventory": "Red Velvet Cake"
+  },
+  {
+   "index": 57,
+   "previous": "capresesandwich",
+   "item": "chickentikkamasala",
+   "caption": "Chicken Tikka Masala",
+   "inventory": "Chicken Tikka Masala"
+  },
+  {
+   "index": 58,
+   "previous": "tunasaladwrap",
+   "item": "lambvindaloo",
+   "caption": "Lamb Vindaloo",
+   "inventory": "Lamb Vindaloo"
+  },
+  {
+   "index": 59,
+   "previous": "smokedsalmon",
+   "item": "vegantikkamasala",
+   "caption": "Vegan Tikka Masala",
+   "inventory": "Vegan Tikka Masala"
+  },
+  {
+   "index": 60,
+   "previous": "plainyogurt",
+   "item": "gnocchi",
+   "caption": "Gnocchi",
+   "inventory": "Gnocci"
+  },
+  {
+   "index": 61,
+   "previous": "strawberryyogurt",
+   "item": "margheritapizza",
+   "caption": "Margherita Pizza",
+   "inventory": "Magherita Pizza"
+  },
+  {
+   "index": 62,
+   "previous": "blueberryyogurt",
+   "item": "macaron",
+   "caption": "Macarons",
+   "inventory": "Macarons"
+  },
+  {
+   "index": 63,
+   "previous": "deviledeggs",
+   "item": "polloasadoburrito",
+   "caption": "Pollo Asado Burrito",
+   "inventory": "Pollo Asado Burrito"
+  },
+  {
+   "index": 64,
+   "previous": "smoreschewybars",
+   "item": "beanandcheeseburrito",
+   "caption": "Bean and Cheese Burrito",
+   "inventory": "Bean and Cheese Burrito"
+  },
+  {
+   "index": 65,
+   "previous": "gnocchi",
+   "item": "chocolatechipclifbars",
+   "caption": "Chocolate Chip Clif Bars",
+   "inventory": "Chocolate Chip Clif Bars"
+  },
+  {
+   "index": 66,
+   "previous": "margheritapizza",
+   "item": "blueberrycrispclifbars",
+   "caption": "Blueberry Crisp Clif Bars",
+   "inventory": "Blueberry Crisp Clif Bars"
+  },
+  {
+   "index": 67,
+   "previous": "macaron",
+   "item": "yogurtpretzels",
+   "caption": "Yogurt Pretzels",
+   "inventory": "Yogurt Pretzels"
+  },
+  {
+   "index": 68,
+   "previous": "blueberrycrispclifbars",
+   "item": "chocolatepretzels",
+   "caption": "Chocolate Pretzels",
+   "inventory": "Chocolate Pretzels"
+  },
+  {
+   "index": 69,
+   "previous": "yogurtpretzels",
+   "item": "ferrerochocolates",
+   "caption": "Ferrero Chocolates",
+   "inventory": "Ferrero Chocolates"
+  },
+  {
+   "index": 70,
+   "previous": "chocolatepretzels",
+   "item": "ghirardellichocolates",
+   "caption": "Ghiradelli Chocolates",
+   "inventory": "Ghiradelli Chocolates"
+  },
+  {
+   "index": 101,
+   "previous": "abriefhistoryoftime",
+   "item": "abriefhistoryoftime",
+   "caption": NaN,
+   "inventory": "A Brief History of Time book"
+  },
+  {
+   "index": 102,
+   "previous": "freakonomics",
+   "item": "freakonomics",
+   "caption": NaN,
+   "inventory": "Freakonomics book"
+  },
+  {
+   "index": 103,
+   "previous": "1984book",
+   "item": "1984book",
+   "caption": NaN,
+   "inventory": "1984 book"
+  },
+  {
+   "index": 104,
+   "previous": "waterbottle",
+   "item": "waterbottle",
+   "caption": NaN,
+   "inventory": "Water bottle"
+  },
+  {
+   "index": 105,
+   "previous": "wirelessmouse",
+   "item": "wirelessmouse",
+   "caption": NaN,
+   "inventory": "Wireless mouse"
+  },
+  {
+   "index": 106,
+   "previous": "yogamat",
+   "item": "yogamat",
+   "caption": NaN,
+   "inventory": "Yoga mat"
+  },
+  {
+   "index": 107,
+   "previous": "hitchhikersguide",
+   "item": "hitchhikersguide",
+   "caption": NaN,
+   "inventory": "Hitchhikers book"
+  },
+  {
+   "index": 108,
+   "previous": "lordoftherings",
+   "item": "lordoftherings",
+   "caption": NaN,
+   "inventory": "LOR book"
+  },
+  {
+   "index": 109,
+   "previous": "caltechbackpack",
+   "item": "caltechbackpack",
+   "caption": NaN,
+   "inventory": "Caltech backpack"
+  },
+  {
+   "index": 110,
+   "previous": "caltechhat",
+   "item": "caltechhat",
+   "caption": NaN,
+   "inventory": "Caltech hat"
+  },
+  {
+   "index": 111,
+   "previous": "caltechbanner",
+   "item": "caltechbanner",
+   "caption": NaN,
+   "inventory": "Caltech banner"
+  },
+  {
+   "index": 112,
+   "previous": "caltechkeychain",
+   "item": "caltechkeychain",
+   "caption": NaN,
+   "inventory": "Caltech keychain"
+  },
+  {
+   "index": 113,
+   "previous": "usbstick16gb",
+   "item": "usbstick16gb",
+   "caption": NaN,
+   "inventory": "USB stick 16GB"
+  },
+  {
+   "index": 114,
+   "previous": "caltechmug",
+   "item": "caltechmug",
+   "caption": NaN,
+   "inventory": "Caltech mug"
+  },
+  {
+   "index": 115,
+   "previous": "caltechdrawstringbag",
+   "item": "caltechdrawstringbag",
+   "caption": NaN,
+   "inventory": "Caltech drawstring bag"
+  },
+  {
+   "index": 116,
+   "previous": "desklamp",
+   "item": "desklamp",
+   "caption": NaN,
+   "inventory": "Desk lamp"
+  },
+  {
+   "index": 117,
+   "previous": "stapler",
+   "item": "stapler",
+   "caption": NaN,
+   "inventory": "Stapler"
+  },
+  {
+   "index": 118,
+   "previous": "overtheearheadphones",
+   "item": "overtheearheadphones",
+   "caption": NaN,
+   "inventory": "Over the ear headphones"
+  },
+  {
+   "index": 119,
+   "previous": "headbackpack",
+   "item": "headbackpack",
+   "caption": NaN,
+   "inventory": "Head backpack"
+  },
+  {
+   "index": 120,
+   "previous": "batteries",
+   "item": "batteries",
+   "caption": NaN,
+   "inventory": "Batteries"
+  },
+  {
+   "index": 121,
+   "previous": "lock",
+   "item": "lock",
+   "caption": NaN,
+   "inventory": "Lock"
+  },
+  {
+   "index": 122,
+   "previous": "notebook",
+   "item": "notebook",
+   "caption": NaN,
+   "inventory": "Notebook"
+  },
+  {
+   "index": 123,
+   "previous": "bathroomscale",
+   "item": "bathroomscale",
+   "caption": NaN,
+   "inventory": "Bathroom scale"
+  },
+  {
+   "index": 124,
+   "previous": "playingcards",
+   "item": "playingcards",
+   "caption": NaN,
+   "inventory": "Playing cards"
+  },
+  {
+   "index": 125,
+   "previous": "honeyclementinecandle",
+   "item": "honeyclementinecandle",
+   "caption": NaN,
+   "inventory": "Honey clementine candle"
+  },
+  {
+   "index": 126,
+   "previous": "rosescandle",
+   "item": "rosescandle",
+   "caption": NaN,
+   "inventory": "Roses candle"
+  },
+  {
+   "index": 127,
+   "previous": "umbrella",
+   "item": "umbrella",
+   "caption": NaN,
+   "inventory": "Umbrella"
+  },
+  {
+   "index": 128,
+   "previous": "androidcharger",
+   "item": "androidcharger",
+   "caption": NaN,
+   "inventory": "Android charger"
+  },
+  {
+   "index": 129,
+   "previous": "iphonecharger",
+   "item": "iphonecharger",
+   "caption": NaN,
+   "inventory": "iPhone charger"
+  },
+  {
+   "index": 130,
+   "previous": "clotheshangers",
+   "item": "clotheshangers",
+   "caption": NaN,
+   "inventory": "Clothes hangers"
+  },
+  {
+   "index": 131,
+   "previous": "beachtowel",
+   "item": "beachtowel",
+   "caption": NaN,
+   "inventory": "Beach towel"
+  },
+  {
+   "index": 132,
+   "previous": "cookingsupplies",
+   "item": "cookingsupplies",
+   "caption": NaN,
+   "inventory": "Cooking supplies"
+  },
+  {
+   "index": 133,
+   "previous": "kitchenutensils",
+   "item": "kitchenutensils",
+   "caption": NaN,
+   "inventory": "Kitchen utensils"
+  },
+  {
+   "index": 134,
+   "previous": "pens",
+   "item": "pens",
+   "caption": NaN,
+   "inventory": "Pens"
+  },
+  {
+   "index": 135,
+   "previous": "plates",
+   "item": "plates",
+   "caption": NaN,
+   "inventory": "Plates"
+  },
+  {
+   "index": 136,
+   "previous": "portablecharger",
+   "item": "portablecharger",
+   "caption": NaN,
+   "inventory": "Portable charger"
+  },
+  {
+   "index": 137,
+   "previous": "portablespeaker",
+   "item": "portablespeaker",
+   "caption": NaN,
+   "inventory": "Portable speaker"
+  },
+  {
+   "index": 138,
+   "previous": "screwdrivers",
+   "item": "screwdrivers",
+   "caption": NaN,
+   "inventory": "Screwdrivers"
+  },
+  {
+   "index": 139,
+   "previous": "sunglasses",
+   "item": "sunglasses",
+   "caption": NaN,
+   "inventory": "Sunglasses"
+  },
+  {
+   "index": 140,
+   "previous": "surgeprotector",
+   "item": "surgeprotector",
+   "caption": NaN,
+   "inventory": "Surge Protector"
+  }
+ ]
+}

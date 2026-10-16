@@ -1,0 +1,14 @@
+{
+ "split_half": 0.906,
+ "recall": "modal typed answer = authors' abbreviation for 48/48 ids (mean modal share 0.757); every one of 91 participants fits that key best of 48 cyclic shifts (lowest hit rate 0.35, chance ~0.02)",
+ "salty_sweet": {
+  "bars": 0.927,
+  "bonbons": 0.852,
+  "chocolate": 0.961,
+  "wine gums": 0.925,
+  "nuts": 0.154,
+  "salty snacks": 0.094
+ },
+ "db_agreement": "r=0.799 on 12 names in DB (bounty, cashews, colabottles, gummibears, mars, mentos, pistachios, pringles, snickers, tictac, toblerone, twix); full permutation null 95th/99.9th 0.49/0.78, p=0.0004; within-block null 95th/99.9th 0.77/0.89, p=0.0248",
+ "pass1_vs_pass2": "identical in 0.628 of cells, r=0.970"
+}

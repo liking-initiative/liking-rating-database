@@ -62,7 +62,8 @@ class Dataset(Base):
     rating_scale_type = Column(String(50))  # e.g., "likert", "visual_analog", "hedonic"
     data_completeness = Column(Float)  # Percentage of complete responses
     # Source-inherited defects, declared rather than silently corrected
-    # (migration 011): "placeholder_items" | "coded_items" | NULL.
+    # (migration 011): "placeholder_items" | "coded_items" | "inferred_key" |
+    # "unidentified_items" (033-036) | NULL.
     quality_flag = Column(String(50))
     quality_note = Column(Text)
     file_format = Column(String(20))  # csv, xlsx, sav, etc.

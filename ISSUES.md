@@ -10,6 +10,15 @@ history of this file.
 
 Per-release notes are on each GitHub release; one line each here.
 
+- **v1.7.0 (2026-10-15)** — extended verification of item identity across
+  studies (`docs/DATASET_AUDIT.md` section H; new integrity tests), migrations
+  033–044: item mappings updated and verified against study materials in
+  `shevsmith1`, `yoo2025`, `smithspiller1`, `smithspiller2`, `crosswebb`; one
+  item per product in the eight `shenhav*` datasets and `romfred` (+10,710
+  ratings); `foljac2` bids from its trial file; `romfred`'s 0–1 slider versions
+  on its 0–10 scale; `fernandezeeg` on its full slider; 60 of `larlua`'s
+  images named. Two datasets added, `desself` and `ostroglu`: 40 studies, 61
+  datasets, 777,116 ratings.
 - **v1.6.4 (2026-10-12)** — raw Prolific IDs in nine datasets (688
   participants) replaced with per-dataset numbers (migration 031); Rich et al.
   (2026) cited as published, *Communications Psychology* 4, 132, instead of its
@@ -80,6 +89,19 @@ The kramits check exposed a second listing-order error already in the database �
 | `sebmar` | 2,025 | **Not recoverable locally** | `Behavior_unzipped/ID*/bdm_run` holds numeric item ids 1..45; `choice_set_information.mat` is numeric only. Gluth-lab BDM study — ask for the snack list. |
 | `ostroglu` | 4,368 | **Not recoverable locally** | `osfstorage-archive.zip` contains only per-subject numeric `.mat` matrices; no item list anywhere in the archive. |
 
+#### Update 2026-10-15 (label recovery pass; authors confirmed to hold nothing more)
+
+| Dataset | Verdict | Evidence |
+|---|---|---|
+| `desself` | **Keyed — the earlier verdict was wrong** | `data (1).zip` does hold the key: the task (`self_control_code_final.m`, lines 221–254) numbers PicID as the `UnhealthyImages` then `HealthyImages` `dir()` lists, and participants 3, 4 and 12's MATLAB workspaces saved both lists (`unhealthyList` 87 + `healthyList` 52, identical in all three). `Health` = PicID > 87 in all 4,031 rows. A different image set (139 grocery photos). Agreement with the database on 46 shared names r = .79 (random keys: 99.9th pct .44). Construct: tastiness, −10..10. **Ingested 2026-10-15** (`ds-desself`; study record — Desai's 2022 dissertation, per the RA — to confirm). |
+| `ostroglu` | **Partly keyed** | The authors' analysis script (OSF ze8xh, `Data_Analysis_SubjectiveBelief.R`) maps every snack id to an abbreviation, which participants' own recall answers reproduce for all 48; 23 abbreviations are named by the lab's 2018 study files (OSF qrv2e). The other 25 stay coded (`ostroglu-<abbrev>`, flagged `coded_items`). Uses the authors' analysed second-pass rating. **Ingested 2026-10-15** (`ds-ostroglu`). |
+| `kraeglu` | **Not keyable; RA column confirmed wrong** | `money` is the trial's money offer (1–4 CHF), not a rating; the real ratings are a WTP slider (0–5 CHF) for ~20 of 55 snacks per participant. No name key in OSF enwtd or the thesis; ostroglu's numbering does not transfer (ids 49–50 are new). |
+| `sebmar` | **Not keyable; construct relabelled** | These are Gluth et al. (2020)'s eye-tracking experiment, and `bdm_run` holds an incentivised liking rating (0–5 VAS), not a CHF bid. Snack ids appear only as numbers in data, code, readmes and preregistration. |
+| `foljac1` | **Not keyable** | Item indices are stable across participants (split-half .75) but nothing names the 16 items; figshare and the GitHub repos match the RA copy. |
+| `tanhar` | **Not keyable** | Not food-pics: the paper (footnote 1) used 414 photos prepared for the project, and food-pics ids would put meat in front of its vegetarians. |
+| `kramits` | **Not keyable** | Not food-pics: branded snack packages (eLife Figure 1), and liking vs food-pics palatability r = .01. |
+| `shenhav1a` | **Not keyable** | Its `prodIDs` do not stand for the same product across participants (split-half −.05; the same lab's array gives .43 for this sample size), so no product list can name them. |
+
 ### Chen Exp3–6 imported as chenhol3–chenhol6 (2026-09-01)
 
 42 of the 60 candies, named from the stimulus photographs with certainty (the method already used for chenhol7). 18 are withheld rather than given descriptive placeholders — 9 where only a sub-type or brand is uncertain (#5, #7, #8, #31, #37, #39, #40, #47, #54) and 9 unnamed (#9, #10, #11, #16, #20, #24, #26, #44, #49); their ratings ship beside each ingest as `heldout_unnamed.csv` and `image_to_item.json` carries every reading. The harmonization candidates this surfaced were merged in migration 028 (see docs/NAME_HARMONIZATION.md, pass 2); `gummicandygoldbears` stays apart because it co-occurs with `gummibears`.
@@ -110,10 +132,11 @@ Excluded after verification: `Smith_2020/TaskRatings.RData` **is** the already-i
 perceptual judgments, out of scope.
 
 ### Data
-- [ ] **Decide: `foljac2` units.** Source values arrived normalized 0–1;
-  original scale was WTP £0–3 (Folke et al. 2016). Currently stored as-is with
-  scale 0–1 + provenance note (normalized values are identical either way).
-  Multiplying by 3 would restore original units — needs Kianté's call.
+- [x] **`foljac2` values** (2026-10-15). Not pre-normalized bids but a merge
+  artefact of the source compilation (0.75 × each participant's mean bid −
+  0.25, for every food). Replaced with the recorded bids from
+  `exp2_main_data.csv` in migration 037; 027's ×3 had only rescaled the
+  artefact.
 - [ ] **172 items have opaque source codes as names** (`0488`, `mh0021`, …) and
   category `unknown`. (The `mh*`/numeric codes come from imported datasets whose
   sources also used codes; same ask-the-authors path as above.)

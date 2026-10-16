@@ -14,6 +14,14 @@ const FLAGS = {
     type: 'info',
     message: 'Some items in this dataset have no readable name',
   },
+  inferred_key: {
+    type: 'info',
+    message: 'Item names in this dataset were inferred from the data',
+  },
+  unidentified_items: {
+    type: 'warning',
+    message: 'Which food each rating refers to is unknown',
+  },
 };
 
 const DataQualityNotice = ({ dataset }) => {

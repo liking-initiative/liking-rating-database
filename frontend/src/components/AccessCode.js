@@ -78,7 +78,7 @@ import likingInitiative as lk
 import polars as pl
 
 db = lk.load_database()    # the whole corpus, one download
-db["ratings"]              # 759,399 rows
+db["ratings"]              # 777,116 rows
 
 # One item across every study that used it
 lk.get_item("kitkat").by_dataset()
@@ -101,7 +101,7 @@ cite(d)`
 library(likingInitiative)
 
 db <- load_database()      # the whole corpus, one download
-nrow(db$ratings)           # 759399
+nrow(db$ratings)           # 777116
 
 # One item across every study that used it
 k <- get_item("kitkat")

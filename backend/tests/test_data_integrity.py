@@ -228,7 +228,7 @@ def test_quality_flags_are_known_and_explained(con):
     # which is worse than not flagging at all.
     assert one(con, """SELECT COUNT(*) FROM datasets
         WHERE quality_flag IS NOT NULL
-          AND quality_flag != 'coded_items'""") == 0
+          AND quality_flag NOT IN ('coded_items', 'inferred_key', 'unidentified_items')""") == 0
     assert one(con, """SELECT COUNT(*) FROM datasets
         WHERE quality_flag IS NOT NULL
           AND (quality_note IS NULL OR TRIM(quality_note) = '')""") == 0
@@ -241,6 +241,67 @@ def test_no_placeholder_item_survives(con):
     assert one(con, "SELECT COUNT(*) FROM items WHERE name = 'nouniqueitem'") == 0
     assert one(con, """SELECT COUNT(*) FROM items
         WHERE name IN ('noitem', 'na', 'none', 'unknown', 'n/a', '')""") == 0
+    # an empty screen quadrant (foljac2, 037) and a non-image file in a
+    # stimulus folder (shevsmith1, 033) were both stored as foods
+    assert one(con, "SELECT COUNT(*) FROM items WHERE name IN ('empty', 'matlab999choicemat')") == 0
+
+
+# Every mislabelling found so far (migrations 029, 033-035) left the values
+# intact and the names wrong, so no check on values could see it. These two
+# can: an item must mean the same food for every participant (odd- vs
+# even-numbered participants agree on which items are popular), and must rank
+# like the same item in other datasets (leave-one-dataset-out, r >= .5). A
+# lower agreement floor needs a reason other than "the names might be wrong";
+# .3 still fails a scrambled key, which lands near 0.
+LOWER_AGREEMENT_FLOOR = {
+    "fernandezeeg": "only foods rated above 0 survive (ratings recovered from choice trials), "
+                    "which compresses item differences; key confirmed by FILL choices",
+    "smithspiller2": "WTP here tracks package size (r = .53 with log oz); key validated on the "
+                     "opt-out pattern instead (r = .79 with liking elsewhere)",
+    "crosswebb": "WTP with a median of ~4 bidders per item; names are the captions on the authors' "
+                 "stimulus files; agrees with sucro (same 56 foods, WTP) at r = .61, near its ceiling",
+    "sucro": "whole-dollar WTP for ~$4-retail quantities prices candy and single fruit low relative "
+             "to liking; agrees with crosswebb (same foods, WTP) at r = .61",
+}
+
+
+def test_no_dataset_mixes_rating_units(con):
+    # romfred stored two of its three task versions as 0-1 fractions under a
+    # 0-10 scale (fixed in 040), so 61 of 92 participants never rose above 0.1
+    # normalized. One participant rating everything low happens; a block of
+    # them is a unit error.
+    rows = con.execute("""SELECT code, AVG(mx <= 0.15) FROM (
+            SELECT d.name code, r.subject_id, MAX(r.normalized_rating) mx
+            FROM ratings r JOIN datasets d ON d.id = r.dataset_id GROUP BY 1, 2)
+        GROUP BY code""").fetchall()
+    bad = {code: round(share, 2) for code, share in rows if share > 0.10}
+    assert not bad, f"share of participants who never rate above 15% of the scale: {bad}"
+
+
+def test_item_names_reproduce_and_agree(con):
+    import pandas as pd
+
+    df = pd.read_sql("""SELECT substr(d.name, 1, instr(d.name, ' ') - 1) code, r.subject_id s,
+               r.item_id item, AVG(r.normalized_rating) v
+        FROM ratings r JOIN datasets d ON d.id = r.dataset_id
+        WHERE COALESCE(d.quality_flag, '') != 'unidentified_items'
+        GROUP BY 1, 2, 3""", con)
+    sd = df.groupby(["code", "s"]).v.transform("std")
+    df["z"] = (df.v - df.groupby(["code", "s"]).v.transform("mean")) / sd.where(sd > 0)
+    pop = df.groupby(["code", "item"]).z.mean().unstack(0)
+    bad = {}
+    for code, x in df.groupby("code"):
+        floor = 0.3 if code in LOWER_AGREEMENT_FLOOR else 0.5
+        subs = sorted(x.s.unique(), key=lambda s: (len(s), s))
+        odd = x.s.isin(subs[::2])
+        halves = pd.concat([x[odd].groupby("item").z.mean(), x[~odd].groupby("item").z.mean()], axis=1).dropna()
+        shared = pd.concat([pop[code], pop.drop(columns=code).mean(axis=1)], axis=1).dropna()
+        r_half = halves.corr().iloc[0, 1]
+        r_loo = shared.corr().iloc[0, 1] if len(shared) >= 20 else 1.0
+        if not (r_half >= 0.3 and r_loo >= floor):
+            bad[code] = (round(r_half, 2), round(r_loo, 2), len(shared))
+    assert not bad, ("item names look misassigned -- (split-half, agreement with other datasets, "
+                     f"shared items): {bad}; see docs/DATASET_AUDIT.md section H")
 
 
 def test_no_prolific_ids_in_subject_ids(con):

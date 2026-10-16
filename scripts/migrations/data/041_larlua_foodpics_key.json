@@ -1,0 +1,331 @@
+{
+ "rule": "larlua image file NNNN.jpg is food-pics image NNNN (images up to 1314); its name is the food-pics English description, normalized like every other food-pics dataset here; images sharing a description are one item (subject ratings averaged), as in toyam/toyama2026. Images 2000-2116 are the lab's own photographs and stay coded.",
+ "sources": {
+  "raw_trials": {
+   "file": "selected_dat_choice_quality_control_included_no_duplicate_trials.csv",
+   "sha256": "689d141ffd019a6ef12799692a9fd628561377dd8b59a9b1804c3007ab0dc53a",
+   "note": "left.image/right.image hold food-pics file names; each image carries one fixed Chilean warning-label count"
+  },
+  "food_pics": {
+   "file": "food.pics.extended.database (Stand 2022).xlsx",
+   "sha256": "c904edc90e344286442cb71a4b3f769c6c9ae437ae882cabc40041dd8ec93e06"
+  },
+  "sister_study_image_list": {
+   "citation": "Caballero et al. (2023), Front. Nutr., doi:10.3389/fnut.2022.1026623, Data Sheet 1",
+   "sha256": "b62c2537d2cb4d223d61e4f2ce85176bf36cb80b52f94470af73bbdf0b6ab43d"
+  }
+ },
+ "validation": {
+  "description_in_2023_list_and_warning_labels_match": "60/60 (random food images: mean 2.7, max 9 of 60)",
+  "healthiness_vs_whole_food": "r = .83 (random max .52)",
+  "tastiness_vs_food_pics_palatability": "r = .59 (random max .45)",
+  "agreement_with_toyam_toyama2026": "r = .73 / .70"
+ },
+ "shared_descriptions": [
+  "chocolatemuffin",
+  "saladplate",
+  "strawberrycake"
+ ],
+ "key": {
+  "0004": {
+   "food_pics_image_no": 4,
+   "description": "chocolate cookie",
+   "item": "chocolatecookie"
+  },
+  "0019": {
+   "food_pics_image_no": 19,
+   "description": "German krapfen",
+   "item": "germankrapfen"
+  },
+  "0028": {
+   "food_pics_image_no": 28,
+   "description": "fruit cake",
+   "item": "fruitcake"
+  },
+  "0041": {
+   "food_pics_image_no": 41,
+   "description": "Donut with chocolate sprinkles",
+   "item": "donutwithchocolatesprinkles"
+  },
+  "0046": {
+   "food_pics_image_no": 46,
+   "description": "french fries",
+   "item": "frenchfries"
+  },
+  "0047": {
+   "food_pics_image_no": 47,
+   "description": "french fries and chicken drumsticks",
+   "item": "frenchfriesandchickendrumsticks"
+  },
+  "0065": {
+   "food_pics_image_no": 65,
+   "description": "cheese burger",
+   "item": "cheeseburger"
+  },
+  "0080": {
+   "food_pics_image_no": 80,
+   "description": "chocolate muffin",
+   "item": "chocolatemuffin"
+  },
+  "0089": {
+   "food_pics_image_no": 89,
+   "description": "strawberry cake",
+   "item": "strawberrycake"
+  },
+  "0113": {
+   "food_pics_image_no": 113,
+   "description": "chips",
+   "item": "chips"
+  },
+  "0116": {
+   "food_pics_image_no": 116,
+   "description": "chocolate popsicle with nuts",
+   "item": "chocolatepopsiclewithnuts"
+  },
+  "0123": {
+   "food_pics_image_no": 123,
+   "description": "lollipops",
+   "item": "lollipops"
+  },
+  "0127": {
+   "food_pics_image_no": 127,
+   "description": "Sacher cake",
+   "item": "sachercake"
+  },
+  "0133": {
+   "food_pics_image_no": 133,
+   "description": "strawberry cake",
+   "item": "strawberrycake"
+  },
+  "0139": {
+   "food_pics_image_no": 139,
+   "description": "cake",
+   "item": "cake"
+  },
+  "0150": {
+   "food_pics_image_no": 150,
+   "description": "popcorn",
+   "item": "popcorn"
+  },
+  "0155": {
+   "food_pics_image_no": 155,
+   "description": "crackers",
+   "item": "crackers"
+  },
+  "0160": {
+   "food_pics_image_no": 160,
+   "description": "nuts covered in chocolate",
+   "item": "nutscoveredinchocolate"
+  },
+  "0167": {
+   "food_pics_image_no": 167,
+   "description": "some bars of chocolate (stacked)",
+   "item": "somebarsofchocolatestacked"
+  },
+  "0176": {
+   "food_pics_image_no": 176,
+   "description": "salami sausage",
+   "item": "salamisausage"
+  },
+  "0180": {
+   "food_pics_image_no": 180,
+   "description": "muesli bar (oatmeal)",
+   "item": "mueslibaroatmeal"
+  },
+  "0192": {
+   "food_pics_image_no": 192,
+   "description": "apple",
+   "item": "apple"
+  },
+  "0199": {
+   "food_pics_image_no": 199,
+   "description": "watermelon",
+   "item": "watermelon"
+  },
+  "0219": {
+   "food_pics_image_no": 219,
+   "description": "salad plate",
+   "item": "saladplate"
+  },
+  "0220": {
+   "food_pics_image_no": 220,
+   "description": "fruit plate: melon, pineapple, grapes...",
+   "item": "fruitplatemelonpineapplegrapes"
+  },
+  "0227": {
+   "food_pics_image_no": 227,
+   "description": "bowl of muesli (granola)",
+   "item": "bowlofmuesligranola"
+  },
+  "0229": {
+   "food_pics_image_no": 229,
+   "description": "salad plate",
+   "item": "saladplate"
+  },
+  "0232": {
+   "food_pics_image_no": 232,
+   "description": "bowl of salad",
+   "item": "bowlofsalad"
+  },
+  "0282": {
+   "food_pics_image_no": 282,
+   "description": "banana",
+   "item": "banana"
+  },
+  "0296": {
+   "food_pics_image_no": 296,
+   "description": "colored chocolate beans",
+   "item": "coloredchocolatebeans"
+  },
+  "0298": {
+   "food_pics_image_no": 298,
+   "description": "cookies (oreos)",
+   "item": "cookiesoreos"
+  },
+  "0300": {
+   "food_pics_image_no": 300,
+   "description": "loaf of bread",
+   "item": "loafofbread"
+  },
+  "0307": {
+   "food_pics_image_no": 307,
+   "description": "salmon",
+   "item": "salmon"
+  },
+  "0311": {
+   "food_pics_image_no": 311,
+   "description": "Roast Beef",
+   "item": "roastbeef"
+  },
+  "0312": {
+   "food_pics_image_no": 312,
+   "description": " chicken fillets, grilled",
+   "item": "chickenfilletsgrilled"
+  },
+  "0325": {
+   "food_pics_image_no": 325,
+   "description": "fruit salad",
+   "item": "fruitsalad"
+  },
+  "0351": {
+   "food_pics_image_no": 351,
+   "description": "croissant",
+   "item": "croissant"
+  },
+  "0365": {
+   "food_pics_image_no": 365,
+   "description": "orange",
+   "item": "orange"
+  },
+  "0372": {
+   "food_pics_image_no": 372,
+   "description": "breakfast cereals",
+   "item": "breakfastcereals"
+  },
+  "0373": {
+   "food_pics_image_no": 373,
+   "description": "vanilla ice cream",
+   "item": "vanillaicecream"
+  },
+  "0410": {
+   "food_pics_image_no": 410,
+   "description": "peanuts ",
+   "item": "peanuts"
+  },
+  "0432": {
+   "food_pics_image_no": 432,
+   "description": "roman lettuce",
+   "item": "romanlettuce"
+  },
+  "0446": {
+   "food_pics_image_no": 446,
+   "description": "tomato, sliced ",
+   "item": "tomatosliced"
+  },
+  "0455": {
+   "food_pics_image_no": 455,
+   "description": "spinach",
+   "item": "spinach"
+  },
+  "0465": {
+   "food_pics_image_no": 465,
+   "description": "pralines",
+   "item": "pralines"
+  },
+  "0469": {
+   "food_pics_image_no": 469,
+   "description": "toast ",
+   "item": "toast"
+  },
+  "0488": {
+   "food_pics_image_no": 488,
+   "description": "waffle with whipped cream",
+   "item": "wafflewithwhippedcream"
+  },
+  "0510": {
+   "food_pics_image_no": 510,
+   "description": "chocolate bar, broken",
+   "item": "chocolatebarbroken"
+  },
+  "0525": {
+   "food_pics_image_no": 525,
+   "description": "walnut",
+   "item": "walnut"
+  },
+  "0536": {
+   "food_pics_image_no": 536,
+   "description": "cooked ham cut",
+   "item": "cookedhamcut"
+  },
+  "0539": {
+   "food_pics_image_no": 539,
+   "description": "almonds",
+   "item": "almonds"
+  },
+  "0576": {
+   "food_pics_image_no": 576,
+   "description": "sandwich with avocado",
+   "item": "sandwichwithavocado"
+  },
+  "0599": {
+   "food_pics_image_no": 599,
+   "description": "chicken soup",
+   "item": "chickensoup"
+  },
+  "0672": {
+   "food_pics_image_no": 672,
+   "description": "Cupcake",
+   "item": "cupcakes"
+  },
+  "0703": {
+   "food_pics_image_no": 703,
+   "description": "chocolate muffin",
+   "item": "chocolatemuffin"
+  },
+  "0711": {
+   "food_pics_image_no": 711,
+   "description": "pizza",
+   "item": "pizza"
+  },
+  "0745": {
+   "food_pics_image_no": 745,
+   "description": "sushi",
+   "item": "sushi"
+  },
+  "0784": {
+   "food_pics_image_no": 784,
+   "description": "pineapple",
+   "item": "pineapple"
+  },
+  "0822": {
+   "food_pics_image_no": 822,
+   "description": "slices of cheese",
+   "item": "slicesofcheese"
+  },
+  "0875": {
+   "food_pics_image_no": 875,
+   "description": "lettuce",
+   "item": "lettuce"
+  }
+ }
+}

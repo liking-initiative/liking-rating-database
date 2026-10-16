@@ -1,0 +1,10 @@
+{
+ "split_half_taste": 0.789,
+ "split_half_health": 0.967,
+ "db_agreement": "r=0.787 on 46 names in DB; full permutation null 95th/99.9th 0.24/0.44, p=0.0000; within-folder null 95th/99.9th 0.24/0.46, p=0.0000",
+ "db_agreement_UnhealthyImages": "r=0.847 on 21; null 95th/99.9th 0.37/0.60, p=0.0000",
+ "db_agreement_HealthyImages": "r=0.764 on 25; null 95th/99.9th 0.34/0.58, p=0.0000",
+ "db_agreement_key_shifted_-1": 0.273,
+ "db_agreement_key_shifted_+1": 0.405,
+ "health_vs_ganzou": "r=0.932 over 37 PicIDs; within-folder null 95th/99.9th 0.79/0.87, p=0.0000"
+}

@@ -21,6 +21,9 @@ data migrations.
 
 2. **`dataset.json`** — metadata; copy [templates/dataset.json](templates/dataset.json).
    `scale.type` must be one of `likert | continuous | vas | slider | wtp`.
+   Optional `quality_flag` + `quality_note` declare a known defect at ingest —
+   e.g. `coded_items` when some stimuli keep source codes because no key names
+   them (never guess a name to avoid the flag).
    If the paper's study already exists in the database (matched by exact
    title), the dataset attaches to it; otherwise the study is created from
    this metadata — so include the full citation and DOI.

@@ -9,16 +9,23 @@ not counted twice.
 """
 import argparse
 import csv
+import json
 import sqlite3
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
+# A dataset whose items do not identify a food (quality_flag
+# "unidentified_items") gets the "not estimated" record estimate_networks.R
+# would write, so R leaves it alone and visitors see why.
+UNIDENTIFIED_REASON = ("Which food each rating refers to is unknown in this dataset, "
+                       "so a network of foods cannot be estimated.")
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--db", default=str(REPO / "data" / "liking_rating_db.db"))
     ap.add_argument("--out", default=str(REPO / "build" / "ega-matrices"))
+    ap.add_argument("--networks", default=str(REPO / "data-release" / "networks"))
     args = ap.parse_args()
 
     out = Path(args.out)
@@ -28,8 +35,13 @@ def main():
 
     con = sqlite3.connect(f"file:{args.db}?mode=ro", uri=True)
     n = 0
-    for dataset_id, name in con.execute("SELECT id, name FROM datasets"):
+    for dataset_id, name, flag in con.execute("SELECT id, name, quality_flag FROM datasets"):
         code = name.replace(" Dataset", "").strip()
+        if flag == "unidentified_items":
+            skip = Path(args.networks) / f"{code}.json"
+            skip.write_text(json.dumps({"dataset_code": code, "estimated": False, "reason": UNIDENTIFIED_REASON}))
+            print(f"{code}: not exported ({UNIDENTIFIED_REASON}) -> {skip}")
+            continue
         rows = con.execute(
             "SELECT r.subject_id, r.item_id, i.name, i.frequency, r.normalized_rating "
             "  FROM ratings r JOIN items i ON i.id = r.item_id "

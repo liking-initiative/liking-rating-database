@@ -20,15 +20,17 @@ $0–3 auction (migration 024).
 | **C** | RA transcription corroborated by the data's structure. **No dataset is left at this tier** — every one was replaced by a paper quote. |
 | **D** | Ingested from primary sources; the scale was read from the paper at ingest but no quotation was retained. |
 
-**54 of 59 datasets carry a verbatim quotation** from their paper or its
-published experiment program; one is verified against the study's own raw
-data file; the remaining four are this lab's own unpublished work. Nothing
+**55 of 61 datasets carry a verbatim quotation** from their paper or its
+published experiment program; two are verified against the study's own raw
+files; the remaining four are this lab's own unpublished work. Nothing
 rests on the RA's transcription.
 
 ## Verified quotations
 
 | Dataset(s) | Tier | Declared | Quotation |
 |---|---|---|---|
+| `ostroglu` | A | 0..10 | willingness to eat "each snack at the end of the experiment" from **0 ("not at all") to 10 ("very much")**; the second-pass rating the authors analysed |
+| `desself` | B | −10..10 | Task code (`self_control_code_final.m`, unpublished): "rate each individual food based on how **TASTY** you think the foods are… **−10** means that the food tastes very bad… **10** … very good" — tastiness, 21 integer steps |
 | `romfred` | A | 0..10 | "rate how much they **liked** the remaining items individually on a scale from **0 (not at all) to 10 (a great deal)**" |
 | `thomolt` | A | −3..3 | "ratings on a 7-point rating scale, ranging from **−3 (not at all) to 3 (very much)**, with 0 denoting indifference" |
 | `bakpol` | A | 0..10 | "rate how much they **prefer to eat** the food item on the screen from **0 (prefer least to eat) to 10 (prefer most to eat)**" |
@@ -121,7 +123,7 @@ from the RA's processing notebook:
 
 ## Corpus-wide checks
 
-Both run over all 59 datasets and are enforced by
+Both run over all 61 datasets and are enforced by
 `backend/tests/test_data_integrity.py`:
 
 - **Scale vs. data** — observed ratings fall inside the declared `[min, max]`
@@ -161,4 +163,14 @@ from these datasets is biased upward.
 **`eumdol` is typed `likert` but is a slider.** The paper describes 0.25
 intervals and the data confirms them. Retyped `slider` in migration 025.
 
-**`foljac2` arrived pre-normalized** to 0..1 from its original £0–3 elicitation.
+**`foljac2` did not arrive pre-normalized; it arrived as an artefact.** The
+source compilation merged the trial file's items and bids on participant ×
+screen quadrant, so every food got 0.75 × the participant's mean bid − 0.25.
+Migration 037 replaced those values with the bids themselves, recovered from
+`exp2_main_data.csv` (one bid per participant × food, £0–3 on a 5p grid);
+027's ×3 had only rescaled the artefact.
+
+**`fernandezeeg` is declared on its full slider, −870..870** (migration 036;
+`Representations_EEG_V5.m` stores pixels from the centre, "Would not eat" on
+the left, "Would eat" on the right), not the 1..870 its values span: they are
+recovered from choice trials, which only drew foods rated above 0.

@@ -1,0 +1,598 @@
+{
+ "rule": "stimulus n = n-th .jpg of the study's FoodFinal folder in case-sensitive (ASCII) name order -- MATLAB dir() order; the folder's non-image file matlab999choice.mat is not a stimulus",
+ "sources": {
+  "ratings": {
+   "file": "fcData_Final.csv",
+   "url": "https://osf.io/download/7c9nk/",
+   "sha256": "fd71385a3bc354cb48ef316d164c1f17e3c045f1f951a234371a22e2bd106066",
+   "derivation": "unique (SubjectNumber, Pic, Rat) over the Pic1/Rat1 and Pic2/Rat2 columns"
+  },
+  "stimuli": {
+   "file": "FoodFinal.zip (Liking Rating Database Files.zip)",
+   "sha256": "7ad39fc86f0419ec9b9d9ae568b84910c22de82885670266d20f3792ba3727c9"
+  },
+  "numbering_rule": "gwinn_krajbich_ratingdata.csv: picNum -> picName follows ASCII order at 147/147 (case-insensitive order would differ at 140)"
+ },
+ "key": {
+  "1": {
+   "file": "100Grand.jpg",
+   "item": "100grand"
+  },
+  "2": {
+   "file": "3Musketeers.jpg",
+   "item": "3musketeers"
+  },
+  "3": {
+   "file": "AirheadsBlueRaspberry.jpg",
+   "item": "airheadsblueraspberry"
+  },
+  "4": {
+   "file": "AirheadsCherry.jpg",
+   "item": "airheadscherry"
+  },
+  "5": {
+   "file": "AirheadsGreenApple.jpg",
+   "item": "airheadsgreenapple"
+  },
+  "6": {
+   "file": "AirheadsWatermelon.jpg",
+   "item": "airheadswatermelon"
+  },
+  "7": {
+   "file": "AlmondJoy.jpg",
+   "item": "almondjoy"
+  },
+  "8": {
+   "file": "BabyRuth.jpg",
+   "item": "babyruth"
+  },
+  "9": {
+   "file": "BlowPopBlueRaspberry.jpg",
+   "item": "blowpopblueraspberry"
+  },
+  "10": {
+   "file": "BlowPopCherry.jpg",
+   "item": "blowpopcherry"
+  },
+  "11": {
+   "file": "BlowPopSourApple.jpg",
+   "item": "blowpopsourapple"
+  },
+  "12": {
+   "file": "BlowPopWatermelon.jpg",
+   "item": "blowpopwatermelon"
+  },
+  "13": {
+   "file": "BunchaCrunch.jpg",
+   "item": "bunchacrunch"
+  },
+  "14": {
+   "file": "Butterfinger.jpg",
+   "item": "butterfinger"
+  },
+  "15": {
+   "file": "ButterfingerBites.jpg",
+   "item": "butterfingerbites"
+  },
+  "16": {
+   "file": "CaramelApplePops.jpg",
+   "item": "caramelapplepops"
+  },
+  "17": {
+   "file": "CheesePeanutButterCrackers.jpg",
+   "item": "cheesepeanutbuttercrackers"
+  },
+  "18": {
+   "file": "CheetosCrunchy.jpg",
+   "item": "cheetoscrunchy"
+  },
+  "19": {
+   "file": "CheetosPuffs.jpg",
+   "item": "cheetospuffs"
+  },
+  "20": {
+   "file": "Cheez-it.jpg",
+   "item": "cheezit"
+  },
+  "21": {
+   "file": "CheezitWhiteCheddar.jpg",
+   "item": "cheezitwhitecheddar"
+  },
+  "22": {
+   "file": "ChexMixCheddar.jpg",
+   "item": "chexmixcheddar"
+  },
+  "23": {
+   "file": "ChexMixTraditional.jpg",
+   "item": "chexmixtraditional"
+  },
+  "24": {
+   "file": "ChipsAhoy.jpg",
+   "item": "chipsahoy"
+  },
+  "25": {
+   "file": "CombosCheddar.jpg",
+   "item": "comboscheddar"
+  },
+  "26": {
+   "file": "CombosPizzeria.jpg",
+   "item": "combospizzeria"
+  },
+  "27": {
+   "file": "Crunch.jpg",
+   "item": "crunch"
+  },
+  "28": {
+   "file": "DoritoSpicyChili.jpg",
+   "item": "doritospicychili"
+  },
+  "29": {
+   "file": "DoritosCoolRanch.jpg",
+   "item": "doritoscoolranch"
+  },
+  "30": {
+   "file": "DoritosNachoCheese.jpg",
+   "item": "doritosnachocheese"
+  },
+  "31": {
+   "file": "Dots.jpg",
+   "item": "dots"
+  },
+  "32": {
+   "file": "DoveCaramelMilkChocolate.jpg",
+   "item": "dovecaramelmilkchocolate"
+  },
+  "33": {
+   "file": "DoveDarkChocolateBites.jpg",
+   "item": "dovedarkchocolatebites"
+  },
+  "34": {
+   "file": "DoveMilk&PeanutButterBites.jpg",
+   "item": "dovemilkpeanutbutterbites"
+  },
+  "35": {
+   "file": "FamousAmos.jpg",
+   "item": "famousamos"
+  },
+  "36": {
+   "file": "Fritos.jpg",
+   "item": "fritos"
+  },
+  "37": {
+   "file": "FritosBBQ.jpg",
+   "item": "fritosbbq"
+  },
+  "38": {
+   "file": "Funyuns.jpg",
+   "item": "funyuns"
+  },
+  "39": {
+   "file": "GhirardelliCaramelSquares.jpg",
+   "item": "ghirardellicaramelsquares"
+  },
+  "40": {
+   "file": "GhirardelliDarkChocolateSquares.jpg",
+   "item": "ghirardellidarkchocolatesquares"
+  },
+  "41": {
+   "file": "GhirardelliMilkChocolateSquares.jpg",
+   "item": "ghirardellimilkchocolatesquares"
+  },
+  "42": {
+   "file": "GiantSweeTarts.jpg",
+   "item": "giantsweetarts"
+  },
+  "43": {
+   "file": "Gobstoppers.jpg",
+   "item": "gobstoppers"
+  },
+  "44": {
+   "file": "GoldfishCheddar.jpg",
+   "item": "goldfishcheddar"
+  },
+  "45": {
+   "file": "Goobers.jpg",
+   "item": "goobers"
+  },
+  "46": {
+   "file": "Grandma'sChocolateChipCookies.jpg",
+   "item": "grandmaschocolatechipcookies"
+  },
+  "47": {
+   "file": "Grandma'sOatmealRaisinCookies.jpg",
+   "item": "grandmasoatmealraisincookies"
+  },
+  "48": {
+   "file": "Grandma'sPeanutButterCookies.jpg",
+   "item": "grandmaspeanutbuttercookies"
+  },
+  "49": {
+   "file": "GummyWormsSour.jpg",
+   "item": "gummywormssour"
+  },
+  "50": {
+   "file": "HeathBar.jpg",
+   "item": "heathbar"
+  },
+  "51": {
+   "file": "HostessChocolateDonuts.jpg",
+   "item": "hostesschocolatedonuts"
+  },
+  "52": {
+   "file": "HostessCupcakes.jpg",
+   "item": "hostesscupcakes"
+  },
+  "53": {
+   "file": "HostessPowderedDonut.jpg",
+   "item": "hostesspowdereddonut"
+  },
+  "54": {
+   "file": "JuniorCaramels.jpg",
+   "item": "juniorcaramels"
+  },
+  "55": {
+   "file": "JuniorMints.jpg",
+   "item": "juniormints"
+  },
+  "56": {
+   "file": "KeeblerFudgeStripes.jpg",
+   "item": "keeblerfudgestripes"
+  },
+  "57": {
+   "file": "KeeblerRainbowCookies.jpg",
+   "item": "keeblerrainbowcookies"
+  },
+  "58": {
+   "file": "KettleBBQChips.jpg",
+   "item": "kettlebbqchips"
+  },
+  "59": {
+   "file": "KettleJalapenoChips.jpg",
+   "item": "kettlejalapenochips"
+  },
+  "60": {
+   "file": "KettleSalt&PepperChips.jpg",
+   "item": "kettlesaltpepperchips"
+  },
+  "61": {
+   "file": "KettleSalt&VinegarChips.jpg",
+   "item": "kettlesaltvinegarchips"
+  },
+  "62": {
+   "file": "KitKat.jpg",
+   "item": "kitkat"
+  },
+  "63": {
+   "file": "KitKatWhiteChocolate.jpg",
+   "item": "kitkatwhitechocolate"
+  },
+  "64": {
+   "file": "LaffyTaffySourApple.jpg",
+   "item": "laffytaffysourapple"
+  },
+  "65": {
+   "file": "LaysCheesyGarlicBread.jpg",
+   "item": "layscheesygarlicbread"
+  },
+  "66": {
+   "file": "LaysClassic.jpg",
+   "item": "laysclassic"
+  },
+  "67": {
+   "file": "LaysDillPickle.jpg",
+   "item": "laysdillpickle"
+  },
+  "68": {
+   "file": "LaysSourCreamAndOnion.jpg",
+   "item": "layssourcreamandonion"
+  },
+  "69": {
+   "file": "LaysSweetSouthernHeatBarbecue.jpg",
+   "item": "layssweetsouthernheatbarbecue"
+  },
+  "70": {
+   "file": "LifeSaversGummies.jpg",
+   "item": "lifesaversgummies"
+  },
+  "71": {
+   "file": "LifesaversGummiesSours.jpg",
+   "item": "lifesaversgummiessours"
+  },
+  "72": {
+   "file": "LindtDarkChocolate.jpg",
+   "item": "lindtdarkchocolate"
+  },
+  "73": {
+   "file": "LindtMilkChocolate.jpg",
+   "item": "lindtmilkchocolate"
+  },
+  "74": {
+   "file": "M&M'sMilkChocolate.jpg",
+   "item": "mmsmilkchocolate"
+  },
+  "75": {
+   "file": "M&M'sMint.jpg",
+   "item": "mmsmint"
+  },
+  "76": {
+   "file": "M&M'sPeanuts.jpg",
+   "item": "peanutmms"
+  },
+  "77": {
+   "file": "M&M'sPretzel.jpg",
+   "item": "mmspretzel"
+  },
+  "78": {
+   "file": "MMsMilkChocolate.jpg",
+   "item": "mmsmilkchocolate"
+  },
+  "79": {
+   "file": "MentosRainbow.jpg",
+   "item": "mentosrainbow"
+  },
+  "80": {
+   "file": "Mike&IkeZours.jpg",
+   "item": "mikeikezours"
+  },
+  "81": {
+   "file": "MilanoCookies.jpg",
+   "item": "milanocookies"
+  },
+  "82": {
+   "file": "MilkDuds.jpg",
+   "item": "milkduds"
+  },
+  "83": {
+   "file": "MilkyWay.jpg",
+   "item": "milkyway"
+  },
+  "84": {
+   "file": "MilkyWayCaramel.jpg",
+   "item": "milkywaycaramel"
+  },
+  "85": {
+   "file": "MilkyWayDark.jpg",
+   "item": "milkywaydark"
+  },
+  "86": {
+   "file": "MunchiesJalapenoCheddar.jpg",
+   "item": "munchiesjalapenocheddar"
+  },
+  "87": {
+   "file": "MunchiesNachoCheese.jpg",
+   "item": "munchiesnachocheese"
+  },
+  "88": {
+   "file": "MunchiesPeanutButter.jpg",
+   "item": "munchiespeanutbutter"
+  },
+  "89": {
+   "file": "NerdsRope.jpg",
+   "item": "nerdsrope"
+  },
+  "90": {
+   "file": "NerdsStrawberryGrape.jpg",
+   "item": "nerdsstrawberrygrape"
+  },
+  "91": {
+   "file": "Oreos.jpg",
+   "item": "oreos"
+  },
+  "92": {
+   "file": "OreosGolden.jpg",
+   "item": "oreosgolden"
+  },
+  "93": {
+   "file": "Pez.jpg",
+   "item": "pez"
+  },
+  "94": {
+   "file": "PopcornWhiteCheddar.jpg",
+   "item": "popcornwhitecheddar"
+  },
+  "95": {
+   "file": "PopcornersJalapeno.jpg",
+   "item": "popcornersjalapeno"
+  },
+  "96": {
+   "file": "PopcornersKettle.jpg",
+   "item": "popcornerskettle"
+  },
+  "97": {
+   "file": "PopcornersWhiteCheddar.jpg",
+   "item": "popcornerswhitecheddar"
+  },
+  "98": {
+   "file": "PringlesCheddar.jpg",
+   "item": "pringlescheddar"
+  },
+  "99": {
+   "file": "PringlesOriginal.jpg",
+   "item": "pringlesoriginal"
+  },
+  "100": {
+   "file": "PringlesSourCreamOnion.jpg",
+   "item": "pringlessourcreamonion"
+  },
+  "101": {
+   "file": "RaisinetsMilkChocolate.jpg",
+   "item": "raisinetsmilkchocolate"
+  },
+  "102": {
+   "file": "Razzles.jpg",
+   "item": "razzles"
+  },
+  "103": {
+   "file": "Reese'sBigCup.jpg",
+   "item": "reesesbigcup"
+  },
+  "104": {
+   "file": "ReesesPeanutButterCup.jpg",
+   "item": "reesespeanutbuttercup"
+  },
+  "105": {
+   "file": "ReesesPieces.jpg",
+   "item": "reesespieces"
+  },
+  "106": {
+   "file": "RitzBitsCheese.jpg",
+   "item": "ritzbitscheese"
+  },
+  "107": {
+   "file": "RitzBitsPeanutButter.jpg",
+   "item": "ritzbitspeanutbutter"
+  },
+  "108": {
+   "file": "RoldGoldTinyTwistPretzels.jpg",
+   "item": "roldgoldtinytwistpretzels"
+  },
+  "109": {
+   "file": "RufflesCheddarSourCreamChips.jpg",
+   "item": "rufflescheddarsourcreamchips"
+  },
+  "110": {
+   "file": "Runts.jpg",
+   "item": "runts"
+  },
+  "111": {
+   "file": "Shockers.jpg",
+   "item": "shockers"
+  },
+  "112": {
+   "file": "SkittleWildberry.jpg",
+   "item": "skittlewildberry"
+  },
+  "113": {
+   "file": "Skittles.jpg",
+   "item": "skittles"
+  },
+  "114": {
+   "file": "SkittlesSours.jpg",
+   "item": "skittlessours"
+  },
+  "115": {
+   "file": "SkittlesTropical.jpg",
+   "item": "skittlestropical"
+  },
+  "116": {
+   "file": "SlimJim.jpg",
+   "item": "slimjim"
+  },
+  "117": {
+   "file": "Snickers.jpg",
+   "item": "snickers"
+  },
+  "118": {
+   "file": "SnickersAlmond.jpg",
+   "item": "snickersalmond"
+  },
+  "119": {
+   "file": "SnickersDarkChocolate.jpg",
+   "item": "snickersdarkchocolate"
+  },
+  "120": {
+   "file": "SnickersPeanutButter.jpg",
+   "item": "snickerspeanutbutter"
+  },
+  "121": {
+   "file": "SnydersHoneyMustardOnionNibblerPretzels.jpg",
+   "item": "snydershoneymustardonionnibblerpretzels"
+  },
+  "122": {
+   "file": "SnydersMiniPretzels.jpg",
+   "item": "snydersminipretzels"
+  },
+  "123": {
+   "file": "SnydersOriginalNibblers.jpg",
+   "item": "snydersoriginalnibblers"
+  },
+  "124": {
+   "file": "SnydersPretzelSticks.jpg",
+   "item": "snyderspretzelsticks"
+  },
+  "125": {
+   "file": "SourPatchKids.jpg",
+   "item": "sourpatchkids"
+  },
+  "126": {
+   "file": "SourPunchStrawsApple.jpg",
+   "item": "sourpunchstrawsapple"
+  },
+  "127": {
+   "file": "SourPunchStrawsStrawberry.jpg",
+   "item": "sourpunchstrawsstrawberry"
+  },
+  "128": {
+   "file": "Spree.jpg",
+   "item": "spree"
+  },
+  "129": {
+   "file": "Starburst.jpg",
+   "item": "starburst"
+  },
+  "130": {
+   "file": "StarburstTropical.jpg",
+   "item": "starbursttropical"
+  },
+  "131": {
+   "file": "SunchipsCheddar.jpg",
+   "item": "sunchipscheddar"
+  },
+  "132": {
+   "file": "SunchipsFrenchOnion.jpg",
+   "item": "sunchipsfrenchonion"
+  },
+  "133": {
+   "file": "SunchipsGardenSalsa.jpg",
+   "item": "sunchipsgardensalsa"
+  },
+  "134": {
+   "file": "SunchipsOriginal.jpg",
+   "item": "sunchipsoriginal"
+  },
+  "135": {
+   "file": "SwedishFish.jpg",
+   "item": "swedishfish"
+  },
+  "136": {
+   "file": "SwedishFishAssorted.jpg",
+   "item": "swedishfishassorted"
+  },
+  "137": {
+   "file": "Take5.jpg",
+   "item": "take5"
+  },
+  "138": {
+   "file": "Toblerone.jpg",
+   "item": "toblerone"
+  },
+  "139": {
+   "file": "TrailMix.jpg",
+   "item": "trailmix"
+  },
+  "140": {
+   "file": "Twix.jpg",
+   "item": "twix"
+  },
+  "141": {
+   "file": "TwixPeanutButter.jpg",
+   "item": "twixpeanutbutter"
+  },
+  "142": {
+   "file": "TwizzlersStrawberry.jpg",
+   "item": "twizzlersstrawberry"
+  },
+  "143": {
+   "file": "WarHeads.jpg",
+   "item": "warheads"
+  },
+  "144": {
+   "file": "Whoppers.jpg",
+   "item": "whoppers"
+  },
+  "145": {
+   "file": "YorkPeppermintPatty.jpg",
+   "item": "yorkpeppermintpatty"
+  }
+ }
+}

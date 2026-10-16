@@ -1,0 +1,14 @@
+{
+ "sources": {
+  "cfr.csv": {
+   "path": "~/Documents/EEG-ET/data/cfr.csv (lab data, unpublished)",
+   "sha256": "f935656be5e8d1881b8a30c22fa3a15616e8c7b4e707a789b66a3e71e86edc03"
+  },
+  "derivation": "one food-liking rating per (SubjectNumber, picture) from Pic1/Rat1 and Pic2/Rat2 over all four conditions; single-valued in every cell; picture -> item through ingests/fernandezeeg/pic_to_name_100foods.json (current item names); the 46 participants already in the database"
+ },
+ "scale": {
+  "min": -870,
+  "max": 870,
+  "evidence": "Representations_EEG_V5.m: line 758 stores x - cx (signed px from centre); line 686 spans cx +/- 10*round(1920/22) = 870 px; lines 620/622 label left \"Would not eat\", right \"Would eat\"; line 519 keeps only ratings > 0 for the choice task"
+ }
+}

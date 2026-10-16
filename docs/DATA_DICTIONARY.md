@@ -50,9 +50,9 @@ Understanding Food Judgment" (2022) contribute eight each.
 | `slider` | Fine-grained discrete slider | `leeholyoak2021` 1–100, `libain1/2` 0–10, `eumdol` 1–5 (0.25 steps) |
 | `wtp` | Willingness-to-pay / auction | `bakbot_BM2` 0–3, `sucro` 0–3, `smithspiller1/2` 0–4 |
 
-Special case: `foljac2`'s source values arrived already normalized to 0–1;
-the original elicitation was WTP 0–3 (Folke et al. 2016). Its scale is
-recorded as 0–1 with a note in the dataset description.
+Special case: `fernandezeeg` is declared on its full slider, −870..870, but
+only the positive half is present (its ratings come from choice trials, which
+only drew foods rated above 0), so its normalized values lie in 0.5–1.
 
 ## items — one row per stimulus
 
@@ -77,7 +77,7 @@ consumer goods). `unknown` (178 items with opaque source codes like `0488`).
 Categories were assigned by a curated name-based classifier (migration 002);
 see `scripts/migrations/data/item_categories.json` for the full mapping.
 
-## ratings — one row per (dataset, subject, item, timepoint) (759,399 rows)
+## ratings — one row per (dataset, subject, item, timepoint) (777,116 rows)
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -124,7 +124,9 @@ Migration 008 cleared 41 dataset descriptions built from the template
 them and had gone stale against the titles corrected in 007. The 13 real
 curatorial notes are untouched, and `foljac2`'s note — recording that its
 ratings arrived pre-normalized from an unrecoverable willingness-to-pay
-scale — was preserved with only its placeholder prefix stripped.
+scale — was preserved with only its placeholder prefix stripped. (That note
+was itself wrong: the values were a merge artefact, and migration 037
+replaced them with the recorded bids.)
 
 Migration 006 cleared all 24 study descriptions. Every one matched the
 template `"Food preference study from <code> dataset"` — synthesised by an

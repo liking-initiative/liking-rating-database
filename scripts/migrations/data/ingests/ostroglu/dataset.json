@@ -1,0 +1,61 @@
+{
+ "code": "ostroglu",
+ "study": {
+  "name": "Memory Beliefs Drive the Memory Bias on Value-based Decisions",
+  "authors": [
+   "Mechera-Ostrovsky, T.",
+   "Gluth, S."
+  ],
+  "year": 2018,
+  "journal": "Scientific Reports",
+  "doi": "10.1038/s41598-018-28728-9",
+  "citation": "Mechera-Ostrovsky, T., & Gluth, S. (2018). Memory beliefs drive the memory bias on value-based decisions. Scientific Reports, 8, 10592. https://doi.org/10.1038/s41598-018-28728-9",
+  "description": "Preregistered remember-and-decide study with 48 Swiss supermarket snacks; data and analysis scripts at https://osf.io/ze8xh/."
+ },
+ "scale": {
+  "min": 0,
+  "max": 10,
+  "type": "continuous"
+ },
+ "description": "Wanting to eat: participants reported \"their willingness to eat each snack at the end of the experiment on a continuous rating scale from 0 (=not at all) to 10 (=very much)\"; after a first pass they saw every snack again with its initial rating and could adjust it, and were incentivized (two snacks drawn, the higher-rated one given). The adjusted rating (preference_mat2, the value the authors analysed) is imported; the RA compilation had used the first pass. All 91 participants in the OSF archive (the paper analysed 64 after exclusions). Stimulus key: the source stores snack ids 1-48 only. The authors' analysis script (Data_Analysis_SubjectiveBelief.R, OSF) maps every id to the three-letter abbreviation participants learned and typed during cued recall (\"e.g., sni for Snickers\", paper); the same map is recovered from all 91 participants' typed recall answers. Ids run in blocks of 8 matching the lab's six categories (bars, bonbons, chocolate, wine gums, nuts, salty snacks), and participants' salty/sweet key presses at encoding follow those blocks. 23 snacks are named because the lab's own 2018 study files name that product (OSF qrv2e, CDdata G.id); the other 25 keep dataset-scoped codes ostroglu-<abbreviation> (see quality_note). snack_to_item.json carries the per-id evidence.",
+ "quality_flag": "coded_items",
+ "quality_note": "25 of 48 items are dataset-scoped codes 'ostroglu-<abbreviation>': the three-letter abbreviation participants learned for each snack (documented by the authors' analysis script), whose product no surviving document names. Likely readings, not asserted: kag = Kaegi fret; kar = unknown bar; cou = possibly Kinder Country; bal = Balisto; fru = fruit drops?; car = caramels?; chu = Chupa Chups; cor = unknown chocolate; tru = truffles?; tor = probably Torino (Camille Bloch); cho = a chocolate (typed \"lin\" 8 times: Lindt?); exc = Lindt Excellence; red = unknown wine gum; loo = unknown wine gum; him = probably Himbeeren (raspberry gums); stu = Studentenfutter (trail mix); erd = Erdnuesse (peanuts); nus = probably a nut mix; man = Mandeln (almonds); mex = unknown nut snack; chi = chips (typed \"tor\" 22 times: tortilla chips?); fli = Flips (peanut puffs); kam = Kambly (typed \"gol\" 26 times: Goldfischli crackers?); pop = popcorn; rol = salty snack (typed \"sal\" 6 times). The other 23 items are named from the lab's own snack list (OSF qrv2e).",
+ "item_categories": {
+  "sugus": "sweets",
+  "ricola": "sweets",
+  "fishermansfriend": "sweets",
+  "ovomaltine": "sweets",
+  "caillermilkchocolate": "sweets",
+  "nimm2": "sweets",
+  "trolli": "sweets",
+  "sourpower": "sweets",
+  "wasabinuts": "nuts_seeds",
+  "pombaer": "chips",
+  "paprikachips": "chips",
+  "ostroglu-kag": "sweets",
+  "ostroglu-kar": "sweets",
+  "ostroglu-cou": "sweets",
+  "ostroglu-bal": "sweets",
+  "ostroglu-fru": "sweets",
+  "ostroglu-car": "sweets",
+  "ostroglu-chu": "sweets",
+  "ostroglu-cor": "sweets",
+  "ostroglu-tru": "sweets",
+  "ostroglu-tor": "sweets",
+  "ostroglu-cho": "sweets",
+  "ostroglu-exc": "sweets",
+  "ostroglu-red": "sweets",
+  "ostroglu-loo": "sweets",
+  "ostroglu-him": "sweets",
+  "ostroglu-stu": "nuts_seeds",
+  "ostroglu-erd": "nuts_seeds",
+  "ostroglu-nus": "nuts_seeds",
+  "ostroglu-man": "nuts_seeds",
+  "ostroglu-mex": "nuts_seeds",
+  "ostroglu-chi": "chips",
+  "ostroglu-fli": "chips",
+  "ostroglu-kam": "chips",
+  "ostroglu-pop": "chips",
+  "ostroglu-rol": "chips"
+ }
+}
